@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "com.lefarmico.donetime"
+        minSdkVersion 22
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+}
+
+apply from: "$project.rootDir/versions.gradle"
+
+dependencies {
+
+    // Tests
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.3.0'
+
+    //Core
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Views
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.fragment:fragment-ktx:1.3.5"
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    // Picasso
+    implementation picasso
+
+    // Dagger
+    implementation dagger
+    implementation daggerAndroid
+    kapt daggerAndroidProcessor
+    kapt daggerCompiler
+
+    // Navigation Components
+    implementation navigationFragment
+    implementation navigationUI
+    implementation navigationDynamicFeatures
+
+    // GSON
+    implementation gson
+
+    // OkHttp
+    implementation okHttp
+    implementation okHttpInterceptor
+
+    // Retrofit
+    implementation retrofit
+    implementation retrofitGsonConverter
+    implementation retrofitRXJava
+
+    //Room
+    implementation roomRuntime
+    kapt roomCompiler
+    implementation roomKtx
+    implementation roomRx
+
+    // RXJava
+    implementation rxjava3Android
+    implementation rxjava3
+    implementation rxjavaKotlin
+    implementation rxjavaRetrofitAdapter
+}
