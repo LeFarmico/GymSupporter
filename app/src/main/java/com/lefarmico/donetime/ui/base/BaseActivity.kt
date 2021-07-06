@@ -15,7 +15,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>(
 
     protected lateinit var viewModel: VM
 
-    private lateinit var binding: VB
+    internal lateinit var binding: VB
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
