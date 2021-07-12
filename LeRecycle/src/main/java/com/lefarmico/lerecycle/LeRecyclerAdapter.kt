@@ -3,35 +3,57 @@ package com.lefarmico.lerecycle
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class LeRecyclerAdapter<T : Any, VH : LeRecyclerViewHolder<T>> : RecyclerView.Adapter<VH>() {
+open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemType>>() {
 
-    abstract fun onCreateViewHolderWithListener(parent: ViewGroup, viewType: Int): VH
-    abstract var items: MutableList<T>
-    abstract var onClickEvent: OnClickEvent<T>?
+    var items: MutableList<ItemType> = mutableListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+    private var onClickEvent: ((ItemType) -> Unit)? = null
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+    lateinit var itemTypes: Wrapper<IViewHolderFactory<ItemType>>
+
+    open fun setItemTypes(types: Array<out IViewHolderFactory<ItemType>>) {
+        itemTypes = Wrapper(types)
+    }
+    open fun setItemType(type: IViewHolderFactory<ItemType>) {
+        itemTypes = Wrapper(arrayOf(type))
+    }
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeRecyclerViewHolder<ItemType> {
         return onCreateViewHolderWithListener(parent, viewType).listen { position, _ ->
-            onClickCallback(items[position], onClickEvent)
+            onClickEvent?.let { it(items[position]) }
         }
     }
 
-    private fun onClickCallback(item: T, event: OnClickEvent<T>?) {
-        if (event != null) {
-            event.onClick(item)
-        } else {
-            return
-        }
+    private fun onCreateViewHolderWithListener(
+        parent: ViewGroup,
+        viewType: Int
+    ): LeRecyclerViewHolder<ItemType> {
+        val factory = itemTypes.getType(viewType)
+        return factory.createViewHolder(parent)
     }
 
-    fun setOnClickEvent(event: (T) -> Unit) {
-        onClickEvent = object : OnClickEvent<T> {
-            override fun onClick(item: T) {
-                event(item)
-            }
-        }
+    final override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
+        holder.bind(items[position])
     }
 
-    interface OnClickEvent<T> {
-        fun onClick(item: T)
+    fun setOnClickEvent(event: (ItemType) -> Unit) {
+        onClickEvent = event
     }
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val type = items[position].type
+        return itemTypes.getViewTypeNumber(type)
+    }
+}
+interface IViewHolderFactory<T> {
+    fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<T>
+}
+interface ItemType {
+    val type: IViewHolderFactory<ItemType>
 }

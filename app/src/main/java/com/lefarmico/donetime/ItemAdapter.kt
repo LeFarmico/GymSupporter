@@ -3,78 +3,66 @@ package com.lefarmico.donetime
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import com.lefarmico.donetime.databinding.TestItem2Binding
-import com.lefarmico.donetime.databinding.TestItemBinding
-import com.lefarmico.lerecycle.LeRecyclerAdapter
+import com.lefarmico.donetime.databinding.ItemDateBinding
+import com.lefarmico.donetime.databinding.ItemExerciseBinding
+import com.lefarmico.lerecycle.IViewHolderFactory
+import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
-import java.lang.IllegalArgumentException
 
-class ItemAdapter : LeRecyclerAdapter<ItemType, LeRecyclerViewHolder<ItemType>>() {
+data class Exercise(
+    val name: String,
+    val description: String,
+) : ItemType {
+    override val type: IViewHolderFactory<ItemType> = EnumViewTypes.EXERCISE
+}
 
-    override var items: MutableList<ItemType> = mutableListOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+data class ExerciseDate(
+    val date: String
+) : ItemType {
+    override val type: IViewHolderFactory<ItemType> = EnumViewTypes.DATE
+}
 
-    override var onClickEvent: OnClickEvent<ItemType>? = null
-
-    class DateViewHolder(
-        dateItemBinding: TestItemBinding
-    ) : LeRecyclerViewHolder<ItemType>(dateItemBinding.root) {
-        private val date: TextView = dateItemBinding.dateTextView
-
-        override fun bind(item: ItemType) {
-            val exerciseDate = (item as ExerciseDate)
-            date.text = exerciseDate.date
-        }
-    }
-
-    class ExerciseViewHolder(
-        exerciseItemBinding: TestItem2Binding
-    ) : LeRecyclerViewHolder<ItemType>(exerciseItemBinding.root) {
-        private val exerciseName: TextView = exerciseItemBinding.exNameTextView
-        private val exerciseDescription: TextView = exerciseItemBinding.exDescriptionTextView
-
-        override fun bind(item: ItemType) {
-            val exercise = (item as Exercise)
-            exerciseName.text = exercise.name
-            exerciseDescription.text = exercise.description
-        }
-    }
-
-    override fun onCreateViewHolderWithListener(
-        parent: ViewGroup,
-        viewType: Int
-    ): LeRecyclerViewHolder<ItemType> {
-        return when (viewType) {
-            ItemViewType.EXERCISE.typeNumber -> {
-                ExerciseViewHolder(
-                    TestItem2Binding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
+enum class EnumViewTypes : IViewHolderFactory<ItemType> {
+    DATE {
+        override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
+            return DateViewHolder(
+                ItemDateBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 )
-            }
-            ItemViewType.DATE.typeNumber -> {
-                DateViewHolder(
-                    TestItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
+            )
+        }
+    },
+    EXERCISE {
+        override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
+            return ExerciseViewHolder(
+                ItemExerciseBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 )
-            }
-            else -> throw (IllegalArgumentException("Illegal viewType parameter."))
+            )
         }
     }
+}
 
-    override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
-        holder.bind(items[position])
+class ExerciseViewHolder(
+    exerciseItemBinding: ItemExerciseBinding
+) : LeRecyclerViewHolder<ItemType>(exerciseItemBinding.root) {
+    private val exerciseName: TextView = exerciseItemBinding.exNameTextView
+    private val exerciseDescription: TextView = exerciseItemBinding.exDescriptionTextView
+
+    override fun bind(item: ItemType) {
+        val exercise = (item as Exercise)
+        exerciseName.text = exercise.name
+        exerciseDescription.text = exercise.description
     }
+}
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+class DateViewHolder(
+    dateItemBinding: ItemDateBinding
+) : LeRecyclerViewHolder<ItemType>(dateItemBinding.root) {
+    private val date: TextView = dateItemBinding.dateTextView
 
-    override fun getItemViewType(position: Int): Int {
-        return items[position].type.typeNumber
+    override fun bind(item: ItemType) {
+        val exerciseDate = (item as ExerciseDate)
+        date.text = exerciseDate.date
     }
 }
