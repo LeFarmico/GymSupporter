@@ -1,11 +1,11 @@
 package com.lefarmico.donetime.ui.order
 
 import android.widget.Toast
-import com.lefarmico.donetime.EnumViewTypes
-import com.lefarmico.donetime.Exercise
-import com.lefarmico.donetime.ExerciseDate
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.donetime.ui.base.BaseActivity
+import com.lefarmico.donetime.viewHolders.entity.Exercise
+import com.lefarmico.donetime.viewHolders.entity.ExerciseDate
+import com.lefarmico.donetime.viewHolders.factories.ExerciseMenuFactory
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerAdapter
 import com.lefarmico.lerecycle.extractValues
@@ -17,7 +17,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, OrderViewModel>(
     override fun setUpViews() {
         binding.listRecycler.adapter = LeRecyclerAdapter().apply {
             setItemTypes(
-                extractValues<EnumViewTypes>()
+                extractValues<ExerciseMenuFactory>()
             )
             val newItems: MutableList<ItemType> = mutableListOf(
                 ExerciseDate("04.07.2021"),
@@ -28,11 +28,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, OrderViewModel>(
             items = newItems
             setOnClickEvent {
                 when (it.type) {
-                    EnumViewTypes.EXERCISE -> {
+                    ExerciseMenuFactory.EXERCISE -> {
                         val exercise = it as Exercise
                         Toast.makeText(this@MainActivity, "Ex ${exercise.name}", Toast.LENGTH_SHORT).show()
                     }
-                    EnumViewTypes.DATE -> {
+                    ExerciseMenuFactory.DATE -> {
                         val date = it as ExerciseDate
                         Toast.makeText(this@MainActivity, "Ex ${date.date}", Toast.LENGTH_SHORT).show()
                     }
