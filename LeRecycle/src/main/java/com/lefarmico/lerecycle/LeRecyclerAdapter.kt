@@ -34,8 +34,8 @@ open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemTyp
         return factory.createViewHolder(parent)
     }
 
-    final override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
+        holder.bind(items[position], position, itemCount)
     }
 
     fun setOnClickEvent(event: (ItemType) -> Unit) {
@@ -51,7 +51,7 @@ open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemTyp
         return itemTypes.getViewTypeNumber(type)
     }
 }
-interface IViewHolderFactory<T> {
+interface IViewHolderFactory<T : ItemType> {
     fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<T>
 }
 interface ItemType {

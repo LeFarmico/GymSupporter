@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DoneTime</string>
+    <string name="add_set">add set</string>
+    <string name="delete_set">delete set</string>
 </resources>

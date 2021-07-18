@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exercise"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_corners_shape">
+
+
+    <TextView
+        android:id="@+id/set_number"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:text="1. Set"
+        android:layout_margin="8dp"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/weights"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="weights:"
+        android:textSize="13sp"
+        android:gravity="start"
+        android:layout_toEndOf="@id/set_number"
+        />
+    <TextView
+        android:id="@+id/reps"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:layout_marginVertical="8dp"
+        android:layout_toEndOf="@id/weights"
+        android:text="reps: "
+        />
+
+</RelativeLayout>
