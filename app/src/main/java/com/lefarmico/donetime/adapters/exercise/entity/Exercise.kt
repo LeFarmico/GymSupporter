@@ -2,23 +2,23 @@ package com.lefarmico.donetime.adapters.exercise.entity
 
 import com.lefarmico.lerecycle.ItemType
 
-class Exercise(
-    exerciseName: String,
-    tags: String = ""
-) {
-    val isActive = false
-    val exerciseName = ExerciseName(exerciseName, tags)
-    val addDelButtons = AddDelButtons(
+class Exercise {
+
+    private val sets: MutableList<ExerciseSet> = mutableListOf()
+    var isActive: Boolean = false
+    private lateinit var exerciseName: ExerciseName
+    private var addDelButtons = AddDelButtons(
         {
-            addSet(100f, 45)
+            addButtonEvent?.let { it() }
         },
         {
-            delSet()
+            delButtonEvent?.let { it() }
         }
     )
-    
-    private val sets = mutableListOf<ExerciseSet>()
-    
+
+    var addButtonEvent: (() -> Unit)? = null
+    var delButtonEvent: (() -> Unit)? = null
+
     fun addSet(weights: Float, reps: Int) {
         sets.add(
             ExerciseSet(sets.size + 1, weights, reps)
@@ -32,9 +32,17 @@ class Exercise(
         val itemList = mutableListOf<ItemType>()
         itemList.add(exerciseName)
         itemList.addAll(sets)
-        itemList.add(addDelButtons)
+        if (isActive) {
+            itemList.add(addDelButtons)
+        }
         return itemList
     }
 
-    fun setAddDelButtonListeners(addButtonCallback: () -> Unit, deleteButtonCallback: () -> Unit,) {}
+    fun setNameAndTags(name: String, tags: String) {
+        exerciseName = ExerciseName(name, tags)
+    }
+
+    fun getSetCount(): Int {
+        return sets.size
+    }
 }

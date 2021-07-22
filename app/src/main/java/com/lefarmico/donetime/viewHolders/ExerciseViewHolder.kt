@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.viewHolders
 
 import com.lefarmico.donetime.adapters.exercise.entity.ExerciseName
 import com.lefarmico.donetime.databinding.ItemExerciseTitleBinding
@@ -6,7 +6,7 @@ import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
 
 class ExerciseViewHolder(
-    private val itemExerciseTitleBinding: ItemExerciseTitleBinding
+    itemExerciseTitleBinding: ItemExerciseTitleBinding
 ) : LeRecyclerViewHolder<ItemType>(itemExerciseTitleBinding.root) {
     val exerciseName = itemExerciseTitleBinding.exerciseName
     val tags = itemExerciseTitleBinding.tags

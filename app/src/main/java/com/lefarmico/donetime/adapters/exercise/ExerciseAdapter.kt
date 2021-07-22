@@ -1,18 +1,24 @@
 package com.lefarmico.donetime.adapters.exercise
 
 import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.exercise.entity.AddDelButtons
 import com.lefarmico.donetime.adapters.exercise.entity.Exercise
 import com.lefarmico.donetime.adapters.exercise.entity.ExerciseSet
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseSetViewHolder
+import com.lefarmico.donetime.viewHolders.ExerciseSetViewHolder
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerAdapter
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
+import com.lefarmico.lerecycle.extractValues
 import java.lang.IndexOutOfBoundsException
 
 class ExerciseAdapter : LeRecyclerAdapter() {
 
-    private val exercises = mutableListOf<Exercise>()
+    private lateinit var exercise: Exercise
+
+    init {
+        setItemTypes(
+            extractValues<ExerciseMenuFactory>()
+        )
+    }
 
     override fun onBindViewHolder(
         holder: LeRecyclerViewHolder<ItemType>,
@@ -46,16 +52,27 @@ class ExerciseAdapter : LeRecyclerAdapter() {
         }
     }
 
-    fun addExercise(exercise: Exercise) {
-        exercises.add(exercise)
+    fun setExercise(ex: Exercise) {
+        ex.addButtonEvent = {
+            ex.addSet(50f, 20)
+            items = ex.getItems()
+        }
+        ex.delButtonEvent = {
+            ex.delSet()
+            items = ex.getItems()
+        }
+        exercise = ex
+
+        val exerciseItems = ex.getItems()
+        items = exerciseItems
     }
 
-    fun setItems() {
-        val itemsList = mutableListOf<ItemType>()
-        for (i in exercises.indices) {
-            val exercisesItems = exercises[i].getItems()
-            itemsList.addAll(exercisesItems)
-        }
-        items = itemsList
+    fun setActive(isActive: Boolean) {
+        exercise.isActive = isActive
+        items = exercise.getItems()
+    }
+
+    fun getSetCount(): Int {
+        return exercise.getSetCount()
     }
 }

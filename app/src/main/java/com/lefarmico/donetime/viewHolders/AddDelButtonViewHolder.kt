@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.viewHolders
 
 import com.lefarmico.donetime.adapters.exercise.entity.AddDelButtons
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
@@ -15,10 +15,10 @@ class AddDelButtonViewHolder(
     override fun bind(item: ItemType, position: Int, itemCount: Int) {
         item as AddDelButtons
         addButton.setOnClickListener {
-            item.addButtonCallback
+            item.addButtonCallback()
         }
         deleteButton.setOnClickListener {
-            item.deleteButtonCallback
+            item.deleteButtonCallback()
         }
     }
 }
