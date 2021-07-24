@@ -1,13 +1,13 @@
-package com.lefarmico.donetime.adapters.exercise
+package com.lefarmico.donetime.ui.workout.adapters.exercise
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 import com.lefarmico.donetime.databinding.ItemExerciseTitleBinding
-import com.lefarmico.donetime.viewHolders.AddDelButtonViewHolder
-import com.lefarmico.donetime.viewHolders.ExerciseSetViewHolder
-import com.lefarmico.donetime.viewHolders.ExerciseViewHolder
+import com.lefarmico.donetime.ui.workout.viewHolders.ExerciseAddDelButtonViewHolder
+import com.lefarmico.donetime.ui.workout.viewHolders.ExerciseSetViewHolder
+import com.lefarmico.donetime.ui.workout.viewHolders.ExerciseTitleViewHolder
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
@@ -22,9 +22,9 @@ enum class ExerciseMenuFactory : IViewHolderFactory<ItemType> {
             )
         }
     },
-    EXERCISE {
+    EXERCISE_TITLE {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
-            return ExerciseViewHolder(
+            return ExerciseTitleViewHolder(
                 ItemExerciseTitleBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
@@ -33,7 +33,7 @@ enum class ExerciseMenuFactory : IViewHolderFactory<ItemType> {
     },
     BUTTONS {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
-            return AddDelButtonViewHolder(
+            return ExerciseAddDelButtonViewHolder(
                 ItemAddButtonBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )

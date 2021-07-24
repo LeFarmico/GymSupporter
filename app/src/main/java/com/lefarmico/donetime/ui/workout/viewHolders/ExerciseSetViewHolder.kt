@@ -1,9 +1,9 @@
-package com.lefarmico.donetime.viewHolders
+package com.lefarmico.donetime.ui.workout.viewHolders
 
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import com.lefarmico.donetime.adapters.exercise.entity.ExerciseSet
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
+import com.lefarmico.donetime.ui.workout.data.ExerciseSet
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
 

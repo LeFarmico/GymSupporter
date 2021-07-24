@@ -1,11 +1,11 @@
-package com.lefarmico.donetime.viewHolders
+package com.lefarmico.donetime.ui.workout.viewHolders
 
-import com.lefarmico.donetime.adapters.exercise.entity.AddDelButtons
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
+import com.lefarmico.donetime.ui.workout.data.AddDelButtons
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
 
-class AddDelButtonViewHolder(
+class ExerciseAddDelButtonViewHolder(
     itemAddButtonBinding: ItemAddButtonBinding
 ) : LeRecyclerViewHolder<ItemType>(itemAddButtonBinding.root) {
 

@@ -1,9 +1,9 @@
-package com.lefarmico.donetime.adapters.exercise
+package com.lefarmico.donetime.ui.workout.adapters.exercise
 
 import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.exercise.entity.Exercise
-import com.lefarmico.donetime.adapters.exercise.entity.ExerciseSet
-import com.lefarmico.donetime.viewHolders.ExerciseSetViewHolder
+import com.lefarmico.donetime.ui.workout.data.Exercise
+import com.lefarmico.donetime.ui.workout.data.ExerciseSet
+import com.lefarmico.donetime.ui.workout.viewHolders.ExerciseSetViewHolder
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerAdapter
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
@@ -31,8 +31,12 @@ class ExerciseAdapter : LeRecyclerAdapter() {
 
     private fun bindRoundCorners(item: ItemType, position: Int, holder: LeRecyclerViewHolder<ItemType>) {
         if (item is ExerciseSet) {
-            val isPrevExercise: Boolean = try { items[position - 1] is ExerciseSet } catch (e: IndexOutOfBoundsException) { false }
-            val isNextExercise: Boolean = try { items[position + 1] is ExerciseSet } catch (e: IndexOutOfBoundsException) { false }
+            val isPrevExercise: Boolean = try {
+                items[position - 1] is ExerciseSet
+            } catch (e: IndexOutOfBoundsException) { false }
+            val isNextExercise: Boolean = try {
+                items[position + 1] is ExerciseSet
+            } catch (e: IndexOutOfBoundsException) { false }
             val viewHolder = (holder as ExerciseSetViewHolder)
 
             // TODO упростить
@@ -53,16 +57,7 @@ class ExerciseAdapter : LeRecyclerAdapter() {
     }
 
     fun setExercise(ex: Exercise) {
-        ex.addButtonEvent = {
-            ex.addSet(50f, 20)
-            items = ex.getItems()
-        }
-        ex.delButtonEvent = {
-            ex.delSet()
-            items = ex.getItems()
-        }
         exercise = ex
-
         val exerciseItems = ex.getItems()
         items = exerciseItems
     }
@@ -72,7 +67,10 @@ class ExerciseAdapter : LeRecyclerAdapter() {
         items = exercise.getItems()
     }
 
-    fun getSetCount(): Int {
-        return exercise.getSetCount()
+    fun setAddButtonEvent(addEvent: () -> Unit) {
+        exercise.addButtonEvent = addEvent
+    }
+    fun setDelButtonEvent(delEvent: () -> Unit) {
+        exercise.delButtonEvent = delEvent
     }
 }

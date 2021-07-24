@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.exercise.entity
+package com.lefarmico.donetime.ui.workout.data
 
 import com.lefarmico.lerecycle.ItemType
 
