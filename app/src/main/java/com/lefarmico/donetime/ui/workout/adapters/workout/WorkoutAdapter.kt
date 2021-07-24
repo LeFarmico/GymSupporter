@@ -81,6 +81,6 @@ class WorkoutAdapter(
                 onNotActiveExerciseCallback(position)
             }
         }
-        holder.recycler.adapter = adapter
+        holder.bindAdapter(adapter)
     }
 }

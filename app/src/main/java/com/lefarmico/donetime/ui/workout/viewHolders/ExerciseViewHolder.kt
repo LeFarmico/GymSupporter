@@ -10,7 +10,7 @@ class ExerciseViewHolder(
 ) : LeRecyclerViewHolder<ItemType>(
     itemExerciseFullBinding.root
 ) {
-    val recycler = itemExerciseFullBinding.exerciseItem
+    private val recycler = itemExerciseFullBinding.exerciseItem
     override fun bind(item: ItemType, position: Int, itemCount: Int) {}
     fun bindAdapter(exerciseAdapter: ExerciseAdapter) {
         recycler.adapter = exerciseAdapter
