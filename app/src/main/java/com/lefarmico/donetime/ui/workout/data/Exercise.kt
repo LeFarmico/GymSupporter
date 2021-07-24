@@ -1,8 +1,10 @@
 package com.lefarmico.donetime.ui.workout.data
 
+import com.lefarmico.donetime.ui.workout.adapters.workout.WorkoutViewHolderFactory
+import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-class Exercise {
+class Exercise : ItemType {
 
     private val sets: MutableList<ExerciseSet> = mutableListOf()
     var isActive: Boolean = false
@@ -45,4 +47,6 @@ class Exercise {
     fun getSetCount(): Int {
         return sets.size
     }
+
+    override val type: IViewHolderFactory<ItemType> = WorkoutViewHolderFactory.EXERCISE
 }

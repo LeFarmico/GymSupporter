@@ -1,6 +1,8 @@
 package com.lefarmico.donetime.ui.workout.data
 
-class WorkoutRepository {
+import com.lefarmico.lerecycle.ItemType
+
+class Workout {
 
     constructor()
     
@@ -42,5 +44,11 @@ class WorkoutRepository {
 
     fun isActivePosition(position: Int): Boolean {
         return position == activePosition
+    }
+
+    fun getItems(): MutableList<ItemType> {
+        val itemList = mutableListOf<ItemType>()
+        itemList.addAll(exercises)
+        return itemList
     }
 }

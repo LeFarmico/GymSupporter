@@ -12,7 +12,7 @@ import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
 
-enum class ExerciseMenuFactory : IViewHolderFactory<ItemType> {
+enum class ExerciseViewHolderFactory : IViewHolderFactory<ItemType> {
     SET {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
             return ExerciseSetViewHolder(

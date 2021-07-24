@@ -16,7 +16,7 @@ class ExerciseAdapter : LeRecyclerAdapter() {
 
     init {
         setItemTypes(
-            extractValues<ExerciseMenuFactory>()
+            extractValues<ExerciseViewHolderFactory>()
         )
     }
 

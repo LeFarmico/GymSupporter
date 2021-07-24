@@ -12,7 +12,7 @@ open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemTyp
         }
     private var onClickEvent: ((ItemType) -> Unit)? = null
 
-    lateinit var itemTypes: Wrapper<IViewHolderFactory<ItemType>>
+    private lateinit var itemTypes: Wrapper<IViewHolderFactory<ItemType>>
 
     open fun setItemTypes(types: Array<out IViewHolderFactory<ItemType>>) {
         itemTypes = Wrapper(types)
