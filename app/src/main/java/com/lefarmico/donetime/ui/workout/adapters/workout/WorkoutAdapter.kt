@@ -2,9 +2,11 @@ package com.lefarmico.donetime.ui.workout.adapters.workout
 
 import android.util.Log
 import com.lefarmico.donetime.ui.workout.adapters.AdapterBuilder
+import com.lefarmico.donetime.ui.workout.data.AddExercise
 import com.lefarmico.donetime.ui.workout.data.Exercise
 import com.lefarmico.donetime.ui.workout.data.Workout
 import com.lefarmico.donetime.ui.workout.viewHolders.ExerciseViewHolder
+import com.lefarmico.donetime.ui.workout.viewHolders.WorkoutAddExViewHolder
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerAdapter
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
@@ -24,24 +26,39 @@ class WorkoutAdapter(
 
     override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
         super.onBindViewHolder(holder, position)
-        when (holder) {
-            is ExerciseViewHolder -> {
+        when (items[position]) {
+            is Exercise -> {
+                holder as ExerciseViewHolder
                 bindExerciseItem(holder, position)
+            }
+            is AddExercise -> {
+                holder as WorkoutAddExViewHolder
+                val exercise = Exercise().apply {
+                    addSet(100f, 951)
+                    addSet(100f, 951)
+                    setNameAndTags("Push upps", "Back")
+                }
+                setAddExerciseEvent {
+                    addExercise(exercise)
+                }
+                holder.bind(items[position], position, itemCount)
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return workoutRepo.getExercisesSize()
+        return items.size
     }
 
     fun addExercise(exercise: Exercise) {
         workoutRepo.addExercise(exercise)
+        items = workoutRepo.getItems()
         notifyDataSetChanged()
     }
 
     fun deleteExercise(position: Int) {
         workoutRepo.deleteExercise(position)
+        items = workoutRepo.getItems()
     }
 
     private fun onActiveExerciseCallback(position: Int) {
@@ -82,5 +99,11 @@ class WorkoutAdapter(
             }
         }
         holder.bindAdapter(adapter)
+    }
+
+    fun setAddExerciseEvent(addExEvent: () -> Unit) {
+        workoutRepo.addExButtonEvent = {
+            addExEvent()
+        }
     }
 }

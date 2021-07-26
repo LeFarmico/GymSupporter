@@ -16,13 +16,15 @@ class Workout {
     }
 
     private var exercises = mutableListOf<Exercise>()
+    private var addExerciseButton = AddExercise { addExButtonEvent?.let { it() } }
+    var addExButtonEvent: (() -> Unit)? = null
     private var activePosition = -1
 
     fun getExercise(position: Int): Exercise {
         return exercises[position]
     }
 
-    fun getExercisesSize(): Int {
+    fun getItemsSize(): Int {
         return exercises.size
     }
     
@@ -49,6 +51,7 @@ class Workout {
     fun getItems(): MutableList<ItemType> {
         val itemList = mutableListOf<ItemType>()
         itemList.addAll(exercises)
+        itemList.add(addExerciseButton)
         return itemList
     }
 }
