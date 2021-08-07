@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemType>>() {
 
-    var items: MutableList<ItemType> = mutableListOf()
+    open var items: MutableList<ItemType> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()

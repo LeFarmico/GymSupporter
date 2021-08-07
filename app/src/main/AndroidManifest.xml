@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@style/Theme.DoneTime">
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

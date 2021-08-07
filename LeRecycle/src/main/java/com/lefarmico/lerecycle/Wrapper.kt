@@ -20,3 +20,8 @@ inline fun <reified T> extractValues(): Array<out T>
         throw (NullPointerException("Class have not type parameters"))
     }
 }
+inline fun <reified T> extractValue(): Array<out T>
+        where T : IViewHolderFactory<ItemType> {
+
+    return arrayOf(T::class.java.newInstance())
+}

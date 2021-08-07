@@ -1,10 +1,16 @@
 package com.lefarmico.donetime.di
 
-import com.lefarmico.donetime.ui.base.BaseViewModel
+import com.lefarmico.donetime.viewModels.ExerciseListViewModel
 import dagger.Component
+import javax.inject.Singleton
 
-@Component
+@Component(
+    modules = [
+        DataBaseModel::class
+    ]
+)
+@Singleton
 interface AppComponent {
     // ViewModels
-    fun inject(viewModel: BaseViewModel)
+    fun inject(viewModel: ExerciseListViewModel)
 }

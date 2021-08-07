@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/text"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingLeft="@dimen/list_item_spacing"
+    android:paddingTop="@dimen/list_item_spacing_half"
+    android:paddingRight="@dimen/list_item_spacing"
+    android:paddingBottom="@dimen/list_item_spacing_half"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    tools:text="Hello"
+    app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
