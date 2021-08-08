@@ -7,18 +7,19 @@ import androidx.room.Query
 import com.lefarmico.donetime.data.db.entities.LibraryCategory
 import com.lefarmico.donetime.data.db.entities.LibraryExercise
 import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
+import io.reactivex.rxjava3.core.Observable
 
 @Dao
 interface ExerciseLibraryDao {
 
     @Query("SELECT * FROM exercise_library_type")
-    fun getCategories(): List<LibraryCategory>
+    fun getCategories(): Observable<List<LibraryCategory>>
 
     @Query("SELECT * FROM exercise_library_sub_category WHERE category_id = :id")
-    fun getSubCategoriesByCategoryId(id: Int): List<LibrarySubCategory>
+    fun getSubCategoriesByCategoryId(id: Int): Observable<LibrarySubCategory>
 
     @Query("SELECT * FROM exercise_library_exercise WHERE sub_category_id = :id")
-    fun getExercisesBySubCategoryId(id: Int): List<LibraryExercise>
+    fun getExercisesBySubCategoryId(id: Int): Observable<LibraryExercise>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCategory(category: LibraryCategory)

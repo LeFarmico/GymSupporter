@@ -3,7 +3,8 @@ package com.lefarmico.donetime
 import android.app.Application
 import com.lefarmico.donetime.di.AppComponent
 import com.lefarmico.donetime.di.DaggerAppComponent
-import com.lefarmico.donetime.di.DataBaseModel
+import com.lefarmico.donetime.di.DataBaseModule
+import com.lefarmico.donetime.di.DomainModule
 
 class App : Application() {
 
@@ -15,7 +16,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder()
-            .dataBaseModel(DataBaseModel(this))
+            .dataBaseModule(DataBaseModule(this))
+            .domainModule(DomainModule())
             .build()
     }
 }

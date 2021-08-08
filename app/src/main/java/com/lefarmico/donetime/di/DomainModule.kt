@@ -1,7 +1,7 @@
 package com.lefarmico.donetime.di
 
+import com.lefarmico.donetime.data.ExerciseLibraryRepository
 import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.db.ExerciseLibraryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
