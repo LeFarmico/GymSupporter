@@ -16,10 +16,10 @@ interface ExerciseLibraryDao {
     fun getCategories(): Observable<List<LibraryCategory>>
 
     @Query("SELECT * FROM exercise_library_sub_category WHERE category_id = :id")
-    fun getSubCategoriesByCategoryId(id: Int): Observable<LibrarySubCategory>
+    fun getSubCategoriesByCategoryId(id: Int): Observable<List<LibrarySubCategory>>
 
     @Query("SELECT * FROM exercise_library_exercise WHERE sub_category_id = :id")
-    fun getExercisesBySubCategoryId(id: Int): Observable<LibraryExercise>
+    fun getExercisesBySubCategoryId(id: Int): Observable<List<LibraryExercise>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCategory(category: LibraryCategory)

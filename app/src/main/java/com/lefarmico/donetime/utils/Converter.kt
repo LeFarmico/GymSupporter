@@ -11,13 +11,17 @@ object Converter {
 
     fun convertLibraryCategoryToItemCategory(categoryDao: LibraryCategory): ItemLibraryCategory {
         return ItemLibraryCategory(
-            title = categoryDao.categoryTitle
+            title = categoryDao.categoryTitle,
+            id = categoryDao.id
         )
     }
 
     fun convertLibrarySubCategoryToItemSubCategory(subCategory: LibrarySubCategory): ItemLibrarySubCategory {
         return ItemLibrarySubCategory(
-            title = subCategory.subCategory
+            title = subCategory.subCategory,
+            id = subCategory.id,
+            categoryId = subCategory.categoryId,
+
         )
     }
 
@@ -25,7 +29,9 @@ object Converter {
         return ItemLibraryExercise(
             title = exercise.title,
             description = exercise.description,
-            image = exercise.image
+            image = exercise.image,
+            id = exercise.id,
+            subCategoryId = exercise.subCategoryId
         )
     }
 }

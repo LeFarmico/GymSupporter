@@ -12,11 +12,11 @@ class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
         return dao.getCategories()
     }
 
-    fun getSubCategories(categoryId: Int): Observable<LibrarySubCategory> {
+    fun getSubCategories(categoryId: Int): Observable<List<LibrarySubCategory>> {
         return dao.getSubCategoriesByCategoryId(categoryId)
     }
 
-    fun getExercises(subCategoryId: Int): Observable<LibraryExercise> {
+    fun getExercises(subCategoryId: Int): Observable<List<LibraryExercise>> {
         return dao.getExercisesBySubCategoryId(subCategoryId)
     }
 

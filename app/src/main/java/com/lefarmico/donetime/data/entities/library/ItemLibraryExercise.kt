@@ -7,7 +7,9 @@ import com.lefarmico.lerecycle.ItemType
 data class ItemLibraryExercise(
     val title: String,
     val description: String,
-    val image: String?
+    val image: String?,
+    val id: Int,
+    val subCategoryId: Int
 ) : ItemType {
-    override val type: IViewHolderFactory<ItemType> = ExerciseListViewHolderFactory.ITEM
+    override val type: IViewHolderFactory<ItemType> = ExerciseListViewHolderFactory.EXERCISE
 }

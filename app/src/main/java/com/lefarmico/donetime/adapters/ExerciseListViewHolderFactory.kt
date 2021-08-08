@@ -9,7 +9,7 @@ import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
 
 enum class ExerciseListViewHolderFactory : IViewHolderFactory<ItemType> {
-    MENU_ITEM {
+    CATEGORY {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
             return ExerciseListViewHolder(
                 ItemExerciseListBinding.inflate(
@@ -18,7 +18,16 @@ enum class ExerciseListViewHolderFactory : IViewHolderFactory<ItemType> {
             )
         }
     },
-    ITEM {
+    SUBCATEGORY {
+        override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
+            return ExerciseListViewHolder(
+                ItemExerciseListBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+        }
+    },
+    EXERCISE {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
             return ExerciseListViewHolder(
                 ItemExerciseListBinding.inflate(
