@@ -1,26 +1,29 @@
 package com.lefarmico.donetime.viewModels
 
+import androidx.lifecycle.MutableLiveData
 import com.lefarmico.donetime.App
-import com.lefarmico.donetime.data.db.ExerciseLibraryRepository
+import com.lefarmico.donetime.data.Interactor
+import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
 import com.lefarmico.donetime.views.base.BaseViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class ExerciseListViewModel : BaseViewModel() {
 
-    @Inject lateinit var repo: ExerciseLibraryRepository
+    @Inject lateinit var interactor: Interactor
+
+    val categoriesLiveData = MutableLiveData<List<ItemLibraryCategory>>()
 
     init {
         App.appComponent.inject(this)
-//        GlobalScope.launch {
-//            addNew()
-//        }
+        passCategoriesToLiveData()
     }
 
-    fun addNew() {
-        repo.addCategory("Силовые")
-        val cat = repo.getExerciseCategories()[0]
-        repo.addSubCategory("Грудь", cat.id)
-        val subCat = repo.getSubCategories(cat.id)[0]
-        repo.addExercise("Жим штанги лежа в наклоне", "Когда жмешь лежа в наклоне", null, subCat.id)
+    private fun passCategoriesToLiveData() {
+        interactor.getCategoriesFromDB()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                categoriesLiveData.postValue(it)
+            }
     }
 }

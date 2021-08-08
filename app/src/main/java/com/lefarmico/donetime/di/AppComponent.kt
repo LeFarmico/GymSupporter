@@ -6,7 +6,8 @@ import javax.inject.Singleton
 
 @Component(
     modules = [
-        DataBaseModel::class
+        DataBaseModule::class,
+        DomainModule::class
     ]
 )
 @Singleton

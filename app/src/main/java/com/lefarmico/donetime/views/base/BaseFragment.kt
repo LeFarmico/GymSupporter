@@ -15,7 +15,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
     private val provideViewModel: Class<VM>
 ) : Fragment(), ISetupBaseActivity {
 
-    private lateinit var viewModel: VM
+    internal lateinit var viewModel: VM
 
     private var _binding: VB? = null
     internal val binding get() = _binding!!

@@ -1,21 +1,22 @@
-package com.lefarmico.donetime.data.db
+package com.lefarmico.donetime.data
 
 import com.lefarmico.donetime.data.db.dao.ExerciseLibraryDao
 import com.lefarmico.donetime.data.db.entities.LibraryCategory
 import com.lefarmico.donetime.data.db.entities.LibraryExercise
 import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
+import io.reactivex.rxjava3.core.Observable
 
 class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
 
-    fun getExerciseCategories(): List<LibraryCategory> {
+    fun getExerciseCategories(): Observable<List<LibraryCategory>> {
         return dao.getCategories()
     }
 
-    fun getSubCategories(categoryId: Int): List<LibrarySubCategory> {
+    fun getSubCategories(categoryId: Int): Observable<LibrarySubCategory> {
         return dao.getSubCategoriesByCategoryId(categoryId)
     }
 
-    fun getExercises(subCategoryId: Int): List<LibraryExercise> {
+    fun getExercises(subCategoryId: Int): Observable<LibraryExercise> {
         return dao.getExercisesBySubCategoryId(subCategoryId)
     }
 

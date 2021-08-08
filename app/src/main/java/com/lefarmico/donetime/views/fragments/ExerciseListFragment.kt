@@ -11,7 +11,11 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
 ) {
 
     override fun setUpViews() {
-        binding.recycler.adapter = ExerciseListAdapter()
+        val adapter = ExerciseListAdapter()
+        viewModel.categoriesLiveData.observe(viewLifecycleOwner) {
+            adapter.setCategories(it)
+            binding.recycler.adapter = adapter
+        }
     }
 
     override fun observeView() {

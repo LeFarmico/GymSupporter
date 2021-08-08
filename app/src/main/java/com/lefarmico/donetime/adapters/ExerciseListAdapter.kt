@@ -12,11 +12,11 @@ class ExerciseListAdapter : LeRecyclerAdapter() {
         setItemTypes(extractValues<ExerciseListViewHolderFactory>())
     }
 
-    fun setTypes(types: List<ItemLibraryCategory>) {
+    fun setCategories(types: List<ItemLibraryCategory>) {
         items = types.toMutableList()
     }
 
-    fun setGroups(groups: List<ItemLibrarySubCategory>) {
+    fun setSubCategories(groups: List<ItemLibrarySubCategory>) {
         items = groups.toMutableList()
     }
 
