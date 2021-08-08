@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.adapters.viewHolders
 
-import com.lefarmico.donetime.data.entities.library.LibraryExercise
-import com.lefarmico.donetime.data.entities.library.LibraryExerciseCategory
-import com.lefarmico.donetime.data.entities.library.LibraryExerciseSubCategory
+import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
+import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
+import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
 import com.lefarmico.donetime.databinding.ItemExerciseListBinding
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
@@ -15,13 +15,13 @@ class ExerciseListViewHolder(
 
     override fun bind(item: ItemType, position: Int, itemCount: Int) {
         when (item) {
-            is LibraryExerciseCategory -> {
+            is ItemLibraryCategory -> {
                 exerciseText.text = item.title
             }
-            is LibraryExerciseSubCategory -> {
+            is ItemLibrarySubCategory -> {
                 exerciseText.text = item.title
             }
-            is LibraryExercise -> {
+            is ItemLibraryExercise -> {
                 exerciseText.text = item.title
                 exerciseText.setCompoundDrawables(null, null, null, null)
             }

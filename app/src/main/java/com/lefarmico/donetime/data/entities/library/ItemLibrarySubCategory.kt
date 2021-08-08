@@ -4,9 +4,8 @@ import com.lefarmico.donetime.adapters.ExerciseListViewHolderFactory
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-data class LibraryExerciseSubCategory(
-    val title: String,
-    val exerciseType: LibraryExerciseCategory
+data class ItemLibrarySubCategory(
+    val title: String
 ) : ItemType {
     override val type: IViewHolderFactory<ItemType> = ExerciseListViewHolderFactory.MENU_ITEM
 }

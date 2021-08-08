@@ -6,15 +6,16 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "exercise_library_type",
+    tableName = "exercise_library_sub_category",
     indices = [
         Index(
-            value = ["category_title"],
+            value = ["sub_category_title"],
             unique = true
         )
     ]
 )
-data class ExerciseLibraryCategory(
+data class LibrarySubCategory(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "category_title") val categoryTitle: String = ""
+    @ColumnInfo(name = "sub_category_title") val subCategory: String = "",
+    @ColumnInfo(name = "category_id") val categoryId: Int,
 )

@@ -1,6 +1,6 @@
 package com.lefarmico.donetime.data.entities.traning
 
-import com.lefarmico.donetime.adapters.viewHolders.WorkoutViewHolderFactory
+import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 

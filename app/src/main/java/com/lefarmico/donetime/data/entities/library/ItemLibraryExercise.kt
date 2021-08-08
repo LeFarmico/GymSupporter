@@ -4,13 +4,10 @@ import com.lefarmico.donetime.adapters.ExerciseListViewHolderFactory
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-data class LibraryExercise(
+data class ItemLibraryExercise(
     val title: String,
     val description: String,
-    val image: String?,
-    val mainGroup: LibraryExerciseSubCategory,
-    val supportGroups: List<LibraryExerciseSubCategory>,
-    val exTypeTags: LibraryExerciseCategory
+    val image: String?
 ) : ItemType {
     override val type: IViewHolderFactory<ItemType> = ExerciseListViewHolderFactory.ITEM
 }

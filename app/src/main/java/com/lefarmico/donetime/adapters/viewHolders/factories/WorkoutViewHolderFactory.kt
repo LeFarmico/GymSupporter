@@ -1,7 +1,9 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.factories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
+import com.lefarmico.donetime.adapters.viewHolders.WorkoutAddExViewHolder
 import com.lefarmico.donetime.databinding.ItemAddExerciseBinding
 import com.lefarmico.donetime.databinding.ItemExerciseFullBinding
 import com.lefarmico.lerecycle.IViewHolderFactory

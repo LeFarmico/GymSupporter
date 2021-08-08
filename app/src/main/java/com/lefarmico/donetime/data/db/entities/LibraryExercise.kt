@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class ExerciseLibraryExercise(
+data class LibraryExercise(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "exercise_title") val title: String,
     @ColumnInfo(name = "exercise_description") val description: String = "",

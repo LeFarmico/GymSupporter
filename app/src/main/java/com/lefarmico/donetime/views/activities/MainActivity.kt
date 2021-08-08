@@ -2,13 +2,13 @@ package com.lefarmico.donetime.views.activities
 
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
-import com.lefarmico.donetime.viewModels.OrderViewModel
+import com.lefarmico.donetime.viewModels.MainViewModel
 import com.lefarmico.donetime.views.base.BaseActivity
 import com.lefarmico.donetime.views.fragments.ExerciseListFragment
 
-class MainActivity : BaseActivity<ActivityMainBinding, OrderViewModel>(
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
-    OrderViewModel::class.java
+    MainViewModel::class.java
 ) {
     override fun setUpViews() {
 

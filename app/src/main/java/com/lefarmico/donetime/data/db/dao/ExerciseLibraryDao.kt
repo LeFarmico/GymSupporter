@@ -4,28 +4,28 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lefarmico.donetime.data.db.entities.ExerciseLibraryCategory
-import com.lefarmico.donetime.data.db.entities.ExerciseLibraryExercise
-import com.lefarmico.donetime.data.db.entities.ExerciseLibrarySubCategory
+import com.lefarmico.donetime.data.db.entities.LibraryCategory
+import com.lefarmico.donetime.data.db.entities.LibraryExercise
+import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
 
 @Dao
 interface ExerciseLibraryDao {
 
     @Query("SELECT * FROM exercise_library_type")
-    fun getCategories(): List<ExerciseLibraryCategory>
+    fun getCategories(): List<LibraryCategory>
 
     @Query("SELECT * FROM exercise_library_sub_category WHERE category_id = :id")
-    fun getSubCategoriesByCategoryId(id: Int): List<ExerciseLibrarySubCategory>
+    fun getSubCategoriesByCategoryId(id: Int): List<LibrarySubCategory>
 
     @Query("SELECT * FROM exercise_library_exercise WHERE sub_category_id = :id")
-    fun getExercisesBySubCategoryId(id: Int): List<ExerciseLibraryExercise>
+    fun getExercisesBySubCategoryId(id: Int): List<LibraryExercise>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertCategory(category: ExerciseLibraryCategory)
+    fun insertCategory(category: LibraryCategory)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertSubCategory(subCategory: ExerciseLibrarySubCategory)
+    fun insertSubCategory(subCategory: LibrarySubCategory)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertExercise(exercise: ExerciseLibraryExercise)
+    fun insertExercise(exercise: LibraryExercise)
 }

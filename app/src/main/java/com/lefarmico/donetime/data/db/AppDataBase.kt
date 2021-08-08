@@ -3,15 +3,15 @@ package com.lefarmico.donetime.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.lefarmico.donetime.data.db.dao.ExerciseLibraryDao
-import com.lefarmico.donetime.data.db.entities.ExerciseLibraryCategory
-import com.lefarmico.donetime.data.db.entities.ExerciseLibraryExercise
-import com.lefarmico.donetime.data.db.entities.ExerciseLibrarySubCategory
+import com.lefarmico.donetime.data.db.entities.LibraryCategory
+import com.lefarmico.donetime.data.db.entities.LibraryExercise
+import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
 
 @Database(
     entities = [
-        ExerciseLibraryCategory::class,
-        ExerciseLibrarySubCategory::class,
-        ExerciseLibraryExercise::class
+        LibraryCategory::class,
+        LibrarySubCategory::class,
+        LibraryExercise::class
     ],
     version = 1
 )

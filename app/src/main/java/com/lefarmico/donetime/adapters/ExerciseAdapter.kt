@@ -2,7 +2,7 @@ package com.lefarmico.donetime.adapters
 
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.viewHolders.ExerciseSetViewHolder
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolderFactory
+import com.lefarmico.donetime.adapters.viewHolders.factories.ExerciseViewHolderFactory
 import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseMuscleSetEntity
 import com.lefarmico.donetime.utils.ItemObservable
 import com.lefarmico.donetime.utils.ItemObserver

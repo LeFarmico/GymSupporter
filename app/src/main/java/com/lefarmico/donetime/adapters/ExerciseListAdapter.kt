@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.adapters
 
-import com.lefarmico.donetime.data.entities.library.LibraryExercise
-import com.lefarmico.donetime.data.entities.library.LibraryExerciseCategory
-import com.lefarmico.donetime.data.entities.library.LibraryExerciseSubCategory
+import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
+import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
+import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
 import com.lefarmico.lerecycle.LeRecyclerAdapter
 import com.lefarmico.lerecycle.extractValues
 
@@ -12,15 +12,15 @@ class ExerciseListAdapter : LeRecyclerAdapter() {
         setItemTypes(extractValues<ExerciseListViewHolderFactory>())
     }
 
-    fun setTypes(types: List<LibraryExerciseCategory>) {
+    fun setTypes(types: List<ItemLibraryCategory>) {
         items = types.toMutableList()
     }
 
-    fun setGroups(groups: List<LibraryExerciseSubCategory>) {
+    fun setGroups(groups: List<ItemLibrarySubCategory>) {
         items = groups.toMutableList()
     }
 
-    fun setExercises(exercises: List<LibraryExercise>) {
+    fun setExercises(exercises: List<ItemLibraryExercise>) {
         items = exercises.toMutableList()
     }
 }
