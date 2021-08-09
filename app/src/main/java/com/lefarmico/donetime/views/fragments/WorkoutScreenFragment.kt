@@ -1,6 +1,8 @@
 package com.lefarmico.donetime.views.fragments
 
+import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.WorkoutAdapter
+import com.lefarmico.donetime.data.entities.traning.AddExerciseEntity
 import com.lefarmico.donetime.data.entities.traning.WorkoutDataBase
 import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseDataBase
 import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseMuscleSetEntity
@@ -28,9 +30,14 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
         val workoutRepo = WorkoutDataBase().apply {
             addExercise(exercise)
             addExercise(exercise2)
-            addExButtonEvent = { exercise }
             addSetButtonEvent = {
                 ExerciseMuscleSetEntity(25f, 44)
+            }
+            addExerciseButton = AddExerciseEntity {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, CategoryListFragment())
+                    .addToBackStack("Workout")
+                    .commit()
             }
         }
 

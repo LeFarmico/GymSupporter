@@ -21,12 +21,12 @@ class WorkoutDataBase : IWorkoutItemObservable {
 
     private var exercises = mutableListOf<ExerciseDataBase>()
     private var activePosition = -1
-    private var addExerciseButton = AddExerciseEntity {
+    var addExerciseButton = AddExerciseEntity {
         if (addExButtonEvent != null) {
-            addExercise(addExButtonEvent!!.invoke())
+//            addExercise(addExButtonEvent!!.invoke())
         }
     }
-    var addExButtonEvent: (() -> ExerciseDataBase)? = null
+    var addExButtonEvent: (() -> Unit)? = null
     var addSetButtonEvent: (() -> ISetEntity)? = null
     var deleteSetButtonEvent: (() -> Unit) = { }
 

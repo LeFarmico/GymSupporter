@@ -4,7 +4,7 @@ import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.donetime.viewModels.MainViewModel
 import com.lefarmico.donetime.views.base.BaseActivity
-import com.lefarmico.donetime.views.fragments.ExerciseListFragment
+import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
@@ -13,7 +13,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     override fun setUpViews() {
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment, ExerciseListFragment())
+            .replace(R.id.fragment, WorkoutScreenFragment())
             .commit()
     }
 
