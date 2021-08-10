@@ -2,7 +2,6 @@ package com.lefarmico.donetime.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.core.util.Preconditions
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.WorkoutAdapter
@@ -47,7 +46,6 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     }
 
     override fun setUpViews() {
-        Log.d("XXX", this.hashCode().toString())
         workoutRepo.apply {
             addExercise(exercise)
             addExercise(exercise2)
@@ -57,7 +55,7 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
             addExerciseButton = AddExerciseEntity {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment, CategoryListFragment::class.java, null)
-                    .addToBackStack("EX")
+                    .addToBackStack(BACKSTACK_BRANCH)
                     .commit()
             }
         }
@@ -79,5 +77,6 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     companion object {
         const val REQUEST_KEY = "exercise_result"
         const val KEY_NUMBER = "key_1"
+        const val BACKSTACK_BRANCH = "EXERCISE"
     }
 }
