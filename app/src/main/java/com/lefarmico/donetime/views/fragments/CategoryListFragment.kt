@@ -1,6 +1,7 @@
 package com.lefarmico.donetime.views.fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseListAdapter
 import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
@@ -8,27 +9,41 @@ import com.lefarmico.donetime.databinding.FragmentCategoryListBinding
 import com.lefarmico.donetime.viewModels.CategoryListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 
-class CategoryListFragment : BaseFragment< FragmentCategoryListBinding, CategoryListViewModel>(
+class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryListViewModel>(
     FragmentCategoryListBinding::inflate,
     CategoryListViewModel::class.java
 ) {
 
+    private val adapter = ExerciseListAdapter().apply {
+        val bundle = Bundle()
+        setOnClickEvent { item ->
+            item as ItemLibraryCategory
+            bundle.putInt(KEY_NUMBER, item.id)
+            changeFragment(SubCategoryListFragment::class.java, bundle)
+        }
+    }
+
     override fun setUpViews() {
-        val adapter = ExerciseListAdapter()
+        binding.recycler.adapter = adapter
+    }
+
+    override fun observeData() {
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { data ->
             adapter.setCategories(data)
-            val bundle = Bundle()
-            adapter.setOnClickEvent { item ->
-                item as ItemLibraryCategory
-                bundle.putInt("Category", item.id)
-                parentFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fragment, SubCategoryListFragment().apply { arguments = bundle }
-                    )
-                    .addToBackStack("Category")
-                    .commit()
-            }
         }
-        binding.recycler.adapter = adapter
+    }
+
+    private fun changeFragment(
+        fragment: Class<out Fragment>,
+        bundle: Bundle
+    ) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment, fragment, bundle)
+            .addToBackStack(WorkoutScreenFragment.BACKSTACK_BRANCH)
+            .commit()
+    }
+    
+    companion object {
+        const val KEY_NUMBER = "key_category"
     }
 }

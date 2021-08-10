@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.replace
-import com.lefarmico.donetime.R
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import com.lefarmico.donetime.adapters.ExerciseListAdapter
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseNameEntity
@@ -14,34 +14,46 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
     FragmentExerciseListBinding::inflate,
     ExerciseListViewModel::class.java
 ) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val bundle = this.arguments
-        if (bundle != null) {
-            viewModel.passExercisesToLiveData(
-                bundle.getInt("SubCategory")
+
+    var bundleResult: Int = -1
+
+    private val adapter = ExerciseListAdapter().apply {
+        setOnClickEvent {
+            it as ItemLibraryExercise
+            setResult(ExerciseNameEntity(it.title, it.title))
+            parentFragmentManager.popBackStack(
+                WorkoutScreenFragment.BACKSTACK_BRANCH,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
         }
     }
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getBundleResult()
+    }
     override fun setUpViews() {
-        val adapter = ExerciseListAdapter()
-        val bundle = Bundle()
+        binding.recycler.adapter = adapter
+        viewModel.passExercisesToLiveData(bundleResult)
+    }
+
+    override fun observeData() {
         viewModel.exercisesLiveData.observe(viewLifecycleOwner) { list ->
             adapter.setExercises(list)
         }
-        adapter.setOnClickEvent {
-            it as ItemLibraryExercise
-            bundle.putParcelable("Exercise", ExerciseNameEntity(it.title, it.title))
-            parentFragmentManager.beginTransaction()
-                .replace<WorkoutScreenFragment>(R.id.fragment, "Workout", bundle)
-//                .replace(
-//
-//                    WorkoutScreenFragment().apply { arguments = bundle },
-//                    "Workout"
-//                )
-                .disallowAddToBackStack()
-                .commit()
+    }
+
+    private fun setResult(exerciseEntity: ExerciseNameEntity) {
+        parentFragmentManager.setFragmentResult(
+            WorkoutScreenFragment.REQUEST_KEY,
+            bundleOf(WorkoutScreenFragment.KEY_NUMBER to exerciseEntity)
+        )
+    }
+
+    private fun getBundleResult() {
+        val bundle = this.arguments
+        if (bundle != null) {
+            bundleResult = bundle.getInt(SubCategoryListFragment.KEY_NUMBER)
         }
-        binding.recycler.adapter = adapter
     }
 }
