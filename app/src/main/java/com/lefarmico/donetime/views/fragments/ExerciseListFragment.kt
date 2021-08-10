@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.replace
-import com.lefarmico.donetime.R
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import com.lefarmico.donetime.adapters.ExerciseListAdapter
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseNameEntity
@@ -25,22 +25,16 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
     }
     override fun setUpViews() {
         val adapter = ExerciseListAdapter()
-        val bundle = Bundle()
         viewModel.exercisesLiveData.observe(viewLifecycleOwner) { list ->
             adapter.setExercises(list)
         }
         adapter.setOnClickEvent {
             it as ItemLibraryExercise
-            bundle.putParcelable("Exercise", ExerciseNameEntity(it.title, it.title))
-            parentFragmentManager.beginTransaction()
-                .replace<WorkoutScreenFragment>(R.id.fragment, "Workout", bundle)
-//                .replace(
-//
-//                    WorkoutScreenFragment().apply { arguments = bundle },
-//                    "Workout"
-//                )
-                .disallowAddToBackStack()
-                .commit()
+            parentFragmentManager.setFragmentResult(
+                WorkoutScreenFragment.REQUEST_KEY,
+                bundleOf(WorkoutScreenFragment.KEY_NUMBER to ExerciseNameEntity(it.title, it.title))
+            )
+            parentFragmentManager.popBackStack("EX", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         binding.recycler.adapter = adapter
     }

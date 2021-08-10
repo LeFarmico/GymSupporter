@@ -31,10 +31,8 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
                 item as ItemLibrarySubCategory
                 bundle.putInt("SubCategory", item.id)
                 parentFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fragment, ExerciseListFragment().apply { arguments = bundle }
-                    )
-                    .addToBackStack("SubCategory")
+                    .replace(R.id.fragment, ExerciseListFragment::class.java, bundle)
+                    .addToBackStack("EX")
                     .commit()
             }
         }
