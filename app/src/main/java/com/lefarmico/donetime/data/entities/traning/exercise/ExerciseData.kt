@@ -6,39 +6,54 @@ import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-class ExerciseDataBase : ItemType, ItemObservable {
+class ExerciseData : ItemType, ItemObservable {
 
+    constructor(name: String, tag: String) {
+        this.exerciseName = ExerciseNameEntity(name, tag)
+        this.sets.add(ExerciseMuscleSetEntity(0f, 0))
+    }
+
+    constructor(name: String, tag: String, setEntity: ISetEntity) {
+        this.exerciseName = ExerciseNameEntity(name, tag)
+        this.sets.add(setEntity)
+    }
+
+    constructor(name: String, tag: String, listSetEntity: List<ISetEntity>) {
+        this.exerciseName = ExerciseNameEntity(name, tag)
+        this.sets.addAll(listSetEntity)
+    }
+    private var exerciseName: ExerciseNameEntity
     private val sets: MutableList<ISetEntity> = mutableListOf()
-    private lateinit var exerciseName: ExerciseNameEntity
     private var addDelButtons = AddDelButtonsEntity(
-        { addButtonEvent?.let { it() } },
-        { delButtonEvent?.let { it() } }
+        {
+            addSet(addButtonEvent())
+        },
+        {
+            delSet()
+            delButtonEvent(this)
+        }
     )
+    lateinit var addButtonEvent: (() -> ISetEntity)
+    lateinit var delButtonEvent: ((ExerciseData) -> Unit)
 
     var isActive: Boolean = false
         set(value) {
             field = value
             notifyObservers()
         }
-    var addButtonEvent: (() -> Unit)? = null
-    var delButtonEvent: (() -> Unit)? = null
 
     override val listObservers = mutableListOf<ItemObserver>()
+    
+    fun getSetCount(): Int {
+        return sets.size
+    }
 
-    fun addSet(weights: Float, reps: Int) {
-        sets.add(
-            ExerciseMuscleSetEntity(weights, reps).apply {
-                setNumber = sets.size + 1
-            }
-        )
+    fun addSet(setEntity: ISetEntity) {
+        setEntity.setNumber = sets.size + 1
+        sets.add(setEntity)
         notifyObservers()
     }
-    fun addSet(ISetEntity: ISetEntity) {
-        ISetEntity.setNumber = sets.size + 1
-        sets.add(ISetEntity)
-        notifyObservers()
-    }
-    fun delSet() {
+    private fun delSet() {
         sets.removeAt(sets.size - 1)
         notifyObservers()
     }
@@ -51,15 +66,6 @@ class ExerciseDataBase : ItemType, ItemObservable {
             itemList.add(addDelButtons)
         }
         return itemList
-    }
-
-    fun setNameAndTags(name: String, tags: String) {
-        exerciseName = ExerciseNameEntity(name, tags)
-        notifyObservers()
-    }
-
-    fun getSetCount(): Int {
-        return sets.size
     }
 
     override val type: IViewHolderFactory<ItemType> = WorkoutViewHolderFactory.EXERCISE

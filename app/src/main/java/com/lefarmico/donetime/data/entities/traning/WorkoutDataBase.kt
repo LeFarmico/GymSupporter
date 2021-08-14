@@ -1,95 +1,63 @@
 package com.lefarmico.donetime.data.entities.traning
 
-import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseDataBase
+import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseData
 import com.lefarmico.donetime.data.entities.traning.exercise.ISetEntity
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType
 
-class WorkoutDataBase : IWorkoutItemObservable {
+class WorkoutDataBase : IWorkoutItemObservable, IWorkoutData {
 
     constructor()
     
-    constructor(exerciseRepositories: List<ExerciseDataBase>) {
+    constructor(exerciseRepositories: List<ExerciseData>) {
         this.exercises = exerciseRepositories.toMutableList()
     }
     
-    constructor(exerciseRepositories: List<ExerciseDataBase>, activePosition: Int) {
+    constructor(exerciseRepositories: List<ExerciseData>, activePosition: Int) {
         this.exercises = exerciseRepositories.toMutableList()
         this.activePosition = activePosition
     }
 
-    private var exercises = mutableListOf<ExerciseDataBase>()
     private var activePosition = -1
-    var addExerciseButton = AddExerciseEntity {
-        if (addExButtonEvent != null) {
-//            addExercise(addExButtonEvent!!.invoke())
-        }
-    }
-    var addExButtonEvent: (() -> Unit)? = null
-    var addSetButtonEvent: (() -> ISetEntity)? = null
-    var deleteSetButtonEvent: (() -> Unit) = { }
+    override var exercises = mutableListOf<ExerciseData>()
+    override lateinit var buttonEventAddSet: (() -> ISetEntity) // FragmentResultListener
+    override var buttonEventDelSet: (ExerciseData) -> Unit = { deleteEmptySetExercise(it) }
+    override val listObservers: MutableList<ItemObserver> = mutableListOf()
 
     override fun setActivePosition(position: Int) {
+        val currentActivePos = activePosition
         try {
-            val currentActivePos = getActivePosition()
             getExercise(currentActivePos).isActive = false
-        } catch (e: ArrayIndexOutOfBoundsException) {}
+        } catch (e: IndexOutOfBoundsException) {}
         activePosition = position
         getExercise(activePosition).isActive = true
         notifyObservers()
     }
 
-    override val listObservers: MutableList<ItemObserver> = mutableListOf()
-
-    fun getExercise(position: Int): ExerciseDataBase {
-        return try {
-            exercises[position]
-        } catch (e: ArrayIndexOutOfBoundsException) {
-            throw (e)
-        }
+    private fun getExercise(position: Int): ExerciseData {
+        return exercises[position]
     }
     
-    fun addExercise(exerciseRepository: ExerciseDataBase) {
-        exerciseRepository.addButtonEvent = {
-            if (addSetButtonEvent != null) {
-                exerciseRepository.addSet(addSetButtonEvent!!.invoke())
-            }
-        }
-        exerciseRepository.delButtonEvent = {
-            exerciseRepository.delSet()
-            deleteEmptySetExercise(exerciseRepository)
+    fun addExercise(exerciseRepository: ExerciseData) {
+        exerciseRepository.apply {
+            addButtonEvent = { buttonEventAddSet.invoke() }
+            delButtonEvent = { buttonEventDelSet(it) }
         }
         exercises.add(exerciseRepository)
         notifyObservers()
     }
-    
-    fun deleteExercise(index: Int) {
-        exercises.removeAt(index)
-        notifyObservers()
-    }
 
-    fun deleteExercise(exerciseRepository: ExerciseDataBase) {
+    private fun deleteExercise(exerciseRepository: ExerciseData) {
         exercises.remove(exerciseRepository)
         notifyObservers()
     }
 
-    fun getActivePosition(): Int {
-        return activePosition
-    }
-
-    fun isActivePosition(position: Int): Boolean {
-        return position == activePosition
-    }
-
     private fun getItems(): MutableList<ItemType> {
-        val itemList = mutableListOf<ItemType>()
-        itemList.addAll(exercises)
-        itemList.add(addExerciseButton)
-        return itemList
+        return exercises.toMutableList()
     }
 
-    fun deleteEmptySetExercise(exerciseRepository: ExerciseDataBase) {
+    private fun deleteEmptySetExercise(exerciseRepository: ExerciseData) {
         if (exerciseRepository.getSetCount() == 0) {
             deleteExercise(exerciseRepository)
         }
