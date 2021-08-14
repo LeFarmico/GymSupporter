@@ -1,7 +1,8 @@
-package com.lefarmico.donetime.data.entities.traning
+package com.lefarmico.donetime.data.entities.workout
 
-import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseData
-import com.lefarmico.donetime.data.entities.traning.exercise.ISetEntity
+import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.workout.exercise.IExerciseData
+import com.lefarmico.donetime.data.entities.workout.exercise.ISetEntity
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType
@@ -20,9 +21,9 @@ class WorkoutDataBase : IWorkoutItemObservable, IWorkoutData {
     }
 
     private var activePosition = -1
-    override var exercises = mutableListOf<ExerciseData>()
+    override var exercises = mutableListOf<IExerciseData>()
     override lateinit var buttonEventAddSet: (() -> ISetEntity) // FragmentResultListener
-    override var buttonEventDelSet: (ExerciseData) -> Unit = { deleteEmptySetExercise(it) }
+    override var buttonEventDelSet: (IExerciseData) -> Unit = { deleteEmptySetExercise(it) }
     override val listObservers: MutableList<ItemObserver> = mutableListOf()
 
     override fun setActivePosition(position: Int) {
@@ -35,31 +36,31 @@ class WorkoutDataBase : IWorkoutItemObservable, IWorkoutData {
         notifyObservers()
     }
 
-    private fun getExercise(position: Int): ExerciseData {
+    private fun getExercise(position: Int): IExerciseData {
         return exercises[position]
     }
     
-    fun addExercise(exerciseRepository: ExerciseData) {
-        exerciseRepository.apply {
+    fun addExercise(exerciseData: IExerciseData) {
+        exerciseData.apply {
             addButtonEvent = { buttonEventAddSet.invoke() }
             delButtonEvent = { buttonEventDelSet(it) }
         }
-        exercises.add(exerciseRepository)
+        exercises.add(exerciseData)
         notifyObservers()
     }
 
-    private fun deleteExercise(exerciseRepository: ExerciseData) {
-        exercises.remove(exerciseRepository)
+    private fun deleteExercise(exerciseData: IExerciseData) {
+        exercises.remove(exerciseData)
         notifyObservers()
     }
 
-    private fun getItems(): MutableList<ItemType> {
+    fun getItems(): MutableList<ItemType> {
         return exercises.toMutableList()
     }
 
-    private fun deleteEmptySetExercise(exerciseRepository: ExerciseData) {
-        if (exerciseRepository.getSetCount() == 0) {
-            deleteExercise(exerciseRepository)
+    private fun deleteEmptySetExercise(exerciseData: IExerciseData) {
+        if (exerciseData.getSetCount() == 0) {
+            deleteExercise(exerciseData)
         }
     }
 

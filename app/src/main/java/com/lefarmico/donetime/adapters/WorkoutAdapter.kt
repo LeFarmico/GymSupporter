@@ -3,8 +3,8 @@ package com.lefarmico.donetime.adapters
 import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.WorkoutAddExViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
-import com.lefarmico.donetime.data.entities.traning.AddExerciseEntity
-import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.workout.AddExerciseEntity
+import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType

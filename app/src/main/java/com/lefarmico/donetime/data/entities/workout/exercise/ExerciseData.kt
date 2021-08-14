@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.entities.traning.exercise
+package com.lefarmico.donetime.data.entities.workout.exercise
 
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
 import com.lefarmico.donetime.utils.ItemObservable
@@ -6,24 +6,10 @@ import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-class ExerciseData : ItemType, ItemObservable {
+class ExerciseData(override var name: String, override var tag: String) : ItemObservable, IExerciseData {
 
-    constructor(name: String, tag: String) {
-        this.exerciseName = ExerciseNameEntity(name, tag)
-        this.sets.add(ExerciseMuscleSetEntity(0f, 0))
-    }
-
-    constructor(name: String, tag: String, setEntity: ISetEntity) {
-        this.exerciseName = ExerciseNameEntity(name, tag)
-        this.sets.add(setEntity)
-    }
-
-    constructor(name: String, tag: String, listSetEntity: List<ISetEntity>) {
-        this.exerciseName = ExerciseNameEntity(name, tag)
-        this.sets.addAll(listSetEntity)
-    }
-    private var exerciseName: ExerciseNameEntity
-    private val sets: MutableList<ISetEntity> = mutableListOf()
+    private var exerciseName: ExerciseNameEntity = ExerciseNameEntity(name, tag)
+    override var sets: MutableList<ISetEntity> = mutableListOf(ExerciseMuscleSetEntity(0f, 0))
     private var addDelButtons = AddDelButtonsEntity(
         {
             addSet(addButtonEvent())
@@ -33,18 +19,16 @@ class ExerciseData : ItemType, ItemObservable {
             delButtonEvent(this)
         }
     )
-    lateinit var addButtonEvent: (() -> ISetEntity)
-    lateinit var delButtonEvent: ((ExerciseData) -> Unit)
-
-    var isActive: Boolean = false
+    override lateinit var addButtonEvent: (() -> ISetEntity)
+    override lateinit var delButtonEvent: ((ExerciseData) -> Unit)
+    override val listObservers = mutableListOf<ItemObserver>()
+    override var isActive: Boolean = false
         set(value) {
             field = value
             notifyObservers()
         }
 
-    override val listObservers = mutableListOf<ItemObserver>()
-    
-    fun getSetCount(): Int {
+    override fun getSetCount(): Int {
         return sets.size
     }
 
