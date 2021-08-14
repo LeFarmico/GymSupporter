@@ -15,9 +15,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/add_ex_button"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_margin="16dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_ex_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/list_recycler"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="16dp"
+        android:text="@string/add_exercise"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

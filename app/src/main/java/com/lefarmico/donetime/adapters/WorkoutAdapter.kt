@@ -3,8 +3,8 @@ package com.lefarmico.donetime.adapters
 import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.WorkoutAddExViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
-import com.lefarmico.donetime.data.entities.traning.AddExerciseEntity
-import com.lefarmico.donetime.data.entities.traning.exercise.ExerciseDataBase
+import com.lefarmico.donetime.data.entities.workout.AddExerciseEntity
+import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType
@@ -26,7 +26,7 @@ class WorkoutAdapter(
     override fun onBindViewHolder(holder: LeRecyclerViewHolder<ItemType>, position: Int) {
         super.onBindViewHolder(holder, position)
         when (items[position]) {
-            is ExerciseDataBase -> {
+            is ExerciseData -> {
                 holder as ExerciseViewHolder
                 bindExerciseItem(holder, position)
             }
@@ -42,7 +42,7 @@ class WorkoutAdapter(
     }
 
     private fun bindExerciseItem(holder: ExerciseViewHolder, position: Int) {
-        val exercise = items[position] as ExerciseDataBase
+        val exercise = items[position] as ExerciseData
         val adapter = ExerciseAdapter(exercise)
 
         if (!exercise.isActive) {

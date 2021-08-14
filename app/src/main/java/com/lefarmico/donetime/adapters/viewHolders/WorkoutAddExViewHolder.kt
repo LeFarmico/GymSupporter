@@ -1,6 +1,6 @@
 package com.lefarmico.donetime.adapters.viewHolders
 
-import com.lefarmico.donetime.data.entities.traning.AddExerciseEntity
+import com.lefarmico.donetime.data.entities.workout.AddExerciseEntity
 import com.lefarmico.donetime.databinding.ItemAddExerciseBinding
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder

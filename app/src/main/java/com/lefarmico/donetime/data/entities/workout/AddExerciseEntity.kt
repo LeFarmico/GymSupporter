@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.entities.traning
+package com.lefarmico.donetime.data.entities.workout
 
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
 import com.lefarmico.lerecycle.IViewHolderFactory

@@ -3,4 +3,5 @@
     <string name="add_set">add set</string>
     <string name="delete_set">delete set</string>
     <string name="add_exercise">Add exercise +</string>
+    <string name="start_new_workout">Start new workout</string>
 </resources>
