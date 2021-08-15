@@ -7,7 +7,7 @@ import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType
 
-class WorkoutDataBase : IWorkoutItemObservable, IWorkoutData {
+class WorkoutData : IWorkoutItemObservable, IWorkoutData {
 
     constructor()
     

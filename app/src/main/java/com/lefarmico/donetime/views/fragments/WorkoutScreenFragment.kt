@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.core.util.Preconditions
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.WorkoutAdapter
-import com.lefarmico.donetime.data.entities.workout.WorkoutDataBase
+import com.lefarmico.donetime.data.entities.workout.WorkoutData
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseMuscleSetEntity
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseNameEntity
@@ -22,7 +22,7 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     val exercise = ExerciseData("Bench press", "Chest")
     private val exercise2 = ExerciseData("Pull ups", "Back")
 
-    private var workoutRepo: WorkoutDataBase = WorkoutDataBase().apply {
+    private var workoutRepo: WorkoutData = WorkoutData().apply {
         addExercise(exercise)
         addExercise(exercise2)
         buttonEventAddSet = { addSetButtonListener() }

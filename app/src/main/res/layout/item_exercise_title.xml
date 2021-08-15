@@ -3,11 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_exercise_title"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#00DADADA"
-    android:layout_below="@id/tags"
-    android:orientation="vertical"
-    android:layout_marginTop="8dp"
+    android:layout_height="40dp"
     >
 
     <TextView
@@ -15,16 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        style="@style/TextAppearance.MaterialComponents.Caption"
-        android:layout_margin="8dp"
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_marginHorizontal="8dp"
+        android:layout_gravity="bottom"
         />
     <TextView
         android:id="@+id/tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        style="@style/TextAppearance.MaterialComponents.Caption"
-        android:layout_margin="8dp"
-        android:layout_gravity="end"
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_marginHorizontal="8dp"
+        android:layout_gravity="end|bottom"
         />
 </FrameLayout>
