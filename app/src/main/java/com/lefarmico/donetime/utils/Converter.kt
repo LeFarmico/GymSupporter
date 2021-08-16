@@ -34,4 +34,21 @@ object Converter {
             subCategoryId = exercise.subCategoryId
         )
     }
+
+//    fun WorkoutData.convertWorkoutDataToWorkoutEntity(): IWorkoutEntity {
+//        val date = Calendar.getInstance().time
+//        val format = SimpleDateFormat("dd.MM.yyy", Locale.getDefault())
+//        val formattedDate = format.format(date)
+//
+//        val exEntities = mutableListOf<IExerciseEntity>()
+//        exercises.forEach {
+//            val entity = IExerciseEntity(
+//                name = it.name,
+//                tag = it.tag,
+//                sets = it.sets
+//            )
+//            exEntities.add(entity)
+//        }
+//        return IWorkoutEntity(date = formattedDate, exercises = exEntities)
+//    }
 }

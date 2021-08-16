@@ -2,15 +2,16 @@ package com.lefarmico.donetime.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.core.util.Preconditions
-import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.WorkoutAdapter
-import com.lefarmico.donetime.data.entities.workout.WorkoutDataBase
+import com.lefarmico.donetime.data.entities.workout.WorkoutData
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseMuscleSetEntity
 import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseNameEntity
 import com.lefarmico.donetime.data.entities.workout.exercise.ISetEntity
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
+import com.lefarmico.donetime.utils.JsonConverter
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 
@@ -22,7 +23,7 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     val exercise = ExerciseData("Bench press", "Chest")
     private val exercise2 = ExerciseData("Pull ups", "Back")
 
-    private var workoutRepo: WorkoutDataBase = WorkoutDataBase().apply {
+    private var workoutRepo: WorkoutData = WorkoutData().apply {
         addExercise(exercise)
         addExercise(exercise2)
         buttonEventAddSet = { addSetButtonListener() }
@@ -49,10 +50,12 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
         }
         binding.listRecycler.adapter = adapter
         binding.addExButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment, CategoryListFragment::class.java, null)
-                .addToBackStack(BACKSTACK_BRANCH)
-                .commit()
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment, CategoryListFragment::class.java, null)
+//                .addToBackStack(BACKSTACK_BRANCH)
+//                .commit()
+            val json = JsonConverter.fromWorkoutDataToJson(workoutRepo)
+            Log.d("XXXXX", json)
         }
     }
 

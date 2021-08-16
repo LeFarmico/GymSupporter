@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">DoneTime</string>
-    <string name="add_set">add set</string>
-    <string name="delete_set">delete set</string>
+    <string name="add_set">+ set</string>
+    <string name="delete_set">- set</string>
     <string name="add_exercise">Add exercise +</string>
     <string name="start_new_workout">Start new workout</string>
+    <string name="exercise">Exercise</string>
+    <string name="tag">Tag</string>
+    <string name="edit">Edit</string>
+    <string name="number">0.</string>
+    <string name="reps_0">Reps: 0 </string>
+    <string name="weights_0_0_kg">Weights: 0.0 kg</string>
+    <string name="home">Home</string>
+    <string name="exercises">Exercises</string>
+    <string name="settings">Settings</string>
 </resources>
