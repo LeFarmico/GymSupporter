@@ -3,8 +3,6 @@ package com.lefarmico.donetime.adapters.viewHolders.factories
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
-import com.lefarmico.donetime.adapters.viewHolders.WorkoutAddExViewHolder
-import com.lefarmico.donetime.databinding.ItemAddExerciseBinding
 import com.lefarmico.donetime.databinding.ItemExerciseFullBinding
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
@@ -15,15 +13,6 @@ enum class WorkoutViewHolderFactory : IViewHolderFactory<ItemType> {
         override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
             return ExerciseViewHolder(
                 ItemExerciseFullBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-            )
-        }
-    },
-    ADD_EXERCISE {
-        override fun createViewHolder(parent: ViewGroup): LeRecyclerViewHolder<ItemType> {
-            return WorkoutAddExViewHolder(
-                ItemAddExerciseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )

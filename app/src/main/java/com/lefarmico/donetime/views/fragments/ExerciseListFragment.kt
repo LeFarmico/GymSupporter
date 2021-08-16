@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.donetime.adapters.ExerciseListAdapter
+import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseNameEntity
 import com.lefarmico.donetime.databinding.FragmentExerciseListBinding
 import com.lefarmico.donetime.viewModels.ExerciseListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment

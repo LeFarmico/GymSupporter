@@ -1,6 +1,6 @@
 package com.lefarmico.donetime.data.entities.workout
 
-import com.lefarmico.donetime.data.entities.workout.exercise.IExerciseEntity
+import com.lefarmico.donetime.data.entities.exercise.IExerciseEntity
 
 interface IWorkoutEntity {
     val date: String

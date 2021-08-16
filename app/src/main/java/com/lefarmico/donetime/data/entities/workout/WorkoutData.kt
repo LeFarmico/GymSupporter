@@ -1,14 +1,12 @@
 package com.lefarmico.donetime.data.entities.workout
 
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
-import com.lefarmico.donetime.data.entities.workout.exercise.IExerciseData
-import com.lefarmico.donetime.data.entities.workout.exercise.ISetEntity
+import com.lefarmico.donetime.data.entities.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.exercise.IExerciseData
+import com.lefarmico.donetime.data.entities.exercise.ISetEntity
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
+import com.lefarmico.donetime.utils.Utilities
 import com.lefarmico.lerecycle.ItemType
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class WorkoutData : IWorkoutItemObservable, IWorkoutData {
 
@@ -23,11 +21,7 @@ class WorkoutData : IWorkoutItemObservable, IWorkoutData {
         this.activePosition = activePosition
     }
 
-    init {
-        date = getCurrentDate()
-    }
-
-    override val date: String
+    override val date: String = Utilities.getCurrentDateInFormat()
     override var exercises = mutableListOf<IExerciseData>()
     override lateinit var buttonEventAddSet: (() -> ISetEntity) // FragmentResultListener
     override var buttonEventDelSet: (IExerciseData) -> Unit = { deleteEmptySetExercise(it) }
@@ -71,12 +65,6 @@ class WorkoutData : IWorkoutItemObservable, IWorkoutData {
         if (exerciseData.getSetCount() == 0) {
             deleteExercise(exerciseData)
         }
-    }
-
-    private fun getCurrentDate(): String {
-        val date = Calendar.getInstance().time
-        val format = SimpleDateFormat("dd.MM.yyy", Locale.getDefault())
-        return format.format(date)
     }
 
     override fun registerObserver(observer: ItemObserver) {

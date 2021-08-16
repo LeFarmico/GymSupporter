@@ -1,8 +1,8 @@
-package com.lefarmico.donetime.data.json
+package com.lefarmico.donetime.data.entities.json
 
 import com.google.gson.annotations.Expose
-import com.lefarmico.donetime.data.entities.workout.exercise.IExerciseEntity
-import com.lefarmico.donetime.data.entities.workout.exercise.ISetEntity
+import com.lefarmico.donetime.data.entities.exercise.IExerciseEntity
+import com.lefarmico.donetime.data.entities.exercise.ISetEntity
 
 class ExerciseEntityImpl(exerciseData: IExerciseEntity) : IExerciseEntity {
     @Expose

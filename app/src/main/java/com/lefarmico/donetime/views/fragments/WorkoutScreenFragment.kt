@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.util.Preconditions
 import com.lefarmico.donetime.adapters.WorkoutAdapter
+import com.lefarmico.donetime.data.entities.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.exercise.ExerciseMuscleSetEntity
+import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
+import com.lefarmico.donetime.data.entities.exercise.ISetEntity
 import com.lefarmico.donetime.data.entities.workout.WorkoutData
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseMuscleSetEntity
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseNameEntity
-import com.lefarmico.donetime.data.entities.workout.exercise.ISetEntity
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.donetime.utils.JsonConverter
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel

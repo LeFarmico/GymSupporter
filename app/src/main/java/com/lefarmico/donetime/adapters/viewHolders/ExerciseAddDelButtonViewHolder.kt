@@ -1,6 +1,6 @@
 package com.lefarmico.donetime.adapters.viewHolders
 
-import com.lefarmico.donetime.data.entities.workout.exercise.AddDelButtonsEntity
+import com.lefarmico.donetime.data.entities.exercise.AddDelButtonsEntity
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder

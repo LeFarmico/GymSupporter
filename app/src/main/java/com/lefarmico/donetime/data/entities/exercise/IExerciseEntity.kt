@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.entities.workout.exercise
+package com.lefarmico.donetime.data.entities.exercise
 
 interface IExerciseEntity {
     val name: String
