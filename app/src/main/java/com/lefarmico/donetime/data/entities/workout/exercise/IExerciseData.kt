@@ -2,12 +2,12 @@ package com.lefarmico.donetime.data.entities.workout.exercise
 
 import com.lefarmico.lerecycle.ItemType
 
-interface IExerciseData : ItemType {
-    var name: String
-    var tag: String
+interface IExerciseData : ItemType, IExerciseEntity {
+    override val name: String
+    override val tag: String
+    override var sets: MutableList<ISetEntity>
     var isActive: Boolean
     var addButtonEvent: (() -> ISetEntity)
     var delButtonEvent: ((ExerciseData) -> Unit)
-    var sets: MutableList<ISetEntity>
     fun getSetCount(): Int
 }

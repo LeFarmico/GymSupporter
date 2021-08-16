@@ -6,7 +6,10 @@ import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.IViewHolderFactory
 import com.lefarmico.lerecycle.ItemType
 
-class ExerciseData(override var name: String, override var tag: String) : ItemObservable, IExerciseData {
+class ExerciseData(
+    override var name: String,
+    override var tag: String
+) : ItemObservable, IExerciseData {
 
     private var exerciseName: ExerciseNameEntity = ExerciseNameEntity(name, tag)
     override var sets: MutableList<ISetEntity> = mutableListOf(ExerciseMuscleSetEntity(0f, 0))

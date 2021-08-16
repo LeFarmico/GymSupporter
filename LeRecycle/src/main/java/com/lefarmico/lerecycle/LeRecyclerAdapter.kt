@@ -20,7 +20,10 @@ open class LeRecyclerAdapter : RecyclerView.Adapter<LeRecyclerViewHolder<ItemTyp
     open fun setItemType(type: IViewHolderFactory<ItemType>) {
         itemTypes = Wrapper(arrayOf(type))
     }
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeRecyclerViewHolder<ItemType> {
+    final override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): LeRecyclerViewHolder<ItemType> {
         return onCreateViewHolderWithListener(parent, viewType).listen { position, _ ->
             onClickEvent?.let { it(items[position]) }
         }

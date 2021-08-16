@@ -5,12 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <View
+        android:id="@+id/single_row_calendar"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/single_corners_shape"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workout_notes"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/single_row_calendar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/new_workout_button"
