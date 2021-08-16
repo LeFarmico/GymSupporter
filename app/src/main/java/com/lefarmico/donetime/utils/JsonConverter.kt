@@ -2,8 +2,8 @@ package com.lefarmico.donetime.utils
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.lefarmico.donetime.data.entities.json.WorkoutEntityImpl
 import com.lefarmico.donetime.data.entities.workout.IWorkoutEntity
-import com.lefarmico.donetime.data.json.WorkoutEntityImpl
 
 object JsonConverter {
 

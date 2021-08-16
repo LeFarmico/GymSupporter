@@ -1,10 +1,8 @@
 package com.lefarmico.donetime.adapters
 
 import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
-import com.lefarmico.donetime.adapters.viewHolders.WorkoutAddExViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
-import com.lefarmico.donetime.data.entities.workout.AddExerciseEntity
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.exercise.ExerciseData
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.lerecycle.ItemType
@@ -29,10 +27,6 @@ class WorkoutAdapter(
             is ExerciseData -> {
                 holder as ExerciseViewHolder
                 bindExerciseItem(holder, position)
-            }
-            is AddExerciseEntity -> {
-                holder as WorkoutAddExViewHolder
-                holder.bind(items[position], position, itemCount)
             }
         }
     }

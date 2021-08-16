@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.entities.workout.exercise
+package com.lefarmico.donetime.data.entities.exercise
 
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
 import com.lefarmico.donetime.utils.ItemObservable

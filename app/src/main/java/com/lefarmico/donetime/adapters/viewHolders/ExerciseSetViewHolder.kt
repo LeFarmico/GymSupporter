@@ -2,7 +2,7 @@ package com.lefarmico.donetime.adapters.viewHolders
 
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import com.lefarmico.donetime.data.entities.workout.exercise.ExerciseMuscleSetEntity
+import com.lefarmico.donetime.data.entities.exercise.ExerciseMuscleSetEntity
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 import com.lefarmico.lerecycle.ItemType
 import com.lefarmico.lerecycle.LeRecyclerViewHolder
