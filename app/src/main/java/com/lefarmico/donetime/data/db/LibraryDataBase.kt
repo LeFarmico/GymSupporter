@@ -15,6 +15,6 @@ import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
     ],
     version = 1
 )
-abstract class AppDataBase : RoomDatabase() {
+abstract class LibraryDataBase : RoomDatabase() {
     abstract fun itemDao(): ExerciseLibraryDao
 }
