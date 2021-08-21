@@ -1,7 +1,7 @@
 package com.lefarmico.donetime.views.fragments
 
 import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.viewHolders.factories.NoteExerciseViewHolderFactory
+import com.lefarmico.donetime.adapters.viewHolders.factories.SingleViewHolderFactory
 import com.lefarmico.donetime.data.entities.notes.SetNote
 import com.lefarmico.donetime.databinding.FragmentHomeBinding
 import com.lefarmico.donetime.viewModels.HomeViewModel
@@ -26,8 +26,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
         notes.add(SetNote(2, 10f, 20))
         notes.add(SetNote(3, 10f, 30))
         notes.add(SetNote(4, 10f, 15))
-        binding.note.setsRecycler.adapter = LeRecyclerAdapter().apply {
-            setItemTypes(extractValues<NoteExerciseViewHolderFactory>())
+        binding.workoutNotes.adapter = LeRecyclerAdapter().apply {
+            setItemTypes(extractValues<SingleViewHolderFactory>())
             items = notes.toMutableList()
         }
     }

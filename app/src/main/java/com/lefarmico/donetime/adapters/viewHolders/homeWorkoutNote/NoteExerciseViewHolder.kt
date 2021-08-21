@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.homeWorkoutNote
 
 import com.lefarmico.donetime.data.entities.notes.SetNote
 import com.lefarmico.donetime.databinding.ItemNoteSetBinding

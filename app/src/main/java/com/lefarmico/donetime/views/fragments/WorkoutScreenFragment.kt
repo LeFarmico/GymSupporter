@@ -56,7 +56,8 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
                 .commit()
         }
         binding.finishButton.setOnClickListener {
-            viewModel.putWorkoutNoteToDB(workoutRepo)
+//            viewModel.putWorkoutNoteToDB(workoutRepo)
+            viewModel.putWorkoutData(workoutRepo)
             Toast.makeText(requireContext(), "Your workout saved!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment, HomeFragment::class.java, null)

@@ -1,27 +1,26 @@
 package com.lefarmico.donetime.data.entities.workout
 
-import com.lefarmico.donetime.data.entities.exercise.ExerciseData
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.lefarmico.donetime.data.entities.exercise.IExerciseData
 import com.lefarmico.donetime.data.entities.exercise.ISetEntity
+import com.lefarmico.donetime.utils.ExercisesTypeConverter
 import com.lefarmico.donetime.utils.IWorkoutItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.donetime.utils.Utilities
 import com.lefarmico.lerecycle.ItemType
 
+@Entity(tableName = "workout")
+@TypeConverters(ExercisesTypeConverter::class)
 class WorkoutData : IWorkoutItemObservable, IWorkoutData {
 
-    constructor()
-    
-    constructor(exerciseRepositories: List<ExerciseData>) {
-        this.exercises = exerciseRepositories.toMutableList()
-    }
-    
-    constructor(exerciseRepositories: List<ExerciseData>, activePosition: Int) {
-        this.exercises = exerciseRepositories.toMutableList()
-        this.activePosition = activePosition
-    }
-
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+    val id: Int = 0
+    @ColumnInfo(name = "date")
     override val date: String = Utilities.getCurrentDateInFormat()
+    @ColumnInfo(name = "exercises")
     override var exercises = mutableListOf<IExerciseData>()
     override lateinit var buttonEventAddSet: (() -> ISetEntity) // FragmentResultListener
     override var buttonEventDelSet: (IExerciseData) -> Unit = { deleteEmptySetExercise(it) }

@@ -17,4 +17,8 @@ class WorkoutScreenViewModel : BaseViewModel() {
     fun putWorkoutNoteToDB(workoutData: WorkoutData) {
         interactor.addWorkoutNoteToDB(workoutData)
     }
+
+    fun putWorkoutData(workoutData: WorkoutData) {
+        interactor.addWorkoutData(workoutData)
+    }
 }

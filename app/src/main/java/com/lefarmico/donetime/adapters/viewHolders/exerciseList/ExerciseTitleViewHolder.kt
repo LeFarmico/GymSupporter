@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.exerciseList
 
 import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
 import com.lefarmico.donetime.databinding.ItemExerciseTitleBinding

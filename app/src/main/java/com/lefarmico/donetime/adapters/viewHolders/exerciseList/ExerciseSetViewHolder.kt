@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.exerciseList
 
 import android.widget.TextView
 import androidx.annotation.DrawableRes

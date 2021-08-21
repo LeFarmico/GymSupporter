@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.curWorkout
 
 import com.lefarmico.donetime.adapters.ExerciseAdapter
 import com.lefarmico.donetime.databinding.ItemExerciseFullBinding
