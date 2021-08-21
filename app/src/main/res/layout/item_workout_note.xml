@@ -34,9 +34,10 @@
         app:layout_constraintTop_toBottomOf="@id/edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_workout_note_exercise"
+        tools:listitem="@layout/item_note"
         tools:itemCount="5"
         android:background="@drawable/single_corners_shape"
         android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

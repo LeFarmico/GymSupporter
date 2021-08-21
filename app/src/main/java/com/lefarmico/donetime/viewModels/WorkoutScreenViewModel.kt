@@ -2,7 +2,7 @@ package com.lefarmico.donetime.viewModels
 
 import com.lefarmico.donetime.App
 import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.workout.ExerciseDataManager
+import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
 import com.lefarmico.donetime.views.base.BaseViewModel
 import javax.inject.Inject
 

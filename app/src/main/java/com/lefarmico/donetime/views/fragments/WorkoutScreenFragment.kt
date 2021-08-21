@@ -7,9 +7,9 @@ import androidx.core.util.Preconditions
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.CurrentExercisesAdapter
 import com.lefarmico.donetime.data.entities.exercise.ExerciseData
+import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
 import com.lefarmico.donetime.data.entities.exercise.ExerciseMuscleSetEntity
 import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
-import com.lefarmico.donetime.data.entities.workout.ExerciseDataManager
 import com.lefarmico.donetime.data.models.ICurrentExerciseSetItem
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel

@@ -5,8 +5,8 @@ import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseButtonsDelegate
 import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseNameDelegate
 import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseSetDelegate
+import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
 import com.lefarmico.donetime.data.entities.exercise.ExerciseMuscleSetEntity
-import com.lefarmico.donetime.data.entities.workout.ExerciseDataManager
 import com.lefarmico.donetime.data.models.ICurrentExerciseItem
 import com.lefarmico.donetime.utils.ItemObserver
 

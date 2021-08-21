@@ -1,13 +1,12 @@
-package com.lefarmico.donetime.data.entities.workout
+package com.lefarmico.donetime.data.entities.exercise
 
-import com.lefarmico.donetime.data.entities.exercise.IExerciseData
 import com.lefarmico.donetime.data.models.ICurrentExerciseItem
 import com.lefarmico.donetime.data.models.ICurrentExerciseSetItem
 import com.lefarmico.donetime.utils.ItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.donetime.utils.Utilities
 
-class ExerciseDataManager : ItemObservable<ICurrentExerciseItem>, IWorkoutData {
+class ExerciseDataManager : ItemObservable<ICurrentExerciseItem>, IExerciseDataManager {
 
     val id: Int = 0
     override val date: String = Utilities.getCurrentDateInFormat()

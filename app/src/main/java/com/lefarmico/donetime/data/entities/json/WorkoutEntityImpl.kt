@@ -2,7 +2,7 @@ package com.lefarmico.donetime.data.entities.json
 
 import com.google.gson.annotations.Expose
 import com.lefarmico.donetime.data.entities.exercise.IExerciseEntity
-import com.lefarmico.donetime.data.entities.workout.IWorkoutEntity
+import com.lefarmico.donetime.data.entities.exercise.IWorkoutEntity
 
 class WorkoutEntityImpl(workoutData: IWorkoutEntity) : IWorkoutEntity {
     @Expose
