@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.adapters.viewHolders
+package com.lefarmico.donetime.adapters.viewHolders.exerciseList
 
 import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise

@@ -2,9 +2,9 @@ package com.lefarmico.donetime.adapters.viewHolders.factories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseAddDelButtonViewHolder
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseSetViewHolder
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseTitleViewHolder
+import com.lefarmico.donetime.adapters.viewHolders.curWorkout.ExerciseAddDelButtonViewHolder
+import com.lefarmico.donetime.adapters.viewHolders.exerciseList.ExerciseSetViewHolder
+import com.lefarmico.donetime.adapters.viewHolders.exerciseList.ExerciseTitleViewHolder
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 import com.lefarmico.donetime.databinding.ItemExerciseTitleBinding

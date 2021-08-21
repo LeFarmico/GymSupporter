@@ -4,10 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.lefarmico.donetime.data.db.dao.WorkoutNoteDao
 import com.lefarmico.donetime.data.db.entities.WorkoutNote
+import com.lefarmico.donetime.data.entities.workout.WorkoutData
 
 @Database(
     entities = [
-        WorkoutNote::class
+        WorkoutNote::class,
+        WorkoutData::class
     ],
     version = 1
 )

@@ -24,10 +24,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/new_workout_button"
+        android:layout_marginHorizontal="8dp"
         tools:listitem="@layout/item_workout_note"
         tools:itemCount="5"
         android:layout_marginBottom="8dp"
         />
+<!--    <include-->
+<!--        android:id="@+id/note"-->
+<!--        layout="@layout/item_workout_note_exercise"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/single_row_calendar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        />-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/new_workout_button"
         android:layout_width="match_parent"

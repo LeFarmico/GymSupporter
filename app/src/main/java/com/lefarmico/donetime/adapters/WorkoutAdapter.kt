@@ -1,6 +1,6 @@
 package com.lefarmico.donetime.adapters
 
-import com.lefarmico.donetime.adapters.viewHolders.ExerciseViewHolder
+import com.lefarmico.donetime.adapters.viewHolders.curWorkout.ExerciseViewHolder
 import com.lefarmico.donetime.adapters.viewHolders.factories.WorkoutViewHolderFactory
 import com.lefarmico.donetime.data.entities.exercise.ExerciseData
 import com.lefarmico.donetime.utils.IWorkoutItemObservable

@@ -58,4 +58,14 @@ class Interactor(
                 workoutRepo.addWorkoutNote(workoutNote)
             }
     }
+
+    fun addWorkoutData(workoutData: WorkoutData) {
+        Single.create<WorkoutData> {
+            it.onSuccess(workoutData)
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe { data ->
+                workoutRepo.addWorkoutData(data)
+            }
+    }
 }
