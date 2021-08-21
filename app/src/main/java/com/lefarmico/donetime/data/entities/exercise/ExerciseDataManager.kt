@@ -1,34 +1,23 @@
-package com.lefarmico.donetime.data.entities.workout
+package com.lefarmico.donetime.data.entities.exercise
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.lefarmico.donetime.data.entities.exercise.IExerciseData
-import com.lefarmico.donetime.data.entities.exercise.ISetEntity
-import com.lefarmico.donetime.utils.ExercisesTypeConverter
-import com.lefarmico.donetime.utils.IWorkoutItemObservable
+import com.lefarmico.donetime.data.models.ICurrentExerciseItem
+import com.lefarmico.donetime.data.models.ICurrentExerciseSetItem
+import com.lefarmico.donetime.utils.ItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.donetime.utils.Utilities
-import com.lefarmico.lerecycle.ItemType
 
-@Entity(tableName = "workout")
-@TypeConverters(ExercisesTypeConverter::class)
-class WorkoutData : IWorkoutItemObservable, IWorkoutData {
+class ExerciseDataManager : ItemObservable<ICurrentExerciseItem>, IExerciseDataManager {
 
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     val id: Int = 0
-    @ColumnInfo(name = "date")
     override val date: String = Utilities.getCurrentDateInFormat()
-    @ColumnInfo(name = "exercises")
     override var exercises = mutableListOf<IExerciseData>()
-    override lateinit var buttonEventAddSet: (() -> ISetEntity) // FragmentResultListener
+    override lateinit var buttonEventAddSet: (() -> ICurrentExerciseSetItem) // FragmentResultListener
     override var buttonEventDelSet: (IExerciseData) -> Unit = { deleteEmptySetExercise(it) }
-    override val listObservers: MutableList<ItemObserver> = mutableListOf()
+    override val listObservers: MutableList<ItemObserver<ICurrentExerciseItem>> = mutableListOf()
 
     private var activePosition = -1
 
-    override fun setActivePosition(position: Int) {
+    fun setActiveExercise(position: Int) {
         val currentActivePos = activePosition
         try {
             getExercise(currentActivePos).isActive = false
@@ -56,8 +45,13 @@ class WorkoutData : IWorkoutItemObservable, IWorkoutData {
         notifyObservers()
     }
 
-    private fun getItems(): MutableList<ItemType> {
-        return exercises.toMutableList()
+    private fun getItems(): MutableList<ICurrentExerciseItem> {
+        val itemsList = mutableListOf<ICurrentExerciseItem>()
+        exercises.forEach { 
+            val exItems = it.getItems()
+            itemsList.addAll(exItems)
+        }
+        return itemsList
     }
 
     private fun deleteEmptySetExercise(exerciseData: IExerciseData) {
@@ -66,12 +60,12 @@ class WorkoutData : IWorkoutItemObservable, IWorkoutData {
         }
     }
 
-    override fun registerObserver(observer: ItemObserver) {
+    override fun registerObserver(observer: ItemObserver<ICurrentExerciseItem>) {
         observer.updateData(getItems())
         listObservers.add(observer)
     }
 
-    override fun removeObserver(observer: ItemObserver) {
+    override fun removeObserver(observer: ItemObserver<ICurrentExerciseItem>) {
         listObservers.remove(observer)
     }
 

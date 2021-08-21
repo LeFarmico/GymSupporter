@@ -11,11 +11,13 @@
         android:id="@+id/exercise_number"
         style="@style/TextAppearance.AppCompat.Body1"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="@string/number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dropdown_arrow"
+        />
 
     <TextView
         android:id="@+id/exercise_name"
@@ -24,27 +26,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="@string/exercise"
-        app:layout_constraintBottom_toBottomOf="@id/exercise_number"
         app:layout_constraintStart_toEndOf="@id/exercise_number"
-        app:layout_constraintTop_toTopOf="@id/exercise_number" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dropdown_arrow"
+         />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/dropdown_arrow"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:contentDescription="@string/dropdown_sets_list"
         android:src="@drawable/ic_baseline_arrow_drop_down_24"
-        app:layout_constraintBottom_toBottomOf="@id/exercise_number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/exercise_number" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/sets_recycler"
+        android:id="@+id/sets_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/dropdown_arrow"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/exercise_number"
         tools:itemCount="5"
         tools:listitem="@layout/item_note_set" />
 

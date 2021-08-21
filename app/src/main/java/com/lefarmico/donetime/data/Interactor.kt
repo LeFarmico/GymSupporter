@@ -1,10 +1,10 @@
 package com.lefarmico.donetime.data
 
 import com.lefarmico.donetime.data.db.entities.WorkoutNote
+import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
 import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
-import com.lefarmico.donetime.data.entities.workout.WorkoutData
 import com.lefarmico.donetime.utils.Converter
 import com.lefarmico.donetime.utils.JsonConverter
 import io.reactivex.rxjava3.core.Observable
@@ -45,9 +45,9 @@ class Interactor(
             }
     }
 
-    fun addWorkoutNoteToDB(workoutData: WorkoutData) {
-        Single.create<WorkoutData> {
-            it.onSuccess(workoutData)
+    fun addWorkoutNoteToDB(exerciseDataManager: ExerciseDataManager) {
+        Single.create<ExerciseDataManager> {
+            it.onSuccess(exerciseDataManager)
         }
             .subscribeOn(Schedulers.io())
             .subscribe { data ->
@@ -56,16 +56,6 @@ class Interactor(
                     workoutEntity = JsonConverter.fromWorkoutDataToJson(data)
                 )
                 workoutRepo.addWorkoutNote(workoutNote)
-            }
-    }
-
-    fun addWorkoutData(workoutData: WorkoutData) {
-        Single.create<WorkoutData> {
-            it.onSuccess(workoutData)
-        }
-            .subscribeOn(Schedulers.io())
-            .subscribe { data ->
-                workoutRepo.addWorkoutData(data)
             }
     }
 }

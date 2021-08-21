@@ -3,7 +3,7 @@ package com.lefarmico.donetime.views.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.ExerciseListAdapter
+import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
 import com.lefarmico.donetime.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.donetime.viewModels.SubCategoryViewModel
@@ -14,9 +14,9 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     SubCategoryViewModel::class.java
 ) {
 
-    private val adapter = ExerciseListAdapter().apply {
+    private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
-        setOnClickEvent { item ->
+        onClick = { item ->
             item as ItemLibrarySubCategory
             bundle.putInt(KEY_NUMBER, item.id)
             changeFragment(ExerciseListFragment::class.java, bundle)
@@ -38,7 +38,7 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
 
     override fun observeData() {
         viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) {
-            adapter.setSubCategories(it)
+            adapter.items = it
         }
     }
 

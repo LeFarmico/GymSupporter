@@ -3,7 +3,7 @@ package com.lefarmico.donetime.views.fragments
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import com.lefarmico.donetime.adapters.ExerciseListAdapter
+import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.databinding.FragmentExerciseListBinding
@@ -17,8 +17,8 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
 
     var bundleResult: Int = -1
 
-    private val adapter = ExerciseListAdapter().apply {
-        setOnClickEvent {
+    private val adapter = ExerciseLibraryAdapter().apply {
+        onClick = {
             it as ItemLibraryExercise
             setResult(ExerciseNameEntity(it.title, it.title))
             parentFragmentManager.popBackStack(
@@ -39,7 +39,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
 
     override fun observeData() {
         viewModel.exercisesLiveData.observe(viewLifecycleOwner) { list ->
-            adapter.setExercises(list)
+            adapter.items = list
         }
     }
 
