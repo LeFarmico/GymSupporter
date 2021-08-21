@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.utils
 
-interface ItemObservable {
-    val listObservers: MutableList<ItemObserver>
-    fun registerObserver(observer: ItemObserver)
-    fun removeObserver(observer: ItemObserver)
+interface ItemObservable<T> {
+    val listObservers: MutableList<ItemObserver<T>>
+    fun registerObserver(observer: ItemObserver<T>)
+    fun removeObserver(observer: ItemObserver<T>)
     fun notifyObservers()
 }

@@ -101,4 +101,7 @@ dependencies {
 
     // LeRecycle
     api project(':LeRecycle')
+
+    // AdapterDelegates
+    implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.0'
 }

@@ -1,7 +1,5 @@
 package com.lefarmico.donetime.utils
 
-import com.lefarmico.lerecycle.ItemType
-
-interface ItemObserver {
-    fun updateData(items: MutableList<ItemType>)
+interface ItemObserver<T> {
+    fun updateData(items: MutableList<T>)
 }
