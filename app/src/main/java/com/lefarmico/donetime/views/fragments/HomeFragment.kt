@@ -2,9 +2,9 @@ package com.lefarmico.donetime.views.fragments
 
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.WorkoutNoteAdapter
-import com.lefarmico.donetime.data.entities.note.ExerciseNote
-import com.lefarmico.donetime.data.entities.note.SetNote
-import com.lefarmico.donetime.data.entities.note.WorkoutNote
+import com.lefarmico.donetime.data.entities.note.NoteExercise
+import com.lefarmico.donetime.data.entities.note.NoteSet
+import com.lefarmico.donetime.data.entities.note.NoteWorkout
 import com.lefarmico.donetime.databinding.FragmentHomeBinding
 import com.lefarmico.donetime.viewModels.HomeViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
@@ -21,23 +21,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
                 .commit()
         }
 
-        val notes = mutableListOf<SetNote>()
-        notes.add(SetNote(1, 10f, 10))
-        notes.add(SetNote(2, 10f, 20))
-        notes.add(SetNote(3, 10f, 30))
-        notes.add(SetNote(4, 10f, 15))
+        val notes = mutableListOf<NoteSet>()
+        notes.add(NoteSet(1, 10f, 10))
+        notes.add(NoteSet(2, 10f, 20))
+        notes.add(NoteSet(3, 10f, 30))
+        notes.add(NoteSet(4, 10f, 15))
 
-        val exerciseNote = ExerciseNote(
+        val exerciseNote = NoteExercise(
             exerciseName = "Bench press",
-            setNoteList = notes
+            noteSetList = notes
         )
-        val exercises = mutableListOf<ExerciseNote>()
+        val exercises = mutableListOf<NoteExercise>()
         exercises.add(exerciseNote)
         exercises.add(exerciseNote)
 
-        val workoutNote = WorkoutNote(
+        val workoutNote = NoteWorkout(
             date = "23.12.2021",
-            exerciseNoteList = mutableListOf(exerciseNote, exerciseNote)
+            noteExerciseList = mutableListOf(exerciseNote, exerciseNote)
         )
         val adapter = WorkoutNoteAdapter()
         adapter.items = mutableListOf(workoutNote, workoutNote)

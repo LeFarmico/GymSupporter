@@ -3,28 +3,28 @@ package com.lefarmico.donetime.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.note.SetNote
-import com.lefarmico.donetime.databinding.ItemNoteSetBinding
+import com.lefarmico.donetime.data.entities.note.NoteSet
+import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 
 class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
 
     class SetViewHolder(
-        itemNoteSetBinding: ItemNoteSetBinding
-    ) : RecyclerView.ViewHolder(itemNoteSetBinding.root) {
+        itemExerciseSetBinding: ItemExerciseSetBinding
+    ) : RecyclerView.ViewHolder(itemExerciseSetBinding.root) {
 
-        private var reps = itemNoteSetBinding.reps
-        private var setNumber = itemNoteSetBinding.setNumber
-        private var wieght = itemNoteSetBinding.weight
-        
-        fun bind(setNote: SetNote) {
-            reps.text = "Reps: ${setNote.reps} "
-            wieght.text = "Weight: ${setNote.weight} "
+        private var reps = itemExerciseSetBinding.reps
+        private var setNumber = itemExerciseSetBinding.setNumber
+        private var wieght = itemExerciseSetBinding.weight
+
+        fun bind(noteSet: NoteSet) {
+            reps.text = noteSet.reps.toString()
+            wieght.text = noteSet.weight.toString()
         }
         fun bindSetNumber(number: Int) {
-            setNumber.text = "$number. "
+            setNumber.text = number.toString()
         }
     }
-    var items = mutableListOf<SetNote>()
+    var items = mutableListOf<NoteSet>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -32,7 +32,7 @@ class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
         return SetViewHolder(
-            ItemNoteSetBinding.inflate(
+            ItemExerciseSetBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

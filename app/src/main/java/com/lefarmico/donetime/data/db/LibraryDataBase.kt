@@ -3,9 +3,9 @@ package com.lefarmico.donetime.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.lefarmico.donetime.data.db.dao.ExerciseLibraryDao
-import com.lefarmico.donetime.data.db.entities.LibraryCategory
-import com.lefarmico.donetime.data.db.entities.LibraryExercise
-import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 
 @Database(
     entities = [

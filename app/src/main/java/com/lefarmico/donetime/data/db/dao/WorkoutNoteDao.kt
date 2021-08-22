@@ -4,15 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lefarmico.donetime.data.entities.note.WorkoutNote
+import com.lefarmico.donetime.data.entities.note.NoteWorkout
 import io.reactivex.rxjava3.core.Observable
 
 @Dao
 interface WorkoutNoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWorkoutNote(workoutNote: WorkoutNote)
+    fun insertWorkoutNote(noteWorkout: NoteWorkout)
 
     @Query("SELECT * FROM workout_history")
-    fun getWorkoutNotes(): Observable<List<WorkoutNote>>
+    fun getWorkoutNotes(): Observable<List<NoteWorkout>>
 }

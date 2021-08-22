@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
-import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import com.lefarmico.donetime.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.donetime.viewModels.SubCategoryViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
@@ -17,7 +17,7 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
-            item as ItemLibrarySubCategory
+            item as LibrarySubCategory
             bundle.putInt(KEY_NUMBER, item.id)
             changeFragment(ExerciseListFragment::class.java, bundle)
         }

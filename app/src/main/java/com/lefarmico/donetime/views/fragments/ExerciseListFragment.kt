@@ -5,7 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
-import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
 import com.lefarmico.donetime.databinding.FragmentExerciseListBinding
 import com.lefarmico.donetime.viewModels.ExerciseListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
@@ -19,7 +19,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
 
     private val adapter = ExerciseLibraryAdapter().apply {
         onClick = {
-            it as ItemLibraryExercise
+            it as LibraryExercise
             setResult(ExerciseName(it.title, it.title))
             parentFragmentManager.popBackStack(
                 WorkoutScreenFragment.BACKSTACK_BRANCH,

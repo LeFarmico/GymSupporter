@@ -1,8 +1,8 @@
 package com.lefarmico.donetime.data.entities.note
 
-data class ExerciseNote(
+data class NoteExercise(
     val exerciseName: String,
-    val setNoteList: List<SetNote>
+    val noteSetList: List<NoteSet>
 ) {
     val setNumber: Int = 0
 }

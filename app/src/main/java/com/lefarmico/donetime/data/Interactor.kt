@@ -1,9 +1,9 @@
 package com.lefarmico.donetime.data
 
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
-import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
-import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
-import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
+import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import com.lefarmico.donetime.utils.Converter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -13,7 +13,7 @@ class Interactor(
     private val exRepo: ExerciseLibraryRepository,
     private val workoutRepo: WorkoutNotesRepository
 ) {
-    fun getCategoriesFromDB(): Observable<List<ItemLibraryCategory>> {
+    fun getCategoriesFromDB(): Observable<List<LibraryCategory>> {
         return exRepo.getExerciseCategories()
             .subscribeOn(Schedulers.io())
             .map { list ->
@@ -23,7 +23,7 @@ class Interactor(
             }
     }
 
-    fun getSubCategoriesFromDB(categoryId: Int): Observable<List<ItemLibrarySubCategory>> {
+    fun getSubCategoriesFromDB(categoryId: Int): Observable<List<LibrarySubCategory>> {
         return exRepo.getSubCategories(categoryId)
             .observeOn(Schedulers.io())
             .map { list ->
@@ -33,7 +33,7 @@ class Interactor(
             }
     }
 
-    fun getExercisesFromDB(subCategoryId: Int): Observable<List<ItemLibraryExercise>> {
+    fun getExercisesFromDB(subCategoryId: Int): Observable<List<LibraryExercise>> {
         return exRepo.getExercises(subCategoryId)
             .observeOn(Schedulers.io())
             .map { list ->
@@ -43,9 +43,9 @@ class Interactor(
             }
     }
 
-    fun addWorkoutNoteToDB(exerciseDataManager: ExerciseDataManager) {
-        Single.create<ExerciseDataManager> {
-            it.onSuccess(exerciseDataManager)
+    fun addWorkoutNoteToDB(workoutData: WorkoutData) {
+        Single.create<WorkoutData> {
+            it.onSuccess(workoutData)
         }
             .subscribeOn(Schedulers.io())
             .subscribe { data ->

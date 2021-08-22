@@ -2,7 +2,7 @@ package com.lefarmico.donetime.viewModels
 
 import com.lefarmico.donetime.App
 import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
+import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
 import com.lefarmico.donetime.views.base.BaseViewModel
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ class WorkoutScreenViewModel : BaseViewModel() {
         App.appComponent.inject(this)
     }
 
-    fun putWorkoutNoteToDB(exerciseDataManager: ExerciseDataManager) {
-        interactor.addWorkoutNoteToDB(exerciseDataManager)
+    fun putWorkoutNoteToDB(workoutData: WorkoutData) {
+        interactor.addWorkoutNoteToDB(workoutData)
     }
 }

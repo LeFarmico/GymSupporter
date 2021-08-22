@@ -1,17 +1,16 @@
 package com.lefarmico.donetime.data.entities.currentExercise
 
-import com.lefarmico.donetime.data.models.ICurrentExerciseItem
 import com.lefarmico.donetime.utils.ItemObservable
 import com.lefarmico.donetime.utils.ItemObserver
 import com.lefarmico.donetime.utils.Utilities
 
-class ExerciseDataManager : ItemObservable<ICurrentExerciseItem>, IExerciseDataManager {
+class WorkoutData : ItemObservable<ICurrentExerciseItem> {
 
     val id: Int = 0
-    override val date: String = Utilities.getCurrentDateInFormat()
-    override var exercises = mutableListOf<ExerciseData>()
+    val date: String = Utilities.getCurrentDateInFormat()
+    var exercises = mutableListOf<ExerciseData>()
 
-    lateinit var newSet: () -> ExerciseSetEntity
+    lateinit var newSet: () -> ExerciseSet
     override val listObservers: MutableList<ItemObserver<ICurrentExerciseItem>> = mutableListOf()
 
     fun addExercise(name: String, tag: String) {

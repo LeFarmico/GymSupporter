@@ -6,9 +6,9 @@ import android.widget.Toast
 import androidx.core.util.Preconditions
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.CurrentExercisesAdapter
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSetEntity
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSet
+import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
@@ -18,13 +18,13 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     WorkoutScreenViewModel::class.java
 ) {
 
-    private var exerciseDataManager: ExerciseDataManager = ExerciseDataManager().apply {
+    private var workoutData: WorkoutData = WorkoutData().apply {
         addExercise("Bench Press", "Chest")
         addExercise("Pull up", "Back")
         newSet = { addSet() }
     }
 
-    val adapter = CurrentExercisesAdapter(exerciseDataManager)
+    val adapter = CurrentExercisesAdapter(workoutData)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
                 .commit()
         }
         binding.finishButton.setOnClickListener {
-            viewModel.putWorkoutNoteToDB(exerciseDataManager)
+            viewModel.putWorkoutNoteToDB(workoutData)
             Toast.makeText(requireContext(), "Your workout saved!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment, HomeFragment::class.java, null)
@@ -60,11 +60,11 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
         Preconditions.checkState(REQUEST_KEY == requestKey)
 
         val exercise = result.getParcelable<ExerciseName>(KEY_NUMBER)!!
-        exerciseDataManager.addExercise(exercise.name, exercise.tags)
+        workoutData.addExercise(exercise.name, exercise.tags)
     }
 
-    private fun addSet(): ExerciseSetEntity {
-        return ExerciseSetEntity(100f, 55)
+    private fun addSet(): ExerciseSet {
+        return ExerciseSet(100f, 55)
     }
 
     companion object {

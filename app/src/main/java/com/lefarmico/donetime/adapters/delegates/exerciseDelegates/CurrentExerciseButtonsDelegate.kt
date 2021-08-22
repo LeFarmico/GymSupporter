@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
-import com.lefarmico.donetime.data.entities.currentExercise.AddDelButtons
-import com.lefarmico.donetime.data.models.ICurrentExerciseItem
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseButtons
+import com.lefarmico.donetime.data.entities.currentExercise.ICurrentExerciseItem
 import com.lefarmico.donetime.databinding.ItemAddButtonBinding
 
 class CurrentExerciseButtonsDelegate : AbsListItemAdapterDelegate<
-    AddDelButtons,
+    ExerciseButtons,
     ICurrentExerciseItem,
     CurrentExerciseButtonsDelegate.ButtonViewHolder
     >() {
@@ -20,7 +20,7 @@ class CurrentExerciseButtonsDelegate : AbsListItemAdapterDelegate<
         private val addButton = itemAddButtonBinding.addButton
         private val deleteButton = itemAddButtonBinding.deleteButton
 
-        fun bind(item: AddDelButtons) {
+        fun bind(item: ExerciseButtons) {
             addButton.setOnClickListener {
                 item.addButtonCallback()
             }
@@ -35,7 +35,7 @@ class CurrentExerciseButtonsDelegate : AbsListItemAdapterDelegate<
         items: MutableList<ICurrentExerciseItem>,
         position: Int
     ): Boolean {
-        return item is AddDelButtons
+        return item is ExerciseButtons
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ButtonViewHolder {
@@ -47,7 +47,7 @@ class CurrentExerciseButtonsDelegate : AbsListItemAdapterDelegate<
     }
 
     override fun onBindViewHolder(
-        item: AddDelButtons,
+        item: ExerciseButtons,
         holder: ButtonViewHolder,
         payloads: MutableList<Any>
     ) {

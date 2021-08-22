@@ -4,9 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lefarmico.donetime.data.db.entities.LibraryCategory
-import com.lefarmico.donetime.data.db.entities.LibraryExercise
-import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import io.reactivex.rxjava3.core.Observable
 
 @Dao

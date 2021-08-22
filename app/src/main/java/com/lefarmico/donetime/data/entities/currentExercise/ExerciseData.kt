@@ -1,11 +1,9 @@
 package com.lefarmico.donetime.data.entities.currentExercise
 
-import com.lefarmico.donetime.data.models.ICurrentExerciseItem
-
 class ExerciseData private constructor(
-    override var name: String,
-    override var tag: String
-) : IExerciseModel, ICurrentExerciseItem {
+    var name: String,
+    var tag: String
+) : ICurrentExerciseItem {
 
     class Builder {
         private lateinit var name: String
@@ -40,8 +38,8 @@ class ExerciseData private constructor(
         }
     }
 
-    override var exerciseSetList: ExerciseSetList = ExerciseSetList(mutableListOf(ExerciseSetEntity(0f, 0)))
-    private var addDelButtons = AddDelButtons(
+    var exerciseSetList: ExerciseSetList = ExerciseSetList(mutableListOf(ExerciseSet(0f, 0)))
+    private var addDelButtons = ExerciseButtons(
         {
             addButtonEvent(this)
         },
@@ -51,27 +49,25 @@ class ExerciseData private constructor(
         }
     )
 
-    override lateinit var addButtonEvent: ((ExerciseData) -> Unit)
-    override lateinit var delButtonEvent: ((ExerciseData) -> Unit)
-    override var isActive: Boolean = true
+    lateinit var addButtonEvent: ((ExerciseData) -> Unit)
+    lateinit var delButtonEvent: ((ExerciseData) -> Unit)
+    var isActive: Boolean = true
 
-    override fun getSetCount(): Int {
+    fun getSetCount(): Int {
         return exerciseSetList.setList.size
     }
 
-    fun addSet(setEntity: ExerciseSetEntity) {
-        setEntity.setNumber = exerciseSetList.setList.size + 1
-        exerciseSetList.setList.add(setEntity)
+    fun addSet(set: ExerciseSet) {
+        set.setNumber = exerciseSetList.setList.size + 1
+        exerciseSetList.setList.add(set)
     }
     private fun delSet() {
         exerciseSetList.setList.removeAt(exerciseSetList.setList.size - 1)
     }
     
-    override fun getItems(): MutableList<ICurrentExerciseItem> {
+    fun getItems(): MutableList<ICurrentExerciseItem> {
         val itemList = mutableListOf<ICurrentExerciseItem>()
         itemList.add(this)
-//        itemList.add(exerciseName)
-//        itemList.add(exerciseSets)
         if (isActive) {
             itemList.add(addDelButtons)
         }

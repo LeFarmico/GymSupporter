@@ -3,16 +3,16 @@ package com.lefarmico.donetime.adapters
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.lefarmico.donetime.adapters.delegates.exerciseLibraryDelegates.ExerciseLibraryCategoryItem
-import com.lefarmico.donetime.data.models.IExerciseLibraryItem
+import com.lefarmico.donetime.data.entities.library.ILibraryItem
 
-class ExerciseLibraryAdapter : ListDelegationAdapter<List<IExerciseLibraryItem>>() {
+class ExerciseLibraryAdapter : ListDelegationAdapter<List<ILibraryItem>>() {
 
-    lateinit var onClick: (IExerciseLibraryItem) -> Unit
+    lateinit var onClick: (ILibraryItem) -> Unit
     init {
         delegatesManager.addDelegate(ExerciseLibraryCategoryItem())
     }
 
-    override fun setItems(items: List<IExerciseLibraryItem>?) {
+    override fun setItems(items: List<ILibraryItem>?) {
         super.setItems(items)
         notifyDataSetChanged()
     }

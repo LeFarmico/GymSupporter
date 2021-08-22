@@ -18,7 +18,7 @@
         android:id="@+id/reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/reps_0"
+        tools:text="@string/reps_cur"
         android:layout_marginEnd="4dp"
         style="@style/TextAppearance.AppCompat.Body1"
         />
@@ -26,7 +26,7 @@
         android:id="@+id/weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/weights_0_0_kg"
+        tools:text="@string/weight_cur"
         style="@style/TextAppearance.AppCompat.Body1"
         />
 

@@ -1,37 +1,34 @@
 package com.lefarmico.donetime.utils
 
-import com.lefarmico.donetime.data.db.entities.LibraryCategory
-import com.lefarmico.donetime.data.db.entities.LibraryExercise
-import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseData
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
-import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
-import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
-import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
-import com.lefarmico.donetime.data.entities.note.ExerciseNote
-import com.lefarmico.donetime.data.entities.note.SetNote
-import com.lefarmico.donetime.data.entities.note.WorkoutNote
+import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
+import com.lefarmico.donetime.data.entities.note.NoteExercise
+import com.lefarmico.donetime.data.entities.note.NoteSet
+import com.lefarmico.donetime.data.entities.note.NoteWorkout
 
 object Converter {
 
-    fun convertLibraryCategoryToItemCategory(categoryDao: LibraryCategory): ItemLibraryCategory {
-        return ItemLibraryCategory(
-            title = categoryDao.categoryTitle,
+    fun convertLibraryCategoryToItemCategory(categoryDao: LibraryCategory): LibraryCategory {
+        return LibraryCategory(
+            title = categoryDao.title,
             id = categoryDao.id
         )
     }
 
-    fun convertLibrarySubCategoryToItemSubCategory(subCategory: LibrarySubCategory): ItemLibrarySubCategory {
-        return ItemLibrarySubCategory(
-            title = subCategory.subCategory,
+    fun convertLibrarySubCategoryToItemSubCategory(subCategory: LibrarySubCategory): LibrarySubCategory {
+        return LibrarySubCategory(
+            title = subCategory.title,
             id = subCategory.id,
             categoryId = subCategory.categoryId,
 
         )
     }
 
-    fun convertLibraryExerciseToItemExercise(exercise: LibraryExercise): ItemLibraryExercise {
-        return ItemLibraryExercise(
+    fun convertLibraryExerciseToItemExercise(exercise: LibraryExercise): LibraryExercise {
+        return LibraryExercise(
             title = exercise.title,
             description = exercise.description,
             image = exercise.image,
@@ -40,26 +37,26 @@ object Converter {
         )
     }
 
-    fun conVertExDataManagerToWorkoutNote(exerciseDataManager: ExerciseDataManager): WorkoutNote {
-        val exerciseNoteList: List<ExerciseNote> = exerciseDataManager.exercises.map {
+    fun conVertExDataManagerToWorkoutNote(workoutData: WorkoutData): NoteWorkout {
+        val noteExerciseList: List<NoteExercise> = workoutData.exercises.map {
             convertExerciseDataToExerciseNote(it)
         }
-        return WorkoutNote(
-            date = exerciseDataManager.date,
-            exerciseNoteList = exerciseNoteList.toMutableList()
+        return NoteWorkout(
+            date = workoutData.date,
+            noteExerciseList = noteExerciseList.toMutableList()
         )
     }
-    fun convertExerciseDataToExerciseNote(exerciseData: ExerciseData): ExerciseNote {
-        val setNoteList: List<SetNote> = exerciseData.exerciseSetList.setList.map {
-            SetNote(
+    fun convertExerciseDataToExerciseNote(exerciseData: ExerciseData): NoteExercise {
+        val noteSetList: List<NoteSet> = exerciseData.exerciseSetList.setList.map {
+            NoteSet(
                 weight = it.weights,
                 reps = it.reps,
                 setNumber = it.setNumber
             )
         }
-        return ExerciseNote(
+        return NoteExercise(
             exerciseName = exerciseData.name,
-            setNoteList = setNoteList
+            noteSetList = noteSetList
         )
     }
 }

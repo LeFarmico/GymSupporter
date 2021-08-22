@@ -3,12 +3,12 @@ package com.lefarmico.donetime.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.note.ExerciseNote
+import com.lefarmico.donetime.data.entities.note.NoteExercise
 import com.lefarmico.donetime.databinding.ItemNoteExerciseBinding
 
 class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNoteViewHolder>() {
 
-    var items = mutableListOf<ExerciseNote>()
+    var items = mutableListOf<NoteExercise>()
     
     class WorkoutNoteViewHolder(
         itemNoteExerciseBinding: ItemNoteExerciseBinding
@@ -18,19 +18,19 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
         private var exerciseNumber = itemNoteExerciseBinding.exerciseNumber
         private val setList = itemNoteExerciseBinding.setsList
 
-        fun bind(exerciseNote: ExerciseNote) {
-            exercise.text = exerciseNote.exerciseName
+        fun bind(noteExercise: NoteExercise) {
+            exercise.text = noteExercise.exerciseName
         }
         fun bindAdapter(adapter: SetNoteAdapter) {
             setList.adapter = adapter
         }
         fun setExerciseNumber(number: Int) {
-            exerciseNumber.text = "$number. "
+            exerciseNumber.text = number.toString()
         }
     }
 
-    fun setExercise(exerciseList: MutableList<ExerciseNote>) {
-        items = exerciseList
+    fun setExercise(noteExerciseList: MutableList<NoteExercise>) {
+        items = noteExerciseList
         notifyDataSetChanged()
     }
     
@@ -43,7 +43,7 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
-        val setNoteList = items[position].setNoteList
+        val setNoteList = items[position].noteSetList
         val setAdapter = SetNoteAdapter().apply {
             items = setNoteList.toMutableList()
         }

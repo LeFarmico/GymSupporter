@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.lefarmico.donetime.adapters.CurrentSetAdapter
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseData
-import com.lefarmico.donetime.data.models.ICurrentExerciseItem
+import com.lefarmico.donetime.data.entities.currentExercise.ICurrentExerciseItem
 import com.lefarmico.donetime.databinding.ItemExerciseBinding
 
 class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<

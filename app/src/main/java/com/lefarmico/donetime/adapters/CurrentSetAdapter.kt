@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSetEntity
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSet
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 
 class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
 
-    var items = mutableListOf<ExerciseSetEntity>()
+    var items = mutableListOf<ExerciseSet>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -20,17 +20,17 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
     ) : RecyclerView.ViewHolder(itemExerciseSetBinding.root) {
 
         private val setNumber: TextView = itemExerciseSetBinding.setNumber
-        private val weights: TextView = itemExerciseSetBinding.weights
+        private val weights: TextView = itemExerciseSetBinding.weight
         private var reps = itemExerciseSetBinding.reps
 
-        fun bind(item: ExerciseSetEntity) {
-            setNumber.text = "${item.setNumber}. Set"
-            weights.text = "${item.weights} Kg"
-            reps.text = "${item.reps} Reps"
+        fun bind(item: ExerciseSet) {
+            setNumber.text = item.setNumber.toString()
+            weights.text = item.weights.toString()
+            reps.text = item.reps.toString()
         }
     }
 
-    fun addItem(item: ExerciseSetEntity) {
+    fun addItem(item: ExerciseSet) {
         items.add(item)
         notifyItemInserted(itemCount + 1)
     }

@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.db.entities
+package com.lefarmico.donetime.data.entities.library
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -16,6 +16,6 @@ import androidx.room.PrimaryKey
 )
 data class LibrarySubCategory(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "sub_category_title") val subCategory: String = "",
+    @ColumnInfo(name = "sub_category_title") override val title: String = "",
     @ColumnInfo(name = "category_id") val categoryId: Int,
-)
+) : ILibraryItem

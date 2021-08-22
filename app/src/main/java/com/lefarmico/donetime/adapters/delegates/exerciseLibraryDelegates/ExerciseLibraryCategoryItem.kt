@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
-import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
-import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
-import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
-import com.lefarmico.donetime.data.models.IExerciseLibraryItem
+import com.lefarmico.donetime.data.entities.library.ILibraryItem
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import com.lefarmico.donetime.databinding.ItemLibraryListBinding
 
 class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
-    IExerciseLibraryItem,
-    IExerciseLibraryItem,
+    ILibraryItem,
+    ILibraryItem,
     ExerciseLibraryCategoryItem.MenuItemViewHolder
     >() {
             
@@ -22,15 +22,15 @@ class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
         
         private val exerciseText = itemLibraryListBinding.text
 
-        fun bind(item: IExerciseLibraryItem) {
+        fun bind(item: ILibraryItem) {
             when (item) {
-                is ItemLibraryCategory -> {
+                is LibraryCategory -> {
                     exerciseText.text = item.title
                 }
-                is ItemLibrarySubCategory -> {
+                is LibrarySubCategory -> {
                     exerciseText.text = item.title
                 }
-                is ItemLibraryExercise -> {
+                is LibraryExercise -> {
                     exerciseText.text = item.title
                     exerciseText.setCompoundDrawables(null, null, null, null)
                 }
@@ -39,11 +39,11 @@ class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
     }
 
     override fun isForViewType(
-        item: IExerciseLibraryItem,
-        items: MutableList<IExerciseLibraryItem>,
+        item: ILibraryItem,
+        items: MutableList<ILibraryItem>,
         position: Int
     ): Boolean {
-        return item is IExerciseLibraryItem
+        return true
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): MenuItemViewHolder {
@@ -55,7 +55,7 @@ class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
     }
 
     override fun onBindViewHolder(
-        item: IExerciseLibraryItem,
+        item: ILibraryItem,
         holder: MenuItemViewHolder,
         payloads: MutableList<Any>
     ) {

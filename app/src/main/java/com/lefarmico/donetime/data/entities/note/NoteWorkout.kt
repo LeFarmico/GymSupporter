@@ -17,8 +17,8 @@ import com.lefarmico.donetime.utils.ExercisesTypeConverter
     ]
 )
 @TypeConverters(ExercisesTypeConverter::class)
-class WorkoutNote(
+class NoteWorkout(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "date") val date: String = "",
-    @ColumnInfo(name = "workout_note") val exerciseNoteList: MutableList<ExerciseNote> = mutableListOf()
+    @ColumnInfo(name = "workout_note") val noteExerciseList: MutableList<NoteExercise> = mutableListOf()
 )

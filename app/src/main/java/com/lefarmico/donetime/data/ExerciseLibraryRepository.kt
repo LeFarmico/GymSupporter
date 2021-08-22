@@ -1,9 +1,9 @@
 package com.lefarmico.donetime.data
 
 import com.lefarmico.donetime.data.db.dao.ExerciseLibraryDao
-import com.lefarmico.donetime.data.db.entities.LibraryCategory
-import com.lefarmico.donetime.data.db.entities.LibraryExercise
-import com.lefarmico.donetime.data.db.entities.LibrarySubCategory
+import com.lefarmico.donetime.data.entities.library.LibraryCategory
+import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import io.reactivex.rxjava3.core.Observable
 
 class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
@@ -23,7 +23,7 @@ class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
     fun addCategory(title: String) {
         dao.insertCategory(
             LibraryCategory(
-                categoryTitle = title
+                title = title
             )
         )
     }
@@ -31,7 +31,7 @@ class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
     fun addSubCategory(title: String, categoryId: Int) {
         dao.insertSubCategory(
             LibrarySubCategory(
-                subCategory = title,
+                title = title,
                 categoryId = categoryId
             )
         )
