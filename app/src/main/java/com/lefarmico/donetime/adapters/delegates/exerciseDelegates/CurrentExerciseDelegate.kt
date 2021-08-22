@@ -19,9 +19,9 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         itemExerciseBinding: ItemExerciseBinding
     ) : RecyclerView.ViewHolder(itemExerciseBinding.root) {
 
-        val recycler = itemExerciseBinding.exerciseItem
-        val exerciseTitle = itemExerciseBinding.exerciseTitle.exerciseName
-        val exerciseTag = itemExerciseBinding.exerciseTitle.tags
+        private val recycler = itemExerciseBinding.exerciseItem
+        private val exerciseTitle = itemExerciseBinding.exerciseTitle.exerciseName
+        private val exerciseTag = itemExerciseBinding.exerciseTitle.tags
 
         fun bindAdapter(adapter: CurrentSetAdapter) {
             recycler.adapter = adapter
@@ -56,5 +56,6 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         val adapter = CurrentSetAdapter()
         adapter.items = item.exerciseSetList.setList.toMutableList()
         holder.bindAdapter(adapter)
+        holder.bind(item)
     }
 }

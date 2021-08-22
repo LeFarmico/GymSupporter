@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/new_workout_button"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginHorizontal="16dp"
         tools:listitem="@layout/item_note_workout"
         tools:itemCount="5"
         android:layout_marginBottom="8dp"

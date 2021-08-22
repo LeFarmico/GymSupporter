@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/exercise"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="48dp"
     android:gravity="center_vertical">
 
     <androidx.constraintlayout.widget.Guideline
@@ -12,99 +12,106 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.33"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_margin_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
         />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/weight_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.66"
-        />
+        app:layout_constraintGuide_percent="0.66" />
+
     <TextView
         android:id="@+id/set_number"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         style="@style/TextAppearance.MaterialComponents.Body2"
-        tools:text="99"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="end"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/set"
-        />
+        app:layout_constraintStart_toEndOf="@id/start_margin_guide"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="99" />
+
     <TextView
         android:id="@+id/set"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
         style="@style/TextAppearance.MaterialComponents.Body2"
-        android:gravity="start"
-        app:layout_constraintTop_toTopOf="@id/set_number"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintEnd_toStartOf="@id/number_set_guide"
-
-        android:text="@string/set"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
-        />
+        android:gravity="start"
+        android:text="@string/set"
+        app:layout_constraintBottom_toBottomOf="@id/set_number"
+
+        app:layout_constraintStart_toEndOf="@id/set_number"
+        app:layout_constraintTop_toTopOf="@id/set_number" />
+
     <TextView
         android:id="@+id/weights_text"
+        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/weight_cur"
-        style="@style/TextAppearance.MaterialComponents.Body2"
         android:gravity="start"
-        app:layout_constraintTop_toTopOf="@id/set_number"
+        android:text="@string/weight_cur"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
         app:layout_constraintStart_toEndOf="@id/weight_guide"
-        />
+        app:layout_constraintTop_toTopOf="@id/set_number" />
+
     <TextView
         android:id="@+id/weight"
+        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_marginEnd="8dp"
-        tools:text="5555"
-        style="@style/TextAppearance.MaterialComponents.Body2"
         android:gravity="start"
-        app:layout_constraintTop_toTopOf="@id/set_number"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
         app:layout_constraintStart_toEndOf="@id/weights_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/set_number"
+        tools:text="5555" />
+
     <TextView
         android:id="@+id/measures"
+        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/kg"
-        style="@style/TextAppearance.MaterialComponents.Body2"
         android:gravity="start"
-        app:layout_constraintTop_toTopOf="@id/set_number"
+        android:text="@string/kg"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
         app:layout_constraintStart_toEndOf="@id/weight"
-        />
+        app:layout_constraintTop_toTopOf="@id/set_number" />
+
     <TextView
         android:id="@+id/reps_text"
+        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_marginVertical="8dp"
         android:text="@string/reps_cur"
-        app:layout_constraintTop_toTopOf="@id/set_number"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
         app:layout_constraintStart_toEndOf="@id/number_set_guide"
-        />
+        app:layout_constraintTop_toTopOf="@id/set_number" />
+
     <TextView
         android:id="@+id/reps"
+        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.MaterialComponents.Body2"
         android:layout_marginVertical="8dp"
-        tools:text="150"
-        app:layout_constraintTop_toTopOf="@id/set_number"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
         app:layout_constraintStart_toEndOf="@id/reps_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/set_number"
+        tools:text="150" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

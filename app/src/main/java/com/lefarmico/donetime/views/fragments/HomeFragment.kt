@@ -22,7 +22,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
         }
 
         val notes = mutableListOf<NoteSet>()
-        notes.add(NoteSet(1, 10f, 10))
+        notes.add(NoteSet(1, 100f, 100))
         notes.add(NoteSet(2, 10f, 20))
         notes.add(NoteSet(3, 10f, 30))
         notes.add(NoteSet(4, 10f, 15))

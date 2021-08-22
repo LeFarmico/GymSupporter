@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:paddingHorizontal="8dp"
+    android:layout_height="48dp"
     android:gravity="center_vertical"
+    android:layout_marginHorizontal="16dp"
     style="@style/TextAppearance.MaterialComponents.Body1"
     tools:text="Hello"
     app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24" />

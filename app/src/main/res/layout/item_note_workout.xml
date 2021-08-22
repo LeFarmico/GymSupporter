@@ -3,41 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/workout_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:text="@string/date"
         style="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exercises_recycler"
         android:layout_marginStart="8dp"
-        />
-    <ImageView
-        android:id="@+id/edit"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginHorizontal="8dp"
-        android:src="@drawable/ic_baseline_edit_24"
-        android:contentDescription="@string/edit"
+        android:textAlignment="center"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/exercises_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/edit"
+        app:layout_constraintTop_toBottomOf="@id/workout_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_note_exercise"
         tools:itemCount="5"
         android:background="@drawable/single_corners_shape"
-        android:padding="8dp"
+        android:paddingHorizontal="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

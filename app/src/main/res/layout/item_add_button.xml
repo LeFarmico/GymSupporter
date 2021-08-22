@@ -8,7 +8,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_button"
         android:layout_width="96dp"
-        android:layout_height="40dp"
+        android:layout_height="36dp"
+        android:paddingVertical="8dp"
         android:text="@string/add_set"
         android:background="@drawable/button_shape"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +20,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/delete_button"
         android:layout_width="96dp"
-        android:layout_height="40dp"
+        android:layout_height="36dp"
         android:text="@string/delete_set"
         android:background="@drawable/button_shape"
         app:layout_constraintTop_toTopOf="parent"
