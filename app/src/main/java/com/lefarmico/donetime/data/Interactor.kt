@@ -1,12 +1,10 @@
 package com.lefarmico.donetime.data
 
-import com.lefarmico.donetime.data.db.entities.WorkoutNote
-import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
 import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
 import com.lefarmico.donetime.utils.Converter
-import com.lefarmico.donetime.utils.JsonConverter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -51,10 +49,7 @@ class Interactor(
         }
             .subscribeOn(Schedulers.io())
             .subscribe { data ->
-                val workoutNote = WorkoutNote(
-                    date = data.date,
-                    workoutEntity = JsonConverter.fromWorkoutDataToJson(data)
-                )
+                val workoutNote = Converter.conVertExDataManagerToWorkoutNote(data)
                 workoutRepo.addWorkoutNote(workoutNote)
             }
     }

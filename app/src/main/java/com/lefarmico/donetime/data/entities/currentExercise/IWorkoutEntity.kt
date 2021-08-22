@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.data.entities.exercise
+package com.lefarmico.donetime.data.entities.currentExercise
 
 interface IWorkoutEntity {
     val date: String

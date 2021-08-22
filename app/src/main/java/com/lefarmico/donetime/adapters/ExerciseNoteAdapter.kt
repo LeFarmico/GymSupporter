@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.donetime.data.entities.note.ExerciseNote
-import com.lefarmico.donetime.databinding.ItemNoteBinding
+import com.lefarmico.donetime.databinding.ItemNoteExerciseBinding
 
 class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNoteViewHolder>() {
 
     var items = mutableListOf<ExerciseNote>()
     
     class WorkoutNoteViewHolder(
-        itemNoteBinding: ItemNoteBinding
-    ) : RecyclerView.ViewHolder(itemNoteBinding.root) {
+        itemNoteExerciseBinding: ItemNoteExerciseBinding
+    ) : RecyclerView.ViewHolder(itemNoteExerciseBinding.root) {
 
-        private var exercise = itemNoteBinding.exerciseName
-        private var exerciseNumber = itemNoteBinding.exerciseNumber
-        private val setList = itemNoteBinding.setsList
+        private var exercise = itemNoteExerciseBinding.exerciseName
+        private var exerciseNumber = itemNoteExerciseBinding.exerciseNumber
+        private val setList = itemNoteExerciseBinding.setsList
 
         fun bind(exerciseNote: ExerciseNote) {
             exercise.text = exerciseNote.exerciseName
@@ -36,7 +36,7 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {
         return WorkoutNoteViewHolder(
-            ItemNoteBinding.inflate(
+            ItemNoteExerciseBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

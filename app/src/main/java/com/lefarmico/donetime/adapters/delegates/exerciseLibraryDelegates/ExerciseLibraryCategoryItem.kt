@@ -8,7 +8,7 @@ import com.lefarmico.donetime.data.entities.library.ItemLibraryCategory
 import com.lefarmico.donetime.data.entities.library.ItemLibraryExercise
 import com.lefarmico.donetime.data.entities.library.ItemLibrarySubCategory
 import com.lefarmico.donetime.data.models.IExerciseLibraryItem
-import com.lefarmico.donetime.databinding.ItemExerciseListBinding
+import com.lefarmico.donetime.databinding.ItemLibraryListBinding
 
 class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
     IExerciseLibraryItem,
@@ -17,10 +17,10 @@ class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
     >() {
             
     class MenuItemViewHolder(
-        itemExerciseListBinding: ItemExerciseListBinding
-    ) : RecyclerView.ViewHolder(itemExerciseListBinding.root) {
+        itemLibraryListBinding: ItemLibraryListBinding
+    ) : RecyclerView.ViewHolder(itemLibraryListBinding.root) {
         
-        private val exerciseText = itemExerciseListBinding.text
+        private val exerciseText = itemLibraryListBinding.text
 
         fun bind(item: IExerciseLibraryItem) {
             when (item) {
@@ -48,7 +48,7 @@ class ExerciseLibraryCategoryItem : AbsListItemAdapterDelegate<
 
     override fun onCreateViewHolder(parent: ViewGroup): MenuItemViewHolder {
         return MenuItemViewHolder(
-            ItemExerciseListBinding.inflate(
+            ItemLibraryListBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

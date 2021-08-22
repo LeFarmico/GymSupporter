@@ -1,14 +1,13 @@
-package com.lefarmico.donetime.data.entities.exercise
+package com.lefarmico.donetime.data.entities.currentExercise
 
 import com.lefarmico.donetime.data.models.ICurrentExerciseItem
-import com.lefarmico.donetime.data.models.ICurrentExerciseSetItem
 
-interface IExerciseData : IExerciseEntity {
+interface IExerciseModel : IExerciseEntity {
     override val name: String
     override val tag: String
-    override var sets: MutableList<ICurrentExerciseSetItem>
+    override var exerciseSetList: ExerciseSetList
     var isActive: Boolean
-    var addButtonEvent: (() -> ICurrentExerciseSetItem)
+    var addButtonEvent: ((ExerciseData) -> Unit)
     var delButtonEvent: ((ExerciseData) -> Unit)
     fun getSetCount(): Int
     fun getItems(): MutableList<ICurrentExerciseItem>

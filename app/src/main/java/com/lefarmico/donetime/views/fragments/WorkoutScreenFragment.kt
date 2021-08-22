@@ -6,11 +6,9 @@ import android.widget.Toast
 import androidx.core.util.Preconditions
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.CurrentExercisesAdapter
-import com.lefarmico.donetime.data.entities.exercise.ExerciseData
-import com.lefarmico.donetime.data.entities.exercise.ExerciseDataManager
-import com.lefarmico.donetime.data.entities.exercise.ExerciseMuscleSetEntity
-import com.lefarmico.donetime.data.entities.exercise.ExerciseNameEntity
-import com.lefarmico.donetime.data.models.ICurrentExerciseSetItem
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseDataManager
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
+import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSetEntity
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
@@ -20,13 +18,10 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     WorkoutScreenViewModel::class.java
 ) {
 
-    val exercise = ExerciseData("Bench press", "Chest")
-    private val exercise2 = ExerciseData("Pull ups", "Back")
-
     private var exerciseDataManager: ExerciseDataManager = ExerciseDataManager().apply {
-        addExercise(exercise)
-        addExercise(exercise2)
-        buttonEventAddSet = { addSetButtonListener() }
+        addExercise("Bench Press", "Chest")
+        addExercise("Pull up", "Back")
+        newSet = { addSet() }
     }
 
     val adapter = CurrentExercisesAdapter(exerciseDataManager)
@@ -44,11 +39,6 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     }
 
     override fun setUpViews() {
-        exerciseDataManager.apply {
-            buttonEventAddSet = {
-                ExerciseMuscleSetEntity(25f, 44)
-            }
-        }
         binding.listRecycler.adapter = adapter
         binding.addExButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -57,7 +47,7 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
                 .commit()
         }
         binding.finishButton.setOnClickListener {
-//            viewModel.putWorkoutNoteToDB(workoutRepo)
+            viewModel.putWorkoutNoteToDB(exerciseDataManager)
             Toast.makeText(requireContext(), "Your workout saved!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment, HomeFragment::class.java, null)
@@ -69,14 +59,12 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     private fun onFragmentResult(requestKey: String, result: Bundle) {
         Preconditions.checkState(REQUEST_KEY == requestKey)
 
-        val exercise = result.getParcelable<ExerciseNameEntity>(KEY_NUMBER)!!
-        exerciseDataManager.addExercise(
-            ExerciseData(exercise.name, exercise.tags)
-        )
+        val exercise = result.getParcelable<ExerciseName>(KEY_NUMBER)!!
+        exerciseDataManager.addExercise(exercise.name, exercise.tags)
     }
 
-    private fun addSetButtonListener(): ICurrentExerciseSetItem {
-        return ExerciseMuscleSetEntity(100f, 55)
+    private fun addSet(): ExerciseSetEntity {
+        return ExerciseSetEntity(100f, 55)
     }
 
     companion object {

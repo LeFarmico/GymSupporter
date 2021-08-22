@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lefarmico.donetime.data.db.entities.WorkoutNote
+import com.lefarmico.donetime.data.entities.note.WorkoutNote
 import io.reactivex.rxjava3.core.Observable
 
 @Dao

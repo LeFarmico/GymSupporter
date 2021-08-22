@@ -9,4 +9,4 @@
     android:paddingTop="@dimen/list_item_spacing_half"
     android:paddingBottom="@dimen/list_item_spacing_half"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:listitem="@layout/item_exercise_list" />
+    tools:listitem="@layout/item_library_list" />

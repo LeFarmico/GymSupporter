@@ -1,7 +1,7 @@
 package com.lefarmico.donetime.data
 
 import com.lefarmico.donetime.data.db.dao.WorkoutNoteDao
-import com.lefarmico.donetime.data.db.entities.WorkoutNote
+import com.lefarmico.donetime.data.entities.note.WorkoutNote
 import io.reactivex.rxjava3.core.Observable
 
 class WorkoutNotesRepository(private val dao: WorkoutNoteDao) {

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.donetime.data.entities.note.WorkoutNote
-import com.lefarmico.donetime.databinding.ItemWorkoutNoteBinding
+import com.lefarmico.donetime.databinding.ItemNoteWorkoutBinding
 
 class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteViewHolder>() {
 
@@ -15,11 +15,11 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
         }
 
     class WorkoutNoteViewHolder(
-        itemWorkoutNoteBinding: ItemWorkoutNoteBinding
-    ) : RecyclerView.ViewHolder(itemWorkoutNoteBinding.root) {
+        itemNoteWorkoutBinding: ItemNoteWorkoutBinding
+    ) : RecyclerView.ViewHolder(itemNoteWorkoutBinding.root) {
 
-        private val date = itemWorkoutNoteBinding.workoutDate
-        private val exerciseNoteRecycler = itemWorkoutNoteBinding.exercisesRecycler
+        private val date = itemNoteWorkoutBinding.workoutDate
+        private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
 
         fun bind(exerciseNote: WorkoutNote) {
             date.text = exerciseNote.date
@@ -31,7 +31,7 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {
         return WorkoutNoteViewHolder(
-            ItemWorkoutNoteBinding.inflate(
+            ItemNoteWorkoutBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

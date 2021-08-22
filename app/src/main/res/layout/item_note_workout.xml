@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@id/edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_note"
+        tools:listitem="@layout/item_note_exercise"
         tools:itemCount="5"
         android:background="@drawable/single_corners_shape"
         android:padding="8dp"

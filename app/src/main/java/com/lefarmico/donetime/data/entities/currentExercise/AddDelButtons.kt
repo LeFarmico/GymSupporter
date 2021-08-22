@@ -1,8 +1,8 @@
-package com.lefarmico.donetime.data.entities.exercise
+package com.lefarmico.donetime.data.entities.currentExercise
 
 import com.lefarmico.donetime.data.models.ICurrentExerciseItem
 
-data class AddDelButtonsEntity(
+data class AddDelButtons(
     val addButtonCallback: () -> Unit,
     val deleteButtonCallback: () -> Unit,
 ) : ICurrentExerciseItem
