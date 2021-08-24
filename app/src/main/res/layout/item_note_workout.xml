@@ -8,14 +8,15 @@
     <TextView
         android:id="@+id/workout_date"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="48dp"
         android:text="@string/date"
         style="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exercises_recycler"
         android:layout_marginStart="8dp"
-        android:textAlignment="center"
+        android:paddingTop="8dp"
+        android:gravity="center_vertical"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/exercises_recycler"
