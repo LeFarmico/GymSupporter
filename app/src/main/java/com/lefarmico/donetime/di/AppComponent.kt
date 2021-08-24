@@ -1,9 +1,6 @@
 package com.lefarmico.donetime.di
 
-import com.lefarmico.donetime.viewModels.CategoryListViewModel
-import com.lefarmico.donetime.viewModels.ExerciseListViewModel
-import com.lefarmico.donetime.viewModels.SubCategoryViewModel
-import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
+import com.lefarmico.donetime.viewModels.* // ktlint-disable no-wildcard-imports
 import dagger.Component
 import javax.inject.Singleton
 
@@ -20,4 +17,5 @@ interface AppComponent {
     fun inject(viewModel: CategoryListViewModel)
     fun inject(viewModel: SubCategoryViewModel)
     fun inject(viewModel: WorkoutScreenViewModel)
+    fun inject(viewModel: HomeViewModel)
 }

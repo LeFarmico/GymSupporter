@@ -6,11 +6,11 @@ import io.reactivex.rxjava3.core.Observable
 
 class WorkoutNotesRepository(private val dao: WorkoutNoteDao) {
     
-    fun addWorkoutNote(noteWorkout: NoteWorkout) {
+    fun addNoteWorkout(noteWorkout: NoteWorkout) {
         dao.insertWorkoutNote(noteWorkout)
     }
     
-    fun getWorkoutNotes(): Observable<List<NoteWorkout>> {
+    fun getNoteWorkouts(): Observable<List<NoteWorkout>> {
         return dao.getWorkoutNotes()
     }
 }
