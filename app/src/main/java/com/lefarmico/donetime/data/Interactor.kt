@@ -4,6 +4,7 @@ import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
 import com.lefarmico.donetime.data.entities.library.LibraryCategory
 import com.lefarmico.donetime.data.entities.library.LibraryExercise
 import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
+import com.lefarmico.donetime.data.entities.note.NoteWorkout
 import com.lefarmico.donetime.utils.Converter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -50,7 +51,11 @@ class Interactor(
             .subscribeOn(Schedulers.io())
             .subscribe { data ->
                 val workoutNote = Converter.conVertExDataManagerToWorkoutNote(data)
-                workoutRepo.addWorkoutNote(workoutNote)
+                workoutRepo.addNoteWorkout(workoutNote)
             }
+    }
+
+    fun getNoteWorkoutsFromDB(): Observable<List<NoteWorkout>> {
+        return workoutRepo.getNoteWorkouts()
     }
 }
