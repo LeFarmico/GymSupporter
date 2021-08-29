@@ -14,6 +14,7 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     SubCategoryViewModel::class.java
 ) {
 
+    private var bundleData: Int? = null
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
@@ -27,6 +28,7 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
         super.onCreate(savedInstanceState)
         val bundle = this.arguments
         if (bundle != null) {
+            bundleData = bundle.getInt(CategoryListFragment.KEY_NUMBER)
             viewModel.passSubCategoryToLiveData(
                 bundle.getInt(CategoryListFragment.KEY_NUMBER)
             )
@@ -39,6 +41,11 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     override fun observeData() {
         viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) {
             adapter.items = it
+        }
+        binding.editButton.setOnClickListener {
+            binding.textField.apply {
+                viewModel.addNewSubCategory(editText?.text.toString(), bundleData)
+            }
         }
     }
 

@@ -25,4 +25,8 @@ class CategoryListViewModel : BaseViewModel() {
                 categoriesLiveData.postValue(it)
             }
     }
+
+    fun addNewCategory(categoryTitle: String) {
+        interactor.addNewCategory(categoryTitle)
+    }
 }

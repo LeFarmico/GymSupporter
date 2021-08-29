@@ -17,7 +17,7 @@ class CurrentExerciseButtonsDelegate : AbsListItemAdapterDelegate<
     class ButtonViewHolder(
         itemAddButtonBinding: ItemAddButtonBinding
     ) : RecyclerView.ViewHolder(itemAddButtonBinding.root) {
-        private val addButton = itemAddButtonBinding.addButton
+        private val addButton = itemAddButtonBinding.editButton
         private val deleteButton = itemAddButtonBinding.deleteButton
 
         fun bind(item: ExerciseButtons) {

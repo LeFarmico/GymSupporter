@@ -18,6 +18,6 @@ data class LibraryExercise(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "exercise_title") override val title: String,
     @ColumnInfo(name = "exercise_description") val description: String = "",
-    @ColumnInfo(name = "exercise_image") val image: String?,
+    @ColumnInfo(name = "exercise_image") val image: String = "",
     @ColumnInfo(name = "sub_category_id") val subCategoryId: Int,
 ) : ILibraryItem

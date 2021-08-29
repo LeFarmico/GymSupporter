@@ -24,4 +24,10 @@ class SubCategoryViewModel : BaseViewModel() {
                 subCategoriesLiveData.postValue(it)
             }
     }
+
+    fun addNewSubCategory(title: String, categoryId: Int?) {
+        if (categoryId != null) {
+            interactor.addNewSubCategory(title, categoryId)
+        }
+    }
 }
