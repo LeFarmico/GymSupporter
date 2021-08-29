@@ -55,6 +55,41 @@ class Interactor(
             }
     }
 
+    fun addNewCategory(categoryTitle: String) {
+        Single.create<String> {
+            it.onSuccess(categoryTitle)
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe { data ->
+                exRepo.addCategory(data)
+            }
+    }
+
+    fun addNewSubCategory(subCategoryTitle: String, categoryId: Int) {
+        Single.create<Pair<String, Int>> {
+            it.onSuccess(subCategoryTitle to categoryId)
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe { data ->
+                exRepo.addSubCategory(data.first, data.second)
+            }
+    }
+
+    fun addNewExercise(title: String, description: String, imageRes: String?, subcategoryId: Int) {
+        val exercise = LibraryExercise(
+            title = title,
+            description = description,
+            subCategoryId = subcategoryId
+        )
+        Single.create<LibraryExercise> {
+            it.onSuccess(exercise)
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe { data ->
+                exRepo.addExercise(data)
+            }
+    }
+
     fun getNoteWorkoutsFromDB(): Observable<List<NoteWorkout>> {
         return workoutRepo.getNoteWorkouts()
     }

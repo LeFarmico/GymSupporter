@@ -2,7 +2,9 @@ package com.lefarmico.donetime.views.fragments
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
 import com.lefarmico.donetime.data.entities.library.LibraryExercise
@@ -16,11 +18,12 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
 ) {
 
     var bundleResult: Int = -1
+    private val bundle = Bundle()
 
     private val adapter = ExerciseLibraryAdapter().apply {
         onClick = {
             it as LibraryExercise
-            setResult(ExerciseName(it.title, it.title))
+            setExerciseResult(ExerciseName(it.title, it.title))
             parentFragmentManager.popBackStack(
                 WorkoutScreenFragment.BACKSTACK_BRANCH,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -35,6 +38,11 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
     override fun setUpViews() {
         binding.recycler.adapter = adapter
         viewModel.passExercisesToLiveData(bundleResult)
+
+        binding.editButton.setOnClickListener {
+            bundle.putInt(AddExerciseFragment.KEY_NUMBER, bundleResult)
+            changeFragment(AddExerciseFragment::class.java, bundle)
+        }
     }
 
     override fun observeData() {
@@ -43,7 +51,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         }
     }
 
-    private fun setResult(exerciseEntity: ExerciseName) {
+    private fun setExerciseResult(exerciseEntity: ExerciseName) {
         parentFragmentManager.setFragmentResult(
             WorkoutScreenFragment.REQUEST_KEY,
             bundleOf(WorkoutScreenFragment.KEY_NUMBER to exerciseEntity)
@@ -55,5 +63,15 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         if (bundle != null) {
             bundleResult = bundle.getInt(SubCategoryListFragment.KEY_NUMBER)
         }
+    }
+
+    private fun changeFragment(
+        fragment: Class<out Fragment>,
+        bundle: Bundle
+    ) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment, fragment, bundle)
+            .addToBackStack(AddExerciseFragment.BACK_STACK_KEY)
+            .commit()
     }
 }

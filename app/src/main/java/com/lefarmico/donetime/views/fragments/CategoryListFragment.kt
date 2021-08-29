@@ -25,6 +25,12 @@ class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryL
 
     override fun setUpViews() {
         binding.recycler.adapter = adapter
+
+        binding.editButton.setOnClickListener {
+            binding.textField.apply {
+                viewModel.addNewCategory(editText?.text.toString())
+            }
+        }
     }
 
     override fun observeData() {
