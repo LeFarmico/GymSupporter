@@ -1,25 +1,27 @@
-package com.lefarmico.donetime.views.fragments
+package com.lefarmico.donetime.views.fragments.listMenu
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.library.LibraryCategory
 import com.lefarmico.donetime.databinding.FragmentCategoryListBinding
 import com.lefarmico.donetime.viewModels.CategoryListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
+import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
 
-class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryListViewModel>(
+abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryListViewModel>(
     FragmentCategoryListBinding::inflate,
     CategoryListViewModel::class.java
 ) {
+
+    abstract val branchSubcategoryFragment: Class<out SubCategoryListFragment>
 
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
             item as LibraryCategory
             bundle.putInt(KEY_NUMBER, item.id)
-            changeFragment(SubCategoryListFragment::class.java, bundle)
+            changeFragment(branchSubcategoryFragment, bundle)
         }
     }
 
@@ -40,7 +42,7 @@ class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryL
     }
 
     private fun changeFragment(
-        fragment: Class<out Fragment>,
+        fragment: Class<out SubCategoryListFragment>,
         bundle: Bundle
     ) {
         parentFragmentManager.beginTransaction()

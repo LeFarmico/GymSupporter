@@ -12,6 +12,7 @@ import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
+import com.lefarmico.donetime.views.fragments.listMenu.workout.WorkoutCategoryFragment
 
 class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, WorkoutScreenViewModel>(
     FragmentWorkoutScreenBinding::inflate,
@@ -41,8 +42,10 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
     override fun setUpViews() {
         binding.listRecycler.adapter = adapter
         binding.addExButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putBoolean(ADD_EXERCISE_BRANCH, true)
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment, CategoryListFragment::class.java, null)
+                .replace(R.id.fragment, WorkoutCategoryFragment::class.java, bundle)
                 .addToBackStack(BACKSTACK_BRANCH)
                 .commit()
         }
@@ -71,5 +74,6 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
         const val REQUEST_KEY = "exercise_result"
         const val KEY_NUMBER = "key_1"
         const val BACKSTACK_BRANCH = "EXERCISE"
+        const val ADD_EXERCISE_BRANCH = "add_exercise_branch"
     }
 }

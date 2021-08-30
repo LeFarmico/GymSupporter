@@ -6,9 +6,9 @@ import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.donetime.viewModels.MainViewModel
 import com.lefarmico.donetime.views.base.BaseActivity
-import com.lefarmico.donetime.views.fragments.CategoryListFragment
 import com.lefarmico.donetime.views.fragments.HomeFragment
 import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
+import com.lefarmico.donetime.views.fragments.listMenu.library.LibraryCategoryFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
                         true
                     }
                     R.id.exercises -> {
-                        launchFragment(CategoryListFragment::class.java)
+                        launchFragment(LibraryCategoryFragment::class.java)
                         true
                     }
                     R.id.settings -> { false }

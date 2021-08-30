@@ -1,41 +1,37 @@
-package com.lefarmico.donetime.views.fragments
+package com.lefarmico.donetime.views.fragments.listMenu
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
 import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
-import com.lefarmico.donetime.data.entities.library.LibraryExercise
+import com.lefarmico.donetime.data.entities.library.ILibraryItem
 import com.lefarmico.donetime.databinding.FragmentExerciseListBinding
 import com.lefarmico.donetime.viewModels.ExerciseListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
+import com.lefarmico.donetime.views.fragments.AddExerciseFragment
+import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
 
-class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
+abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
     FragmentExerciseListBinding::inflate,
     ExerciseListViewModel::class.java
 ) {
 
+    abstract val onItemClickListener: (ILibraryItem) -> Unit
+    
     var bundleResult: Int = -1
     private val bundle = Bundle()
 
-    private val adapter = ExerciseLibraryAdapter().apply {
-        onClick = {
-            it as LibraryExercise
-            setExerciseResult(ExerciseName(it.title, it.title))
-            parentFragmentManager.popBackStack(
-                WorkoutScreenFragment.BACKSTACK_BRANCH,
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
-        }
-    }
-    
+    private val adapter = ExerciseLibraryAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getBundleResult()
     }
+
     override fun setUpViews() {
+        adapter.onClick = onItemClickListener
         binding.recycler.adapter = adapter
         viewModel.passExercisesToLiveData(bundleResult)
 
@@ -51,7 +47,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         }
     }
 
-    private fun setExerciseResult(exerciseEntity: ExerciseName) {
+    protected fun setExerciseResult(exerciseEntity: ExerciseName) {
         parentFragmentManager.setFragmentResult(
             WorkoutScreenFragment.REQUEST_KEY,
             bundleOf(WorkoutScreenFragment.KEY_NUMBER to exerciseEntity)
@@ -73,5 +69,9 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
             .replace(R.id.fragment, fragment, bundle)
             .addToBackStack(AddExerciseFragment.BACK_STACK_KEY)
             .commit()
+    }
+
+    companion object {
+        const val KEY_NUMBER = "exercise_list_fragment_key"
     }
 }

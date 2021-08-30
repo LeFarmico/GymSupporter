@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class LibraryExercise(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") override val id: Int = 0,
     @ColumnInfo(name = "exercise_title") override val title: String,
     @ColumnInfo(name = "exercise_description") val description: String = "",
     @ColumnInfo(name = "exercise_image") val image: String = "",

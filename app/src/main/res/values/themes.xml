@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.DoneTime" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.DoneTime" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#fbbc0d</item>
-        <item name="colorPrimaryDark">#fbbc0d</item>
+        <item name="colorPrimaryDark">#FBA729</item>
         <item name="colorSecondary">#fd1f4b</item>
 
         <item name="backgroundColor">@color/background</item>
@@ -16,7 +16,7 @@
         <item name="colorOnSurface">@color/black</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:windowLightStatusBar">true</item>
+<!--        <item name="android:windowLightStatusBar">true</item>-->
     </style>
 
 </resources>
