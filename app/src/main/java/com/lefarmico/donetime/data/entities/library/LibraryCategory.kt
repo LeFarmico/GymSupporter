@@ -15,6 +15,6 @@ import androidx.room.PrimaryKey
     ]
 )
 data class LibraryCategory(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") override val id: Int = 0,
     @ColumnInfo(name = "category_title") override val title: String = ""
 ) : ILibraryItem

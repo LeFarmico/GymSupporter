@@ -70,4 +70,8 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
             .addToBackStack(AddExerciseFragment.BACK_STACK_KEY)
             .commit()
     }
+
+    companion object {
+        const val KEY_NUMBER = "exercise_list_fragment_key"
+    }
 }

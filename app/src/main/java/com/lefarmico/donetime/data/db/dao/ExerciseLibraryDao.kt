@@ -29,4 +29,7 @@ interface ExerciseLibraryDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertExercise(exercise: LibraryExercise)
+
+    @Query("SELECT * FROM exercise_library_exercise WHERE id = :exerciseId")
+    fun getExercise(exerciseId: Int): LibraryExercise
 }

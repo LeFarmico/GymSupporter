@@ -19,4 +19,5 @@ interface AppComponent {
     fun inject(viewModel: WorkoutScreenViewModel)
     fun inject(viewModel: HomeViewModel)
     fun inject(viewModel: AddExerciseViewModel)
+    fun inject(viewModel: ExerciseDetailsViewModel)
 }

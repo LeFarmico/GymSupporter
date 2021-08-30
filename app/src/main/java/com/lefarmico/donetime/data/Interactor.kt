@@ -93,4 +93,11 @@ class Interactor(
     fun getNoteWorkoutsFromDB(): Observable<List<NoteWorkout>> {
         return workoutRepo.getNoteWorkouts()
     }
+
+    fun getExerciseById(id: Int): Single<LibraryExercise> {
+        return Single.create<LibraryExercise> {
+            it.onSuccess(exRepo.getExercise(id))
+        }
+            .subscribeOn(Schedulers.io())
+    }
 }

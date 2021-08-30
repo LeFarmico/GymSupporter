@@ -78,4 +78,8 @@ class ExerciseLibraryRepository(private val dao: ExerciseLibraryDao) {
         }
         return isUnique
     }
+
+    fun getExercise(exerciseId: Int): LibraryExercise {
+        return dao.getExercise(exerciseId)
+    }
 }
