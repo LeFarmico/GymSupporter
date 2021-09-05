@@ -30,6 +30,8 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
     override fun setUpViews() {
         binding.recycler.adapter = adapter
 
+        viewModel.onTriggerEvent(CategoryListIntent.GetCategories)
+
         binding.plusButton.setOnClickListener {
             binding.textField.apply {
                 viewModel.onTriggerEvent(

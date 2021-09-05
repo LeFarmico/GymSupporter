@@ -27,24 +27,20 @@ class SubCategoryViewModel : BaseViewModel<SubCategoryIntent>() {
             }
     }
 
-    fun addNewSubCategory(title: String, categoryId: Int?) {
-        if (categoryId != null) {
-            val category = LibraryDto.SubCategory(
-                title = title,
-                categoryId = categoryId
-            )
-            repo.addSubCategory(category)
-                .subscribe { dataState ->
-                    when (dataState) {
-                        is DataState.Success -> {
-                            getSubCategories(categoryId)
-                        }
-                        else -> {}
-                    }    
+    fun addNewSubCategory(title: String, categoryId: Int) {
+        val category = LibraryDto.SubCategory(
+            title = title,
+            categoryId = categoryId
+        )
+        repo.addSubCategory(category)
+            .subscribe { dataState ->
+                when (dataState) {
+                    is DataState.Success -> {
+                        getSubCategories(categoryId)
+                    }
+                    else -> {}
                 }
-        } else {
-            subCategoriesLiveData.postValue(DataState.Empty)
-        }
+            }
     }
 
     override fun onTriggerEvent(eventType: SubCategoryIntent) {

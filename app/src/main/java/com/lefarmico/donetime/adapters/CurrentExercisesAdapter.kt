@@ -4,10 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseDelegate
-import com.lefarmico.donetime.utils.ItemObserver
 
 class CurrentExercisesAdapter :
-    ListDelegationAdapter<List<WorkoutRecordsDto>>(), ItemObserver<WorkoutRecordsDto> {
+    ListDelegationAdapter<List<WorkoutRecordsDto>>() {
 
     lateinit var plusButtonCallBack: (Int) -> Unit
     lateinit var minusButtonCallback: (Int) -> Unit
@@ -35,9 +34,5 @@ class CurrentExercisesAdapter :
             }
         }
         delegatesManager.onBindViewHolder(items, position, holder, null)
-    }
-
-    override fun updateData(items: MutableList<WorkoutRecordsDto>) {
-        setItems(items)
     }
 }

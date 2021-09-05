@@ -18,6 +18,7 @@ class WorkoutScreenViewModel : BaseViewModel<WorkoutScreenIntent>() {
     @Inject lateinit var libraryRepository: LibraryRepositoryImpl
     @Inject lateinit var repo: CurrentWorkoutRepositoryImpl
 
+    // TODO : убрать локальные переменные
     private var exerciseIds = 1
     private var setId = 1
 
@@ -83,6 +84,7 @@ class WorkoutScreenViewModel : BaseViewModel<WorkoutScreenIntent>() {
             }
     }
 
+    // TODO : убрать локальные переменные
     fun addSetToExercise(
         exerciseId: Int,
         reps: Int,

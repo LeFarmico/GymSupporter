@@ -58,7 +58,7 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
         binding.plusButton.setOnClickListener {
             binding.textField.apply {
                 viewModel.onTriggerEvent(
-                    SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), bundleData)
+                    SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), bundleData!!)
                 )
             }
         }

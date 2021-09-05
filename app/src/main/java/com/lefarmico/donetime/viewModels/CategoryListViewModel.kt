@@ -15,7 +15,6 @@ class CategoryListViewModel : BaseViewModel<CategoryListIntent>() {
 
     init {
         App.appComponent.inject(this)
-        getCategories()
     }
     
     @Inject
@@ -50,6 +49,7 @@ class CategoryListViewModel : BaseViewModel<CategoryListIntent>() {
     override fun onTriggerEvent(eventType: CategoryListIntent) {
         when (eventType) {
             is CategoryListIntent.AddCategory -> addNewCategory(eventType.categoryTitle)
+            CategoryListIntent.GetCategories -> getCategories()
         }
     }
 }
