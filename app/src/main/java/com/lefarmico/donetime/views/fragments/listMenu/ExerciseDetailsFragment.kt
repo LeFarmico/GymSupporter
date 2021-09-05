@@ -1,7 +1,9 @@
 package com.lefarmico.donetime.views.fragments.listMenu
 
 import android.os.Bundle
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.databinding.FragmentExerciseDetailsBinding
+import com.lefarmico.donetime.intents.ExerciseDetailsIntent
 import com.lefarmico.donetime.viewModels.ExerciseDetailsViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 
@@ -21,13 +23,24 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
     }
 
     override fun observeView() {
-        viewModel.getExerciseFromDB(bundleResult)
+        viewModel.onTriggerEvent(
+            ExerciseDetailsIntent.GetExercise(
+                bundleResult
+            )
+        )
     }
 
     override fun observeData() {
-        viewModel.libraryExerciseLiveData.observe(viewLifecycleOwner) {
-            binding.exerciseTitleTextView.text = it.title
-            binding.exerciseDescriptionTextView.text = it.description
+        viewModel.libraryExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {}
+                is DataState.Error -> {}
+                DataState.Loading -> {}
+                is DataState.Success -> {
+                    binding.exerciseTitleTextView.text = dataState.data.title
+                    binding.exerciseDescriptionTextView.text = dataState.data.description
+                }
+            }
         }
     }
 

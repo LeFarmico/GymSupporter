@@ -33,7 +33,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-        dataBinding true
     }
 }
 
@@ -99,8 +98,8 @@ dependencies {
     implementation rxjavaKotlin
     implementation rxjavaRetrofitAdapter
 
-    // LeRecycle
-    api project(':LeRecycle')
+    implementation project(':data')
+    implementation project(':domain')
 
     // AdapterDelegates
     implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.0'

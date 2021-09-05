@@ -8,7 +8,7 @@ import androidx.viewbinding.ViewBinding
 
 typealias LayoutInflate<T> = (LayoutInflater) -> T
 
-abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>(
+abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
     private val inflate: LayoutInflate<VB>,
     private val provideViewModel: Class<VM>
 ) : AppCompatActivity(), ISetupBaseActivity {

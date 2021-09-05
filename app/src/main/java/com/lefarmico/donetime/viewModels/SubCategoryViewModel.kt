@@ -1,25 +1,27 @@
 package com.lefarmico.donetime.viewModels
 
 import androidx.lifecycle.MutableLiveData
+import com.lefarmico.data.repository.LibraryRepositoryImpl
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.App
-import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
+import com.lefarmico.donetime.intents.SubCategoryIntent
 import com.lefarmico.donetime.views.base.BaseViewModel
 import javax.inject.Inject
 
-class SubCategoryViewModel : BaseViewModel() {
+class SubCategoryViewModel : BaseViewModel<SubCategoryIntent>() {
 
-    val subCategoriesLiveData = MutableLiveData<List<LibrarySubCategory>>()
-
+    val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryDto.SubCategory>>>()
+    
     @Inject
-    lateinit var interactor: Interactor
+    lateinit var repo: LibraryRepositoryImpl
 
     init {
         App.appComponent.inject(this)
     }
 
-    fun passSubCategoryToLiveData(categoryId: Int) {
-        interactor.getSubCategoriesFromDB(categoryId)
+    fun getSubCategories(categoryId: Int) {
+        repo.getSubCategories(categoryId)
             .subscribe {
                 subCategoriesLiveData.postValue(it)
             }
@@ -27,7 +29,28 @@ class SubCategoryViewModel : BaseViewModel() {
 
     fun addNewSubCategory(title: String, categoryId: Int?) {
         if (categoryId != null) {
-            interactor.addNewSubCategory(title, categoryId)
+            val category = LibraryDto.SubCategory(
+                title = title,
+                categoryId = categoryId
+            )
+            repo.addSubCategory(category)
+                .subscribe { dataState ->
+                    when (dataState) {
+                        is DataState.Success -> {
+                            getSubCategories(categoryId)
+                        }
+                        else -> {}
+                    }    
+                }
+        } else {
+            subCategoriesLiveData.postValue(DataState.Empty)
+        }
+    }
+
+    override fun onTriggerEvent(eventType: SubCategoryIntent) {
+        when (eventType) {
+            is SubCategoryIntent.GetSubcategories -> getSubCategories(eventType.categoryId)
+            is SubCategoryIntent.AddNewSubCategory -> addNewSubCategory(eventType.title, eventType.categoryId)
         }
     }
 }

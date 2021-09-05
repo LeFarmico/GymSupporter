@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSet
+import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
 
 class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
 
-    var items = mutableListOf<ExerciseSet>()
+    var items = mutableListOf<WorkoutRecordsDto.Set>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -23,14 +23,14 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         private val weights: TextView = itemExerciseSetBinding.weight
         private var reps = itemExerciseSetBinding.reps
 
-        fun bind(item: ExerciseSet) {
+        fun bind(item: WorkoutRecordsDto.Set) {
             setNumber.text = item.setNumber.toString()
-            weights.text = item.weights.toString()
+            weights.text = item.weight.toString()
             reps.text = item.reps.toString()
         }
     }
 
-    fun addItem(item: ExerciseSet) {
+    fun addItem(item: WorkoutRecordsDto.Set) {
         items.add(item)
         notifyItemInserted(itemCount + 1)
     }
@@ -46,9 +46,6 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         holder.bind(items[position])
         holder.itemView.isClickable = false
         holder.itemView.isFocusable = false
-//        holder.itemView.setOnClickListener {
-//            Log.d("!!!!!!!", "onClick")
-//        }
     }
 
     override fun getItemCount(): Int {

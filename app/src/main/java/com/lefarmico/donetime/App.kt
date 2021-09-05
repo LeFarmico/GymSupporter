@@ -15,6 +15,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         appComponent = DaggerAppComponent.builder()
             .dataBaseModule(DataBaseModule(this))
             .domainModule(DomainModule())

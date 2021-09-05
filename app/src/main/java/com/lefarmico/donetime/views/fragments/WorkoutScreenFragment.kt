@@ -4,28 +4,34 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.util.Preconditions
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.CurrentExercisesAdapter
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSet
-import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
+import com.lefarmico.donetime.customView.setParameters.SetParametersDialog
+import com.lefarmico.donetime.customView.setParameters.SetSettingDialogCallback
 import com.lefarmico.donetime.databinding.FragmentWorkoutScreenBinding
+import com.lefarmico.donetime.intents.WorkoutScreenIntent
 import com.lefarmico.donetime.viewModels.WorkoutScreenViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 import com.lefarmico.donetime.views.fragments.listMenu.workout.WorkoutCategoryFragment
 
-class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, WorkoutScreenViewModel>(
-    FragmentWorkoutScreenBinding::inflate,
-    WorkoutScreenViewModel::class.java
-) {
+class WorkoutScreenFragment :
+    BaseFragment<FragmentWorkoutScreenBinding, WorkoutScreenViewModel>(
+        FragmentWorkoutScreenBinding::inflate,
+        WorkoutScreenViewModel::class.java
+    ),
+    SetSettingDialogCallback {
 
-    private var workoutData: WorkoutData = WorkoutData().apply {
-        addExercise("Bench Press", "Chest")
-        addExercise("Pull up", "Back")
-        newSet = { addSet() }
+    val adapter = CurrentExercisesAdapter().apply {
+        plusButtonCallBack = {
+            initSetParameterDialog(it)
+        }
+        minusButtonCallback = {
+            viewModel.onTriggerEvent(
+                WorkoutScreenIntent.DeleteSet(it)
+            )
+        }
     }
-
-    val adapter = CurrentExercisesAdapter(workoutData)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,16 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
 
     override fun setUpViews() {
         binding.listRecycler.adapter = adapter
+        viewModel.exerciseLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {}
+                is DataState.Error -> {}
+                DataState.Loading -> {}
+                is DataState.Success -> {
+                    adapter.items = dataState.data
+                }
+            }
+        }
         binding.addExButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putBoolean(ADD_EXERCISE_BRANCH, true)
@@ -50,7 +66,9 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
                 .commit()
         }
         binding.finishButton.setOnClickListener {
-            viewModel.putWorkoutNoteToDB(workoutData)
+            viewModel.onTriggerEvent(
+                WorkoutScreenIntent.SaveAll
+            )
             Toast.makeText(requireContext(), "Your workout saved!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment, HomeFragment::class.java, null)
@@ -58,18 +76,25 @@ class WorkoutScreenFragment : BaseFragment<FragmentWorkoutScreenBinding, Workout
         }
     }
 
+    override fun addSet(exerciseId: Int, reps: Int, weight: Float) {
+        viewModel.onTriggerEvent(
+            WorkoutScreenIntent.AddSetToExercise(exerciseId, reps, weight)
+        )
+    }
+    
     @SuppressLint("RestrictedApi")
     private fun onFragmentResult(requestKey: String, result: Bundle) {
         Preconditions.checkState(REQUEST_KEY == requestKey)
-
-        val exercise = result.getParcelable<ExerciseName>(KEY_NUMBER)!!
-        workoutData.addExercise(exercise.name, exercise.tags)
+        val exercise = result.getInt(KEY_NUMBER)
+        
+        viewModel.onTriggerEvent(WorkoutScreenIntent.AddExercise(exercise))
     }
 
-    private fun addSet(): ExerciseSet {
-        return ExerciseSet(100f, 55)
+    private fun initSetParameterDialog(exerciseId: Int) {
+        SetParametersDialog(exerciseId, this)
+            .show(childFragmentManager, "Set Setting")
     }
-
+    
     companion object {
         const val REQUEST_KEY = "exercise_result"
         const val KEY_NUMBER = "key_1"

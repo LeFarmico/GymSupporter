@@ -1,10 +1,12 @@
 package com.lefarmico.donetime.views.fragments.listMenu
 
 import android.os.Bundle
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
-import com.lefarmico.donetime.data.entities.library.LibraryCategory
 import com.lefarmico.donetime.databinding.FragmentCategoryListBinding
+import com.lefarmico.donetime.intents.CategoryListIntent
 import com.lefarmico.donetime.viewModels.CategoryListViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
@@ -19,7 +21,7 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
-            item as LibraryCategory
+            item as LibraryDto.Category
             bundle.putInt(KEY_NUMBER, item.id)
             changeFragment(branchSubcategoryFragment, bundle)
         }
@@ -28,16 +30,29 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
     override fun setUpViews() {
         binding.recycler.adapter = adapter
 
-        binding.editButton.setOnClickListener {
+        binding.plusButton.setOnClickListener {
             binding.textField.apply {
-                viewModel.addNewCategory(editText?.text.toString())
+                viewModel.onTriggerEvent(
+                    CategoryListIntent.AddCategory(
+                        editText?.text.toString()
+                    )
+                )
             }
         }
     }
 
     override fun observeData() {
-        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { data ->
-            adapter.items = data
+        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    adapter.items = mutableListOf()
+                }
+                is DataState.Error -> {}
+                DataState.Loading -> {}
+                is DataState.Success -> {
+                    adapter.items = dataState.data
+                }
+            }
         }
     }
 

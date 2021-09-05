@@ -1,8 +1,11 @@
 package com.lefarmico.donetime.views.fragments
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.databinding.FragmentAddExerciseBinding
+import com.lefarmico.donetime.intents.AddExerciseIntent
 import com.lefarmico.donetime.viewModels.AddExerciseViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 
@@ -19,16 +22,30 @@ class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExercise
     }
     override fun setUpViews() {
         binding.addButton.setOnClickListener {
-            viewModel.addNewExercise(
-                getTitleField(),
-                getDescriptionField(),
-                getImageSource(),
-                getSubcategory()
+            viewModel.onTriggerEvent(
+                AddExerciseIntent.AddExerciseResult(
+                    getTitleField(),
+                    getDescriptionField(),
+                    getImageSource(),
+                    getSubcategory()
+                )
             )
-            parentFragmentManager.popBackStack(
-                BACK_STACK_KEY,
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+        }
+        
+        viewModel.addExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {}
+                is DataState.Error -> {}
+                DataState.Loading -> {}
+                is DataState.Success -> {
+                    Toast.makeText(requireContext(), "Exercise Added to Library", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack(
+                        BACK_STACK_KEY,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
+                    viewModel.onTriggerEvent(AddExerciseIntent.DefaultState)
+                }
+            }
         }
     }
 

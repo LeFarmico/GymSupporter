@@ -1,10 +1,12 @@
 package com.lefarmico.donetime.views.fragments.listMenu
 
 import android.os.Bundle
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
-import com.lefarmico.donetime.data.entities.library.LibrarySubCategory
 import com.lefarmico.donetime.databinding.FragmentSubcategoryListBinding
+import com.lefarmico.donetime.intents.SubCategoryIntent
 import com.lefarmico.donetime.viewModels.SubCategoryViewModel
 import com.lefarmico.donetime.views.base.BaseFragment
 import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
@@ -20,7 +22,7 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
-            item as LibrarySubCategory
+            item as LibraryDto.SubCategory
             bundle.putInt(KEY_NUMBER, item.id)
             changeFragment(branchExerciseFragment, bundle)
         }
@@ -31,8 +33,8 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
         val bundle = this.arguments
         if (bundle != null) {
             bundleData = bundle.getInt(CategoryListFragment.KEY_NUMBER)
-            viewModel.passSubCategoryToLiveData(
-                bundle.getInt(CategoryListFragment.KEY_NUMBER)
+            viewModel.onTriggerEvent(
+                SubCategoryIntent.GetSubcategories(bundleData!!)
             )
         }
     }
@@ -41,12 +43,23 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
     }
 
     override fun observeData() {
-        viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) {
-            adapter.items = it
+        viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    adapter.items = mutableListOf()
+                }
+                is DataState.Error -> {}
+                DataState.Loading -> {}
+                is DataState.Success -> {
+                    adapter.items = dataState.data
+                }
+            }
         }
-        binding.editButton.setOnClickListener {
+        binding.plusButton.setOnClickListener {
             binding.textField.apply {
-                viewModel.addNewSubCategory(editText?.text.toString(), bundleData)
+                viewModel.onTriggerEvent(
+                    SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), bundleData)
+                )
             }
         }
     }

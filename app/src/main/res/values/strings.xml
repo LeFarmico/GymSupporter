@@ -28,4 +28,6 @@
     <string name="description">Description</string>
     <string name="edit">Edit</string>
     <string name="exercise_image">Exercise Image</string>
+    <string name="done">Done</string>
+    <string name="subweight">SubWeight:</string>
 </resources>

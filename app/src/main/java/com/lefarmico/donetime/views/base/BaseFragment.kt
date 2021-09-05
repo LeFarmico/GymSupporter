@@ -10,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
-abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
+abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
 ) : Fragment(), ISetupBaseActivity {

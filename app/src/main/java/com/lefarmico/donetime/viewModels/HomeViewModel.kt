@@ -1,31 +1,34 @@
 package com.lefarmico.donetime.viewModels
 
 import androidx.lifecycle.MutableLiveData
+import com.lefarmico.data.repository.WorkoutRecordsRepositoryImpl
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.App
-import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.note.NoteWorkout
+import com.lefarmico.donetime.intents.HomeIntent
 import com.lefarmico.donetime.views.base.BaseViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel : BaseViewModel<HomeIntent>() {
 
-    @Inject lateinit var interactor: Interactor
+    @Inject lateinit var repo: WorkoutRecordsRepositoryImpl
 
-    val noteWorkoutLiveData = MutableLiveData<List<NoteWorkout>>()
+    val noteWorkoutLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Workout>>>()
 
     init {
         App.appComponent.inject(this)
-        getNoteWorkouts()
     }
 
     private fun getNoteWorkouts() {
-        interactor.getNoteWorkoutsFromDB()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                noteWorkoutLiveData.postValue(it)
+        repo.getWorkouts()
+            .subscribe { dataState ->
+                noteWorkoutLiveData.postValue(dataState)
             }
+    }
+
+    override fun onTriggerEvent(eventType: HomeIntent) {
+        when (eventType) {
+            HomeIntent.GetWorkoutRecords -> getNoteWorkouts()
+        }
     }
 }

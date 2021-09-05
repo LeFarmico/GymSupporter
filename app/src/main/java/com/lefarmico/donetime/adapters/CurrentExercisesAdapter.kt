@@ -2,27 +2,20 @@ package com.lefarmico.donetime.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
-import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseButtonsDelegate
+import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.donetime.adapters.delegates.exerciseDelegates.CurrentExerciseDelegate
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseSetList
-import com.lefarmico.donetime.data.entities.currentExercise.ICurrentExerciseItem
-import com.lefarmico.donetime.data.entities.currentExercise.WorkoutData
 import com.lefarmico.donetime.utils.ItemObserver
 
-class CurrentExercisesAdapter(
-    workoutData: WorkoutData
-) : ListDelegationAdapter<List<ICurrentExerciseItem>>(), ItemObserver<ICurrentExerciseItem> {
+class CurrentExercisesAdapter :
+    ListDelegationAdapter<List<WorkoutRecordsDto>>(), ItemObserver<WorkoutRecordsDto> {
 
-    var onSetClick: ((ExerciseSetList) -> Unit)? = null
-
+    lateinit var plusButtonCallBack: (Int) -> Unit
+    lateinit var minusButtonCallback: (Int) -> Unit
     init {
-        delegatesManager.addDelegate(CurrentExerciseButtonsDelegate())
         delegatesManager.addDelegate(CurrentExerciseDelegate())
-
-        workoutData.registerObserver(this)
     }
 
-    override fun setItems(items: List<ICurrentExerciseItem>?) {
+    override fun setItems(items: List<WorkoutRecordsDto>?) {
         super.setItems(items)
         notifyDataSetChanged()
     }
@@ -32,10 +25,19 @@ class CurrentExercisesAdapter(
         position: Int,
         payloads: MutableList<Any?>
     ) {
+        if (holder is CurrentExerciseDelegate.ExerciseViewHolder) {
+            val exercise = items[position] as WorkoutRecordsDto.Exercise
+            holder.plusButton.setOnClickListener {
+                plusButtonCallBack(exercise.id)
+            }
+            holder.minusButton.setOnClickListener {
+                minusButtonCallback(exercise.id)
+            }
+        }
         delegatesManager.onBindViewHolder(items, position, holder, null)
     }
 
-    override fun updateData(items: MutableList<ICurrentExerciseItem>) {
+    override fun updateData(items: MutableList<WorkoutRecordsDto>) {
         setItems(items)
     }
 }
