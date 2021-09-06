@@ -1,13 +1,16 @@
-package com.lefarmico.donetime.views.fragments.listMenu
+package com.lefarmico.presentation.views.fragments.listMenu
 
 import android.os.Bundle
-import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
-import com.lefarmico.donetime.data.entities.library.LibraryCategory
-import com.lefarmico.donetime.databinding.FragmentCategoryListBinding
-import com.lefarmico.donetime.viewModels.CategoryListViewModel
-import com.lefarmico.donetime.views.base.BaseFragment
-import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
+import android.view.View
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
+import com.lefarmico.presentation.R
+import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
+import com.lefarmico.presentation.databinding.FragmentCategoryListBinding
+import com.lefarmico.presentation.intents.CategoryListIntent
+import com.lefarmico.presentation.viewModels.CategoryListViewModel
+import com.lefarmico.presentation.views.base.BaseFragment
+import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment
 
 abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, CategoryListViewModel>(
     FragmentCategoryListBinding::inflate,
@@ -19,7 +22,7 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
     private val adapter = ExerciseLibraryAdapter().apply {
         val bundle = Bundle()
         onClick = { item ->
-            item as LibraryCategory
+            item as LibraryDto.Category
             bundle.putInt(KEY_NUMBER, item.id)
             changeFragment(branchSubcategoryFragment, bundle)
         }
@@ -28,16 +31,44 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
     override fun setUpViews() {
         binding.recycler.adapter = adapter
 
-        binding.editButton.setOnClickListener {
+        viewModel.onTriggerEvent(CategoryListIntent.GetCategories)
+
+        binding.plusButton.setOnClickListener {
             binding.textField.apply {
-                viewModel.addNewCategory(editText?.text.toString())
+                viewModel.onTriggerEvent(
+                    CategoryListIntent.AddCategory(
+                        editText?.text.toString()
+                    )
+                )
             }
         }
     }
 
     override fun observeData() {
-        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { data ->
-            adapter.items = data
+        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    binding.emptyState.root.visibility = View.VISIBLE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                is DataState.Error -> {
+                    binding.errorState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                DataState.Loading -> {
+                    binding.loadingState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                }
+                is DataState.Success -> {
+                    adapter.items = dataState.data
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+            }
         }
     }
 

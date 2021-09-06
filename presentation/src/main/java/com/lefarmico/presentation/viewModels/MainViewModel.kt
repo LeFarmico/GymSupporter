@@ -1,5 +1,8 @@
-package com.lefarmico.donetime.viewModels
+package com.lefarmico.presentation.viewModels
 
-import com.lefarmico.donetime.views.base.BaseViewModel
+import com.lefarmico.presentation.views.base.BaseIntent
+import com.lefarmico.presentation.views.base.BaseViewModel
 
-class MainViewModel : BaseViewModel()
+class MainViewModel : BaseViewModel<BaseIntent>() {
+    override fun onTriggerEvent(eventType: BaseIntent) {}
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/reps_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reps_cur"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="@id/reps_picker"
+        app:layout_constraintEnd_toEndOf="@id/reps_picker"
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false"
+        />
+
+    <NumberPicker
+        android:id="@+id/reps_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/weight_picker"
+        />
+
+    <TextView
+        android:id="@+id/weight_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weight_cur"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="@id/weight_picker"
+        app:layout_constraintEnd_toEndOf="@id/weight_picker"
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false"
+        />
+
+    <NumberPicker
+        android:id="@+id/weight_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/reps_picker"
+        />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/done"
+        android:background="@drawable/button_shape"
+        app:layout_constraintTop_toBottomOf="@id/weight_picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

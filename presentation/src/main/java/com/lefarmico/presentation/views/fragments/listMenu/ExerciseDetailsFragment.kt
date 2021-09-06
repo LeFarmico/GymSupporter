@@ -1,9 +1,12 @@
-package com.lefarmico.donetime.views.fragments.listMenu
+package com.lefarmico.presentation.views.fragments.listMenu
 
 import android.os.Bundle
-import com.lefarmico.donetime.databinding.FragmentExerciseDetailsBinding
-import com.lefarmico.donetime.viewModels.ExerciseDetailsViewModel
-import com.lefarmico.donetime.views.base.BaseFragment
+import android.view.View
+import com.lefarmico.domain.utils.DataState
+import com.lefarmico.presentation.databinding.FragmentExerciseDetailsBinding
+import com.lefarmico.presentation.intents.ExerciseDetailsIntent
+import com.lefarmico.presentation.viewModels.ExerciseDetailsViewModel
+import com.lefarmico.presentation.views.base.BaseFragment
 
 class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(
     FragmentExerciseDetailsBinding::inflate,
@@ -21,13 +24,39 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
     }
 
     override fun observeView() {
-        viewModel.getExerciseFromDB(bundleResult)
+        viewModel.onTriggerEvent(
+            ExerciseDetailsIntent.GetExercise(
+                bundleResult
+            )
+        )
     }
 
     override fun observeData() {
-        viewModel.libraryExerciseLiveData.observe(viewLifecycleOwner) {
-            binding.exerciseTitleTextView.text = it.title
-            binding.exerciseDescriptionTextView.text = it.description
+        viewModel.libraryExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    binding.emptyState.root.visibility = View.VISIBLE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                is DataState.Error -> {
+                    binding.errorState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                DataState.Loading -> {
+                    binding.loadingState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                }
+                is DataState.Success -> {
+                    binding.exerciseTitleTextView.text = dataState.data.title
+                    binding.exerciseDescriptionTextView.text = dataState.data.description
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+            }
         }
     }
 

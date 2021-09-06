@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
-import com.lefarmico.domain.repository.BaseRepository
-import com.lefarmico.domain.repository.CurrentWorkoutRepository
-import com.lefarmico.donetime.adapters.CurrentSetAdapter
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.adapters.CurrentSetAdapter
+import com.lefarmico.presentation.databinding.ItemExerciseBinding
 
 class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
-    CurrentWorkoutRepository,
-    BaseRepository,
-        CurrentExerciseDelegate.ExerciseViewHolder
+    WorkoutRecordsDto.Exercise,
+    WorkoutRecordsDto,
+    CurrentExerciseDelegate.ExerciseViewHolder
     >() {
 
     class ExerciseViewHolder(
@@ -22,21 +22,24 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         private val exerciseTitle = itemExerciseBinding.exerciseTitle.exerciseName
         private val exerciseTag = itemExerciseBinding.exerciseTitle.tags
 
+        val plusButton = itemExerciseBinding.buttons.plusButton
+        val minusButton = itemExerciseBinding.buttons.minusButton
+
         fun bindAdapter(adapter: CurrentSetAdapter) {
             recycler.adapter = adapter
         }
-        fun bind(exerciseData: ExerciseData) {
-            exerciseTitle.text = exerciseData.name
-            exerciseTag.text = exerciseData.tag
+        fun bind(exerciseData: WorkoutRecordsDto.Exercise) {
+            exerciseTitle.text = exerciseData.exerciseName
+            exerciseTag.text = exerciseData.exerciseName
         }
     }
 
     override fun isForViewType(
-        item: ICurrentExerciseItem,
-        items: MutableList<ICurrentExerciseItem>,
+        item: WorkoutRecordsDto,
+        items: MutableList<WorkoutRecordsDto>,
         position: Int
     ): Boolean {
-        return item is ExerciseData
+        return item is WorkoutRecordsDto.Exercise
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ExerciseViewHolder {
@@ -48,12 +51,12 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
     }
 
     override fun onBindViewHolder(
-        item: ExerciseData,
+        item: WorkoutRecordsDto.Exercise,
         holder: ExerciseViewHolder,
         payloads: MutableList<Any>
     ) {
         val adapter = CurrentSetAdapter()
-        adapter.items = item.exerciseSetList.setList.toMutableList()
+        adapter.items = item.noteSetList.toMutableList()
         holder.bindAdapter(adapter)
         holder.bind(item)
     }

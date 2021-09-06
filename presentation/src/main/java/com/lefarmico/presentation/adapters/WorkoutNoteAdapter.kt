@@ -1,14 +1,14 @@
-package com.lefarmico.donetime.adapters
+package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.note.NoteWorkout
-import com.lefarmico.donetime.databinding.ItemNoteWorkoutBinding
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.databinding.ItemNoteWorkoutBinding
 
 class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteViewHolder>() {
 
-    var items = mutableListOf<NoteWorkout>()
+    var items = listOf<WorkoutRecordsDto.Workout>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -21,7 +21,7 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
         private val date = itemNoteWorkoutBinding.workoutDate
         private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
 
-        fun bind(noteWorkout: NoteWorkout) {
+        fun bind(noteWorkout: WorkoutRecordsDto.Workout) {
             date.text = noteWorkout.date
         }
         fun bindAdapter(adapter: ExerciseNoteAdapter) {
@@ -39,7 +39,7 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
         val adapter = ExerciseNoteAdapter()
-        adapter.setExercise(items[position].noteExerciseList)
+        adapter.setExercise(items[position].exerciseList)
         holder.bind(items[position])
         holder.bindAdapter(adapter)
     }

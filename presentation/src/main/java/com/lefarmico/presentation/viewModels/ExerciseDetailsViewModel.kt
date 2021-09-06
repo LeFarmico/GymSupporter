@@ -1,26 +1,33 @@
-package com.lefarmico.donetime.viewModels
+package com.lefarmico.presentation.viewModels
 
 import androidx.lifecycle.MutableLiveData
+import com.lefarmico.data.repository.LibraryRepositoryImpl
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.donetime.App
-import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.library.LibraryExercise
-import com.lefarmico.donetime.views.base.BaseViewModel
+import com.lefarmico.presentation.intents.ExerciseDetailsIntent
+import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class ExerciseDetailsViewModel : BaseViewModel() {
+class ExerciseDetailsViewModel : BaseViewModel<ExerciseDetailsIntent>() {
 
-    @Inject lateinit var interactor: Interactor
+    @Inject lateinit var repo: LibraryRepositoryImpl
 
-    val libraryExerciseLiveData = MutableLiveData<LibraryExercise>()
+    val libraryExerciseLiveData = MutableLiveData<DataState<LibraryDto.Exercise>>()
 
     init {
         App.appComponent.inject(this)
     }
 
     fun getExerciseFromDB(exerciseId: Int) {
-        interactor.getExerciseById(exerciseId)
-            .subscribe { data ->
-                libraryExerciseLiveData.postValue(data)
-            }
+        repo.getExercise(exerciseId).subscribe { dataState ->
+            libraryExerciseLiveData.postValue(dataState)
+        }
+    }
+
+    override fun onTriggerEvent(eventType: ExerciseDetailsIntent) {
+        when (eventType) {
+            is ExerciseDetailsIntent.GetExercise -> getExerciseFromDB(eventType.exerciseId)
+        }
     }
 }

@@ -1,14 +1,13 @@
-package com.lefarmico.donetime.views.activities
-
+package com.lefarmico.presentation.views.activities
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.lefarmico.donetime.R
-import com.lefarmico.donetime.databinding.ActivityMainBinding
-import com.lefarmico.donetime.viewModels.MainViewModel
-import com.lefarmico.donetime.views.base.BaseActivity
-import com.lefarmico.donetime.views.fragments.HomeFragment
-import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
-import com.lefarmico.donetime.views.fragments.listMenu.library.LibraryCategoryFragment
+import com.lefarmico.presentation.R
+import com.lefarmico.presentation.databinding.ActivityMainBinding
+import com.lefarmico.presentation.viewModels.MainViewModel
+import com.lefarmico.presentation.views.base.BaseActivity
+import com.lefarmico.presentation.views.fragments.HomeFragment
+import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment
+import com.lefarmico.presentation.views.fragments.listMenu.library.LibraryCategoryFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,

@@ -1,6 +1,12 @@
 package com.lefarmico.donetime.di
 
-import com.lefarmico.donetime.viewModels.* // ktlint-disable no-wildcard-imports
+import com.lefarmico.presentation.viewModels.AddExerciseViewModel
+import com.lefarmico.presentation.viewModels.CategoryListViewModel
+import com.lefarmico.presentation.viewModels.ExerciseDetailsViewModel
+import com.lefarmico.presentation.viewModels.ExerciseListViewModel
+import com.lefarmico.presentation.viewModels.HomeViewModel
+import com.lefarmico.presentation.viewModels.SubCategoryViewModel
+import com.lefarmico.presentation.viewModels.WorkoutScreenViewModel
 import dagger.Component
 import javax.inject.Singleton
 
