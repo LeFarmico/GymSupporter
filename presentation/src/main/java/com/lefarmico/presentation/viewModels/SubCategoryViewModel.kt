@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.donetime.App
 import com.lefarmico.presentation.intents.SubCategoryIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
@@ -15,10 +14,6 @@ class SubCategoryViewModel : BaseViewModel<SubCategoryIntent>() {
     
     @Inject
     lateinit var repo: LibraryRepositoryImpl
-
-    init {
-        App.appComponent.inject(this)
-    }
 
     fun getSubCategories(categoryId: Int) {
         repo.getSubCategories(categoryId)

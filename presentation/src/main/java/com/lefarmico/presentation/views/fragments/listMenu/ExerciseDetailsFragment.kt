@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.databinding.FragmentExerciseDetailsBinding
+import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseDetailsIntent
 import com.lefarmico.presentation.viewModels.ExerciseDetailsViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -17,6 +18,10 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity?.application as PresentationComponentProvider)
+            .getPresentationComponent()
+            .inject(viewModel)
+
         getBundleResult()
     }
 
@@ -50,11 +55,12 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
                     binding.errorState.root.visibility = View.GONE
                 }
                 is DataState.Success -> {
-                    binding.exerciseTitleTextView.text = dataState.data.title
-                    binding.exerciseDescriptionTextView.text = dataState.data.description
                     binding.emptyState.root.visibility = View.GONE
                     binding.errorState.root.visibility = View.GONE
                     binding.loadingState.root.visibility = View.GONE
+
+                    binding.exerciseTitleTextView.text = dataState.data.title
+                    binding.exerciseDescriptionTextView.text = dataState.data.description
                 }
             }
         }

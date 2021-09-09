@@ -7,6 +7,7 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentCategoryListBinding
+import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.CategoryListIntent
 import com.lefarmico.presentation.viewModels.CategoryListViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -28,18 +29,26 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
         }
     }
 
-    override fun setUpViews() {
-        binding.recycler.adapter = adapter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        (activity?.application as PresentationComponentProvider)
+            .getPresentationComponent()
+            .inject(viewModel)
+    }
+    override fun setUpViews() {
         viewModel.onTriggerEvent(CategoryListIntent.GetCategories)
 
-        binding.plusButton.setOnClickListener {
-            binding.textField.apply {
-                viewModel.onTriggerEvent(
-                    CategoryListIntent.AddCategory(
-                        editText?.text.toString()
+        binding.apply {
+            recycler.adapter = adapter
+            plusButton.setOnClickListener {
+                textField.apply {
+                    viewModel.onTriggerEvent(
+                        CategoryListIntent.AddCategory(
+                            editText?.text.toString()
+                        )
                     )
-                )
+                }
             }
         }
     }

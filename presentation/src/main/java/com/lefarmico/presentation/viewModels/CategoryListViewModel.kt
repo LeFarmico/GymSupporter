@@ -4,18 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.donetime.App
 import com.lefarmico.presentation.intents.CategoryListIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class CategoryListViewModel : BaseViewModel<CategoryListIntent>() {
 
     val categoriesLiveData = MutableLiveData<DataState<List<LibraryDto.Category>>>()
-
-    init {
-        App.appComponent.inject(this)
-    }
     
     @Inject
     lateinit var repo: LibraryRepositoryImpl
@@ -27,23 +23,29 @@ class CategoryListViewModel : BaseViewModel<CategoryListIntent>() {
             }
     }
 
-    fun addNewCategory(categoryTitle: String) {
-        val category = LibraryDto.Category(
-            title = categoryTitle
-        )
-        repo.addCategory(category)
-            .subscribe { dataState ->
-                when (dataState) {
-                    DataState.Empty -> {
-                        categoriesLiveData.postValue(DataState.Empty)
-                    }
-                    is DataState.Error -> {}
-                    DataState.Loading -> {}
-                    is DataState.Success -> {
-                        getCategories()
+    private fun addNewCategory(categoryTitle: String) {
+        if (categoryTitle != "") {
+            val category = LibraryDto.Category(
+                title = categoryTitle
+            )
+            repo.addCategory(category)
+                .subscribe { dataState ->
+                    when (dataState) {
+                        is DataState.Error -> {
+                            categoriesLiveData.postValue(dataState)
+                        }
+                        DataState.Loading -> {
+                            categoriesLiveData.postValue(DataState.Loading)
+                        }
+                        is DataState.Success -> {
+                            getCategories()
+                        }
+                        else -> {}
                     }
                 }
-            }
+        } else {
+            categoriesLiveData.postValue(DataState.Error(IllegalArgumentException()))
+        }
     }
 
     override fun onTriggerEvent(eventType: CategoryListIntent) {

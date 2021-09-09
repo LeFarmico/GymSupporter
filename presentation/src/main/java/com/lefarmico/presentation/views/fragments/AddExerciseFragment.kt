@@ -2,12 +2,12 @@ package com.lefarmico.presentation.views.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.databinding.FragmentAddExerciseBinding
 import com.lefarmico.presentation.intents.AddExerciseIntent
 import com.lefarmico.presentation.viewModels.AddExerciseViewModel
+import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 
 class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExerciseViewModel>(
@@ -19,8 +19,12 @@ class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExercise
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (activity as MainActivity)
+
         getBundleResult()
     }
+
     override fun setUpViews() {
         binding.addButton.setOnClickListener {
             viewModel.onTriggerEvent(
@@ -32,7 +36,9 @@ class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExercise
                 )
             )
         }
-        
+    }
+
+    override fun observeData() {
         viewModel.addExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -51,20 +57,19 @@ class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExercise
                     binding.errorState.root.visibility = View.GONE
                 }
                 is DataState.Success -> {
-                    Toast.makeText(requireContext(), "Exercise Added to Library", Toast.LENGTH_SHORT).show()
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+
+                    viewModel.onTriggerEvent(AddExerciseIntent.DefaultState)
                     parentFragmentManager.popBackStack(
                         BACK_STACK_KEY,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE
                     )
-                    viewModel.onTriggerEvent(AddExerciseIntent.DefaultState)
-                    binding.emptyState.root.visibility = View.GONE
-                    binding.errorState.root.visibility = View.GONE
-                    binding.loadingState.root.visibility = View.GONE
                 }
             }
         }
     }
-
     private fun getBundleResult() {
         val bundle = this.arguments
         if (bundle != null) {

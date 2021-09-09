@@ -3,7 +3,6 @@ package com.lefarmico.presentation.views.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.util.Preconditions
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
@@ -11,6 +10,7 @@ import com.lefarmico.presentation.adapters.CurrentExercisesAdapter
 import com.lefarmico.presentation.customView.setParameters.SetParametersDialog
 import com.lefarmico.presentation.customView.setParameters.SetSettingDialogCallback
 import com.lefarmico.presentation.databinding.FragmentWorkoutScreenBinding
+import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.WorkoutScreenIntent
 import com.lefarmico.presentation.viewModels.WorkoutScreenViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -22,33 +22,58 @@ class WorkoutScreenFragment :
         WorkoutScreenViewModel::class.java
     ),
     SetSettingDialogCallback {
-
-    val adapter = CurrentExercisesAdapter().apply {
-        plusButtonCallBack = {
-            initSetParameterDialog(it)
-        }
-        minusButtonCallback = {
-            viewModel.onTriggerEvent(
-                WorkoutScreenIntent.DeleteSet(it)
-            )
-        }
-    }
+    
+    val adapter = CurrentExercisesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parentFragmentManager
-            .setFragmentResultListener(
-                REQUEST_KEY,
-                this,
-                { requestKey, result ->
-                    onFragmentResult(requestKey, result)
-                }
-            )
+
+        (activity?.application as PresentationComponentProvider)
+            .getPresentationComponent()
+            .inject(viewModel)
+
+        parentFragmentManager.setFragmentResultListener(
+            REQUEST_KEY,
+            this,
+            { requestKey, result ->
+                onFragmentResult(requestKey, result)
+            }
+        )
+    }
+    
+    override fun setUpViews() {
         viewModel.onTriggerEvent(WorkoutScreenIntent.GetAll)
+        binding.apply {
+            listRecycler.adapter = adapter
+            addExButton.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putBoolean(ADD_EXERCISE_BRANCH, true)
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, WorkoutCategoryFragment::class.java, bundle)
+                    .addToBackStack(BACKSTACK_BRANCH)
+                    .commit()
+            }
+            finishButton.setOnClickListener {
+                viewModel.onTriggerEvent(WorkoutScreenIntent.SaveAll)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, HomeFragment::class.java, null)
+                    .commit()
+            }
+        }
+        adapter.apply {
+            plusButtonCallBack = {
+                initSetParameterDialog(it)
+            }
+            minusButtonCallback = {
+                viewModel.onTriggerEvent(
+                    WorkoutScreenIntent.DeleteSet(it)
+                )
+            }
+        }
     }
 
-    override fun setUpViews() {
-        binding.listRecycler.adapter = adapter
+    override fun observeData() {
         viewModel.exerciseLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -74,25 +99,8 @@ class WorkoutScreenFragment :
                 }
             }
         }
-        binding.addExButton.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putBoolean(ADD_EXERCISE_BRANCH, true)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment, WorkoutCategoryFragment::class.java, bundle)
-                .addToBackStack(BACKSTACK_BRANCH)
-                .commit()
-        }
-        binding.finishButton.setOnClickListener {
-            viewModel.onTriggerEvent(
-                WorkoutScreenIntent.SaveAll
-            )
-            Toast.makeText(requireContext(), "Your workout saved!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment, HomeFragment::class.java, null)
-                .commit()
-        }
     }
-
+    
     override fun addSet(exerciseId: Int, reps: Int, weight: Float) {
         viewModel.onTriggerEvent(
             WorkoutScreenIntent.AddSetToExercise(exerciseId, reps, weight)

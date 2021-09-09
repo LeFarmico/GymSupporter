@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.donetime.App
 import com.lefarmico.presentation.intents.ExerciseDetailsIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
@@ -15,11 +14,7 @@ class ExerciseDetailsViewModel : BaseViewModel<ExerciseDetailsIntent>() {
 
     val libraryExerciseLiveData = MutableLiveData<DataState<LibraryDto.Exercise>>()
 
-    init {
-        App.appComponent.inject(this)
-    }
-
-    fun getExerciseFromDB(exerciseId: Int) {
+    private fun getExerciseFromDB(exerciseId: Int) {
         repo.getExercise(exerciseId).subscribe { dataState ->
             libraryExerciseLiveData.postValue(dataState)
         }

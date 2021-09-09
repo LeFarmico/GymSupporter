@@ -9,6 +9,7 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentExerciseListBinding
+import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseListIntent
 import com.lefarmico.presentation.viewModels.ExerciseListViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -22,13 +23,17 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
 
     abstract val onItemClickListener: (LibraryDto) -> Unit
     
-    var bundleResult: Int = -1
+    private var bundleResult: Int = -1
     private val bundle = Bundle()
 
     private val adapter = ExerciseLibraryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (activity?.application as PresentationComponentProvider)
+            .getPresentationComponent()
+            .inject(viewModel)
         getBundleResult()
     }
 
@@ -64,10 +69,11 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
                     binding.errorState.root.visibility = View.GONE
                 }
                 is DataState.Success -> {
-                    adapter.items = dataState.data
                     binding.emptyState.root.visibility = View.GONE
                     binding.errorState.root.visibility = View.GONE
                     binding.loadingState.root.visibility = View.GONE
+
+                    adapter.items = dataState.data
                 }
             }
         }

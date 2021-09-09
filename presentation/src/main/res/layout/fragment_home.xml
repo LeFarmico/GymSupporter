@@ -45,13 +45,25 @@
     <include layout="@layout/state_empty"
         android:id="@+id/empty_state"
         android:visibility="gone"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
-    <include layout="@layout/state_loading"
+    <include layout="@layout/state_screen_loading"
         android:id="@+id/loading_state"
         android:visibility="gone"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
     <include layout="@layout/state_error"
         android:id="@+id/error_state"
         android:visibility="gone"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

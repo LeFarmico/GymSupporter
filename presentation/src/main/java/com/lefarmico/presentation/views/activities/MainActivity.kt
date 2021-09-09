@@ -1,8 +1,13 @@
 package com.lefarmico.presentation.views.activities
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.fragment.app.Fragment
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.databinding.ActivityMainBinding
+import com.lefarmico.presentation.di.DaggerPresentationComponent
+import com.lefarmico.presentation.di.PresentationComponent
+import com.lefarmico.presentation.di.modules.DataBaseModule
+import com.lefarmico.presentation.di.modules.DomainModule
 import com.lefarmico.presentation.viewModels.MainViewModel
 import com.lefarmico.presentation.views.base.BaseActivity
 import com.lefarmico.presentation.views.fragments.HomeFragment
@@ -13,6 +18,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
     MainViewModel::class.java
 ) {
+
+    companion object {
+        lateinit var presentationComponent: PresentationComponent
+            private set
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+
+        presentationComponent = DaggerPresentationComponent.builder()
+            .dataBaseModule(DataBaseModule())
+            .domainModule(DomainModule(this))
+            .build()
+    }
+
     override fun setUpViews() {
 
         launchFragment(HomeFragment::class.java)

@@ -6,7 +6,6 @@ import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.data.repository.WorkoutRecordsRepositoryImpl
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.donetime.App
 import com.lefarmico.presentation.intents.WorkoutScreenIntent
 import com.lefarmico.presentation.utils.Utilities
 import com.lefarmico.presentation.views.base.BaseViewModel
@@ -23,10 +22,6 @@ class WorkoutScreenViewModel : BaseViewModel<WorkoutScreenIntent>() {
     private var setId = 1
 
     val exerciseLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Exercise>>>()
-    
-    init {
-        App.appComponent.inject(this)
-    }
 
     fun addExercise(model: WorkoutScreenIntent.AddExercise) {
         libraryRepository.getExercise(model.id)

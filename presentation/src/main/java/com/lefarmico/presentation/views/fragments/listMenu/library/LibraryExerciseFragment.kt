@@ -3,7 +3,7 @@ package com.lefarmico.presentation.views.fragments.listMenu.library
 import android.os.Bundle
 import android.widget.Toast
 import com.lefarmico.domain.entity.LibraryDto
-import com.lefarmico.donetime.R
+import com.lefarmico.presentation.R
 import com.lefarmico.presentation.views.fragments.listMenu.ExerciseDetailsFragment
 import com.lefarmico.presentation.views.fragments.listMenu.ExerciseListFragment
 
