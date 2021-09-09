@@ -1,14 +1,14 @@
-package com.lefarmico.donetime.adapters
+package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.note.NoteExercise
-import com.lefarmico.donetime.databinding.ItemNoteExerciseBinding
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.databinding.ItemNoteExerciseBinding
 
 class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNoteViewHolder>() {
 
-    var items = mutableListOf<NoteExercise>()
+    var items = mutableListOf<WorkoutRecordsDto.Exercise>()
     
     class WorkoutNoteViewHolder(
         itemNoteExerciseBinding: ItemNoteExerciseBinding
@@ -18,7 +18,7 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
         private var exerciseNumber = itemNoteExerciseBinding.exerciseNumber
         private val setList = itemNoteExerciseBinding.setsList
 
-        fun bind(noteExercise: NoteExercise) {
+        fun bind(noteExercise: WorkoutRecordsDto.Exercise) {
             exercise.text = noteExercise.exerciseName
         }
         fun bindAdapter(adapter: SetNoteAdapter) {
@@ -29,8 +29,8 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
         }
     }
 
-    fun setExercise(noteExerciseList: MutableList<NoteExercise>) {
-        items = noteExerciseList
+    fun setExercise(noteExerciseList: List<WorkoutRecordsDto.Exercise>) {
+        items = noteExerciseList.toMutableList()
         notifyDataSetChanged()
     }
     

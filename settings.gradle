@@ -1,7 +1,6 @@
 rootProject.name = "DoneTime"
 include ':app'
 include ':LeRecycle'
-include ':app:domain'
 include ':domain'
 include ':data'
 include ':presentation'

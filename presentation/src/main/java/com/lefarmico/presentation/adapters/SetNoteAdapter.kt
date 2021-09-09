@@ -1,10 +1,10 @@
-package com.lefarmico.donetime.adapters
+package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.donetime.data.entities.note.NoteSet
-import com.lefarmico.donetime.databinding.ItemExerciseSetBinding
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.databinding.ItemExerciseSetBinding
 
 class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
 
@@ -16,7 +16,7 @@ class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
         private var setNumber = itemExerciseSetBinding.setNumber
         private var wieght = itemExerciseSetBinding.weight
 
-        fun bind(noteSet: NoteSet) {
+        fun bind(noteSet: WorkoutRecordsDto.Set) {
             reps.text = noteSet.reps.toString()
             wieght.text = noteSet.weight.toString()
         }
@@ -24,7 +24,7 @@ class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
             setNumber.text = number.toString()
         }
     }
-    var items = mutableListOf<NoteSet>()
+    var items = mutableListOf<WorkoutRecordsDto.Set>()
         set(value) {
             field = value
             notifyDataSetChanged()

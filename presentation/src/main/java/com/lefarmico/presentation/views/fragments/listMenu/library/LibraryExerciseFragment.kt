@@ -1,15 +1,16 @@
-package com.lefarmico.donetime.views.fragments.listMenu.library
+package com.lefarmico.presentation.views.fragments.listMenu.library
 
 import android.os.Bundle
 import android.widget.Toast
-import com.lefarmico.donetime.R
-import com.lefarmico.donetime.data.entities.library.ILibraryItem
-import com.lefarmico.donetime.views.fragments.listMenu.ExerciseDetailsFragment
-import com.lefarmico.donetime.views.fragments.listMenu.ExerciseListFragment
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.presentation.R
+import com.lefarmico.presentation.views.fragments.listMenu.ExerciseDetailsFragment
+import com.lefarmico.presentation.views.fragments.listMenu.ExerciseListFragment
 
 class LibraryExerciseFragment : ExerciseListFragment() {
     
-    override val onItemClickListener: (ILibraryItem) -> Unit = {
+    override val onItemClickListener: (LibraryDto) -> Unit = {
+        it as LibraryDto.Exercise
         Toast.makeText(requireContext(), it.title, Toast.LENGTH_SHORT).show()
         setResult(it.id)
     }

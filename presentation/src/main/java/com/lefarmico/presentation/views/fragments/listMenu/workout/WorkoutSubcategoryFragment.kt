@@ -1,6 +1,6 @@
-package com.lefarmico.donetime.views.fragments.listMenu.workout
+package com.lefarmico.presentation.views.fragments.listMenu.workout
 
-import com.lefarmico.donetime.views.fragments.listMenu.SubCategoryListFragment
+import com.lefarmico.presentation.views.fragments.listMenu.SubCategoryListFragment
 
 class WorkoutSubcategoryFragment : SubCategoryListFragment() {
 

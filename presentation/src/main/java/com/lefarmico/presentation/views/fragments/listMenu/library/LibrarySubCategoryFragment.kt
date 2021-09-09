@@ -1,6 +1,6 @@
-package com.lefarmico.donetime.views.fragments.listMenu.library
+package com.lefarmico.presentation.views.fragments.listMenu.library
 
-import com.lefarmico.donetime.views.fragments.listMenu.SubCategoryListFragment
+import com.lefarmico.presentation.views.fragments.listMenu.SubCategoryListFragment
 
 class LibrarySubCategoryFragment : SubCategoryListFragment() {
 

@@ -1,4 +1,4 @@
-package com.lefarmico.donetime.views.base
+package com.lefarmico.presentation.views.base
 
 interface ISetupBaseActivity {
     fun setUpViews()

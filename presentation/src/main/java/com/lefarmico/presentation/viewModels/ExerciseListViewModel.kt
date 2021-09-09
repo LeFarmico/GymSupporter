@@ -1,26 +1,35 @@
-package com.lefarmico.donetime.viewModels
+package com.lefarmico.presentation.viewModels
 
 import androidx.lifecycle.MutableLiveData
-import com.lefarmico.donetime.App
-import com.lefarmico.donetime.data.Interactor
-import com.lefarmico.donetime.data.entities.library.LibraryExercise
-import com.lefarmico.donetime.views.base.BaseViewModel
+import com.lefarmico.data.repository.LibraryRepositoryImpl
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
+import com.lefarmico.presentation.intents.ExerciseListIntent
+import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class ExerciseListViewModel : BaseViewModel() {
+class ExerciseListViewModel : BaseViewModel<ExerciseListIntent>() {
 
-    @Inject lateinit var interactor: Interactor
+    @Inject
+    lateinit var repo: LibraryRepositoryImpl
 
-    val exercisesLiveData = MutableLiveData<List<LibraryExercise>>()
+    val exercisesLiveData = MutableLiveData<DataState<List<LibraryDto.Exercise>>>()
 
-    init {
-        App.appComponent.inject(this)
+    private fun getExercises(subCategoryId: Int) {
+        repo.getExercises(subCategoryId)
+            .subscribe { dataState ->
+                exercisesLiveData.postValue(dataState)
+            }
     }
 
-    fun passExercisesToLiveData(subCategoryId: Int) {
-        interactor.getExercisesFromDB(subCategoryId)
-            .subscribe {
-                exercisesLiveData.postValue(it)
-            }
+    private fun cleanAll() {
+        exercisesLiveData.postValue(DataState.Empty)
+    }
+
+    override fun onTriggerEvent(eventType: ExerciseListIntent) {
+        when (eventType) {
+            is ExerciseListIntent.GetExercises -> getExercises(eventType.subcategoryId)
+            ExerciseListIntent.CleanAll -> cleanAll()
+        }
     }
 }

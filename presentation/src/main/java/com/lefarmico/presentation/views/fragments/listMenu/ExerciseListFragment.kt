@@ -1,56 +1,88 @@
-package com.lefarmico.donetime.views.fragments.listMenu
+package com.lefarmico.presentation.views.fragments.listMenu
 
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.lefarmico.donetime.R
-import com.lefarmico.donetime.adapters.ExerciseLibraryAdapter
-import com.lefarmico.donetime.data.entities.currentExercise.ExerciseName
-import com.lefarmico.donetime.data.entities.library.ILibraryItem
-import com.lefarmico.donetime.databinding.FragmentExerciseListBinding
-import com.lefarmico.donetime.viewModels.ExerciseListViewModel
-import com.lefarmico.donetime.views.base.BaseFragment
-import com.lefarmico.donetime.views.fragments.AddExerciseFragment
-import com.lefarmico.donetime.views.fragments.WorkoutScreenFragment
+import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.utils.DataState
+import com.lefarmico.presentation.R
+import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
+import com.lefarmico.presentation.databinding.FragmentExerciseListBinding
+import com.lefarmico.presentation.di.provider.PresentationComponentProvider
+import com.lefarmico.presentation.intents.ExerciseListIntent
+import com.lefarmico.presentation.viewModels.ExerciseListViewModel
+import com.lefarmico.presentation.views.base.BaseFragment
+import com.lefarmico.presentation.views.fragments.AddExerciseFragment
+import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment
 
 abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
     FragmentExerciseListBinding::inflate,
     ExerciseListViewModel::class.java
 ) {
 
-    abstract val onItemClickListener: (ILibraryItem) -> Unit
+    abstract val onItemClickListener: (LibraryDto) -> Unit
     
-    var bundleResult: Int = -1
+    private var bundleResult: Int = -1
     private val bundle = Bundle()
 
     private val adapter = ExerciseLibraryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (activity?.application as PresentationComponentProvider)
+            .getPresentationComponent()
+            .inject(viewModel)
         getBundleResult()
     }
 
     override fun setUpViews() {
         adapter.onClick = onItemClickListener
         binding.recycler.adapter = adapter
-        viewModel.passExercisesToLiveData(bundleResult)
+        viewModel.onTriggerEvent(
+            ExerciseListIntent.GetExercises(bundleResult)
+        )
 
-        binding.editButton.setOnClickListener {
+        binding.plusButton.setOnClickListener {
             bundle.putInt(AddExerciseFragment.KEY_NUMBER, bundleResult)
             changeFragment(AddExerciseFragment::class.java, bundle)
         }
     }
 
     override fun observeData() {
-        viewModel.exercisesLiveData.observe(viewLifecycleOwner) { list ->
-            adapter.items = list
+        viewModel.exercisesLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    binding.emptyState.root.visibility = View.VISIBLE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                is DataState.Error -> {
+                    binding.errorState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+                }
+                DataState.Loading -> {
+                    binding.loadingState.root.visibility = View.VISIBLE
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                }
+                is DataState.Success -> {
+                    binding.emptyState.root.visibility = View.GONE
+                    binding.errorState.root.visibility = View.GONE
+                    binding.loadingState.root.visibility = View.GONE
+
+                    adapter.items = dataState.data
+                }
+            }
         }
     }
 
-    protected fun setExerciseResult(exerciseEntity: ExerciseName) {
+    protected fun setExerciseResult(exerciseId: Int) {
         parentFragmentManager.setFragmentResult(
             WorkoutScreenFragment.REQUEST_KEY,
-            bundleOf(WorkoutScreenFragment.KEY_NUMBER to exerciseEntity)
+            bundleOf(WorkoutScreenFragment.KEY_NUMBER to exerciseId)
         )
     }
 
