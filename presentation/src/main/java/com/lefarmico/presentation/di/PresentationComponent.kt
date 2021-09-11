@@ -3,23 +3,15 @@ package com.lefarmico.presentation.di
 import com.lefarmico.presentation.di.modules.DataBaseModule
 import com.lefarmico.presentation.di.modules.DomainModule
 import com.lefarmico.presentation.di.scopes.PresentationScope
-import com.lefarmico.presentation.viewModels.* // ktlint-disable no-wildcard-imports
-import dagger.Component
+import com.lefarmico.presentation.di.viewModel.ViewModelModule
+import dagger.Subcomponent
 
 @PresentationScope
-@Component(
+@Subcomponent(
     modules = [
         DataBaseModule::class,
-        DomainModule::class
+        DomainModule::class,
+        ViewModelModule::class
     ]
 )
-interface PresentationComponent {
-    // ViewModels
-    fun inject(viewModel: ExerciseListViewModel)
-    fun inject(viewModel: CategoryListViewModel)
-    fun inject(viewModel: SubCategoryViewModel)
-    fun inject(viewModel: WorkoutScreenViewModel)
-    fun inject(viewModel: HomeViewModel)
-    fun inject(viewModel: AddExerciseViewModel)
-    fun inject(viewModel: ExerciseDetailsViewModel)
-}
+interface PresentationComponent

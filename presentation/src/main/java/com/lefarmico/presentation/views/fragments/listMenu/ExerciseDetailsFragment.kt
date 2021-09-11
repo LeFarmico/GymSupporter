@@ -7,6 +7,7 @@ import com.lefarmico.presentation.databinding.FragmentExerciseDetailsBinding
 import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseDetailsIntent
 import com.lefarmico.presentation.viewModels.ExerciseDetailsViewModel
+import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 
 class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(
@@ -18,10 +19,6 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.application as PresentationComponentProvider)
-            .getPresentationComponent()
-            .inject(viewModel)
-
         getBundleResult()
     }
 

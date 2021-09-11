@@ -13,6 +13,7 @@ import com.lefarmico.presentation.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.WorkoutScreenIntent
 import com.lefarmico.presentation.viewModels.WorkoutScreenViewModel
+import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 import com.lefarmico.presentation.views.fragments.listMenu.workout.WorkoutCategoryFragment
 
@@ -27,10 +28,6 @@ class WorkoutScreenFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (activity?.application as PresentationComponentProvider)
-            .getPresentationComponent()
-            .inject(viewModel)
 
         parentFragmentManager.setFragmentResultListener(
             REQUEST_KEY,

@@ -9,7 +9,7 @@ import com.lefarmico.presentation.views.base.BaseViewModel
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class CategoryListViewModel : BaseViewModel<CategoryListIntent>() {
+class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIntent>() {
 
     val categoriesLiveData = MutableLiveData<DataState<List<LibraryDto.Category>>>()
     

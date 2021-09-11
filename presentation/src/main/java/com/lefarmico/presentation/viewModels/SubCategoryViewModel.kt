@@ -8,7 +8,7 @@ import com.lefarmico.presentation.intents.SubCategoryIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class SubCategoryViewModel : BaseViewModel<SubCategoryIntent>() {
+class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryIntent>() {
 
     val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryDto.SubCategory>>>()
     

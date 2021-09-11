@@ -17,7 +17,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>
 
     internal lateinit var binding: VB
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = inflate(layoutInflater)
         setContentView(binding.root)

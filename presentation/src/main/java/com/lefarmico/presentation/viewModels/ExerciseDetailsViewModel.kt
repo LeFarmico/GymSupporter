@@ -8,7 +8,7 @@ import com.lefarmico.presentation.intents.ExerciseDetailsIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class ExerciseDetailsViewModel : BaseViewModel<ExerciseDetailsIntent>() {
+class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<ExerciseDetailsIntent>() {
 
     @Inject lateinit var repo: LibraryRepositoryImpl
 

@@ -11,7 +11,7 @@ import com.lefarmico.presentation.utils.Utilities
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class WorkoutScreenViewModel : BaseViewModel<WorkoutScreenIntent>() {
+class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreenIntent>() {
 
     @Inject lateinit var recordsRepository: WorkoutRecordsRepositoryImpl
     @Inject lateinit var libraryRepository: LibraryRepositoryImpl

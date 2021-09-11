@@ -8,7 +8,7 @@ import com.lefarmico.presentation.intents.HomeIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel<HomeIntent>() {
+class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
 
     @Inject lateinit var repo: WorkoutRecordsRepositoryImpl
 
