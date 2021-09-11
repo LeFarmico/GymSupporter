@@ -1,8 +1,8 @@
 package com.lefarmico.presentation.viewModels
 
 import androidx.lifecycle.MutableLiveData
-import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.intents.SubCategoryIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
@@ -13,7 +13,7 @@ class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryInte
     val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryDto.SubCategory>>>()
     
     @Inject
-    lateinit var repo: LibraryRepositoryImpl
+    lateinit var repo: LibraryRepository
 
     fun getSubCategories(categoryId: Int) {
         repo.getSubCategories(categoryId)

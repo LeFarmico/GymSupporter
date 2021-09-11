@@ -60,4 +60,10 @@ dependencies {
 
     // GSON
     implementation gson
+
+    // Dagger
+    implementation dagger
+    implementation daggerAndroid
+    kapt daggerAndroidProcessor
+    kapt daggerCompiler
 }

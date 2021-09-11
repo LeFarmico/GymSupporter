@@ -47,4 +47,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WorkoutScreenViewModel::class)
     abstract fun addWorkoutScreenViewModel(viewModel: WorkoutScreenViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    abstract fun addMainViewModel(viewModel: MainViewModel): ViewModel
 }

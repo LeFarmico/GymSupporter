@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.databinding.FragmentExerciseDetailsBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseDetailsIntent
 import com.lefarmico.presentation.viewModels.ExerciseDetailsViewModel
-import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 
 class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(

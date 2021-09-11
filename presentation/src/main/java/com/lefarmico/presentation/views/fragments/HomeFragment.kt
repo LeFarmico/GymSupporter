@@ -1,6 +1,5 @@
 package com.lefarmico.presentation.views.fragments
 
-import android.os.Bundle
 import android.view.View
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
@@ -8,7 +7,6 @@ import com.lefarmico.presentation.adapters.WorkoutNoteAdapter
 import com.lefarmico.presentation.databinding.FragmentHomeBinding
 import com.lefarmico.presentation.intents.HomeIntent
 import com.lefarmico.presentation.viewModels.HomeViewModel
-import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(

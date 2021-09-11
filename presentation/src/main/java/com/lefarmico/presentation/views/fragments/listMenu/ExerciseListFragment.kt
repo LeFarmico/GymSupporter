@@ -9,10 +9,8 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentExerciseListBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseListIntent
 import com.lefarmico.presentation.viewModels.ExerciseListViewModel
-import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 import com.lefarmico.presentation.views.fragments.AddExerciseFragment
 import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment

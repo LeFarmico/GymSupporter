@@ -1,10 +1,10 @@
 package com.lefarmico.presentation.viewModels
 
 import androidx.lifecycle.MutableLiveData
-import com.lefarmico.data.repository.CurrentWorkoutRepositoryImpl
-import com.lefarmico.data.repository.LibraryRepositoryImpl
-import com.lefarmico.data.repository.WorkoutRecordsRepositoryImpl
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.domain.repository.CurrentWorkoutRepository
+import com.lefarmico.domain.repository.LibraryRepository
+import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.intents.WorkoutScreenIntent
 import com.lefarmico.presentation.utils.Utilities
@@ -13,9 +13,9 @@ import javax.inject.Inject
 
 class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreenIntent>() {
 
-    @Inject lateinit var recordsRepository: WorkoutRecordsRepositoryImpl
-    @Inject lateinit var libraryRepository: LibraryRepositoryImpl
-    @Inject lateinit var repo: CurrentWorkoutRepositoryImpl
+    @Inject lateinit var recordsRepository: WorkoutRecordsRepository
+    @Inject lateinit var libraryRepository: LibraryRepository
+    @Inject lateinit var repo: CurrentWorkoutRepository
 
     // TODO : убрать локальные переменные
     private var exerciseIds = 1

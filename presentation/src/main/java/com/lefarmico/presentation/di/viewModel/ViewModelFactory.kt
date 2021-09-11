@@ -13,6 +13,6 @@ class ViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return viewModels.getValue(modelClass as Class<out ViewModel>).get() as T
+        return viewModels[modelClass]?.get() as T
     }
 }

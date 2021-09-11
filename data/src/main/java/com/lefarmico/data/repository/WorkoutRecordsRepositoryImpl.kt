@@ -11,8 +11,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
+import javax.inject.Inject
 
-class WorkoutRecordsRepositoryImpl(
+class WorkoutRecordsRepositoryImpl @Inject constructor(
     private val dao: WorkoutRecordsDao
 ) : WorkoutRecordsRepository {
     

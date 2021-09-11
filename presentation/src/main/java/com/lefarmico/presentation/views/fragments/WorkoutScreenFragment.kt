@@ -10,10 +10,8 @@ import com.lefarmico.presentation.adapters.CurrentExercisesAdapter
 import com.lefarmico.presentation.customView.setParameters.SetParametersDialog
 import com.lefarmico.presentation.customView.setParameters.SetSettingDialogCallback
 import com.lefarmico.presentation.databinding.FragmentWorkoutScreenBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.WorkoutScreenIntent
 import com.lefarmico.presentation.viewModels.WorkoutScreenViewModel
-import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 import com.lefarmico.presentation.views.fragments.listMenu.workout.WorkoutCategoryFragment
 
