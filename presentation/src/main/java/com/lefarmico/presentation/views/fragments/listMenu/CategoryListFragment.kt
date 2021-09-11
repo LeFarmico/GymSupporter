@@ -7,9 +7,9 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentCategoryListBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.CategoryListIntent
 import com.lefarmico.presentation.viewModels.CategoryListViewModel
+import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment
 
@@ -29,13 +29,6 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoryListBinding, 
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        (activity?.application as PresentationComponentProvider)
-            .getPresentationComponent()
-            .inject(viewModel)
-    }
     override fun setUpViews() {
         viewModel.onTriggerEvent(CategoryListIntent.GetCategories)
 

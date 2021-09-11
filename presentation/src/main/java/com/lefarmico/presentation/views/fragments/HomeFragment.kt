@@ -1,12 +1,10 @@
 package com.lefarmico.presentation.views.fragments
 
-import android.os.Bundle
 import android.view.View
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.WorkoutNoteAdapter
 import com.lefarmico.presentation.databinding.FragmentHomeBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.HomeIntent
 import com.lefarmico.presentation.viewModels.HomeViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -18,12 +16,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
 
     private val noteAdapter = WorkoutNoteAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity?.application as PresentationComponentProvider)
-            .getPresentationComponent()
-            .inject(viewModel)
-    }
     override fun setUpViews() {
         viewModel.onTriggerEvent(HomeIntent.GetWorkoutRecords)
         binding.workoutNotes.adapter = noteAdapter

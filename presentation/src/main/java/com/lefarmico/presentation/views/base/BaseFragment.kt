@@ -4,25 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.lefarmico.presentation.di.viewModel.ViewModelFactory
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
-) : Fragment(), ISetupBaseActivity {
+) : DaggerFragment(), ISetupBaseActivity {
 
     internal lateinit var viewModel: VM
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private var _binding: VB? = null
     internal val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)
             .get(provideViewModel)
     }
 

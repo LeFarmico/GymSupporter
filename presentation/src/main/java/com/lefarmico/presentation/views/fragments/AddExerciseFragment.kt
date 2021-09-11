@@ -19,9 +19,6 @@ class AddExerciseFragment : BaseFragment<FragmentAddExerciseBinding, AddExercise
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (activity as MainActivity)
-
         getBundleResult()
     }
 

@@ -9,7 +9,6 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
 import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentExerciseListBinding
-import com.lefarmico.presentation.di.provider.PresentationComponentProvider
 import com.lefarmico.presentation.intents.ExerciseListIntent
 import com.lefarmico.presentation.viewModels.ExerciseListViewModel
 import com.lefarmico.presentation.views.base.BaseFragment
@@ -30,10 +29,6 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (activity?.application as PresentationComponentProvider)
-            .getPresentationComponent()
-            .inject(viewModel)
         getBundleResult()
     }
 

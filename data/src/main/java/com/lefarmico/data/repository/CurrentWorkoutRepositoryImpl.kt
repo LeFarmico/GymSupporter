@@ -10,8 +10,9 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
 import java.lang.NullPointerException
+import javax.inject.Inject
 
-class CurrentWorkoutRepositoryImpl(
+class CurrentWorkoutRepositoryImpl @Inject constructor(
     private val dataBase: CurrentWorkoutDataBase
 ) : CurrentWorkoutRepository {
 

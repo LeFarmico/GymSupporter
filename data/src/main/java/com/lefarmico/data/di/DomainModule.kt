@@ -1,4 +1,4 @@
-package com.lefarmico.presentation.di.modules
+package com.lefarmico.data.di
 
 import android.content.Context
 import dagger.Module

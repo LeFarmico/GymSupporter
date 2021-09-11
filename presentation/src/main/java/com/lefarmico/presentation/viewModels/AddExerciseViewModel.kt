@@ -1,16 +1,16 @@
 package com.lefarmico.presentation.viewModels
 
 import androidx.lifecycle.MutableLiveData
-import com.lefarmico.data.repository.LibraryRepositoryImpl
 import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.intents.AddExerciseIntent
 import com.lefarmico.presentation.views.base.BaseViewModel
 import javax.inject.Inject
 
-class AddExerciseViewModel : BaseViewModel<AddExerciseIntent>() {
+class AddExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseIntent>() {
     
-    @Inject lateinit var repo: LibraryRepositoryImpl
+    @Inject lateinit var repo: LibraryRepository
 
     val addExerciseLiveData = MutableLiveData<DataState<Long>>()
 
