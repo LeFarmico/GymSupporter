@@ -2,16 +2,21 @@ package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.adapters.diffUtil.WorkoutRecordsDiffCallback
 import com.lefarmico.presentation.databinding.ItemNoteWorkoutBinding
 
-class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteViewHolder>() {
+class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>() {
 
     var items = listOf<WorkoutRecordsDto.Workout>()
         set(value) {
+            val oldField = field
             field = value
-            notifyDataSetChanged()
+            val diffCallback = WorkoutRecordsDiffCallback(oldField, field)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     class WorkoutNoteViewHolder(
@@ -24,7 +29,7 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
         fun bind(noteWorkout: WorkoutRecordsDto.Workout) {
             date.text = noteWorkout.date
         }
-        fun bindAdapter(adapter: ExerciseNoteAdapter) {
+        fun bindAdapter(adapter: ExerciseRecordsAdapter) {
             exerciseNoteRecycler.adapter = adapter
         }
     }
@@ -38,7 +43,7 @@ class WorkoutNoteAdapter : RecyclerView.Adapter<WorkoutNoteAdapter.WorkoutNoteVi
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
-        val adapter = ExerciseNoteAdapter()
+        val adapter = ExerciseRecordsAdapter()
         adapter.setExercise(items[position].exerciseList)
         holder.bind(items[position])
         holder.bindAdapter(adapter)

@@ -81,8 +81,7 @@ dependencies {
     implementation rxjavaKotlin
     implementation rxjavaRetrofitAdapter
 
-    implementation project(':domain')
-    implementation project(':data')
+    api project(':domain')
 
     // AdapterDelegates
     implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.0'

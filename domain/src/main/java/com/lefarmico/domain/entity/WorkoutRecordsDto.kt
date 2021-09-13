@@ -11,7 +11,7 @@ sealed class WorkoutRecordsDto {
     data class Exercise(
         val id: Int,
         val exerciseName: String,
-        val noteSetList: MutableList<Set> // TODO : Попробовать через id
+        val noteSetList: List<Set> // TODO : Попробовать через id
     ) : WorkoutRecordsDto()
 
     data class Set(

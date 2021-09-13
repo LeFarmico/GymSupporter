@@ -14,8 +14,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     MainViewModel::class.java
 ) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setSupportActionBar(binding.appToolbar)
+    }
     override fun setUpViews() {
-
         launchFragment(HomeFragment::class.java)
         binding.bottomNavigation.apply {
             setOnItemSelectedListener {

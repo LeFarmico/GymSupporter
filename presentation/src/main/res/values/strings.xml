@@ -26,10 +26,11 @@
     <string name="add_new_exercise">Add New Exercise</string>
     <string name="exercise_title">Exercise title</string>
     <string name="description">Description</string>
-    <string name="edit">Edit</string>
     <string name="exercise_image">Exercise Image</string>
     <string name="done">Done</string>
     <string name="subweight">SubWeight:</string>
     <string name="empty_text_warning">Now that screen is empty, try to fill it up!</string>
     <string name="something_went_wrong_try_again">Something went wrong. Try again.</string>
+    <string name="edit">Edit</string>
+    <string name="about">About</string>
 </resources>

@@ -1,7 +1,9 @@
-package com.lefarmico.presentation.di.viewModel
+package com.lefarmico.presentation.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.lefarmico.presentation.di.viewModel.ViewModelFactory
+import com.lefarmico.presentation.di.viewModel.ViewModelKey
 import com.lefarmico.presentation.viewModels.* // ktlint-disable no-wildcard-imports
 import dagger.Binds
 import dagger.Module

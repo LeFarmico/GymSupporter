@@ -2,11 +2,13 @@ package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.adapters.diffUtil.SetRecordsDiffCallback
 import com.lefarmico.presentation.databinding.ItemExerciseSetBinding
 
-class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
+class SetRecordsAdapter : RecyclerView.Adapter<SetRecordsAdapter.SetViewHolder>() {
 
     class SetViewHolder(
         itemExerciseSetBinding: ItemExerciseSetBinding
@@ -26,8 +28,11 @@ class SetNoteAdapter : RecyclerView.Adapter<SetNoteAdapter.SetViewHolder>() {
     }
     var items = mutableListOf<WorkoutRecordsDto.Set>()
         set(value) {
+            val oldList = field
             field = value
-            notifyDataSetChanged()
+            val diffCallback = SetRecordsDiffCallback(oldList, field)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {

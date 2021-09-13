@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/drawable/single_corners_shape.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/app_toolbar.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/fragment_add_exercise.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/fragment_category_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/fragment_exercise_details.xml" value="0.25416666666666665" />
@@ -16,6 +17,8 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/state_error.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/state_loading.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/layout/state_screen_loading.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/menu/app_bar_menu.xml" value="0.264" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/menu/bottom_main_menu.xml" value="0.264" />
       </map>
     </option>
   </component>

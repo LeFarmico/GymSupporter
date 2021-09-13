@@ -80,7 +80,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     }
 
     // TODO : убрать локальные переменные
-    fun addSetToExercise(
+    private fun addSetToExercise(
         exerciseId: Int,
         reps: Int,
         weight: Float

@@ -1,9 +1,14 @@
 package com.lefarmico.presentation.views.fragments
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
-import com.lefarmico.presentation.adapters.WorkoutNoteAdapter
+import com.lefarmico.presentation.adapters.WorkoutRecordsAdapter
 import com.lefarmico.presentation.databinding.FragmentHomeBinding
 import com.lefarmico.presentation.intents.HomeIntent
 import com.lefarmico.presentation.viewModels.HomeViewModel
@@ -14,7 +19,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
     HomeViewModel::class.java
 ) {
 
-    private val noteAdapter = WorkoutNoteAdapter()
+    private val noteAdapter = WorkoutRecordsAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun setUpViews() {
         viewModel.onTriggerEvent(HomeIntent.GetWorkoutRecords)
@@ -53,6 +63,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
                     noteAdapter.items = dataState.data.toMutableList()
                 }
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.edit -> {
+                Toast.makeText(requireContext(), "Edit", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> { false }
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.lefarmico.donetime.di
 
 import android.app.Application
+import com.lefarmico.data.di.DaoModule
 import com.lefarmico.data.di.DomainModule
 import com.lefarmico.data.di.RepositoryModule
 import com.lefarmico.donetime.App
 import com.lefarmico.presentation.di.modules.* // ktlint-disable no-wildcard-imports
-import com.lefarmico.presentation.di.viewModel.ViewModelModule
+import com.lefarmico.presentation.di.modules.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule

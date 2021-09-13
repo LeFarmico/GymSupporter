@@ -55,7 +55,7 @@ dependencies {
     kapt daggerCompiler
 
     implementation project(':data')
-    implementation project(':domain')
+    api project(':domain')
     implementation project(':presentation')
 
 }

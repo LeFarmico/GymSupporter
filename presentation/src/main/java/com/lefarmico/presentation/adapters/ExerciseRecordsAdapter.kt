@@ -2,11 +2,13 @@ package com.lefarmico.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.adapters.diffUtil.ExerciseRecordsDiffCallback
 import com.lefarmico.presentation.databinding.ItemNoteExerciseBinding
 
-class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNoteViewHolder>() {
+class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.WorkoutNoteViewHolder>() {
 
     var items = mutableListOf<WorkoutRecordsDto.Exercise>()
     
@@ -21,7 +23,7 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
         fun bind(noteExercise: WorkoutRecordsDto.Exercise) {
             exercise.text = noteExercise.exerciseName
         }
-        fun bindAdapter(adapter: SetNoteAdapter) {
+        fun bindAdapter(adapter: SetRecordsAdapter) {
             setList.adapter = adapter
         }
         fun setExerciseNumber(number: Int) {
@@ -30,8 +32,11 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
     }
 
     fun setExercise(noteExerciseList: List<WorkoutRecordsDto.Exercise>) {
+        val oldList = items
         items = noteExerciseList.toMutableList()
-        notifyDataSetChanged()
+        val diffCallback = ExerciseRecordsDiffCallback(oldList, items)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {
@@ -44,7 +49,7 @@ class ExerciseNoteAdapter : RecyclerView.Adapter<ExerciseNoteAdapter.WorkoutNote
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
         val setNoteList = items[position].noteSetList
-        val setAdapter = SetNoteAdapter().apply {
+        val setAdapter = SetRecordsAdapter().apply {
             items = setNoteList.toMutableList()
         }
         holder.bind(items[position])

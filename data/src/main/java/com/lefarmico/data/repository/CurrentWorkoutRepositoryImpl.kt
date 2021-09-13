@@ -61,10 +61,18 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun addSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>> {
-        val exercise = dataBase.exerciseList.find { it.id == set.exerciseId }
+        val curExerciseId = dataBase.exerciseList.indexOfFirst { it.id == set.exerciseId }
+        val curExercise = dataBase.exerciseList[curExerciseId]
+        val setList = mutableListOf<WorkoutRecordsDto.Set>()
+        setList.addAll(curExercise.noteSetList)
+        setList.add(set)
         return Single.create<DataState<Long>> {
-            if (exercise != null) {
-                exercise.noteSetList.add(set)
+            if (curExerciseId >= 0) {
+                dataBase.exerciseList[curExerciseId] = WorkoutRecordsDto.Exercise(
+                    id = curExercise.id,
+                    exerciseName = curExercise.exerciseName,
+                    noteSetList = setList
+                )
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())
@@ -91,10 +99,18 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun deleteSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>> {
-        val exercise = dataBase.exerciseList.find { it.id == set.exerciseId }
+        val curExerciseId = dataBase.exerciseList.indexOfFirst { it.id == set.exerciseId }
+        val curExercise = dataBase.exerciseList[curExerciseId]
+        val setList = mutableListOf<WorkoutRecordsDto.Set>()
+        setList.addAll(curExercise.noteSetList)
+        setList.remove(set)
         return Single.create<DataState<Long>> {
-            if (exercise != null) {
-                exercise.noteSetList.remove(set)
+            if (curExerciseId >= 0) {
+                dataBase.exerciseList[curExerciseId] = WorkoutRecordsDto.Exercise(
+                    id = curExercise.id,
+                    exerciseName = curExercise.exerciseName,
+                    noteSetList = setList
+                )
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())
@@ -108,10 +124,18 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun deleteLastSet(exerciseId: Int): Single<DataState<Long>> {
-        val exercise = dataBase.exerciseList.find { it.id == exerciseId }
+        val curExerciseIndex = dataBase.exerciseList.indexOfFirst { it.id == exerciseId }
+        val exercise = dataBase.exerciseList[curExerciseIndex]
+        val setList = mutableListOf<WorkoutRecordsDto.Set>()
         return Single.create<DataState<Long>> {
-            if (exercise != null) {
-                exercise.noteSetList.removeLast()
+            if (curExerciseIndex >= 0) {
+                setList.addAll(dataBase.exerciseList[curExerciseIndex].noteSetList)
+                setList.removeLast()
+                dataBase.exerciseList[curExerciseIndex] = WorkoutRecordsDto.Exercise(
+                    id = exercise.id,
+                    exerciseName = exercise.exerciseName,
+                    noteSetList = setList
+                )
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())

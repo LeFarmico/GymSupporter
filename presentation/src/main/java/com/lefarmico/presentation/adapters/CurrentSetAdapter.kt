@@ -3,16 +3,21 @@ package com.lefarmico.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.presentation.adapters.diffUtil.CurrentSetDiffCallback
 import com.lefarmico.presentation.databinding.ItemExerciseSetBinding
 
 class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
 
     var items = mutableListOf<WorkoutRecordsDto.Set>()
         set(value) {
+            val oldField = field
             field = value
-            notifyDataSetChanged()
+            val diffCallback = CurrentSetDiffCallback(oldField, field)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     class SetViewHolder(
