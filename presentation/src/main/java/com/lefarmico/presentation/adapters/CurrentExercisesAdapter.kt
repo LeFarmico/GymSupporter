@@ -10,17 +10,21 @@ import com.lefarmico.presentation.adapters.diffUtil.CurrentExerciseDiffCallback
 class CurrentExercisesAdapter :
     ListDelegationAdapter<List<WorkoutRecordsDto>>() {
 
+    lateinit var onSelectExercise: (Int) -> Unit
     lateinit var plusButtonCallBack: (Int) -> Unit
     lateinit var minusButtonCallback: (Int) -> Unit
+    private val oldList = mutableListOf<WorkoutRecordsDto>()
+
     init {
         delegatesManager.addDelegate(CurrentExerciseDelegate())
     }
-    val oldList = mutableListOf<WorkoutRecordsDto>()
+
     override fun setItems(items: List<WorkoutRecordsDto>) {
         super.setItems(items)
         val diffCallback = CurrentExerciseDiffCallback(oldList, super.items)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         diffResult.dispatchUpdatesTo(this)
+
         oldList.clear()
         oldList.addAll(items)
     }
@@ -37,6 +41,9 @@ class CurrentExercisesAdapter :
             }
             holder.minusButton.setOnClickListener {
                 minusButtonCallback(exercise.id)
+            }
+            holder.rootLayout.setOnClickListener {
+                onSelectExercise(exercise.id)
             }
         }
         delegatesManager.onBindViewHolder(items, position, holder, null)

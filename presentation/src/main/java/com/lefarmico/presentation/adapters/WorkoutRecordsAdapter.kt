@@ -10,6 +10,7 @@ import com.lefarmico.presentation.databinding.ItemNoteWorkoutBinding
 
 class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>() {
 
+    lateinit var editButtonCallback: (WorkoutRecordsDto.Workout) -> Unit
     var items = listOf<WorkoutRecordsDto.Workout>()
         set(value) {
             val oldField = field
@@ -25,6 +26,8 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
 
         private val date = itemNoteWorkoutBinding.workoutDate
         private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
+
+        val editButton = itemNoteWorkoutBinding.edit
 
         fun bind(noteWorkout: WorkoutRecordsDto.Workout) {
             date.text = noteWorkout.date
@@ -47,6 +50,10 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
         adapter.setExercise(items[position].exerciseList)
         holder.bind(items[position])
         holder.bindAdapter(adapter)
+
+        holder.editButton.setOnClickListener {
+            editButtonCallback(items[position])
+        }
     }
 
     override fun getItemCount(): Int {

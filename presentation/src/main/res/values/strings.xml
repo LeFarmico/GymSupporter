@@ -33,4 +33,6 @@
     <string name="something_went_wrong_try_again">Something went wrong. Try again.</string>
     <string name="edit">Edit</string>
     <string name="about">About</string>
+    <string name="save_changes">Save changes</string>
+    <string name="drag_and_drop">Drag and drop</string>
 </resources>

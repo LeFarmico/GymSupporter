@@ -123,6 +123,19 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         getAll()
     }
 
+    fun getExercise(exerciseId: Int) {
+        repo.getExercise(exerciseId).subscribe { dataState ->
+            when (dataState) {
+                is DataState.Success -> {
+                    exerciseLiveData.postValue(
+                        DataState.Success(listOf(dataState.data))
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
+
     override fun onTriggerEvent(eventType: WorkoutScreenIntent) {
         when (eventType) {
             is WorkoutScreenIntent.AddExercise -> addExercise(eventType)
@@ -139,6 +152,8 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                 eventType.weight
             )
             is WorkoutScreenIntent.DeleteSet -> deleteSet(eventType.exerciseId)
+
+            is WorkoutScreenIntent.GetExercise -> TODO()
         }
     }
 }

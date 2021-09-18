@@ -3,6 +3,7 @@ package com.lefarmico.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.domain.entity.WorkoutRecordsDto
@@ -28,10 +29,15 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         private val weights: TextView = itemExerciseSetBinding.weight
         private var reps = itemExerciseSetBinding.reps
 
+        private val layout = itemExerciseSetBinding.root
+
         fun bind(item: WorkoutRecordsDto.Set) {
             setNumber.text = item.setNumber.toString()
             weights.text = item.weight.toString()
             reps.text = item.reps.toString()
+            layout.setOnClickListener {
+                Toast.makeText(it.context, "Push", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

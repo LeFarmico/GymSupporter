@@ -1,6 +1,0 @@
-rootProject.name = "DoneTime"
-include ':app'
-include ':LeRecycle'
-include ':domain'
-include ':data'
-include ':presentation'

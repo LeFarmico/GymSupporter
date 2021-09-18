@@ -9,7 +9,6 @@ import com.lefarmico.presentation.adapters.ExerciseLibraryAdapter
 import com.lefarmico.presentation.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.presentation.intents.SubCategoryIntent
 import com.lefarmico.presentation.viewModels.SubCategoryViewModel
-import com.lefarmico.presentation.views.activities.MainActivity
 import com.lefarmico.presentation.views.base.BaseFragment
 import com.lefarmico.presentation.views.fragments.WorkoutScreenFragment
 

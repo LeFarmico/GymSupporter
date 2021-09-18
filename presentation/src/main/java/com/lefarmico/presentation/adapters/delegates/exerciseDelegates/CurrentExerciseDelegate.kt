@@ -22,6 +22,8 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         private val exerciseTitle = itemExerciseBinding.exerciseTitle.exerciseName
         private val exerciseTag = itemExerciseBinding.exerciseTitle.tags
 
+        val rootLayout = itemExerciseBinding.exerciseTitle.root
+
         val plusButton = itemExerciseBinding.buttons.plusButton
         val minusButton = itemExerciseBinding.buttons.minusButton
 

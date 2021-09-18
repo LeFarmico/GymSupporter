@@ -16,6 +16,8 @@ sealed class WorkoutScreenIntent : BaseIntent() {
 
     data class DeleteSet(val exerciseId: Int) : WorkoutScreenIntent()
 
+    data class GetExercise(val exerciseId: Int) : WorkoutScreenIntent()
+
     object GetAll : WorkoutScreenIntent()
 
     object SaveAll : WorkoutScreenIntent()

@@ -28,6 +28,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
 
     override fun setUpViews() {
         viewModel.onTriggerEvent(HomeIntent.GetWorkoutRecords)
+
+        noteAdapter.editButtonCallback = {
+            Toast.makeText(requireContext(), "Edit", Toast.LENGTH_SHORT).show()
+        }
         binding.workoutNotes.adapter = noteAdapter
 
         binding.newWorkoutButton.setOnClickListener {

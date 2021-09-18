@@ -2,7 +2,11 @@ package com.lefarmico.presentation.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.util.Preconditions
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.presentation.R
@@ -26,6 +30,7 @@ class WorkoutScreenFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         parentFragmentManager.setFragmentResultListener(
             REQUEST_KEY,
@@ -65,6 +70,7 @@ class WorkoutScreenFragment :
                     WorkoutScreenIntent.DeleteSet(it)
                 )
             }
+            onSelectExercise = {}
         }
     }
 
@@ -113,6 +119,20 @@ class WorkoutScreenFragment :
     private fun initSetParameterDialog(exerciseId: Int) {
         SetParametersDialog(exerciseId, this)
             .show(childFragmentManager, "Set Setting")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.edit -> {
+                Toast.makeText(requireContext(), "Select exercise", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> { false }
+        }
     }
     
     companion object {
