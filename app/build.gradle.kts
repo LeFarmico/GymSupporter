@@ -60,9 +60,17 @@ android {
 
 dependencies {
     // Modules
-    implementation(project(":data"))
+    implementation(project(":core"))
+    api(project(":data"))
     api(project(":domain"))
-    implementation(project(":presentation"))
+    api(project(":features"))
+    api(project(":features:exercise_addition"))
+    api(project(":features:exercise_details"))
+    api(project(":features:exercise_library"))
+    api(project(":features:exercise_menu"))
+    api(project(":features:home"))
+    api(project(":features:workout"))
+    api(project(":features:create_new_exercise"))
 
     // Tests
     androidTestImplementation(Deps.UiTest.junit)
@@ -72,10 +80,15 @@ dependencies {
     // Core
     implementation(Deps.Ktx.core)
     implementation(Deps.Ktx.legacySup)
+    implementation(Deps.Ktx.fragment)
+    implementation(Deps.Ktx.liveData)
+    implementation(Deps.Ktx.liveDataCore)
+    implementation(Deps.Ktx.viewModel)
+    implementation(Deps.Androidx.constraintLayout)
 
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
-    kapt(Deps.Dagger.daggerAndroidProcessor)
     kapt(Deps.Dagger.daggerCompiler)
+    kapt(Deps.Dagger.daggerAndroidProcessor)
 }

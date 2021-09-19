@@ -3,6 +3,13 @@ include(
     ":app",
     ":domain",
     ":data",
-    ":presentation",
-    ":core"
+    ":core",
+    ":features",
+    ":features:home",
+    ":features:exercise_menu",
+    ":features:workout",
+    ":features:exercise_addition",
+    ":features:exercise_library",
+    ":features:exercise_details",
+    ":features:create_new_exercise",
 )

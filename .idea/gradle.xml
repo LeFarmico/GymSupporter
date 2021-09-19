@@ -15,7 +15,14 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/create_new_exercise" />
+            <option value="$PROJECT_DIR$/features/exercise_addition" />
+            <option value="$PROJECT_DIR$/features/exercise_details" />
+            <option value="$PROJECT_DIR$/features/exercise_library" />
+            <option value="$PROJECT_DIR$/features/exercise_menu" />
+            <option value="$PROJECT_DIR$/features/home" />
+            <option value="$PROJECT_DIR$/features/workout" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

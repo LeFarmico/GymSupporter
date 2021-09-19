@@ -5,8 +5,9 @@ import com.lefarmico.data.di.DaoModule
 import com.lefarmico.data.di.DomainModule
 import com.lefarmico.data.di.RepositoryModule
 import com.lefarmico.donetime.App
-import com.lefarmico.presentation.di.modules.* // ktlint-disable no-wildcard-imports
-import com.lefarmico.presentation.di.modules.ViewModelModule
+import com.lefarmico.donetime.di.module.ActivityBindingModule
+import com.lefarmico.features.di.FragmentBindingModule
+import com.lefarmico.features.di.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule

@@ -2,7 +2,7 @@ import com.lefarmico.buildsrc.Base
 import com.lefarmico.buildsrc.Deps
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -12,8 +12,6 @@ android {
     compileSdk = Base.currentSDK
 
     defaultConfig {
-        versionCode = Base.versionCode
-        versionName = Base.versionName
 
         minSdk = Base.minSDK
         targetSdk = Base.currentSDK
@@ -54,9 +52,21 @@ dependencies {
     api(Deps.Ktx.liveDataCore)
     api(Deps.Ktx.liveData)
     api(Deps.Ktx.viewModel)
-    api(Deps.Ktx.liveData)
-    api(Deps.Ktx.viewModel)
     api(Deps.UiTest.espressoIdling)
 
+    // RXJava
+    implementation(Deps.RXJava.rxjava)
+    implementation(Deps.RXJava.rxjavaAndroid)
+    implementation(Deps.RXJava.rxjavaKotlin)
+    implementation(Deps.RXJava.rxjavaRetrofitAdapter)
+
+    // Dagger
+    implementation(Deps.Dagger.dagger)
+    implementation(Deps.Dagger.daggerAndroid)
+    annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
+
     testImplementation(Deps.Test.junit)
+
+    // AdapterDelegates
+    implementation(Deps.adapterDelegates)
 }

@@ -2,7 +2,7 @@ import com.lefarmico.buildsrc.Base
 import com.lefarmico.buildsrc.Deps
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -12,9 +12,7 @@ android {
     compileSdk = Base.currentSDK
 
     defaultConfig {
-        applicationId = "com.lefarmico.donetime"
-        versionCode = Base.versionCode
-        versionName = Base.versionName
+
         minSdk = Base.minSDK
         targetSdk = Base.currentSDK
 
@@ -23,20 +21,10 @@ android {
 
     buildTypes {
         getByName("debug") {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-debug-rules.pro"
-            )
-            testProguardFile("proguard-test-rules.pro")
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
         }
         getByName("release") {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
-            )
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
         }
     }
 }
@@ -44,9 +32,6 @@ android {
 dependencies {
 
     api(project(":domain"))
-
-    implementation(Deps.Ktx.core)
-    implementation(Deps.Androidx.appcompat)
 
     // Tests
     androidTestImplementation(Deps.UiTest.junit)
@@ -71,6 +56,6 @@ dependencies {
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
-    kapt(Deps.Dagger.daggerAndroidProcessor)
     kapt(Deps.Dagger.daggerCompiler)
+    kapt(Deps.Dagger.daggerAndroidProcessor)
 }

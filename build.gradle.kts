@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
@@ -10,13 +10,13 @@ buildscript {
         classpath(com.lefarmico.buildsrc.BuildPlugins.kotlin)
         classpath(com.lefarmico.buildsrc.BuildPlugins.ktlint)
         classpath(com.lefarmico.buildsrc.BuildPlugins.extensions)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
     }
 

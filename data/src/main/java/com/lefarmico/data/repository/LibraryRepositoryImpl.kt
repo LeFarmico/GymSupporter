@@ -1,7 +1,11 @@
 package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.dao.LibraryDao
-import com.lefarmico.data.utils.* // ktlint-disable no-wildcard-imports
+import com.lefarmico.data.mapper.toData
+import com.lefarmico.data.mapper.toDto
+import com.lefarmico.data.mapper.toDtoCategoryList
+import com.lefarmico.data.mapper.toDtoExerciseList
+import com.lefarmico.data.mapper.toDtoSubCategoryList
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState

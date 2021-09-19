@@ -2,7 +2,7 @@ package com.lefarmico.buildsrc
 
 object Versions {
     const val gradle = "7.0.2"
-    const val kotlin = "1.5.30"
+    const val kotlin = "1.5.0"
     const val ktlint = "10.1.0"
 
     const val coroutines = "1.5.0"

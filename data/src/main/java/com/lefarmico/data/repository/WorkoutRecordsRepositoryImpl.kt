@@ -1,8 +1,8 @@
 package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
-import com.lefarmico.data.utils.toData
-import com.lefarmico.data.utils.toWorkoutListDto
+import com.lefarmico.data.mapper.toData
+import com.lefarmico.data.mapper.toWorkoutListDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class WorkoutRecordsRepositoryImpl @Inject constructor(
     private val dao: WorkoutRecordsDao
 ) : WorkoutRecordsRepository {
-    
+
     override fun addWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>> {
         return Single.create<DataState<Long>> {
             val data = dao.insertWorkoutNote(workout.toData())
