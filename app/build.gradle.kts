@@ -61,6 +61,7 @@ android {
 dependencies {
     // Modules
     implementation(project(":core"))
+    implementation(project(":navigation"))
     api(project(":data"))
     api(project(":domain"))
     api(project(":features"))
@@ -91,4 +92,8 @@ dependencies {
     implementation(Deps.Dagger.daggerAndroid)
     kapt(Deps.Dagger.daggerCompiler)
     kapt(Deps.Dagger.daggerAndroidProcessor)
+
+    // Navigation
+    implementation(Deps.Ktx.navigationUi)
+    implementation(Deps.Ktx.navigationFragment)
 }

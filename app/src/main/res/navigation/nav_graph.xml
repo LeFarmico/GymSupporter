@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.lefarmico.home.view.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_workoutScreenFragment"
+            app:destination="@id/workoutScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutScreenFragment"
+        android:name="com.lefarmico.workout.view.WorkoutScreenFragment"
+        android:label="fragment_workout_screen"
+        tools:layout="@layout/fragment_workout_screen" >
+        <action
+            android:id="@+id/action_workoutScreenFragment_to_categoryListFragment"
+            app:destination="@id/categoryListFragment" />
+        <action
+            android:id="@+id/action_workoutScreenFragment_to_setParametersDialog"
+            app:destination="@id/setParametersDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryListFragment"
+        android:name="com.lefarmico.exercise_menu.view.CategoryListFragment"
+        android:label="CategoryListFragment" >
+        <action
+            android:id="@+id/action_categoryListFragment_to_subCategoryListFragment"
+            app:destination="@id/subCategoryListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subCategoryListFragment"
+        android:name="com.lefarmico.exercise_menu.view.SubCategoryListFragment"
+        android:label="SubCategoryListFragment" >
+        <action
+            android:id="@+id/action_subCategoryListFragment_to_exerciseListFragment"
+            app:destination="@id/exerciseListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseListFragment"
+        android:name="com.lefarmico.exercise_menu.view.ExerciseListFragment"
+        android:label="ExerciseListFragment" >
+        <action
+            android:id="@+id/action_exerciseListFragment_to_exerciseDetailsFragment"
+            app:destination="@id/exerciseDetailsFragment" />
+        <action
+            android:id="@+id/action_exerciseListFragment_to_workoutScreenFragment"
+            app:destination="@id/workoutScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseDetailsFragment"
+        android:name="com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment"
+        android:label="ExerciseDetailsFragment" />
+    <dialog
+        android:id="@+id/setParametersDialog"
+        android:name="com.lefarmico.core.dialog.setParameter.SetParametersDialog"
+        android:label="SetParametersDialog" />
+</navigation>

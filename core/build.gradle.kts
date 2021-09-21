@@ -38,7 +38,7 @@ android {
 dependencies {
 
     api(project(":domain"))
-//    api(project(":navigation"))
+    api(project(":navigation"))
 
     api(Deps.Androidx.appcompat)
     api(Deps.Androidx.recyclerView)

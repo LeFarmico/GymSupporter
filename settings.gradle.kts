@@ -13,3 +13,4 @@ include(
     ":features:exercise_details",
     ":features:create_new_exercise",
 )
+include(":navigation")

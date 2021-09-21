@@ -1,13 +1,17 @@
 package com.lefarmico.create_new_exercise.view
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.create_new_exercise.BuildConfig
 import com.lefarmico.create_new_exercise.databinding.FragmentCreateNewExerciseBinding
 import com.lefarmico.create_new_exercise.viewModel.AddExerciseViewModel
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.navigation.params.NewExerciseParams
+import java.lang.IllegalArgumentException
 
-class AddExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding, AddExerciseViewModel>(
+class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding, AddExerciseViewModel>(
     FragmentCreateNewExerciseBinding::inflate,
     AddExerciseViewModel::class.java
 ) {
@@ -79,5 +83,24 @@ class AddExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding, AddEx
     companion object {
         const val BACK_STACK_KEY = "add_ex_stack"
         const val KEY_NUMBER = "add_ex_key"
+
+        const val KEY_PARAMS = "new_exercise_params"
+
+        fun createBundle(data: Parcelable?): Bundle {
+            return Bundle().apply {
+                when (data) {
+                    is NewExerciseParams.Exercise -> putParcelable(KEY_PARAMS, data)
+                    else -> {
+                        if (BuildConfig.DEBUG) {
+                            throw (
+                                IllegalArgumentException(
+                                    "data should be NewExerciseParams.Exercise type."
+                                )
+                                )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

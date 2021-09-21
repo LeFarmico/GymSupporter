@@ -1,7 +1,9 @@
 package com.lefarmico.exercise_menu.view
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.domain.entity.LibraryDto
@@ -9,6 +11,8 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentExerciseListBinding
 import com.lefarmico.exercise_menu.intent.ExerciseListIntent
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
+import com.lefarmico.navigation.params.LibraryParams
+import java.lang.IllegalArgumentException
 
 abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
     FragmentExerciseListBinding::inflate,
@@ -89,5 +93,23 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
 
     companion object {
         const val KEY_NUMBER = "exercise_list_fragment_key"
+        private const val KEY_PARAMS = "exercise_key"
+
+        fun createBundle(data: Parcelable?): Bundle {
+            return Bundle().apply {
+                when (data) {
+                    is LibraryParams.Exercise -> putParcelable(KEY_PARAMS, data)
+                    else -> {
+                        if (BuildConfig.DEBUG) {
+                            throw (
+                                IllegalArgumentException(
+                                    "data should be NewExerciseParams.Exercise type."
+                                )
+                                )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
