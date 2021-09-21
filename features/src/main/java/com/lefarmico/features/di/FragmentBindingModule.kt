@@ -1,6 +1,6 @@
 package com.lefarmico.features.di
 
-import com.lefarmico.create_new_exercise.view.AddExerciseFragment
+import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
 import com.lefarmico.exercise_addition.view.WorkoutCategoryFragment
 import com.lefarmico.exercise_addition.view.WorkoutExerciseFragment
 import com.lefarmico.exercise_addition.view.WorkoutSubcategoryFragment
@@ -22,7 +22,7 @@ abstract class FragmentBindingModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideAddExerciseFragment(): AddExerciseFragment
+    abstract fun provideAddExerciseFragment(): CreateNewExerciseFragment
 
     @FragmentScope
     @ContributesAndroidInjector

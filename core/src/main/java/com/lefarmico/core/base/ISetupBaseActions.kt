@@ -1,6 +1,6 @@
 package com.lefarmico.core.base
 
-interface ISetupBaseActivity {
+interface ISetupBaseActions {
     fun setUpViews()
 
     fun observeView()

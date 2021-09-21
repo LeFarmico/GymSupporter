@@ -6,6 +6,7 @@ import com.lefarmico.data.di.DomainModule
 import com.lefarmico.data.di.RepositoryModule
 import com.lefarmico.donetime.App
 import com.lefarmico.donetime.di.module.ActivityBindingModule
+import com.lefarmico.donetime.di.module.NavigationModule
 import com.lefarmico.features.di.FragmentBindingModule
 import com.lefarmico.features.di.ViewModelModule
 import dagger.BindsInstance
@@ -24,7 +25,8 @@ import javax.inject.Singleton
         RepositoryModule::class,
         DaoModule::class,
         DomainModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        NavigationModule::class
     ]
 )
 @Singleton

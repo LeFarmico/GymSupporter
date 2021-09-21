@@ -24,7 +24,7 @@ class WorkoutScreenFragment :
     ),
     SetSettingDialogCallback {
 
-    val adapter = CurrentExercisesAdapter()
+    private val adapter = CurrentExercisesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

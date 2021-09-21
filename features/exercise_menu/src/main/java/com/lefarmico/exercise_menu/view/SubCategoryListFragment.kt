@@ -1,6 +1,8 @@
 package com.lefarmico.exercise_menu.view
 
 import android.os.Bundle
+import android.os.Parcelable
+import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.domain.entity.LibraryDto
@@ -8,6 +10,8 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.exercise_menu.intent.SubCategoryIntent
 import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
+import com.lefarmico.navigation.params.LibraryParams
+import java.lang.IllegalArgumentException
 
 abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, SubCategoryViewModel>(
     FragmentSubcategoryListBinding::inflate,
@@ -87,5 +91,23 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
 
     companion object {
         const val KEY_NUMBER = "key_sub_category"
+        private const val KEY_PARAMS = "subcategory_key"
+
+        fun createBundle(data: Parcelable?): Bundle {
+            return Bundle().apply {
+                when (data) {
+                    is LibraryParams.Subcategory -> putParcelable(KEY_PARAMS, data)
+                    else -> {
+                        if (BuildConfig.DEBUG) {
+                            throw (
+                                IllegalArgumentException(
+                                    "data should be NewExerciseParams.Exercise type."
+                                )
+                                )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

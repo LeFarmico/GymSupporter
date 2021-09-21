@@ -1,37 +1,55 @@
 package com.lefarmico.donetime.view
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.lefarmico.core.base.BaseActivity
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.features.di.MainViewModel
+import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.notification.Notification
+import com.lefarmico.navigation.params.ToastBarParams
+import com.lefarmico.navigation.screen.Screen
+import com.lefarmico.workout.view.WorkoutScreenFragment
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
     MainViewModel::class.java
 ) {
 
+    @Inject
+    lateinit var router: Router
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appToolbar)
+        router.bind(this)
+        setUpBottomNavigation()
     }
-    override fun setUpViews() {
-        // TODO navigation module
-//        launchFragment(com.lefarmico.home.views.HomeFragment::class.java)
+
+    override fun onResume() {
+        super.onResume()
+        router.bind(this)
+    }
+
+    private fun setUpBottomNavigation() {
         binding.bottomNavigation.apply {
             setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.home -> {
-                        // TODO navigation module
-//                        launchFragment(com.lefarmico.home.views.HomeFragment::class.java)
+                        router.navigate(Screen.HOME_SCREEN)
                         true
                     }
                     R.id.exercises -> {
-                        // TODO navigation module
-//                        launchFragment(com.lefarmico.exercise_library.view.LibraryCategoryFragment::class.java)
+                        router.navigate(Screen.CATEGORY_SCREEN_FROM_LIBRARY)
                         true
                     }
-                    R.id.settings -> { false }
+                    R.id.settings -> {
+                        router.show(
+                            Notification.TOAST,
+                            ToastBarParams("Not yet implemented")
+                        )
+                        true
+                    }
                     else -> false
                 }
             }
@@ -39,28 +57,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
             setOnItemReselectedListener {
                 when (it.itemId) {
                     R.id.home -> {
-                        // TODO navigation module
-//                        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment)
-//                        if (currentFragment is com.lefarmico.workout.view.WorkoutScreenFragment) {
-//                            launchFragment(com.lefarmico.home.views.HomeFragment::class.java)
-//                        }
+                        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment)
+                        if (currentFragment is WorkoutScreenFragment) {
+                            router.navigate(Screen.HOME_SCREEN)
+                        }
                     }
                 }
             }
         }
-    }
-
-    override fun observeView() {
-    }
-
-    override fun observeData() {
-        super.observeData()
-    }
-
-    private fun <T : Fragment> launchFragment(fragment: Class<T>, bundle: Bundle? = null) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment, fragment, bundle)
-            .addToBackStack(null)
-            .commit()
     }
 }
