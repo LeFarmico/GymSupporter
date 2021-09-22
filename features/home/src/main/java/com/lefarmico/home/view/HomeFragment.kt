@@ -33,12 +33,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
         }
         binding.workoutNotes.adapter = noteAdapter
 
-        // TODO : navigation module
-//        binding.newWorkoutButton.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment, WorkoutScreenFragment::class.java, null)
-//                .commit()
-//        }
+        binding.newWorkoutButton.setOnClickListener {
+            viewModel.onTriggerEvent(HomeIntent.StartWorkoutScreen)
+        }
     }
 
     override fun observeData() {

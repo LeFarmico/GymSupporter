@@ -38,7 +38,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             }
             Screen.WORKOUT_SCREEN -> {
                 navController?.navigate(
-                    R.id.fragment_workout,
+                    R.id.action_homeFragment_to_workoutScreenFragment,
                     null,
                     null,
                     navExtras
@@ -54,7 +54,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
 //            }
             Screen.CREATE_NEW_EXERCISE_SCREEN -> {
                 navController?.navigate(
-                    R.id.fragment_create_new_exercise,
+                    R.id.action_exerciseListFragment_to_createNewExerciseFragment,
                     CreateNewExerciseFragment.createBundle(data),
                     null,
                     navExtras
@@ -62,7 +62,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             }
             Screen.CATEGORY_SCREEN_FROM_LIBRARY -> {
                 navController?.navigate(
-                    R.id.fragment_categories,
+                    R.id.action_workoutScreenFragment_to_categoryListFragment,
                     CategoryListFragment.createBundle(data),
                     null,
                     navExtras
@@ -70,7 +70,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             }
             Screen.SUBCATEGORY_SCREEN_FROM_LIBRARY -> {
                 navController?.navigate(
-                    R.id.fragment_subcategories,
+                    R.id.action_categoryListFragment_to_subCategoryListFragment,
                     SubCategoryListFragment.createBundle(data),
                     null,
                     navExtras
@@ -78,7 +78,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             }
             Screen.EXERCISE_SCREEN_FROM_LIBRARY -> {
                 navController?.navigate(
-                    R.id.fragment_exercises,
+                    R.id.action_subCategoryListFragment_to_exerciseListFragment,
                     ExerciseListFragment.createBundle(data),
                     null,
                     navExtras
@@ -86,7 +86,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             }
             Screen.EXERCISE_DETAILS_SCREEN_FROM_LIBRARY -> {
                 navController?.navigate(
-                    R.id.fragment_exercise_details,
+                    R.id.action_exerciseListFragment_to_exerciseDetailsFragment,
                     ExerciseDetailsFragment.createBundle(data),
                     null,
                     navExtras
@@ -102,6 +102,14 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
 //            }
 
             Screen.SET_PARAMETERS_DIALOG -> {}
+            Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_exerciseListFragment_to_workoutScreenFragment,
+                    ExerciseDetailsFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
             else -> {
                 if (BuildConfig.DEBUG) {
                     throw (IllegalStateException("Screen is not exist $this"))

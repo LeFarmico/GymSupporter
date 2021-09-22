@@ -10,7 +10,9 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_workoutScreenFragment"
-            app:destination="@id/workoutScreenFragment" />
+            app:destination="@id/workoutScreenFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/workoutScreenFragment"
@@ -50,6 +52,9 @@
         <action
             android:id="@+id/action_exerciseListFragment_to_workoutScreenFragment"
             app:destination="@id/workoutScreenFragment" />
+        <action
+            android:id="@+id/action_exerciseListFragment_to_createNewExerciseFragment"
+            app:destination="@id/createNewExerciseFragment" />
     </fragment>
     <fragment
         android:id="@+id/exerciseDetailsFragment"
@@ -59,4 +64,8 @@
         android:id="@+id/setParametersDialog"
         android:name="com.lefarmico.core.dialog.setParameter.SetParametersDialog"
         android:label="SetParametersDialog" />
+    <fragment
+        android:id="@+id/createNewExerciseFragment"
+        android:name="com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment"
+        android:label="CreateNewExerciseFragment" />
 </navigation>

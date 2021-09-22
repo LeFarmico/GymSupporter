@@ -8,6 +8,9 @@ import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import javax.inject.Inject
 
@@ -16,6 +19,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     @Inject lateinit var recordsRepository: WorkoutRecordsRepository
     @Inject lateinit var libraryRepository: LibraryRepository
     @Inject lateinit var repo: CurrentWorkoutRepository
+    @Inject lateinit var router: Router
 
     // TODO : убрать локальные переменные
     private var exerciseIds = 1
@@ -136,6 +140,18 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         }
     }
 
+    private fun goToCategoryScreen() {
+        router.navigate(
+            screen = Screen.CATEGORY_SCREEN_FROM_LIBRARY,
+            data = LibraryParams.CategoryList(true)
+        )
+    }
+
+    private fun finishWorkout() {
+        router.navigate(
+            screen = Screen.HOME_SCREEN
+        )
+    }
     override fun onTriggerEvent(eventType: WorkoutScreenIntent) {
         when (eventType) {
             is WorkoutScreenIntent.AddExercise -> addExercise(eventType)
@@ -154,6 +170,8 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             is WorkoutScreenIntent.DeleteSet -> deleteSet(eventType.exerciseId)
 
             is WorkoutScreenIntent.GetExercise -> TODO()
+            is WorkoutScreenIntent.GoToCategoryScreen -> goToCategoryScreen()
+            is WorkoutScreenIntent.FinishWorkout -> finishWorkout()
         }
     }
 }

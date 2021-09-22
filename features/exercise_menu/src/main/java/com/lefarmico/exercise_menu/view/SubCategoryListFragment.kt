@@ -13,40 +13,40 @@ import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
-abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, SubCategoryViewModel>(
+class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, SubCategoryViewModel>(
     FragmentSubcategoryListBinding::inflate,
     SubCategoryViewModel::class.java
 ) {
 
-    abstract val branchExerciseFragment: Class<out ExerciseListFragment>
-
-    private var bundleData: Int? = null
+    private val params: LibraryParams.SubcategoryList by lazy {
+        arguments?.getParcelable<LibraryParams.SubcategoryList>(KEY_PARAMS)
+            ?: throw (IllegalArgumentException("Arguments params must be not null"))
+    }
     private val adapter = ExerciseLibraryAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getBundleResult()
-    }
-
     override fun setUpViews() {
-        viewModel.onTriggerEvent(SubCategoryIntent.GetSubcategories(bundleData!!))
+        viewModel.onTriggerEvent(SubCategoryIntent.GetSubcategories(params.categoryId))
 
         binding.apply {
             recycler.adapter = adapter
             plusButton.setOnClickListener {
                 binding.textField.apply {
                     viewModel.onTriggerEvent(
-                        SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), bundleData!!)
+                        SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), params.categoryId)
                     )
                 }
             }
         }
         adapter.apply {
-            val bundle = Bundle()
             onClick = { item ->
                 item as LibraryDto.SubCategory
-                bundle.putInt(KEY_NUMBER, item.id)
-                changeFragment(branchExerciseFragment, bundle)
+                viewModel.onTriggerEvent(
+                    SubCategoryIntent.GoToExerciseListScreen(
+                        params.categoryId,
+                        item.id,
+                        params.isFromWorkoutScreen
+                    )
+                )
             }
         }
     }
@@ -71,32 +71,13 @@ abstract class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBin
         }
     }
 
-    private fun changeFragment(
-        fragment: Class<out ExerciseListFragment>,
-        bundle: Bundle
-    ) {
-        // TODO navigation module
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.fragment, fragment, bundle)
-//            .addToBackStack(com.lefarmico.workout.view.WorkoutScreenFragment.BACKSTACK_BRANCH)
-//            .commit()
-    }
-
-    private fun getBundleResult() {
-        val bundle = this.arguments
-        if (bundle != null) {
-            bundleData = bundle.getInt(CategoryListFragment.KEY_NUMBER)
-        }
-    }
-
     companion object {
-        const val KEY_NUMBER = "key_sub_category"
         private const val KEY_PARAMS = "subcategory_key"
 
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {
                 when (data) {
-                    is LibraryParams.Subcategory -> putParcelable(KEY_PARAMS, data)
+                    is LibraryParams.SubcategoryList -> putParcelable(KEY_PARAMS, data)
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (

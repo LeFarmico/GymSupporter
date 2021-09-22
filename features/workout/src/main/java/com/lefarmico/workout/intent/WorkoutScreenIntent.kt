@@ -21,4 +21,8 @@ sealed class WorkoutScreenIntent : BaseIntent() {
     object GetAll : WorkoutScreenIntent()
 
     object SaveAll : WorkoutScreenIntent()
+
+    object GoToCategoryScreen : WorkoutScreenIntent()
+
+    object FinishWorkout : WorkoutScreenIntent()
 }

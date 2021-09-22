@@ -68,7 +68,7 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {
                 when (data) {
-                    is LibraryParams.Exercise -> putParcelable(KEY_PARAMS, data)
+                    is LibraryParams.ExerciseList -> putParcelable(KEY_PARAMS, data)
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (

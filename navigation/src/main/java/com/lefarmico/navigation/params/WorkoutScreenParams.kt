@@ -3,12 +3,15 @@ package com.lefarmico.navigation.params
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-sealed class NewExerciseParams : Parcelable {
+sealed class WorkoutScreenParams : Parcelable {
 
     @Parcelize
-    data class Exercise(
+    data class NewExercise(
         val id: Int,
         val categoryId: Int,
         val subcategoryId: Int
-    ) : NewExerciseParams()
+    ) : WorkoutScreenParams()
+
+    @Parcelize
+    object Empty : WorkoutScreenParams()
 }

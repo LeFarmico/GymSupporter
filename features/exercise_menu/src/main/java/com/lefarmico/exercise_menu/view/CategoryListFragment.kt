@@ -13,19 +13,25 @@ import com.lefarmico.exercise_menu.viewModel.CategoryListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
-abstract class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryListViewModel>(
+class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryListViewModel>(
     FragmentCategoriesBinding::inflate,
     CategoryListViewModel::class.java
 ) {
 
-    abstract val branchSubcategoryFragment: Class<out SubCategoryListFragment>
+    private val params: LibraryParams.CategoryList by lazy {
+        arguments?.getParcelable<LibraryParams.CategoryList>(KEY_PARAMS)
+            ?: throw (IllegalArgumentException("Arguments params must be not null"))
+    }
 
     private val adapter = ExerciseLibraryAdapter().apply {
-        val bundle = Bundle()
         onClick = { item ->
             item as LibraryDto.Category
-            bundle.putInt(KEY_NUMBER, item.id)
-            changeFragment(branchSubcategoryFragment, bundle)
+            viewModel.onTriggerEvent(
+                CategoryListIntent.GoToSubcategoryScreen(
+                    item.id,
+                    params.isFromWorkoutScreen
+                )
+            )
         }
     }
 
@@ -66,17 +72,6 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, Ca
         }
     }
 
-    private fun changeFragment(
-        fragment: Class<out SubCategoryListFragment>,
-        bundle: Bundle
-    ) {
-        // TODO navigation module
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.fragment, fragment, bundle)
-//            .addToBackStack(com.lefarmico.workout.view.WorkoutScreenFragment.BACKSTACK_BRANCH)
-//            .commit()
-    }
-
     companion object {
         const val KEY_NUMBER = "key_category"
         private const val KEY_PARAMS = "category_key"
@@ -84,12 +79,12 @@ abstract class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, Ca
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {
                 when (data) {
-                    is LibraryParams.Category -> putParcelable(KEY_PARAMS, data)
+                    is LibraryParams.CategoryList -> putParcelable(KEY_PARAMS, data)
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be NewExerciseParams.Exercise type."
+                                    "data should be LibraryParams.Category type."
                                 )
                                 )
                         }

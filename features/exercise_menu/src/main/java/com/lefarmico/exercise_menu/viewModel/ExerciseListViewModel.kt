@@ -30,6 +30,8 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
         when (eventType) {
             is ExerciseListIntent.GetExercises -> getExercises(eventType.subcategoryId)
             ExerciseListIntent.CleanAll -> cleanAll()
+            is ExerciseListIntent.AddExerciseToWorkoutScreen -> TODO()
+            is ExerciseListIntent.GoToExerciseDetailsScreen -> TODO()
         }
     }
 }

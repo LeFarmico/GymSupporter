@@ -37,7 +37,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toWorkoutListDto())
                 } else {
-                    DataState.Loading
+                    DataState.Empty
                 }
             }
             .onErrorReturn {

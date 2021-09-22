@@ -1,11 +1,15 @@
 package com.lefarmico.exercise_menu.viewModel
 
+import android.text.BoringLayout
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.intent.CategoryListIntent
+import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
 
 class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIntent>() {
@@ -14,6 +18,8 @@ class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIn
 
     @Inject
     lateinit var repo: LibraryRepository
+    @Inject
+    lateinit var router: Router
 
     private fun getCategories() {
         repo.getCategories()
@@ -47,10 +53,21 @@ class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIn
         }
     }
 
+    private fun goToSubcategoryScreen(categoryId: Int, isFromWorkoutScreen: Boolean) {
+        router.navigate(
+            screen = Screen.SUBCATEGORY_SCREEN_FROM_LIBRARY,
+            data = LibraryParams.SubcategoryList(categoryId, isFromWorkoutScreen)
+        )
+    }
+
     override fun onTriggerEvent(eventType: CategoryListIntent) {
         when (eventType) {
             is CategoryListIntent.AddCategory -> addNewCategory(eventType.categoryTitle)
-            CategoryListIntent.GetCategories -> getCategories()
+            is CategoryListIntent.GetCategories -> getCategories()
+            is CategoryListIntent.GoToSubcategoryScreen -> goToSubcategoryScreen(
+                eventType.categoryId,
+                eventType.isFromWorkoutScreen
+            )
         }
     }
 }
