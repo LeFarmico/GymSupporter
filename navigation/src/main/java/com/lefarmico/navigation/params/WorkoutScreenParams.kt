@@ -8,8 +8,6 @@ sealed class WorkoutScreenParams : Parcelable {
     @Parcelize
     data class NewExercise(
         val id: Int,
-        val categoryId: Int,
-        val subcategoryId: Int
     ) : WorkoutScreenParams()
 
     @Parcelize

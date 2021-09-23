@@ -142,7 +142,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     private fun goToCategoryScreen() {
         router.navigate(
-            screen = Screen.CATEGORY_SCREEN_FROM_LIBRARY,
+            screen = Screen.CATEGORY_LIST_SCREEN,
             data = LibraryParams.CategoryList(true)
         )
     }
@@ -170,8 +170,10 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             is WorkoutScreenIntent.DeleteSet -> deleteSet(eventType.exerciseId)
 
             is WorkoutScreenIntent.GetExercise -> TODO()
-            is WorkoutScreenIntent.GoToCategoryScreen -> goToCategoryScreen()
-            is WorkoutScreenIntent.FinishWorkout -> finishWorkout()
+
+            WorkoutScreenIntent.GoToCategoryScreen -> goToCategoryScreen()
+
+            WorkoutScreenIntent.FinishWorkout -> finishWorkout()
         }
     }
 }

@@ -6,11 +6,15 @@ import com.lefarmico.create_new_exercise.intent.AddExerciseIntent
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.navigation.Router
 import javax.inject.Inject
 
-class AddExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseIntent>() {
+class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseIntent>() {
 
-    @Inject lateinit var repo: LibraryRepository
+    @Inject
+    lateinit var repo: LibraryRepository
+    @Inject
+    lateinit var router: Router
 
     val addExerciseLiveData = MutableLiveData<DataState<Long>>()
 
@@ -34,13 +38,13 @@ class AddExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseInte
             }
     }
 
-    private fun setDefaultState() {
-        addExerciseLiveData.postValue(DataState.Empty)
+    private fun onAddExerciseSuccess() {
+        router.back()
     }
 
-    override fun onTriggerEvent(eventType: com.lefarmico.create_new_exercise.intent.AddExerciseIntent) {
+    override fun onTriggerEvent(eventType: AddExerciseIntent) {
         when (eventType) {
-            is com.lefarmico.create_new_exercise.intent.AddExerciseIntent.AddExerciseResult -> {
+            is AddExerciseIntent.AddExerciseResult -> {
                 addNewExercise(
                     eventType.title,
                     eventType.description,
@@ -48,7 +52,7 @@ class AddExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseInte
                     eventType.subcategoryId
                 )
             }
-            com.lefarmico.create_new_exercise.intent.AddExerciseIntent.DefaultState -> setDefaultState()
+            AddExerciseIntent.OnAddExerciseSuccess -> onAddExerciseSuccess()
         }
     }
 }

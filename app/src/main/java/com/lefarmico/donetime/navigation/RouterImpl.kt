@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Parcelable
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lefarmico.donetime.R
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
@@ -23,6 +25,14 @@ class RouterImpl @Inject constructor(
     override fun bind(activity: Activity) {
         this.navController = activity.findNavController(R.id.fragment)
         this.activity = activity
+    }
+
+    override fun bindNavigationUI(bottomNavigationView: BottomNavigationView) {
+        NavigationUI.setupWithNavController(
+            bottomNavigationView,
+            navController
+                ?: throw NullPointerException("NavController is not implemented")
+        )
     }
 
     override fun back() {

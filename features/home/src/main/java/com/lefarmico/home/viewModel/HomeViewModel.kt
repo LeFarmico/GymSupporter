@@ -7,6 +7,7 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.intent.HomeIntent
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
 
@@ -30,7 +31,10 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     override fun onTriggerEvent(eventType: HomeIntent) {
         when (eventType) {
             HomeIntent.GetWorkoutRecords -> getNoteWorkouts()
-            HomeIntent.StartWorkoutScreen -> router.navigate(Screen.WORKOUT_SCREEN)
+            HomeIntent.StartWorkoutScreen -> router.navigate(
+                Screen.WORKOUT_SCREEN,
+                WorkoutScreenParams.Empty
+            )
         }
     }
 }

@@ -6,12 +6,18 @@ import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.intent.ExerciseListIntent
+import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.params.WorkoutScreenParams
+import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
 
 class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIntent>() {
 
     @Inject
     lateinit var repo: LibraryRepository
+    @Inject
+    lateinit var router: Router
 
     val exercisesLiveData = MutableLiveData<DataState<List<LibraryDto.Exercise>>>()
 
@@ -26,12 +32,31 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
         exercisesLiveData.postValue(DataState.Empty)
     }
 
+    private fun addExerciseToWorkout(exerciseId: Int) {
+        router.navigate(Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN, WorkoutScreenParams.NewExercise(exerciseId))
+    }
+
+    private fun goToExerciseDetailsScreen(exerciseId: Int) {
+        router.navigate(
+            screen = Screen.EXERCISE_DETAILS_SCREEN,
+            data = LibraryParams.Exercise(exerciseId)
+        )
+    }
+
+    private fun createNewExercise(categoryId: Int, subCategoryId: Int, isFromWorkoutScreen: Boolean) {
+        router.navigate(
+            screen = Screen.CREATE_NEW_EXERCISE_SCREEN,
+            data = LibraryParams.NewExercise(categoryId, subCategoryId, isFromWorkoutScreen)
+        )
+    }
+
     override fun onTriggerEvent(eventType: ExerciseListIntent) {
         when (eventType) {
             is ExerciseListIntent.GetExercises -> getExercises(eventType.subcategoryId)
             ExerciseListIntent.CleanAll -> cleanAll()
-            is ExerciseListIntent.AddExerciseToWorkoutScreen -> TODO()
-            is ExerciseListIntent.GoToExerciseDetailsScreen -> TODO()
+            is ExerciseListIntent.AddExerciseToWorkoutScreen -> addExerciseToWorkout(eventType.exerciseId)
+            is ExerciseListIntent.GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(eventType.exerciseId)
+            is ExerciseListIntent.CreateNewExercise -> createNewExercise(eventType.categoryId, eventType.categoryId, eventType.isFromWorkoutScreen)
         }
     }
 }

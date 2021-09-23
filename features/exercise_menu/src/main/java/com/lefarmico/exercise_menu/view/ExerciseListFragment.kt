@@ -27,9 +27,13 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         { item ->
             item as LibraryDto.Exercise
             if (params.isFromWorkoutScreen) {
-                addExerciseToWorkout(item.id)
+                viewModel.onTriggerEvent(
+                    ExerciseListIntent.AddExerciseToWorkoutScreen(item.id)
+                )
             } else {
-                goToExerciseDetailsScreen(item.id)
+                viewModel.onTriggerEvent(
+                    ExerciseListIntent.GoToExerciseDetailsScreen(item.id)
+                )
             }
         }
 
@@ -43,9 +47,13 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         )
 
         binding.plusButton.setOnClickListener {
-            // TODO navigation module
-//            bundle.putInt(AddExerciseFragment.KEY_NUMBER, bundleResult)
-//            changeFragment(AddExerciseFragment::class.java, bundle)
+            viewModel.onTriggerEvent(
+                ExerciseListIntent.CreateNewExercise(
+                    params.categoryId,
+                    params.subCategoryId,
+                    params.isFromWorkoutScreen
+                )
+            )
         }
     }
 
@@ -69,14 +77,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         }
     }
 
-    fun addExerciseToWorkout(exerciseId: Int) {
-    }
-
-    fun goToExerciseDetailsScreen(exerciseId: Int) {
-    }
-
     companion object {
-        const val KEY_NUMBER = "exercise_list_fragment_key"
         private const val KEY_PARAMS = "exercise_key"
 
         fun createBundle(data: Parcelable?): Bundle {
@@ -87,7 +88,8 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be LibraryParams.ExerciseList type."
+                                    "data should be LibraryParams.ExerciseList type." +
+                                        "but it's ${data!!.javaClass.simpleName}"
                                 )
                                 )
                         }

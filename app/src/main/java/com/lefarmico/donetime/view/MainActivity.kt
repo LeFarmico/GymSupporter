@@ -6,6 +6,7 @@ import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.features.di.MainViewModel
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
+import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.view.WorkoutScreenFragment
@@ -23,7 +24,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appToolbar)
         router.bind(this)
-        setUpBottomNavigation()
+//        setUpBottomNavigation()
+        router.bindNavigationUI(binding.bottomNavigation)
     }
 
     override fun onResume() {
@@ -35,15 +37,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
         binding.bottomNavigation.apply {
             setOnItemSelectedListener {
                 when (it.itemId) {
-                    R.id.home -> {
+                    R.id.navigation_home -> {
                         router.navigate(Screen.HOME_SCREEN)
                         true
                     }
-                    R.id.exercises -> {
-                        router.navigate(Screen.CATEGORY_SCREEN_FROM_LIBRARY)
+                    R.id.navigation_exercises -> {
+                        router.navigate(Screen.CATEGORY_LIST_SCREEN, LibraryParams.CategoryList(false))
                         true
                     }
-                    R.id.settings -> {
+                    R.id.navigation_settings -> {
                         router.show(
                             Notification.TOAST,
                             ToastBarParams("Not yet implemented")
@@ -56,7 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
 
             setOnItemReselectedListener {
                 when (it.itemId) {
-                    R.id.home -> {
+                    R.id.navigation_home -> {
                         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment)
                         if (currentFragment is WorkoutScreenFragment) {
                             router.navigate(Screen.HOME_SCREEN)

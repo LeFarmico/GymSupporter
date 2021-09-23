@@ -73,7 +73,6 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
     }
 
     companion object {
-        const val KEY_NUMBER = "key_category"
         private const val KEY_PARAMS = "category_key"
 
         fun createBundle(data: Parcelable?): Bundle {

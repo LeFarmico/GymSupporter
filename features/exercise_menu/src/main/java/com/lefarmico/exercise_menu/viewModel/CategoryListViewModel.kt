@@ -1,6 +1,5 @@
 package com.lefarmico.exercise_menu.viewModel
 
-import android.text.BoringLayout
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.domain.entity.LibraryDto
@@ -55,7 +54,7 @@ class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIn
 
     private fun goToSubcategoryScreen(categoryId: Int, isFromWorkoutScreen: Boolean) {
         router.navigate(
-            screen = Screen.SUBCATEGORY_SCREEN_FROM_LIBRARY,
+            screen = Screen.SUBCATEGORY_LIST_SCREEN,
             data = LibraryParams.SubcategoryList(categoryId, isFromWorkoutScreen)
         )
     }

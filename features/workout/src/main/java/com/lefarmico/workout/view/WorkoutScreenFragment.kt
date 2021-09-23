@@ -26,9 +26,9 @@ class WorkoutScreenFragment :
     SetSettingDialogCallback {
 
     // TODO delegate?
-    private val params: WorkoutScreenParams =
-        arguments?.getParcelable(KEY_PARAMS)
-            ?: throw (IllegalArgumentException("Arguments params must be not null"))
+    private val params: WorkoutScreenParams by lazy {
+        arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS) ?: throw (IllegalArgumentException())
+    }
 
     private val adapter = CurrentExercisesAdapter()
 
@@ -38,7 +38,8 @@ class WorkoutScreenFragment :
 
         when (params) {
             is WorkoutScreenParams.NewExercise -> {
-                viewModel.onTriggerEvent(WorkoutScreenIntent.AddExercise(params.id))
+                val data = params as WorkoutScreenParams.NewExercise
+                viewModel.onTriggerEvent(WorkoutScreenIntent.AddExercise(data.id))
             }
             else -> {}
         }
@@ -128,7 +129,8 @@ class WorkoutScreenFragment :
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be LibraryParams.ExerciseList type."
+                                    "data should be WorkoutScreenParams type." +
+                                        "But it's ${data!!.javaClass.simpleName} type"
                                 )
                                 )
                         }

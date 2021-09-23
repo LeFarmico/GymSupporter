@@ -31,9 +31,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":features:exercise_addition"))
     implementation(project(":features:exercise_details"))
-    implementation(project(":features:exercise_library"))
     implementation(project(":features:exercise_menu"))
     implementation(project(":features:home"))
     implementation(project(":features:workout"))
