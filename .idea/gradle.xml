@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/create_new_exercise" />
+            <option value="$PROJECT_DIR$/features/edit_record_workout" />
             <option value="$PROJECT_DIR$/features/exercise_addition" />
             <option value="$PROJECT_DIR$/features/exercise_details" />
             <option value="$PROJECT_DIR$/features/exercise_library" />

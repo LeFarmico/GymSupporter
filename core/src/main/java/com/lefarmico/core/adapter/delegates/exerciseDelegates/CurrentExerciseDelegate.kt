@@ -2,6 +2,7 @@ package com.lefarmico.core.adapter.delegates.exerciseDelegates
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.lefarmico.core.adapter.CurrentSetAdapter
@@ -27,8 +28,11 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         val plusButton = itemExerciseBinding.buttons.plusButton
         val minusButton = itemExerciseBinding.buttons.minusButton
 
+        private val decorator = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
+
         fun bindAdapter(adapter: CurrentSetAdapter) {
             recycler.adapter = adapter
+            recycler.addItemDecoration(decorator)
         }
         fun bind(exerciseData: WorkoutRecordsDto.Exercise) {
             exerciseTitle.text = exerciseData.exerciseName

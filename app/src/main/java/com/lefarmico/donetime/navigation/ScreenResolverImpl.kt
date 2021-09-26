@@ -8,6 +8,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
 import com.lefarmico.donetime.BuildConfig
 import com.lefarmico.donetime.R
+import com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment
 import com.lefarmico.exercise_menu.view.CategoryListFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
 import com.lefarmico.exercise_menu.view.SubCategoryListFragment
@@ -31,7 +32,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
         when (screen) {
             Screen.HOME_SCREEN -> {
                 navController?.navigate(
-                    R.id.fragment_home,
+                    R.id.action_workoutScreenFragment_to_navigation_home2,
                     null,
                     null,
                     navExtras
@@ -106,7 +107,15 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_workoutScreenFragment,
-                    ExerciseDetailsFragment.createBundle(data),
+                    WorkoutScreenFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
+            Screen.EDIT_WORKOUT_RECORD_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_navigation_home_to_editWorkoutRecordFragment2,
+                    EditWorkoutRecordFragment.createBundle(data),
                     null,
                     navExtras
                 )

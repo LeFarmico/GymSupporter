@@ -55,10 +55,10 @@ class WorkoutScreenFragment :
                 )
             }
             finishButton.setOnClickListener {
-                viewModel.onTriggerEvent(WorkoutScreenIntent.SaveAll)
                 viewModel.onTriggerEvent(WorkoutScreenIntent.FinishWorkout)
             }
         }
+
         adapter.apply {
             plusButtonCallBack = {
                 initSetParameterDialog(it)
@@ -130,7 +130,7 @@ class WorkoutScreenFragment :
                             throw (
                                 IllegalArgumentException(
                                     "data should be WorkoutScreenParams type." +
-                                        "But it's ${data!!.javaClass.simpleName} type"
+                                        "But it's ${data!!.javaClass.canonicalName} type"
                                 )
                                 )
                         }

@@ -2,6 +2,7 @@ package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
 import com.lefarmico.data.mapper.toData
+import com.lefarmico.data.mapper.toDto
 import com.lefarmico.data.mapper.toWorkoutListDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
@@ -29,6 +30,30 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun updateWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>> {
+        return Single.create<DataState<Long>> {
+            dao.updateWorkout(workout.toData())
+            it.onSuccess(DataState.Success(1))
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .onErrorReturn {
+                DataState.Error(it as Exception)
+            }
+    }
+
+    override fun deleteWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>> {
+        return Single.create<DataState<Long>> {
+            dao.deleteWorkout(workout.toData())
+            it.onSuccess(DataState.Success(1))
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .onErrorReturn {
+                DataState.Error(it as Exception)
+            }
+    }
+
     override fun getWorkouts(): Observable<DataState<List<WorkoutRecordsDto.Workout>>> {
         return dao.getWorkoutNotes()
             .subscribeOn(Schedulers.io())
@@ -39,6 +64,18 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
                 } else {
                     DataState.Empty
                 }
+            }
+            .onErrorReturn {
+                DataState.Error(it as Exception)
+            }
+    }
+
+    override fun getWorkout(workoutId: Int): Observable<DataState<WorkoutRecordsDto.Workout>> {
+        return dao.getWorkout(workoutId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { data ->
+                DataState.Success(data.toDto()) as DataState<WorkoutRecordsDto.Workout>
             }
             .onErrorReturn {
                 DataState.Error(it as Exception)

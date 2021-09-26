@@ -19,8 +19,8 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
 ) {
 
     private val params: LibraryParams.CategoryList by lazy {
-        arguments?.getParcelable<LibraryParams.CategoryList>(KEY_PARAMS)
-            ?: throw (IllegalArgumentException("Arguments params must be not null"))
+        arguments?.getParcelable(KEY_PARAMS)
+            ?: LibraryParams.CategoryList(isFromWorkoutScreen = false)
     }
 
     private val adapter = ExerciseLibraryAdapter().apply {
@@ -83,7 +83,8 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be LibraryParams.Category type."
+                                    "data should be LibraryParams.CategoryList type." +
+                                        "but it's type ${data!!.javaClass.canonicalName}"
                                 )
                                 )
                         }

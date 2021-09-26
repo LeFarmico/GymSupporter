@@ -1,6 +1,7 @@
 package com.lefarmico.features.di
 
 import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
+import com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment
 import com.lefarmico.exercise_menu.view.CategoryListFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
 import com.lefarmico.exercise_menu.view.SubCategoryListFragment
@@ -40,4 +41,8 @@ abstract class FragmentBindingModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun provideWorkoutSubcategoryFragment(): ExerciseListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun provideEditWorkoutRecordFragment(): EditWorkoutRecordFragment
 }

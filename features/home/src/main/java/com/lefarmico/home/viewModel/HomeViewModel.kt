@@ -7,6 +7,7 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.intent.HomeIntent
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.RecordMenuParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
@@ -18,23 +19,34 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     @Inject
     lateinit var router: Router
 
-    // TODO поменять Dto на ViewData
-    val noteWorkoutLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Workout>>>()
+    val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Workout>>>()
 
-    private fun getNoteWorkouts() {
+    private fun getWorkoutRecords() {
         repo.getWorkouts()
             .subscribe { dataState ->
-                noteWorkoutLiveData.postValue(dataState)
+                workoutRecordsLiveData.postValue(dataState)
             }
+    }
+
+    private fun startWorkoutScreen() {
+        router.navigate(
+            Screen.WORKOUT_SCREEN,
+            WorkoutScreenParams.Empty
+        )
+    }
+
+    private fun editWorkout(workoutId: Int) {
+        router.navigate(
+            screen = Screen.EDIT_WORKOUT_RECORD_SCREEN,
+            data = RecordMenuParams.WorkoutRecord(workoutId)
+        )
     }
 
     override fun onTriggerEvent(eventType: HomeIntent) {
         when (eventType) {
-            HomeIntent.GetWorkoutRecords -> getNoteWorkouts()
-            HomeIntent.StartWorkoutScreen -> router.navigate(
-                Screen.WORKOUT_SCREEN,
-                WorkoutScreenParams.Empty
-            )
+            HomeIntent.GetWorkoutRecords -> getWorkoutRecords()
+            HomeIntent.StartWorkoutScreen -> startWorkoutScreen()
+            is HomeIntent.EditWorkout -> editWorkout(eventType.workoutId)
         }
     }
 }

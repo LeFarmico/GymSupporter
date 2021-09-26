@@ -165,4 +165,8 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                 DataState.Error(it as Exception)
             }
     }
+
+    override fun clearCash() {
+        dataBase.exerciseList.clear()
+    }
 }

@@ -70,6 +70,7 @@ dependencies {
     implementation(project(":features:home"))
     implementation(project(":features:workout"))
     implementation(project(":features:create_new_exercise"))
+    implementation(project(":features:edit_record_workout"))
 
     // Tests
     androidTestImplementation(Deps.UiTest.junit)

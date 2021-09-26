@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lefarmico.donetime.view.MainActivity"
-    android:background="?attr/backgroundColor">
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/app_toolbar"

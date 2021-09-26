@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="ButtonStyle" parent="Theme.YellowTheme">
+        <item name="background">@drawable/button_shape</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
+    <style name="ButtonStyleOutline" parent="Theme.YellowTheme">
+        <item name="background">@drawable/out_line_item_shape</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
 
 </resources>

@@ -27,7 +27,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     val exerciseLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Exercise>>>()
 
-    fun addExercise(model: WorkoutScreenIntent.AddExercise) {
+    private fun addExercise(model: WorkoutScreenIntent.AddExercise) {
         libraryRepository.getExercise(model.id)
             .subscribe { dataState ->
                 when (dataState) {
@@ -45,7 +45,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }
     }
 
-    fun deleteExercise(model: WorkoutScreenIntent.DeleteExercise) {
+    private fun deleteExercise(model: WorkoutScreenIntent.DeleteExercise) {
         repo.getExercise(model.id)
             .subscribe { dataState ->
                 when (dataState) {
@@ -58,15 +58,18 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }
     }
 
-    fun getAll() {
+    private fun getAll() {
         repo.getExercises()
             .subscribe { dataState ->
                 exerciseLiveData.postValue(dataState)
             }
     }
 
-    fun saveWorkout() {
+    private fun saveWorkout() {
         repo.getExercises()
+            .doOnTerminate {
+                repo.clearCash()
+            }
             .subscribe { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
@@ -109,7 +112,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         getAll()
     }
 
-    fun deleteSet(exerciseId: Int) {
+    private fun deleteSet(exerciseId: Int) {
         repo.deleteLastSet(exerciseId).subscribe()
         repo.getExercise(exerciseId).subscribe { dataState ->
             when (dataState) {
@@ -148,6 +151,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     }
 
     private fun finishWorkout() {
+        saveWorkout()
         router.navigate(
             screen = Screen.HOME_SCREEN
         )
@@ -159,8 +163,6 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             is WorkoutScreenIntent.DeleteExercise -> deleteExercise(eventType)
 
             WorkoutScreenIntent.GetAll -> getAll()
-
-            WorkoutScreenIntent.SaveAll -> saveWorkout()
 
             is WorkoutScreenIntent.AddSetToExercise -> addSetToExercise(
                 eventType.exerciseId,

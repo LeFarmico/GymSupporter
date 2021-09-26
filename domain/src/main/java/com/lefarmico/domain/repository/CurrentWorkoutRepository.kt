@@ -22,4 +22,6 @@ interface CurrentWorkoutRepository : BaseRepository {
     fun deleteLastSet(exerciseId: Int): Single<DataState<Long>>
 
     fun getExercise(exerciseId: Int): Single<DataState<WorkoutRecordsDto.Exercise>>
+
+    fun clearCash()
 }

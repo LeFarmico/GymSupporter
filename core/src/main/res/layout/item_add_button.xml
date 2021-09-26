@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="48dp"
+    android:divider="@drawable/divider"
+    android:dividerPadding="8dp"
+    android:orientation="horizontal"
+    android:showDividers="middle">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageView
         android:id="@+id/plus_button"
-        android:layout_width="96dp"
-        android:layout_height="36dp"
-        android:paddingVertical="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:text="@string/add_set"
-        android:background="@drawable/button_shape"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/minus_button"
-        />
-    <androidx.appcompat.widget.AppCompatButton
+        android:src="@drawable/ic_baseline_add_circle_24"
+        android:padding="10dp"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:layout_weight="1"
+        android:contentDescription="@string/add_set" />
+
+    <ImageView
         android:id="@+id/minus_button"
-        android:layout_width="96dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:text="@string/delete_set"
-        android:background="@drawable/button_shape"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/plus_button"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:padding="10dp"
+        android:src="@drawable/ic_baseline_remove_circle_24"
+        android:layout_weight="1"
+        android:contentDescription="@string/delete_set" />
+    <ImageView
+        android:id="@+id/info_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/delete_set"
+        android:padding="10dp"
+        android:src="@drawable/ic_baseline_info_24"
+        android:layout_weight="1"
+        android:contentDescription="@string/description" />
+</LinearLayout>

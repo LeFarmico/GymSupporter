@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/start_margin_guide"
+        app:layout_constraintStart_toStartOf="@id/start_margin_guide"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="99" />
 
@@ -63,7 +63,7 @@
         android:gravity="start"
         android:text="@string/weight_cur"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintStart_toEndOf="@id/weight_guide"
+        app:layout_constraintStart_toEndOf="@id/number_set_guide"
         app:layout_constraintTop_toTopOf="@id/set_number" />
 
     <TextView
@@ -100,7 +100,7 @@
         android:layout_marginVertical="8dp"
         android:text="@string/reps_cur"
         app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintStart_toEndOf="@id/number_set_guide"
+        app:layout_constraintStart_toEndOf="@id/weight_guide"
         app:layout_constraintTop_toTopOf="@id/set_number" />
 
     <TextView

@@ -13,6 +13,9 @@
             app:destination="@id/workoutScreenFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_home_to_editWorkoutRecordFragment2"
+            app:destination="@id/editWorkoutRecordFragment" />
     </fragment>
     <fragment
         android:id="@+id/workoutScreenFragment"
@@ -25,6 +28,9 @@
         <action
             android:id="@+id/action_workoutScreenFragment_to_setParametersDialog"
             app:destination="@id/setParametersDialog" />
+        <action
+            android:id="@+id/action_workoutScreenFragment_to_navigation_home2"
+            app:destination="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_exercises"
@@ -77,4 +83,8 @@
             app:popUpTo="@id/exerciseListFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/editWorkoutRecordFragment"
+        android:name="com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment"
+        android:label="EditWorkoutRecordFragment" />
 </navigation>
