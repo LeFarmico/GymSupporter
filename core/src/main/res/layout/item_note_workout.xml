@@ -10,13 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:text="@string/date"
-        style="@style/TextAppearance.AppCompat.Body1"
+        style="@style/TextStyle.SubHead"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exercises_recycler"
-        android:layout_marginStart="8dp"
-        android:paddingTop="8dp"
-        android:gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:gravity="bottom"
         />
     
     <ImageView
@@ -24,10 +23,10 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_baseline_edit_24"
-        android:padding="8dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@id/workout_date"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/edit"
         />
     <androidx.recyclerview.widget.RecyclerView
@@ -39,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_note_exercise"
         tools:itemCount="5"
-        android:background="@drawable/single_corners_shape"
+        android:background="@drawable/shape_button_variant"
         android:paddingHorizontal="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />

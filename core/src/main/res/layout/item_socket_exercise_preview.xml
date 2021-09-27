@@ -4,7 +4,7 @@
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/out_line_item_shape">
+    android:background="@drawable/shape_button_outline">
 
     <TextView
         android:id="@+id/title"

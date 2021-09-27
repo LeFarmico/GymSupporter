@@ -26,6 +26,7 @@ class EditRecordAdapter : ListDelegationAdapter<List<WorkoutRecordsDto>>() {
         position: Int,
         payloads: MutableList<Any?>
     ) {
+        delegatesManager.onBindViewHolder(items, position, holder, null)
         when (holder) {
             is EditExerciseDelegate.EditExerciseViewHolder -> {
                 val exercise = items[position] as WorkoutRecordsDto.Exercise

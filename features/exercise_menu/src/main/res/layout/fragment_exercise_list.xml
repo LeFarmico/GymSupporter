@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
         android:text="@string/add_new_exercise"
-        android:background="@drawable/button_shape"
+        android:background="@drawable/shape_button"
         />
 
     <com.lefarmico.core.customView.StateView
