@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/done"
-        android:background="@drawable/button_shape"
+        android:background="@drawable/shape_button"
         app:layout_constraintTop_toBottomOf="@id/weight_picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

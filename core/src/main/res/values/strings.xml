@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DoneTime</string>
-    <string name="add_set">+ set</string>
-    <string name="delete_set">- set</string>
+    <string name="add_set">Add set to workout</string>
+    <string name="delete_set">Delete last set</string>
     <string name="add_exercise">Add exercise +</string>
     <string name="start_new_workout">Start new workout</string>
     <string name="exercise">Exercise</string>

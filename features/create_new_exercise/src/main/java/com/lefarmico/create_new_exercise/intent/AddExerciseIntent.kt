@@ -11,5 +11,5 @@ sealed class AddExerciseIntent : BaseIntent() {
         val subcategoryId: Int
     ) : AddExerciseIntent()
 
-    object DefaultState : AddExerciseIntent()
+    object OnAddExerciseSuccess : AddExerciseIntent()
 }

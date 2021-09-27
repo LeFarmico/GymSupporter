@@ -1,10 +1,8 @@
 package com.lefarmico.core.adapter
 
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.lefarmico.core.adapter.delegates.exerciseDelegates.CurrentExerciseDelegate
-import com.lefarmico.core.adapter.diffUtil.CurrentExerciseDiffCallback
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 
 class CurrentExercisesAdapter :
@@ -21,12 +19,7 @@ class CurrentExercisesAdapter :
 
     override fun setItems(items: List<WorkoutRecordsDto>) {
         super.setItems(items)
-        val diffCallback = CurrentExerciseDiffCallback(oldList, super.items)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        diffResult.dispatchUpdatesTo(this)
-
-        oldList.clear()
-        oldList.addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(

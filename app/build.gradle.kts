@@ -24,7 +24,7 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-debug-rules.pro"
@@ -32,7 +32,7 @@ android {
             testProguardFile("proguard-test-rules.pro")
         }
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
@@ -62,16 +62,15 @@ dependencies {
     // Modules
     implementation(project(":core"))
     implementation(project(":navigation"))
-    api(project(":data"))
-    api(project(":domain"))
-    api(project(":features"))
-    api(project(":features:exercise_addition"))
-    api(project(":features:exercise_details"))
-    api(project(":features:exercise_library"))
-    api(project(":features:exercise_menu"))
-    api(project(":features:home"))
-    api(project(":features:workout"))
-    api(project(":features:create_new_exercise"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":features"))
+    implementation(project(":features:exercise_details"))
+    implementation(project(":features:exercise_menu"))
+    implementation(project(":features:home"))
+    implementation(project(":features:workout"))
+    implementation(project(":features:create_new_exercise"))
+    implementation(project(":features:edit_record_workout"))
 
     // Tests
     androidTestImplementation(Deps.UiTest.junit)

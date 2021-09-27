@@ -2,7 +2,6 @@ package com.lefarmico.exercise_menu.view
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.fragment.app.Fragment
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
@@ -14,34 +13,47 @@ import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
-abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
+class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
     FragmentExerciseListBinding::inflate,
     ExerciseListViewModel::class.java
 ) {
 
-    abstract val onItemClickListener: (LibraryDto) -> Unit
+    private val params: LibraryParams.ExerciseList by lazy {
+        arguments?.getParcelable<LibraryParams.ExerciseList>(KEY_PARAMS)
+            ?: throw (IllegalArgumentException("Arguments params must be not null"))
+    }
 
-    private var bundleResult: Int = -1
-    private val bundle = Bundle()
+    private val onItemClickListener: (LibraryDto) -> Unit =
+        { item ->
+            item as LibraryDto.Exercise
+            if (params.isFromWorkoutScreen) {
+                viewModel.onTriggerEvent(
+                    ExerciseListIntent.AddExerciseToWorkoutScreen(item.id)
+                )
+            } else {
+                viewModel.onTriggerEvent(
+                    ExerciseListIntent.GoToExerciseDetailsScreen(item.id)
+                )
+            }
+        }
 
     private val adapter = ExerciseLibraryAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getBundleResult()
-    }
 
     override fun setUpViews() {
         adapter.onClick = onItemClickListener
         binding.recycler.adapter = adapter
         viewModel.onTriggerEvent(
-            ExerciseListIntent.GetExercises(bundleResult)
+            ExerciseListIntent.GetExercises(params.subCategoryId)
         )
 
         binding.plusButton.setOnClickListener {
-            // TODO navigation module
-//            bundle.putInt(AddExerciseFragment.KEY_NUMBER, bundleResult)
-//            changeFragment(AddExerciseFragment::class.java, bundle)
+            viewModel.onTriggerEvent(
+                ExerciseListIntent.CreateNewExercise(
+                    params.categoryId,
+                    params.subCategoryId,
+                    params.isFromWorkoutScreen
+                )
+            )
         }
     }
 
@@ -65,45 +77,19 @@ abstract class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, 
         }
     }
 
-    protected fun setExerciseResult(exerciseId: Int) {
-        // TODO navigation module
-//        parentFragmentManager.setFragmentResult(
-//            com.lefarmico.workout.view.WorkoutScreenFragment.REQUEST_KEY,
-//            bundleOf(com.lefarmico.workout.view.WorkoutScreenFragment.KEY_NUMBER to exerciseId)
-//        )
-    }
-
-    private fun getBundleResult() {
-        val bundle = this.arguments
-        if (bundle != null) {
-            bundleResult = bundle.getInt(SubCategoryListFragment.KEY_NUMBER)
-        }
-    }
-
-    private fun changeFragment(
-        fragment: Class<out Fragment>,
-        bundle: Bundle
-    ) {
-        // TODO navigation module
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.fragment, fragment, bundle)
-//            .addToBackStack(AddExerciseFragment.BACK_STACK_KEY)
-//            .commit()
-    }
-
     companion object {
-        const val KEY_NUMBER = "exercise_list_fragment_key"
         private const val KEY_PARAMS = "exercise_key"
 
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {
                 when (data) {
-                    is LibraryParams.Exercise -> putParcelable(KEY_PARAMS, data)
+                    is LibraryParams.ExerciseList -> putParcelable(KEY_PARAMS, data)
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be NewExerciseParams.Exercise type."
+                                    "data should be LibraryParams.ExerciseList type." +
+                                        "but it's ${data!!.javaClass.simpleName}"
                                 )
                                 )
                         }

@@ -26,23 +26,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
     }
 
     override fun setUpViews() {
-        viewModel.onTriggerEvent(HomeIntent.GetWorkoutRecords)
+        pushIntent(HomeIntent.GetWorkoutRecords)
 
         noteAdapter.editButtonCallback = {
-            Toast.makeText(requireContext(), "Edit", Toast.LENGTH_SHORT).show()
+            pushIntent(HomeIntent.EditWorkout(it.id))
         }
         binding.workoutNotes.adapter = noteAdapter
 
-        // TODO : navigation module
-//        binding.newWorkoutButton.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment, WorkoutScreenFragment::class.java, null)
-//                .commit()
-//        }
+        binding.newWorkoutButton.setOnClickListener {
+            pushIntent(HomeIntent.StartWorkoutScreen)
+        }
     }
 
     override fun observeData() {
-        viewModel.noteWorkoutLiveData.observe(viewLifecycleOwner) { dataState ->
+        viewModel.workoutRecordsLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
                     binding.state.showEmptyState()
@@ -55,7 +52,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
                 }
                 is DataState.Success -> {
                     binding.state.showSuccessState()
-
                     noteAdapter.items = dataState.data.toMutableList()
                 }
             }
@@ -74,5 +70,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
             }
             else -> { false }
         }
+    }
+
+    private fun pushIntent(eventType: HomeIntent) {
+        viewModel.onTriggerEvent(eventType)
     }
 }

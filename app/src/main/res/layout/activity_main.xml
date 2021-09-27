@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lefarmico.donetime.view.MainActivity"
-    android:background="?attr/backgroundColor">
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/app_toolbar"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -43,8 +43,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="?attr/colorPrimary"
-        app:itemIconTint="@drawable/menu_selector"
-        app:itemTextColor="@drawable/menu_selector"
+        app:itemIconTint="@drawable/selector_menu"
+        app:itemTextColor="@drawable/selector_menu"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

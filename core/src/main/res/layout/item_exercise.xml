@@ -9,25 +9,27 @@
 
     <include layout="@layout/item_exercise_title"
         android:id="@+id/exercise_title"
-        android:layout_height="24dp"
-        android:layout_width="match_parent"
         />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/exercise_item"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_exercise_set"
-        tools:itemCount="5"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        android:background="@drawable/single_corners_shape"
-        android:clickable="true"
-        android:focusable="true"
-        />
-    <include layout="@layout/item_add_button"
-        android:id="@+id/buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        />
+        android:background="@drawable/shape_button_variant"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exercise_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_exercise_set"
+            tools:itemCount="5"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            />
+        <include layout="@layout/item_add_button"
+            android:id="@+id/buttons"
+            />
+    </LinearLayout>
+
     </LinearLayout>

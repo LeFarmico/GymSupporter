@@ -3,14 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navigation_home">
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/navigation_home"
         android:name="com.lefarmico.home.view.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_workoutScreenFragment"
-            app:destination="@id/workoutScreenFragment" />
+            app:destination="@id/workoutScreenFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_home_to_editWorkoutRecordFragment2"
+            app:destination="@id/editWorkoutRecordFragment" />
     </fragment>
     <fragment
         android:id="@+id/workoutScreenFragment"
@@ -19,13 +24,16 @@
         tools:layout="@layout/fragment_workout_screen" >
         <action
             android:id="@+id/action_workoutScreenFragment_to_categoryListFragment"
-            app:destination="@id/categoryListFragment" />
+            app:destination="@id/navigation_exercises" />
         <action
             android:id="@+id/action_workoutScreenFragment_to_setParametersDialog"
             app:destination="@id/setParametersDialog" />
+        <action
+            android:id="@+id/action_workoutScreenFragment_to_navigation_home2"
+            app:destination="@id/navigation_home" />
     </fragment>
     <fragment
-        android:id="@+id/categoryListFragment"
+        android:id="@+id/navigation_exercises"
         android:name="com.lefarmico.exercise_menu.view.CategoryListFragment"
         android:label="CategoryListFragment" >
         <action
@@ -49,7 +57,12 @@
             app:destination="@id/exerciseDetailsFragment" />
         <action
             android:id="@+id/action_exerciseListFragment_to_workoutScreenFragment"
-            app:destination="@id/workoutScreenFragment" />
+            app:destination="@id/workoutScreenFragment"
+            app:popUpTo="@id/workoutScreenFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_exerciseListFragment_to_createNewExerciseFragment"
+            app:destination="@id/createNewExerciseFragment" />
     </fragment>
     <fragment
         android:id="@+id/exerciseDetailsFragment"
@@ -59,4 +72,19 @@
         android:id="@+id/setParametersDialog"
         android:name="com.lefarmico.core.dialog.setParameter.SetParametersDialog"
         android:label="SetParametersDialog" />
+    <fragment
+        android:id="@+id/createNewExerciseFragment"
+        android:name="com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment"
+        android:label="CreateNewExerciseFragment" >
+        <action
+            android:id="@+id/action_createNewExerciseFragment_to_exerciseListFragment"
+            app:destination="@id/exerciseListFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/exerciseListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <dialog
+        android:id="@+id/editWorkoutRecordFragment"
+        android:name="com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment"
+        android:label="EditWorkoutRecordFragment" />
 </navigation>

@@ -8,6 +8,9 @@ import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import javax.inject.Inject
 
@@ -16,6 +19,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     @Inject lateinit var recordsRepository: WorkoutRecordsRepository
     @Inject lateinit var libraryRepository: LibraryRepository
     @Inject lateinit var repo: CurrentWorkoutRepository
+    @Inject lateinit var router: Router
 
     // TODO : убрать локальные переменные
     private var exerciseIds = 1
@@ -23,7 +27,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     val exerciseLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Exercise>>>()
 
-    fun addExercise(model: WorkoutScreenIntent.AddExercise) {
+    private fun addExercise(model: WorkoutScreenIntent.AddExercise) {
         libraryRepository.getExercise(model.id)
             .subscribe { dataState ->
                 when (dataState) {
@@ -41,7 +45,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }
     }
 
-    fun deleteExercise(model: WorkoutScreenIntent.DeleteExercise) {
+    private fun deleteExercise(model: WorkoutScreenIntent.DeleteExercise) {
         repo.getExercise(model.id)
             .subscribe { dataState ->
                 when (dataState) {
@@ -54,15 +58,18 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }
     }
 
-    fun getAll() {
+    private fun getAll() {
         repo.getExercises()
             .subscribe { dataState ->
                 exerciseLiveData.postValue(dataState)
             }
     }
 
-    fun saveWorkout() {
+    private fun saveWorkout() {
         repo.getExercises()
+            .doOnTerminate {
+                repo.clearCash()
+            }
             .subscribe { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
@@ -105,7 +112,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         getAll()
     }
 
-    fun deleteSet(exerciseId: Int) {
+    private fun deleteSet(exerciseId: Int) {
         repo.deleteLastSet(exerciseId).subscribe()
         repo.getExercise(exerciseId).subscribe { dataState ->
             when (dataState) {
@@ -136,6 +143,19 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         }
     }
 
+    private fun goToCategoryScreen() {
+        router.navigate(
+            screen = Screen.CATEGORY_LIST_SCREEN,
+            data = LibraryParams.CategoryList(true)
+        )
+    }
+
+    private fun finishWorkout() {
+        saveWorkout()
+        router.navigate(
+            screen = Screen.HOME_SCREEN
+        )
+    }
     override fun onTriggerEvent(eventType: WorkoutScreenIntent) {
         when (eventType) {
             is WorkoutScreenIntent.AddExercise -> addExercise(eventType)
@@ -143,8 +163,6 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             is WorkoutScreenIntent.DeleteExercise -> deleteExercise(eventType)
 
             WorkoutScreenIntent.GetAll -> getAll()
-
-            WorkoutScreenIntent.SaveAll -> saveWorkout()
 
             is WorkoutScreenIntent.AddSetToExercise -> addSetToExercise(
                 eventType.exerciseId,
@@ -154,6 +172,10 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             is WorkoutScreenIntent.DeleteSet -> deleteSet(eventType.exerciseId)
 
             is WorkoutScreenIntent.GetExercise -> TODO()
+
+            WorkoutScreenIntent.GoToCategoryScreen -> goToCategoryScreen()
+
+            WorkoutScreenIntent.FinishWorkout -> finishWorkout()
         }
     }
 }

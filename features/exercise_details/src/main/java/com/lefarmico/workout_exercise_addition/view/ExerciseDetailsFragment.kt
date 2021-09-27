@@ -16,11 +16,9 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
     ExerciseDetailsViewModel::class.java
 ) {
 
-    private var bundleResult = -1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getBundleResult()
+    private val params: LibraryParams.Exercise by lazy {
+        arguments?.getParcelable<LibraryParams.Exercise>(KEY_PARAMS)
+            ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
     override fun setUpViews() {
@@ -29,7 +27,7 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
     override fun observeView() {
         viewModel.onTriggerEvent(
             ExerciseDetailsIntent.GetExercise(
-                bundleResult
+                params.exerciseId
             )
         )
     }
@@ -55,13 +53,6 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
         }
     }
 
-    private fun getBundleResult() {
-        val bundle = this.arguments
-        if (bundle != null) {
-            // TODO navigation module
-//            bundleResult = bundle.getInt(com.lefarmico.exercise_menu.view.ExerciseListFragment.KEY_NUMBER)
-        }
-    }
     companion object {
         private const val KEY_PARAMS = "exercise_details_key"
 
@@ -73,7 +64,8 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
                         if (BuildConfig.DEBUG) {
                             throw (
                                 IllegalArgumentException(
-                                    "data should be LibraryParams.Exercise type."
+                                    "data should be LibraryParams.Exercise type." +
+                                        "but it's ${data!!.javaClass.simpleName}"
                                 )
                                 )
                         }

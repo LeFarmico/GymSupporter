@@ -1,12 +1,10 @@
 package com.lefarmico.features.di
 
 import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
-import com.lefarmico.exercise_addition.view.WorkoutCategoryFragment
-import com.lefarmico.exercise_addition.view.WorkoutExerciseFragment
-import com.lefarmico.exercise_addition.view.WorkoutSubcategoryFragment
-import com.lefarmico.exercise_library.view.LibraryCategoryFragment
-import com.lefarmico.exercise_library.view.LibraryExerciseFragment
-import com.lefarmico.exercise_library.view.LibrarySubCategoryFragment
+import com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment
+import com.lefarmico.exercise_menu.view.CategoryListFragment
+import com.lefarmico.exercise_menu.view.ExerciseListFragment
+import com.lefarmico.exercise_menu.view.SubCategoryListFragment
 import com.lefarmico.home.view.HomeFragment
 import com.lefarmico.workout.view.WorkoutScreenFragment
 import com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment
@@ -34,25 +32,17 @@ abstract class FragmentBindingModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideLibraryCategoryFragment(): LibraryCategoryFragment
+    abstract fun provideWorkoutCategoryFragment(): CategoryListFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideLibraryExerciseFragment(): LibraryExerciseFragment
+    abstract fun provideWorkoutExerciseFragment(): SubCategoryListFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideLibrarySubCategoryFragment(): LibrarySubCategoryFragment
+    abstract fun provideWorkoutSubcategoryFragment(): ExerciseListFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideWorkoutCategoryFragment(): WorkoutCategoryFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector
-    abstract fun provideWorkoutExerciseFragment(): WorkoutExerciseFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector
-    abstract fun provideWorkoutSubcategoryFragment(): WorkoutSubcategoryFragment
+    abstract fun provideEditWorkoutRecordFragment(): EditWorkoutRecordFragment
 }
