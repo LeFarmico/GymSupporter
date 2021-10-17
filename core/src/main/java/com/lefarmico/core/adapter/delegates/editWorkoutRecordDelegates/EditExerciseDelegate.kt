@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.lefarmico.core.databinding.ItemEditRecordExerciseBinding
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class EditExerciseDelegate : AbsListItemAdapterDelegate<
-    WorkoutRecordsDto.Exercise,
-    WorkoutRecordsDto,
+    WorkoutRecordsViewData.Exercise,
+    WorkoutRecordsViewData,
     EditExerciseDelegate.EditExerciseViewHolder>() {
 
     class EditExerciseViewHolder(
@@ -26,11 +26,11 @@ class EditExerciseDelegate : AbsListItemAdapterDelegate<
     }
 
     override fun isForViewType(
-        item: WorkoutRecordsDto,
-        items: MutableList<WorkoutRecordsDto>,
+        item: WorkoutRecordsViewData,
+        items: MutableList<WorkoutRecordsViewData>,
         position: Int
     ): Boolean {
-        return item is WorkoutRecordsDto.Exercise
+        return item is WorkoutRecordsViewData.ExerciseWithSets
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): EditExerciseViewHolder {
@@ -42,7 +42,7 @@ class EditExerciseDelegate : AbsListItemAdapterDelegate<
     }
 
     override fun onBindViewHolder(
-        item: WorkoutRecordsDto.Exercise,
+        item: WorkoutRecordsViewData.Exercise,
         holder: EditExerciseViewHolder,
         payloads: MutableList<Any>
     ) {

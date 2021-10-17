@@ -1,15 +1,19 @@
 package com.lefarmico.data.db
 
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.lefarmico.data.db.dao.CurrentWorkoutDao
+import com.lefarmico.data.db.entity.CurrentWorkoutData
 
-class CurrentWorkoutDataBase {
-
-    val exerciseList = mutableListOf<WorkoutRecordsDto.Exercise>()
-    
-    companion object {
-        const val LOADING = 2L
-        const val SUCCESS = 1L
-        const val EMPTY = 0L
-        const val ERROR = -1L
-    }
+@Database(
+    entities = [
+        CurrentWorkoutData.Exercise::class,
+        CurrentWorkoutData.Set::class,
+        CurrentWorkoutData.ExerciseSetCrossRef::class
+    ],
+    version = 1,
+    exportSchema = false
+)
+abstract class CurrentWorkoutDataBase : RoomDatabase() {
+    abstract fun currentWorkoutDao(): CurrentWorkoutDao
 }

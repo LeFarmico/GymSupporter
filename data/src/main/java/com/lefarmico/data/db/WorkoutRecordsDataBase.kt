@@ -7,7 +7,10 @@ import com.lefarmico.data.db.entity.WorkoutRecordsData
 
 @Database(
     entities = [
-        WorkoutRecordsData.Workout::class
+        WorkoutRecordsData.Workout::class,
+        WorkoutRecordsData.Exercise::class,
+        WorkoutRecordsData.Set::class,
+        WorkoutRecordsData.ExerciseSetCrossRef::class
     ],
     version = 1,
     exportSchema = false

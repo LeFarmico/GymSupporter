@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import com.lefarmico.core.BuildConfig
-import com.lefarmico.core.adapter.CurrentExercisesAdapter
+import com.lefarmico.core.adapter.delegates.exerciseDelegates.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.dialog.setParameter.SetParametersDialog
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
@@ -15,6 +15,7 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.workout.R
 import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
+import com.lefarmico.workout.extensions.toExerciseWithSetsViewData
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
 
@@ -30,7 +31,7 @@ class WorkoutScreenFragment :
         arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS) ?: throw (IllegalArgumentException())
     }
 
-    private val adapter = CurrentExercisesAdapter()
+    private val adapter = CurrentExerciseAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +61,15 @@ class WorkoutScreenFragment :
         }
 
         adapter.apply {
-            plusButtonCallBack = {
+            plusButtonCallback = {
                 initSetParameterDialog(it)
             }
-            minusButtonCallback = {
-                viewModel.onTriggerEvent(
-                    WorkoutScreenIntent.DeleteSet(it)
-                )
-            }
-            onSelectExercise = {}
+//            minusButtonCallback = {
+//                viewModel.onTriggerEvent(
+//                    WorkoutScreenIntent.DeleteSet(it)
+//                )
+//            }
+//            onSelectExercise = {}
         }
     }
 
@@ -85,7 +86,7 @@ class WorkoutScreenFragment :
                     binding.state.showLoadingState()
                 }
                 is DataState.Success -> {
-                    adapter.items = dataState.data
+                    adapter.items = dataState.data.toExerciseWithSetsViewData()
                     binding.state.showSuccessState()
                 }
             }

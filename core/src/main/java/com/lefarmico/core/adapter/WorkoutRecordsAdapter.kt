@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.diffUtil.WorkoutRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemNoteWorkoutBinding
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>() {
 
-    lateinit var editButtonCallback: (WorkoutRecordsDto.Workout) -> Unit
-    var items = listOf<WorkoutRecordsDto.Workout>()
+    lateinit var editButtonCallback: (WorkoutRecordsViewData.Workout) -> Unit
+
+    var items = listOf<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>()
         set(value) {
             val oldField = field
             field = value
@@ -29,7 +30,7 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
 
         val editButton = itemNoteWorkoutBinding.edit
 
-        fun bind(noteWorkout: WorkoutRecordsDto.Workout) {
+        fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
             date.text = noteWorkout.date
         }
         fun bindAdapter(adapter: ExerciseRecordsAdapter) {
@@ -47,12 +48,12 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
         val adapter = ExerciseRecordsAdapter()
-        adapter.setExercise(items[position].exerciseList)
-        holder.bind(items[position])
+        adapter.setExercise(items[position].exerciseWithSetsList)
+        holder.bind(items[position].workout)
         holder.bindAdapter(adapter)
 
         holder.editButton.setOnClickListener {
-            editButtonCallback(items[position])
+            editButtonCallback(items[position].workout)
         }
     }
 

@@ -1,27 +1,29 @@
 package com.lefarmico.domain.repository
 
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 interface CurrentWorkoutRepository : BaseRepository {
 
-    fun getExercises(): Observable<DataState<List<WorkoutRecordsDto.Exercise>>>
+    fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>>
 
-    fun getSets(exerciseId: Int): Observable<DataState<List<WorkoutRecordsDto.Set>>>
+    fun getExercisesWithSets(): Observable<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>>
 
-    fun addExercise(exercise: WorkoutRecordsDto.Exercise): Single<DataState<Long>>
+    fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>>
 
-    fun addSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>>
+    fun deleteExerciseWithSets(exercise: CurrentWorkoutDto.ExerciseWithSets): Single<DataState<Long>>
 
-    fun deleteExercise(exercise: WorkoutRecordsDto.Exercise): Single<DataState<Long>>
+    fun updateExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>>
 
-    fun deleteSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>>
+    fun updateSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
 
-    fun deleteLastSet(exerciseId: Int): Single<DataState<Long>>
+    fun getSets(exerciseId: Int): Observable<DataState<List<CurrentWorkoutDto.Set>>>
 
-    fun getExercise(exerciseId: Int): Single<DataState<WorkoutRecordsDto.Exercise>>
+    fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
 
-    fun clearCash()
+    fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
+
+    fun clearCash(): Single<DataState<Long>>
 }

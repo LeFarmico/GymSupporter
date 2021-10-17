@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.lefarmico.core.adapter.WorkoutRecordsAdapter
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.core.mapper.toWorkoutWithExercisesAndSetsViewData
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.R
 import com.lefarmico.home.databinding.FragmentHomeBinding
@@ -52,7 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
                 }
                 is DataState.Success -> {
                     binding.state.showSuccessState()
-                    noteAdapter.items = dataState.data.toMutableList()
+                    noteAdapter.items = dataState.data.toWorkoutWithExercisesAndSetsViewData()
                 }
             }
         }

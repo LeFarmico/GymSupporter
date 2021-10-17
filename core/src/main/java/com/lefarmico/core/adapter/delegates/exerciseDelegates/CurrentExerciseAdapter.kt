@@ -4,17 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.lefarmico.core.adapter.CurrentSetAdapter
 import com.lefarmico.core.databinding.ItemExerciseBinding
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
-class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
-    WorkoutRecordsDto.Exercise,
-    WorkoutRecordsDto,
-    CurrentExerciseDelegate.ExerciseViewHolder
+class CurrentExerciseAdapter() : RecyclerView.Adapter<
+    CurrentExerciseAdapter.ExerciseViewHolder
     >() {
 
+    lateinit var plusButtonCallback: (Int) -> Unit
+    var items = listOf<WorkoutRecordsViewData.ExerciseWithSets>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     class ExerciseViewHolder(
         itemExerciseBinding: ItemExerciseBinding
     ) : RecyclerView.ViewHolder(itemExerciseBinding.root) {
@@ -34,21 +37,13 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
             recycler.adapter = adapter
             recycler.addItemDecoration(decorator)
         }
-        fun bind(exerciseData: WorkoutRecordsDto.Exercise) {
-            exerciseTitle.text = exerciseData.exerciseName
-            exerciseTag.text = exerciseData.exerciseName
+        fun bind(title: String, tag: String) {
+            exerciseTitle.text = title
+            exerciseTag.text = tag
         }
     }
 
-    override fun isForViewType(
-        item: WorkoutRecordsDto,
-        items: MutableList<WorkoutRecordsDto>,
-        position: Int
-    ): Boolean {
-        return item is WorkoutRecordsDto.Exercise
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup): ExerciseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         return ExerciseViewHolder(
             ItemExerciseBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -56,14 +51,16 @@ class CurrentExerciseDelegate() : AbsListItemAdapterDelegate<
         )
     }
 
-    override fun onBindViewHolder(
-        item: WorkoutRecordsDto.Exercise,
-        holder: ExerciseViewHolder,
-        payloads: MutableList<Any>
-    ) {
+    override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
+        val title = items[position].exercise.exerciseName
         val adapter = CurrentSetAdapter()
-        adapter.items = item.noteSetList.toMutableList()
+        plusButtonCallback(items[position].exercise.id)
+        adapter.items = items[position].setList.toMutableList()
         holder.bindAdapter(adapter)
-        holder.bind(item)
+        holder.bind(title, title)
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
     }
 }

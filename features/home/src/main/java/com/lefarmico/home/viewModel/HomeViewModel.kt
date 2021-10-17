@@ -19,10 +19,10 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     @Inject
     lateinit var router: Router
 
-    val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.Workout>>>()
+    val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>()
 
     private fun getWorkoutRecords() {
-        repo.getWorkouts()
+        repo.getWorkoutsWithExerciseAnsSets()
             .subscribe { dataState ->
                 workoutRecordsLiveData.postValue(dataState)
             }

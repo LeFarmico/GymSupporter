@@ -1,26 +1,20 @@
 package com.lefarmico.domain.entity
 
-sealed class WorkoutRecordsDto {
-
-    data class Workout(
-        val id: Int = 0,
-        val date: String = "",
-    ) : WorkoutRecordsDto()
+sealed class CurrentWorkoutDto {
 
     data class Exercise(
         val id: Int,
-        val workoutId: Int,
         val exerciseName: String
-    ) : WorkoutRecordsDto()
+    ) : CurrentWorkoutDto()
 
     data class Set(
-        val id: Int = 0,
+        val id: Int,
         val exerciseId: Int,
         val setNumber: Int,
         val weight: Float,
         val reps: Int,
         val measureType: MeasureType
-    ) : WorkoutRecordsDto()
+    ) : CurrentWorkoutDto()
 
     enum class MeasureType(val typeNumber: Int) {
         KILO(1), LB(2)
@@ -29,10 +23,5 @@ sealed class WorkoutRecordsDto {
     data class ExerciseWithSets(
         val exercise: Exercise,
         val setList: List<Set>
-    ) : WorkoutRecordsDto()
-
-    data class WorkoutWithExercisesAndSets(
-        val workout: Workout,
-        val exerciseWithSetsList: List<ExerciseWithSets>
-    ) : WorkoutRecordsDto()
+    ) : CurrentWorkoutDto()
 }

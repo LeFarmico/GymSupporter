@@ -1,6 +1,7 @@
 package com.lefarmico.workout.intent
 
 import com.lefarmico.core.base.BaseIntent
+import com.lefarmico.domain.entity.CurrentWorkoutDto
 
 sealed class WorkoutScreenIntent : BaseIntent() {
 
@@ -14,7 +15,7 @@ sealed class WorkoutScreenIntent : BaseIntent() {
         val weight: Float
     ) : WorkoutScreenIntent()
 
-    data class DeleteSet(val exerciseId: Int) : WorkoutScreenIntent()
+    data class DeleteSet(val set: CurrentWorkoutDto.Set) : WorkoutScreenIntent()
 
     data class GetExercise(val exerciseId: Int) : WorkoutScreenIntent()
 
