@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.lefarmico.data.db.CurrentWorkoutDataBase
 import com.lefarmico.data.db.LibraryDataBase
 import com.lefarmico.data.db.WorkoutRecordsDataBase
-import com.lefarmico.data.db.dao.CurrentWorkoutDao
 import com.lefarmico.data.db.dao.LibraryDao
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
 import dagger.Module
@@ -36,11 +35,7 @@ class DaoModule {
     }
 
     @Provides
-    fun provideCurrentWorkoutDao(context: Context): CurrentWorkoutDao {
-        return Room.databaseBuilder(
-            context,
-            CurrentWorkoutDataBase::class.java,
-            "current_workout"
-        ).build().currentWorkoutDao()
+    fun provideCurrentWorkoutDataBase(): CurrentWorkoutDataBase {
+        return CurrentWorkoutDataBase()
     }
 }

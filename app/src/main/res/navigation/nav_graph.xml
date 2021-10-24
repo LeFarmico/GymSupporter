@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_workoutScreenFragment_to_navigation_home2"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_workoutScreenFragment_to_exerciseDetailsFragment"
+            app:destination="@id/exerciseDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_exercises"

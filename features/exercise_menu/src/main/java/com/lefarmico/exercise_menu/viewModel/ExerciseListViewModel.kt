@@ -33,17 +33,24 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
     }
 
     private fun addExerciseToWorkout(exerciseId: Int) {
-        router.navigate(Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN, WorkoutScreenParams.NewExercise(exerciseId))
-    }
-
-    private fun goToExerciseDetailsScreen(exerciseId: Int) {
         router.navigate(
-            screen = Screen.EXERCISE_DETAILS_SCREEN,
-            data = LibraryParams.Exercise(exerciseId)
+            Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN,
+            WorkoutScreenParams.NewExercise(exerciseId)
         )
     }
 
-    private fun createNewExercise(categoryId: Int, subCategoryId: Int, isFromWorkoutScreen: Boolean) {
+    private fun goToExerciseDetailsScreen(exerciseLibraryId: Int) {
+        router.navigate(
+            screen = Screen.EXERCISE_DETAILS_SCREEN,
+            data = LibraryParams.Exercise(exerciseLibraryId)
+        )
+    }
+
+    private fun createNewExercise(
+        categoryId: Int,
+        subCategoryId: Int,
+        isFromWorkoutScreen: Boolean
+    ) {
         router.navigate(
             screen = Screen.CREATE_NEW_EXERCISE_SCREEN,
             data = LibraryParams.NewExercise(categoryId, subCategoryId, isFromWorkoutScreen)
@@ -54,9 +61,17 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
         when (eventType) {
             is ExerciseListIntent.GetExercises -> getExercises(eventType.subcategoryId)
             ExerciseListIntent.CleanAll -> cleanAll()
-            is ExerciseListIntent.AddExerciseToWorkoutScreen -> addExerciseToWorkout(eventType.exerciseId)
-            is ExerciseListIntent.GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(eventType.exerciseId)
-            is ExerciseListIntent.CreateNewExercise -> createNewExercise(eventType.categoryId, eventType.categoryId, eventType.isFromWorkoutScreen)
+            is ExerciseListIntent.AddExerciseToWorkoutScreen -> addExerciseToWorkout(
+                eventType.exerciseId
+            )
+            is ExerciseListIntent.GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(
+                eventType.exerciseId
+            )
+            is ExerciseListIntent.CreateNewExercise -> createNewExercise(
+                eventType.categoryId,
+                eventType.categoryId,
+                eventType.isFromWorkoutScreen
+            )
         }
     }
 }

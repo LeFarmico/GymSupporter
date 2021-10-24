@@ -1,7 +1,6 @@
 package com.lefarmico.data.mapper
 
 import com.lefarmico.data.db.entity.WorkoutRecordsData
-import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import java.lang.IllegalArgumentException
 

@@ -26,20 +26,10 @@ class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<AddExerci
             subCategoryId = subcategoryId
         )
         repo.addExercise(exercise)
-            .subscribe { dataState ->
-                when (dataState) {
-                    is DataState.Success -> {
-                        addExerciseLiveData.postValue(DataState.Success(1))
-                    }
-                    else -> {
-                        addExerciseLiveData.postValue(dataState)
-                    }
-                }
+            .doAfterSuccess {
+                router.back()
             }
-    }
-
-    private fun onAddExerciseSuccess() {
-        router.back()
+            .subscribe()
     }
 
     override fun onTriggerEvent(eventType: AddExerciseIntent) {
@@ -52,7 +42,6 @@ class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<AddExerci
                     eventType.subcategoryId
                 )
             }
-            AddExerciseIntent.OnAddExerciseSuccess -> onAddExerciseSuccess()
         }
     }
 }

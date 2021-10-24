@@ -8,14 +8,14 @@ sealed class WorkoutRecordsDto {
     ) : WorkoutRecordsDto()
 
     data class Exercise(
-        val id: Int,
-        val workoutId: Int,
+        val id: Int = 0,
+        val workoutId: Int = 0,
         val exerciseName: String
     ) : WorkoutRecordsDto()
 
     data class Set(
         val id: Int = 0,
-        val exerciseId: Int,
+        val exerciseId: Int = 0,
         val setNumber: Int,
         val weight: Float,
         val reps: Int,

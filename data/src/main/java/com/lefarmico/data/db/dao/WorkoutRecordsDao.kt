@@ -31,7 +31,7 @@ interface WorkoutRecordsDao {
 
     /* exercise_records table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSet(exercise: WorkoutRecordsData.Exercise): Long
+    fun insertExercise(exercise: WorkoutRecordsData.Exercise): Long
 
     @Query("SELECT * FROM exercise_records WHERE workout_id = :workoutId")
     fun getExerciseRecords(workoutId: Int): Observable<List<WorkoutRecordsData.Exercise>>
@@ -62,6 +62,7 @@ interface WorkoutRecordsDao {
     fun deleteSet(set: WorkoutRecordsData.Set): Int
 
     /* cross queries */
+
     @Transaction
     @Query("SELECT * FROM workout_records WHERE workout_id = :workoutId")
     fun getWorkoutWithExerciseAnsSets(workoutId: Int): Observable<WorkoutRecordsData.WorkoutWithExercisesAndSets>
@@ -71,8 +72,8 @@ interface WorkoutRecordsDao {
     fun getWorkoutsWithExerciseAnsSets(): Observable<List<WorkoutRecordsData.WorkoutWithExercisesAndSets>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSetList(setList: List<WorkoutRecordsData.Set>)
+    fun insertExercises(exerciseList: List<WorkoutRecordsData.Exercise>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertExerciseList(exerciseList: List<WorkoutRecordsData.Exercise>)
+    fun insertSets(setList: List<WorkoutRecordsData.Set>)
 }

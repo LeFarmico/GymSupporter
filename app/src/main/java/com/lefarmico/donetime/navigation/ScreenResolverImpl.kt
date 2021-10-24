@@ -94,14 +94,14 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                     navExtras
                 )
             }
-//            Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT -> {
-//                navController.navigate(
-//                    R.id.fragment,
-//                    ,
-//                null,
-//                    navExtras
-//                )
-//            }
+            Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT -> {
+                navController?.navigate(
+                    R.id.action_workoutScreenFragment_to_exerciseDetailsFragment,
+                    ExerciseDetailsFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
 
             Screen.SET_PARAMETERS_DIALOG -> {}
             Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN -> {

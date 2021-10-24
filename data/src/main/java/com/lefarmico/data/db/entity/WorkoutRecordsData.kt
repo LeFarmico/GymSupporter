@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
-import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 
@@ -61,18 +60,11 @@ sealed class WorkoutRecordsData {
         KILO(1), LB(2)
     }
 
-    @Entity(primaryKeys = ["exercise_id", "set_id"])
-    data class ExerciseSetCrossRef(
-        @ColumnInfo(name = "exercise_id") val exerciseId: Int,
-        @ColumnInfo(name = "set_id") val setId: Int,
-    ) : WorkoutRecordsData()
-
     data class ExerciseWithSets(
         @Embedded val exercise: Exercise,
         @Relation(
             parentColumn = "exercise_id",
-            entityColumn = "set_id",
-            associateBy = Junction(ExerciseSetCrossRef::class)
+            entityColumn = "exercise_id"
         )
         val setList: List<Set>
     ) : WorkoutRecordsData()

@@ -15,7 +15,7 @@ class SetParametersDialog(
     private var _binding: DialogAddSetBinding? = null
     private val binding get() = _binding!!
 
-    val weightValues = arrayKilos()
+    private val weightValues = arrayKilos()
 
     override fun onCreateView(
         inflater: LayoutInflater,

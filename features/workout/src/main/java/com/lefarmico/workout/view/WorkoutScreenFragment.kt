@@ -15,7 +15,6 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.workout.R
 import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
-import com.lefarmico.workout.extensions.toExerciseWithSetsViewData
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
 
@@ -26,7 +25,6 @@ class WorkoutScreenFragment :
     ),
     SetSettingDialogCallback {
 
-    // TODO delegate?
     private val params: WorkoutScreenParams by lazy {
         arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS) ?: throw (IllegalArgumentException())
     }
@@ -64,12 +62,16 @@ class WorkoutScreenFragment :
             plusButtonCallback = {
                 initSetParameterDialog(it)
             }
-//            minusButtonCallback = {
-//                viewModel.onTriggerEvent(
-//                    WorkoutScreenIntent.DeleteSet(it)
-//                )
-//            }
-//            onSelectExercise = {}
+            minusButtonCallback = {
+                viewModel.onTriggerEvent(
+                    WorkoutScreenIntent.DeleteLastSet(it)
+                )
+            }
+            infoButtonCallback = {
+                viewModel.onTriggerEvent(
+                    WorkoutScreenIntent.GoToExerciseInfo(it)
+                )
+            }
         }
     }
 
@@ -78,6 +80,7 @@ class WorkoutScreenFragment :
             when (dataState) {
                 DataState.Empty -> {
                     binding.state.showEmptyState()
+                    adapter.items = listOf()
                 }
                 is DataState.Error -> {
                     binding.state.showErrorState()
@@ -86,7 +89,7 @@ class WorkoutScreenFragment :
                     binding.state.showLoadingState()
                 }
                 is DataState.Success -> {
-                    adapter.items = dataState.data.toExerciseWithSetsViewData()
+                    adapter.items = dataState.data
                     binding.state.showSuccessState()
                 }
             }
@@ -99,8 +102,8 @@ class WorkoutScreenFragment :
         )
     }
 
-    private fun initSetParameterDialog(exerciseId: Int) {
-        SetParametersDialog(exerciseId, this)
+    private fun initSetParameterDialog(exercisePosition: Int) {
+        SetParametersDialog(exercisePosition, this)
             .show(childFragmentManager, "Set Setting")
     }
 

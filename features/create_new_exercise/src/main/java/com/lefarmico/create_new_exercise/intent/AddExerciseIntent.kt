@@ -10,6 +10,4 @@ sealed class AddExerciseIntent : BaseIntent() {
         val imageRes: String,
         val subcategoryId: Int
     ) : AddExerciseIntent()
-
-    object OnAddExerciseSuccess : AddExerciseIntent()
 }

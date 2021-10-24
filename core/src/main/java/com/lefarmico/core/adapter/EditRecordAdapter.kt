@@ -2,9 +2,7 @@ package com.lefarmico.core.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.core.adapter.diffUtil.CurrentExerciseDiffCallback
 import com.lefarmico.core.databinding.ItemEditRecordExerciseBinding
 import com.lefarmico.core.databinding.ItemEditRecordSetBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
@@ -19,12 +17,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items = listOf<WorkoutRecordsViewData.ViewDataItemType>()
         set(value) {
             field = value
-            val diffCallback = CurrentExerciseDiffCallback(oldList, items)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-
-            oldList.clear()
-            oldList.addAll(items)
+            notifyDataSetChanged()
         }
 
     class EditExerciseViewHolder(
@@ -47,8 +40,6 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val setNumber = itemEditRecordSetBinding.set.setNumber
         private val reps = itemEditRecordSetBinding.set.reps
         private val weight = itemEditRecordSetBinding.set.weight
-
-        val dragButton = itemEditRecordSetBinding.dragAndDropPoint
 
         fun bind(setNumber: Int, repsCount: Int, weight: Float) {
             this.setNumber.text = setNumber.toString()
@@ -107,7 +98,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return try {
             (items as WorkoutRecordsViewData.ViewDataItemType).getItemType()
         } catch (e: TypeCastException) {
-            throw TypeCastException("items must resolve ViewDataItemType interface")
+            throw ClassCastException("items must resolve ViewDataItemType interface")
         }
     }
 }

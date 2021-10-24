@@ -61,12 +61,15 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
         viewModel.exercisesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
+                    adapter.items = mutableListOf()
                     binding.state.showEmptyState()
                 }
                 is DataState.Error -> {
+                    adapter.items = mutableListOf()
                     binding.state.showErrorState()
                 }
                 DataState.Loading -> {
+                    adapter.items = mutableListOf()
                     binding.state.showLoadingState()
                 }
                 is DataState.Success -> {

@@ -2,21 +2,28 @@ package com.lefarmico.core.adapter.delegates.exerciseDelegates
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.CurrentSetAdapter
+import com.lefarmico.core.adapter.diffUtil.CurrentExerciseDiffCallback
 import com.lefarmico.core.databinding.ItemExerciseBinding
-import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.domain.entity.CurrentWorkoutDto
 
-class CurrentExerciseAdapter() : RecyclerView.Adapter<
+class CurrentExerciseAdapter : RecyclerView.Adapter<
     CurrentExerciseAdapter.ExerciseViewHolder
     >() {
 
     lateinit var plusButtonCallback: (Int) -> Unit
-    var items = listOf<WorkoutRecordsViewData.ExerciseWithSets>()
+    lateinit var minusButtonCallback: (Int) -> Unit
+    lateinit var infoButtonCallback: (Int) -> Unit
+    var items = listOf<CurrentWorkoutDto.ExerciseWithSets>()
         set(value) {
+            val oldField = field
             field = value
-            notifyDataSetChanged()
+            val diffCallback = CurrentExerciseDiffCallback(oldField, field)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
         }
     class ExerciseViewHolder(
         itemExerciseBinding: ItemExerciseBinding
@@ -30,12 +37,15 @@ class CurrentExerciseAdapter() : RecyclerView.Adapter<
 
         val plusButton = itemExerciseBinding.buttons.plusButton
         val minusButton = itemExerciseBinding.buttons.minusButton
+        val infoButton = itemExerciseBinding.buttons.infoButton
 
         private val decorator = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
 
         fun bindAdapter(adapter: CurrentSetAdapter) {
             recycler.adapter = adapter
-            recycler.addItemDecoration(decorator)
+            if (recycler.itemDecorationCount == 0) {
+                recycler.addItemDecoration(decorator)
+            }
         }
         fun bind(title: String, tag: String) {
             exerciseTitle.text = title
@@ -52,9 +62,19 @@ class CurrentExerciseAdapter() : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
-        val title = items[position].exercise.exerciseName
+        val title = items[position].exercise.title
         val adapter = CurrentSetAdapter()
-        plusButtonCallback(items[position].exercise.id)
+        holder.apply {
+            plusButton.setOnClickListener {
+                plusButtonCallback(items[position].exercise.id)
+            }
+            minusButton.setOnClickListener {
+                minusButtonCallback(items[position].exercise.id)
+            }
+            infoButton.setOnClickListener {
+                infoButtonCallback(items[position].exercise.libraryId)
+            }
+        }
         adapter.items = items[position].setList.toMutableList()
         holder.bindAdapter(adapter)
         holder.bind(title, title)

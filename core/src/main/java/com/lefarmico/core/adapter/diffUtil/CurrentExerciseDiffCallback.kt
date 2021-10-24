@@ -1,11 +1,11 @@
 package com.lefarmico.core.adapter.diffUtil
 
 import androidx.recyclerview.widget.DiffUtil
-import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.domain.entity.CurrentWorkoutDto
 
 class CurrentExerciseDiffCallback(
-    private val oldList: List<WorkoutRecordsViewData.ViewDataItemType>,
-    private val newList: List<WorkoutRecordsViewData.ViewDataItemType>
+    private val oldList: List<CurrentWorkoutDto.ExerciseWithSets>,
+    private val newList: List<CurrentWorkoutDto.ExerciseWithSets>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -17,54 +17,14 @@ class CurrentExerciseDiffCallback(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        when (oldList[oldItemPosition]) {
-            is WorkoutRecordsViewData.Exercise -> {
-                return if (newList[newItemPosition] is WorkoutRecordsViewData.Exercise) {
-                    val oldItem = oldList[oldItemPosition] as WorkoutRecordsViewData.Exercise
-                    val newItem = newList[newItemPosition] as WorkoutRecordsViewData.Exercise
-                    oldItem.id == newItem.id
-                } else {
-                    false
-                }
-            }
-            is WorkoutRecordsViewData.Set -> {
-                return if (newList[newItemPosition] is WorkoutRecordsViewData.Set) {
-                    val oldItem = oldList[oldItemPosition] as WorkoutRecordsViewData.Set
-                    val newItem = newList[newItemPosition] as WorkoutRecordsViewData.Set
-                    oldItem.id == newItem.id
-                } else {
-                    false
-                }
-            }
-            else -> {
-                throw (TypeCastException("Object should resolve ViewDataItemType interface"))
-            }
-        }
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem.exercise.id == newItem.exercise.id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        when (oldList[oldItemPosition]) {
-            is WorkoutRecordsViewData.Exercise -> {
-                return if (newList[newItemPosition] is WorkoutRecordsViewData.Exercise) {
-                    val oldItem = oldList[oldItemPosition] as WorkoutRecordsViewData.Exercise
-                    val newItem = newList[newItemPosition] as WorkoutRecordsViewData.Exercise
-                    oldItem == newItem
-                } else {
-                    false
-                }
-            }
-            is WorkoutRecordsViewData.Set -> {
-                return if (newList[newItemPosition] is WorkoutRecordsViewData.Set) {
-                    val oldItem = oldList[oldItemPosition] as WorkoutRecordsViewData.Set
-                    val newItem = newList[newItemPosition] as WorkoutRecordsViewData.Set
-                    oldItem == newItem
-                } else {
-                    false
-                }
-            }
-            else -> {
-                throw (TypeCastException("Object should resolve ViewDataItemType interface"))
-            }
-        }
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem == newItem
     }
 }
