@@ -2,6 +2,8 @@ package com.lefarmico.edit_record_workout.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
@@ -16,12 +18,22 @@ class EditWorkoutRecordViewModel @Inject constructor() : BaseViewModel<EditWorko
     @Inject
     lateinit var router: Router
 
-    val noteWorkoutLiveData = MutableLiveData<DataState<WorkoutRecordsDto.Workout>>()
+    val noteWorkoutLiveData =
+        MutableLiveData<DataState<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>()
 
     private fun getRecordWorkout(workoutId: Int) {
-        repo.getWorkout(workoutId)
+        repo.getWorkoutWithExerciseAnsSets(workoutId)
             .subscribe { dataState ->
-                noteWorkoutLiveData.postValue(dataState)
+                when (dataState) {
+                    is DataState.Success -> {
+                        noteWorkoutLiveData.postValue(DataState.Success(dataState.data.toViewData()))
+                    }
+                    else -> {
+                        noteWorkoutLiveData.postValue(
+                            dataState as DataState<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>
+                        )
+                    }
+                }
             }
     }
 

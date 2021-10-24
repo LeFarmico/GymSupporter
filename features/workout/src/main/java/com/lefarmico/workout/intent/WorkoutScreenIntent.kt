@@ -14,13 +14,13 @@ sealed class WorkoutScreenIntent : BaseIntent() {
         val weight: Float
     ) : WorkoutScreenIntent()
 
-    data class DeleteSet(val exerciseId: Int) : WorkoutScreenIntent()
-
-    data class GetExercise(val exerciseId: Int) : WorkoutScreenIntent()
+    data class DeleteLastSet(val exerciseId: Int) : WorkoutScreenIntent()
 
     object GetAll : WorkoutScreenIntent()
 
     object GoToCategoryScreen : WorkoutScreenIntent()
 
     object FinishWorkout : WorkoutScreenIntent()
+
+    data class GoToExerciseInfo(val libraryId: Int) : WorkoutScreenIntent()
 }

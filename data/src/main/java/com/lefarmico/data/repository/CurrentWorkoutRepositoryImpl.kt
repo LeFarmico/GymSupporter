@@ -1,11 +1,15 @@
 package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.CurrentWorkoutDataBase
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.data.db.entity.CurrentWorkoutData
+import com.lefarmico.data.mapper.toData
+import com.lefarmico.data.mapper.toDto
+import com.lefarmico.data.mapper.toExerciseWithSetsDto
+import com.lefarmico.data.mapper.toSetDto
+import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
@@ -16,13 +20,13 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     private val dataBase: CurrentWorkoutDataBase
 ) : CurrentWorkoutRepository {
 
-    override fun getExercises(): Observable<DataState<List<WorkoutRecordsDto.Exercise>>> {
-        val data = dataBase.exerciseList
-        return Observable.create<DataState<List<WorkoutRecordsDto.Exercise>>> {
+    override fun getExercisesWithSets(): Single<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
+        val data = dataBase.exerciseWithSetsList
+        return Single.create<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
             if (data.isNotEmpty()) {
-                it.onNext(DataState.Success(data))
+                it.onSuccess(DataState.Success(data.toExerciseWithSetsDto()))
             } else {
-                it.onNext(DataState.Empty)
+                it.onSuccess(DataState.Empty)
             }
         }
             .subscribeOn(Schedulers.io())
@@ -32,13 +36,16 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getSets(exerciseId: Int): Observable<DataState<List<WorkoutRecordsDto.Set>>> {
-        val exercise = dataBase.exerciseList.find { it.id == exerciseId }
-        return Observable.create<DataState<List<WorkoutRecordsDto.Set>>> {
+    override fun getSets(exerciseId: Int): Single<DataState<List<CurrentWorkoutDto.Set>>> {
+        val exercise = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
+        return Single.create<DataState<List<CurrentWorkoutDto.Set>>> {
             if (exercise != null) {
-                it.onNext(DataState.Success(exercise.noteSetList) as DataState<List<WorkoutRecordsDto.Set>>)
+                it.onSuccess(
+                    DataState.Success(exercise.setList.toSetDto())
+                        as DataState<List<CurrentWorkoutDto.Set>>
+                )
             } else {
-                it.onNext(DataState.Empty)
+                it.onSuccess(DataState.Empty)
             }
         }
             .subscribeOn(Schedulers.io())
@@ -48,9 +55,16 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun addExercise(exercise: WorkoutRecordsDto.Exercise): Single<DataState<Long>> {
+    override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>> {
         return Single.create<DataState<Long>> {
-            dataBase.exerciseList.add(exercise)
+            dataBase.insertExerciseWithSets(
+                CurrentWorkoutData.ExerciseWithSets(
+                    CurrentWorkoutData.Exercise.Builder()
+                        .setTitle(exercise.title)
+                        .setLibraryId(exercise.libraryId)
+                        .build()
+                )
+            )
             it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
         }
             .subscribeOn(Schedulers.io())
@@ -60,19 +74,11 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun addSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>> {
-        val curExerciseId = dataBase.exerciseList.indexOfFirst { it.id == set.exerciseId }
-        val curExercise = dataBase.exerciseList[curExerciseId]
-        val setList = mutableListOf<WorkoutRecordsDto.Set>()
-        setList.addAll(curExercise.noteSetList)
-        setList.add(set)
+    override fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>> {
+        val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == set.exerciseId }
         return Single.create<DataState<Long>> {
-            if (curExerciseId >= 0) {
-                dataBase.exerciseList[curExerciseId] = WorkoutRecordsDto.Exercise(
-                    id = curExercise.id,
-                    exerciseName = curExercise.exerciseName,
-                    noteSetList = setList
-                )
+            if (exerciseWithSets != null) {
+                exerciseWithSets.setList.add(set.toData())
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())
@@ -86,10 +92,15 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun deleteExercise(exercise: WorkoutRecordsDto.Exercise): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> {
-            dataBase.exerciseList.remove(exercise)
-            it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+    override fun deleteExercise(exerciseId: Int): Single<DataState<Long>> {
+        val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
+        return Single.create<DataState<Long>> { emitter ->
+            if (exerciseWithSets != null) {
+                dataBase.exerciseWithSetsList.remove(exerciseWithSets)
+                emitter.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+            } else {
+                emitter.onError(NullPointerException())
+            }
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -98,19 +109,11 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun deleteSet(set: WorkoutRecordsDto.Set): Single<DataState<Long>> {
-        val curExerciseId = dataBase.exerciseList.indexOfFirst { it.id == set.exerciseId }
-        val curExercise = dataBase.exerciseList[curExerciseId]
-        val setList = mutableListOf<WorkoutRecordsDto.Set>()
-        setList.addAll(curExercise.noteSetList)
-        setList.remove(set)
+    override fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>> {
+        val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == set.exerciseId }
         return Single.create<DataState<Long>> {
-            if (curExerciseId >= 0) {
-                dataBase.exerciseList[curExerciseId] = WorkoutRecordsDto.Exercise(
-                    id = curExercise.id,
-                    exerciseName = curExercise.exerciseName,
-                    noteSetList = setList
-                )
+            if (exerciseWithSets != null) {
+                exerciseWithSets.setList - set
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())
@@ -124,18 +127,14 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun deleteLastSet(exerciseId: Int): Single<DataState<Long>> {
-        val curExerciseIndex = dataBase.exerciseList.indexOfFirst { it.id == exerciseId }
-        val exercise = dataBase.exerciseList[curExerciseIndex]
-        val setList = mutableListOf<WorkoutRecordsDto.Set>()
+        val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
         return Single.create<DataState<Long>> {
-            if (curExerciseIndex >= 0) {
-                setList.addAll(dataBase.exerciseList[curExerciseIndex].noteSetList)
-                setList.removeLast()
-                dataBase.exerciseList[curExerciseIndex] = WorkoutRecordsDto.Exercise(
-                    id = exercise.id,
-                    exerciseName = exercise.exerciseName,
-                    noteSetList = setList
-                )
+            if (exerciseWithSets != null) {
+                val lastSet = exerciseWithSets.setList[exerciseWithSets.setList.size - 1]
+                exerciseWithSets.setList.remove(lastSet)
+                if (exerciseWithSets.setList.isEmpty()) {
+                    dataBase.exerciseWithSetsList.remove(exerciseWithSets)
+                }
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
                 it.onError(NullPointerException())
@@ -148,12 +147,12 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getExercise(exerciseId: Int): Single<DataState<WorkoutRecordsDto.Exercise>> {
-        return Single.create<DataState<WorkoutRecordsDto.Exercise>> { emitter ->
-            val exercise = dataBase.exerciseList.find { it.id == exerciseId }
+    override fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>> {
+        return Single.create<DataState<CurrentWorkoutDto.ExerciseWithSets>> { emitter ->
+            val exercise = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
             if (exercise != null) {
                 emitter.onSuccess(
-                    DataState.Success(exercise)
+                    DataState.Success(exercise.toDto())
                 )
             } else {
                 emitter.onError(NullPointerException())
@@ -167,6 +166,6 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun clearCash() {
-        dataBase.exerciseList.clear()
+        dataBase.exerciseWithSetsList.clear()
     }
 }

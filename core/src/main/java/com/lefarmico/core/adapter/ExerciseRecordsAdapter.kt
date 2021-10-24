@@ -2,15 +2,13 @@ package com.lefarmico.core.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.core.adapter.diffUtil.ExerciseRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemNoteExerciseBinding
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.WorkoutNoteViewHolder>() {
 
-    var items = mutableListOf<WorkoutRecordsDto.Exercise>()
+    var items = listOf<WorkoutRecordsViewData.ExerciseWithSets>()
 
     class WorkoutNoteViewHolder(
         itemNoteExerciseBinding: ItemNoteExerciseBinding
@@ -20,8 +18,8 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
         private var exerciseNumber = itemNoteExerciseBinding.exerciseNumber
         private val setList = itemNoteExerciseBinding.setsList
 
-        fun bind(noteExercise: WorkoutRecordsDto.Exercise) {
-            exercise.text = noteExercise.exerciseName
+        fun bind(exercise: WorkoutRecordsViewData.Exercise) {
+            this.exercise.text = exercise.exerciseName
         }
         fun bindAdapter(adapter: SetRecordsAdapter) {
             setList.adapter = adapter
@@ -31,12 +29,15 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
         }
     }
 
-    fun setExercise(noteExerciseList: List<WorkoutRecordsDto.Exercise>) {
-        val oldList = items
-        items = noteExerciseList.toMutableList()
-        val diffCallback = ExerciseRecordsDiffCallback(oldList, items)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        diffResult.dispatchUpdatesTo(this)
+    fun setExercise(
+        exerciseWithSetsList: List<WorkoutRecordsViewData.ExerciseWithSets>
+    ) {
+//        val oldList = items
+        items = exerciseWithSetsList
+        notifyDataSetChanged()
+//        val diffCallback = ExerciseRecordsDiffCallback(oldList, items)
+//        val diffResult = DiffUtil.calculateDiff(diffCallback)
+//        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {
@@ -48,11 +49,11 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
-        val setNoteList = items[position].noteSetList
+        val exerciseSetList = items[position].setList
         val setAdapter = SetRecordsAdapter().apply {
-            items = setNoteList.toMutableList()
+            items = exerciseSetList
         }
-        holder.bind(items[position])
+        holder.bind(items[position].exercise)
         holder.bindAdapter(setAdapter)
         holder.setExerciseNumber(position + 1)
     }

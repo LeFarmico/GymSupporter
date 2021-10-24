@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.edit_record_workout.databinding.FragmentEditWorkoutRecordBinding
 import com.lefarmico.edit_record_workout.intent.EditWorkoutRecordIntent
@@ -40,12 +40,12 @@ class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWork
                 DataState.Loading -> {
                 }
                 is DataState.Success -> {
-                    binding.workoutDate.text = dataState.data.date
-                    val itemList = mutableListOf<WorkoutRecordsDto>()
-                    val exerciseList = dataState.data.exerciseList
+                    binding.workoutDate.text = dataState.data.workout.date
+                    val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
+                    val exerciseList = dataState.data.exerciseWithSetsList
                     for (i in exerciseList.indices) {
-                        itemList.add(exerciseList[i])
-                        itemList.addAll(exerciseList[i].noteSetList)
+                        itemList.add(exerciseList[i].exercise)
+                        itemList.addAll(exerciseList[i].setList)
                     }
                     adapter.items = itemList
                 }

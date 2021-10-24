@@ -1,57 +1,104 @@
 package com.lefarmico.core.adapter
 
-import androidx.recyclerview.widget.DiffUtil
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
-import com.lefarmico.core.adapter.delegates.editWorkoutRecordDelegates.EditExerciseDelegate
-import com.lefarmico.core.adapter.delegates.editWorkoutRecordDelegates.EditSetDelegate
-import com.lefarmico.core.adapter.diffUtil.CurrentExerciseDiffCallback
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.databinding.ItemEditRecordExerciseBinding
+import com.lefarmico.core.databinding.ItemEditRecordSetBinding
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
-class EditRecordAdapter : ListDelegationAdapter<List<WorkoutRecordsDto>>() {
+class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit var onAddSet: (Int) -> Unit
     lateinit var onDeleteSet: (Int) -> Unit
     lateinit var onDragButton: () -> Unit
 
-    private val oldList = mutableListOf<WorkoutRecordsDto>()
+    private val oldList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
+    var items = listOf<WorkoutRecordsViewData.ViewDataItemType>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    init {
-        delegatesManager.addDelegate(EditExerciseDelegate())
-        delegatesManager.addDelegate(EditSetDelegate())
+    class EditExerciseViewHolder(
+        itemEditRecordBinding: ItemEditRecordExerciseBinding
+    ) : RecyclerView.ViewHolder(itemEditRecordBinding.root) {
+
+        private val exerciseTitle = itemEditRecordBinding.exerciseTitle
+//        val addSetButton = itemEditRecordBinding.plusButton
+//        val deleteSetButton = itemEditRecordBinding.minusButton
+
+        fun bind(title: String) {
+            exerciseTitle.text = title
+        }
     }
 
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int,
-        payloads: MutableList<Any?>
-    ) {
-        delegatesManager.onBindViewHolder(items, position, holder, null)
-        when (holder) {
-            is EditExerciseDelegate.EditExerciseViewHolder -> {
-                val exercise = items[position] as WorkoutRecordsDto.Exercise
-//                holder.addSetButton.setOnClickListener {
-//                    onAddSet(exercise.id)
-//                    onDeleteSet(exercise.id)
-//                }
+    class EditSetViewHolder(
+        itemEditRecordSetBinding: ItemEditRecordSetBinding
+    ) : RecyclerView.ViewHolder(itemEditRecordSetBinding.root) {
+
+        private val setNumber = itemEditRecordSetBinding.set.setNumber
+        private val reps = itemEditRecordSetBinding.set.reps
+        private val weight = itemEditRecordSetBinding.set.weight
+
+        fun bind(setNumber: Int, repsCount: Int, weight: Float) {
+            this.setNumber.text = setNumber.toString()
+            this.reps.text = repsCount.toString()
+            this.weight.text = weight.toString()
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = items[position]
+        when (item.getItemType()) {
+            WorkoutRecordsViewData.EXERCISE -> {
+                holder as EditExerciseViewHolder
+                item as WorkoutRecordsViewData.Exercise
+                holder.bind(item.exerciseName)
             }
-            is EditSetDelegate.EditSetViewHolder -> {
-                val set = items[position] as WorkoutRecordsDto.Set
-                holder.dragButton.setOnClickListener {
-                    // TODO access to drag and drop
-                    onDragButton()
-                }
+            WorkoutRecordsViewData.SET -> {
+                holder as EditSetViewHolder
+                item as WorkoutRecordsViewData.Set
+                holder.bind(
+                    item.setNumber,
+                    item.reps,
+                    item.weight
+                )
             }
         }
     }
 
-    override fun setItems(items: List<WorkoutRecordsDto>) {
-        super.setItems(items)
-        val diffCallback = CurrentExerciseDiffCallback(oldList, super.items)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        diffResult.dispatchUpdatesTo(this)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            WorkoutRecordsViewData.EXERCISE -> {
+                EditExerciseViewHolder(
+                    ItemEditRecordExerciseBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            WorkoutRecordsViewData.SET -> {
+                EditSetViewHolder(
+                    ItemEditRecordSetBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                throw (IllegalArgumentException("Not existing ViewDataItemType: $viewType"))
+            }
+        }
+    }
 
-        oldList.clear()
-        oldList.addAll(items)
+    override fun getItemCount(): Int {
+        return items.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return try {
+            (items as WorkoutRecordsViewData.ViewDataItemType).getItemType()
+        } catch (e: TypeCastException) {
+            throw ClassCastException("items must resolve ViewDataItemType interface")
+        }
     }
 }

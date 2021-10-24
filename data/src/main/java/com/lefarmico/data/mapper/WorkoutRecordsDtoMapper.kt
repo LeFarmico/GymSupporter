@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 fun WorkoutRecordsData.Exercise.toDto() = WorkoutRecordsDto.Exercise(
     id = id,
     exerciseName = exerciseName,
-    noteSetList = noteSetList.toSetListDto().toMutableList()
+    workoutId = workoutId
 )
 
 fun WorkoutRecordsData.Set.toDto() = WorkoutRecordsDto.Set(
@@ -16,13 +16,12 @@ fun WorkoutRecordsData.Set.toDto() = WorkoutRecordsDto.Set(
     setNumber = setNumber,
     weight = weight,
     reps = reps,
-    measureType = measureType.toData()
+    measureType = measureType.toDto()
 )
 
 fun WorkoutRecordsData.Workout.toDto() = WorkoutRecordsDto.Workout(
     id = id,
-    date = date,
-    exerciseList = exerciseList.toExerciseListDto()
+    date = date
 )
 
 fun List<WorkoutRecordsData.Set>.toSetListDto() = this.map { it.toDto() }
@@ -31,10 +30,25 @@ fun List<WorkoutRecordsData.Exercise>.toExerciseListDto() = this.map { it.toDto(
 
 fun List<WorkoutRecordsData.Workout>.toWorkoutListDto() = this.map { it.toDto() }
 
-fun WorkoutRecordsData.MeasureType.toData(): WorkoutRecordsDto.MeasureType {
+fun List<WorkoutRecordsData.ExerciseWithSets>.toExerciseWithSetsListDto() = this.map { it.toDto() }
+
+fun List<WorkoutRecordsData.WorkoutWithExercisesAndSets>.toWorkoutWithExercisesAndSetsDto() =
+    this.map { it.toDto() }
+
+fun WorkoutRecordsData.MeasureType.toDto(): WorkoutRecordsDto.MeasureType {
     return when (this.typeNumber) {
         1 -> WorkoutRecordsDto.MeasureType.KILO
         2 -> WorkoutRecordsDto.MeasureType.LB
         else -> throw (IllegalArgumentException())
     }
 }
+
+fun WorkoutRecordsData.WorkoutWithExercisesAndSets.toDto() = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
+    workout = workout.toDto(),
+    exerciseWithSetsList = exerciseWithSetsList.toExerciseWithSetsListDto()
+)
+
+fun WorkoutRecordsData.ExerciseWithSets.toDto() = WorkoutRecordsDto.ExerciseWithSets(
+    exercise = exercise.toDto(),
+    setList = setList.toSetListDto()
+)

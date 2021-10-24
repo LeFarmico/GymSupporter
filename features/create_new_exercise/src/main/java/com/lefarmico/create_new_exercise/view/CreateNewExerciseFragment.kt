@@ -16,6 +16,10 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
     CreateNewExerciseViewModel::class.java
 ) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     private val params: LibraryParams.NewExercise by lazy {
         arguments?.getParcelable<LibraryParams.NewExercise>(KEY_PARAMS)
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
@@ -48,7 +52,6 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
                 }
                 is DataState.Success -> {
                     binding.state.showSuccessState()
-                    viewModel.onTriggerEvent(AddExerciseIntent.OnAddExerciseSuccess)
                 }
             }
         }

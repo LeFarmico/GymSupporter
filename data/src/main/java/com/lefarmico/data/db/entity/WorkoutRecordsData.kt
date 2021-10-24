@@ -1,7 +1,11 @@
 package com.lefarmico.data.db.entity
 
-import androidx.room.* // ktlint-disable no-wildcard-imports
-import com.lefarmico.data.utils.TypeConverter
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 sealed class WorkoutRecordsData {
 
@@ -9,35 +13,69 @@ sealed class WorkoutRecordsData {
         tableName = "workout_records",
         indices = [
             Index(
-                value = ["id"],
+                value = ["workout_id"],
                 unique = true
             )
         ]
     )
-    @TypeConverters(TypeConverter.ExerciseList::class)
     data class Workout(
-        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int,
+        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "workout_id") val id: Int,
         @ColumnInfo(name = "date") val date: String = "",
-        @ColumnInfo(name = "exercises_record") val exerciseList: List<Exercise>
     ) : WorkoutRecordsData()
 
-    @TypeConverters(TypeConverter.SetsList::class)
+    @Entity(
+        tableName = "exercise_records",
+        indices = [
+            Index(
+                value = ["exercise_id"],
+                unique = true
+            )
+        ]
+    )
     data class Exercise(
-        val id: Int,
-        val exerciseName: String,
-        val noteSetList: List<Set>
+        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "exercise_id") val id: Int,
+        @ColumnInfo(name = "workout_id") val workoutId: Int,
+        @ColumnInfo(name = "exercise_name") val exerciseName: String,
     ) : WorkoutRecordsData()
 
+    @Entity(
+        tableName = "set_records",
+        indices = [
+            Index(
+                value = ["set_id"],
+                unique = true
+            )
+        ]
+    )
     data class Set(
-        val id: Int,
-        val exerciseId: Int,
-        val setNumber: Int,
-        val weight: Float,
-        val reps: Int,
-        val measureType: MeasureType
+        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "set_id") val id: Int,
+        @ColumnInfo(name = "exercise_id") val exerciseId: Int,
+        @ColumnInfo(name = "set_number") val setNumber: Int,
+        @ColumnInfo(name = "weight") val weight: Float,
+        @ColumnInfo(name = "reps") val reps: Int,
+        @ColumnInfo(name = "measure_type") val measureType: MeasureType
     ) : WorkoutRecordsData()
 
     enum class MeasureType(val typeNumber: Int) {
         KILO(1), LB(2)
     }
+
+    data class ExerciseWithSets(
+        @Embedded val exercise: Exercise,
+        @Relation(
+            parentColumn = "exercise_id",
+            entityColumn = "exercise_id"
+        )
+        val setList: List<Set>
+    ) : WorkoutRecordsData()
+
+    data class WorkoutWithExercisesAndSets(
+        @Embedded val workout: Workout,
+        @Relation(
+            entity = Exercise::class,
+            parentColumn = "workout_id",
+            entityColumn = "workout_id"
+        )
+        val exerciseWithSetsList: List<ExerciseWithSets>
+    ) : WorkoutRecordsData()
 }

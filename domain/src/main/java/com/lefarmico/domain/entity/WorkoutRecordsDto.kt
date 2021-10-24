@@ -5,18 +5,17 @@ sealed class WorkoutRecordsDto {
     data class Workout(
         val id: Int = 0,
         val date: String = "",
-        val exerciseList: List<Exercise> = mutableListOf()
     ) : WorkoutRecordsDto()
 
     data class Exercise(
-        val id: Int,
-        val exerciseName: String,
-        val noteSetList: List<Set> // TODO : Попробовать через id
+        val id: Int = 0,
+        val workoutId: Int = 0,
+        val exerciseName: String
     ) : WorkoutRecordsDto()
 
     data class Set(
         val id: Int = 0,
-        val exerciseId: Int,
+        val exerciseId: Int = 0,
         val setNumber: Int,
         val weight: Float,
         val reps: Int,
@@ -26,4 +25,14 @@ sealed class WorkoutRecordsDto {
     enum class MeasureType(val typeNumber: Int) {
         KILO(1), LB(2)
     }
+
+    data class ExerciseWithSets(
+        val exercise: Exercise,
+        val setList: List<Set>
+    ) : WorkoutRecordsDto()
+
+    data class WorkoutWithExercisesAndSets(
+        val workout: Workout,
+        val exerciseWithSetsList: List<ExerciseWithSets>
+    ) : WorkoutRecordsDto()
 }

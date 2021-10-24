@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.diffUtil.SetRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemExerciseSetBinding
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class SetRecordsAdapter : RecyclerView.Adapter<SetRecordsAdapter.SetViewHolder>() {
 
@@ -18,7 +18,7 @@ class SetRecordsAdapter : RecyclerView.Adapter<SetRecordsAdapter.SetViewHolder>(
         private var setNumber = itemExerciseSetBinding.setNumber
         private var wieght = itemExerciseSetBinding.weight
 
-        fun bind(noteSet: WorkoutRecordsDto.Set) {
+        fun bind(noteSet: WorkoutRecordsViewData.Set) {
             reps.text = noteSet.reps.toString()
             wieght.text = noteSet.weight.toString()
         }
@@ -26,7 +26,7 @@ class SetRecordsAdapter : RecyclerView.Adapter<SetRecordsAdapter.SetViewHolder>(
             setNumber.text = number.toString()
         }
     }
-    var items = mutableListOf<WorkoutRecordsDto.Set>()
+    var items = listOf<WorkoutRecordsViewData.Set>()
         set(value) {
             val oldList = field
             field = value

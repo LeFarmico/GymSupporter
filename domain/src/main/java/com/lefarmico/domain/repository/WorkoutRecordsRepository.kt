@@ -7,13 +7,19 @@ import io.reactivex.rxjava3.core.Single
 
 interface WorkoutRecordsRepository : BaseRepository {
 
-    fun addWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>>
+    fun getWorkoutWithExerciseAnsSets(workoutId: Int):
+        Observable<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
 
-    fun updateWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>>
+    fun getWorkoutsWithExerciseAnsSets():
+        Observable<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>
 
-    fun deleteWorkout(workout: WorkoutRecordsDto.Workout): Single<DataState<Long>>
+    fun addWorkoutWithExAndSets(
+        workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
+    ): Single<DataState<Boolean>>
 
-    fun getWorkouts(): Observable<DataState<List<WorkoutRecordsDto.Workout>>>
+    fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Boolean>>
 
-    fun getWorkout(workoutId: Int): Observable<DataState<WorkoutRecordsDto.Workout>>
+    fun updateWorkoutWithExAndSets(
+        workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
+    ): Single<DataState<Boolean>>
 }
