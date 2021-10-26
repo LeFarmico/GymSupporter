@@ -28,7 +28,7 @@ class LibraryRepositoryImpl @Inject constructor(
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toDtoCategoryList())
                 } else {
-                    DataState.Loading
+                    DataState.Empty
                 }
             }
             .onErrorReturn {
@@ -44,7 +44,7 @@ class LibraryRepositoryImpl @Inject constructor(
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toDtoSubCategoryList())
                 } else {
-                    DataState.Loading
+                    DataState.Empty
                 }
             }
             .onErrorReturn {
@@ -73,7 +73,7 @@ class LibraryRepositoryImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { data ->
-                DataState.Success(data.toDto()) as DataState<LibraryDto.Exercise> // !?
+                DataState.Success(data.toDto()) as DataState<LibraryDto.Exercise>
             }
             .onErrorReturn {
                 DataState.Error(it as Exception)

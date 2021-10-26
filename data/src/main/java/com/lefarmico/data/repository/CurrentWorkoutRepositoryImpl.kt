@@ -57,7 +57,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
 
     override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>> {
         return Single.create<DataState<Long>> {
-            dataBase.insertExerciseWithSets(
+            val exerciseId = dataBase.insertExerciseWithSets(
                 CurrentWorkoutData.ExerciseWithSets(
                     CurrentWorkoutData.Exercise.Builder()
                         .setTitle(exercise.title)
@@ -65,7 +65,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                         .build()
                 )
             )
-            it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+            it.onSuccess(DataState.Success(exerciseId))
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

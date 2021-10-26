@@ -5,17 +5,17 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.delegates.exerciseDelegates.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.core.dialog.setParameter.SetParametersDialog
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
+import com.lefarmico.navigation.params.WorkoutScreenParams.*
 import com.lefarmico.workout.R
 import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.workout.intent.WorkoutScreenIntent
+import com.lefarmico.workout.intent.WorkoutScreenIntent.*
 import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
 
 class WorkoutScreenFragment :
@@ -36,25 +36,25 @@ class WorkoutScreenFragment :
         setHasOptionsMenu(true)
 
         when (params) {
-            is WorkoutScreenParams.NewExercise -> {
-                val data = params as WorkoutScreenParams.NewExercise
-                viewModel.onTriggerEvent(WorkoutScreenIntent.AddExercise(data.id))
+            is NewExercise -> {
+                val data = params as NewExercise
+                startEvent(AddExercise(data.id))
             }
             else -> {}
         }
     }
 
     override fun setUpViews() {
-        viewModel.onTriggerEvent(WorkoutScreenIntent.GetAll)
+        viewModel.onTriggerEvent(GetAll)
+
         binding.apply {
             listRecycler.adapter = adapter
+
             addExButton.setOnClickListener {
-                viewModel.onTriggerEvent(
-                    WorkoutScreenIntent.GoToCategoryScreen
-                )
+                startEvent(GoToCategoryScreen)
             }
             finishButton.setOnClickListener {
-                viewModel.onTriggerEvent(WorkoutScreenIntent.FinishWorkout)
+                startEvent(FinishWorkout)
             }
         }
 
@@ -63,14 +63,10 @@ class WorkoutScreenFragment :
                 initSetParameterDialog(it)
             }
             minusButtonCallback = {
-                viewModel.onTriggerEvent(
-                    WorkoutScreenIntent.DeleteLastSet(it)
-                )
+                startEvent(DeleteLastSet(it))
             }
             infoButtonCallback = {
-                viewModel.onTriggerEvent(
-                    WorkoutScreenIntent.GoToExerciseInfo(it)
-                )
+                startEvent(GoToExerciseInfo(it))
             }
         }
     }
@@ -84,9 +80,11 @@ class WorkoutScreenFragment :
                 }
                 is DataState.Error -> {
                     binding.state.showErrorState()
+                    adapter.items = listOf()
                 }
                 DataState.Loading -> {
                     binding.state.showLoadingState()
+                    adapter.items = listOf()
                 }
                 is DataState.Success -> {
                     adapter.items = dataState.data
@@ -94,17 +92,37 @@ class WorkoutScreenFragment :
                 }
             }
         }
+
+        viewModel.setParametersDialogLiveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                is DataState.Success -> {
+                    startEvent(
+                        ShowSetParametersDialog(
+                            parentFragmentManager,
+                            dataState.data.toInt(),
+                            this,
+                            TAG_DIALOG
+                        )
+                    )
+                }
+                else -> {}
+            }
+        }
     }
 
     override fun addSet(exerciseId: Int, reps: Int, weight: Float) {
-        viewModel.onTriggerEvent(
-            WorkoutScreenIntent.AddSetToExercise(exerciseId, reps, weight)
-        )
+        startEvent(AddSetToExercise(exerciseId, reps, weight))
     }
 
-    private fun initSetParameterDialog(exercisePosition: Int) {
-        SetParametersDialog(exercisePosition, this)
-            .show(childFragmentManager, "Set Setting")
+    private fun initSetParameterDialog(exerciseId: Int) {
+        startEvent(
+            ShowSetParametersDialog(
+                childFragmentManager,
+                exerciseId,
+                this,
+                TAG_DIALOG
+            )
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -114,21 +132,25 @@ class WorkoutScreenFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                Toast.makeText(requireContext(), "Select exercise", Toast.LENGTH_SHORT).show()
+                startEvent(ShowToast("Select exercise"))
                 true
             }
-            else -> { false }
+            else -> false
         }
     }
 
+    private fun startEvent(event: WorkoutScreenIntent) {
+        viewModel.onTriggerEvent(event)
+    }
     companion object {
         private const val KEY_PARAMS = "home_key"
+        private const val TAG_DIALOG = "Set Setting"
 
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {
                 when (data) {
-                    is WorkoutScreenParams.NewExercise -> putParcelable(KEY_PARAMS, data)
-                    is WorkoutScreenParams.Empty -> putParcelable(KEY_PARAMS, data)
+                    is NewExercise -> putParcelable(KEY_PARAMS, data)
+                    is Empty -> putParcelable(KEY_PARAMS, data)
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (
