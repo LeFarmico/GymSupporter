@@ -21,7 +21,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
 ) : WorkoutRecordsRepository {
 
     override fun getWorkoutWithExerciseAnsSets(workoutId: Int):
-        Observable<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
+        Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -76,7 +76,13 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     }
 
     override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>> {
-        TODO("Not yet implemented")
+        return dao.getWorkoutWithExerciseAnsSets(workoutId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map { data ->
+                dao.deleteWorkout(data.workout)
+                DataState.Success("Workout Deleted")
+            }
     }
 
     override fun updateWorkoutWithExAndSets(

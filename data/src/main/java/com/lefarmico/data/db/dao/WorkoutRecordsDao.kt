@@ -9,6 +9,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.lefarmico.data.db.entity.WorkoutRecordsData
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface WorkoutRecordsDao {
@@ -65,7 +66,7 @@ interface WorkoutRecordsDao {
 
     @Transaction
     @Query("SELECT * FROM workout_records WHERE workout_id = :workoutId")
-    fun getWorkoutWithExerciseAnsSets(workoutId: Int): Observable<WorkoutRecordsData.WorkoutWithExercisesAndSets>
+    fun getWorkoutWithExerciseAnsSets(workoutId: Int): Single<WorkoutRecordsData.WorkoutWithExercisesAndSets>
 
     @Transaction
     @Query("SELECT * FROM workout_records")

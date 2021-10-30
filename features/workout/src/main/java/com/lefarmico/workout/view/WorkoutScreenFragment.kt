@@ -2,13 +2,17 @@ package com.lefarmico.workout.view
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.lefarmico.core.BuildConfig
-import com.lefarmico.core.adapter.delegates.exerciseDelegates.CurrentExerciseAdapter
+import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.core.customView.RemoveActionBarCallback
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
+import com.lefarmico.core.entity.CurrentWorkoutViewData.*
+import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.params.WorkoutScreenParams.*
@@ -25,11 +29,16 @@ class WorkoutScreenFragment :
     ),
     SetSettingDialogCallback {
 
-    private val params: WorkoutScreenParams by lazy {
-        arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS) ?: throw (IllegalArgumentException())
-    }
-
     private val adapter = CurrentExerciseAdapter()
+
+    private var actionMode: ActionMode? = null
+    private var selectHandler: SelectItemsHandler<ExerciseWithSets>? = null
+    private var actionModeCallback: RemoveActionBarCallback? = null
+
+    private val params: WorkoutScreenParams by lazy {
+        arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS)
+            ?: throw (IllegalArgumentException())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +56,27 @@ class WorkoutScreenFragment :
     override fun setUpViews() {
         viewModel.onTriggerEvent(GetAll)
 
+        actionModeCallback = object : RemoveActionBarCallback() {
+            override fun selectAllButtonHandler() {
+                // TODO event
+                adapter.toggleSelectAll()
+            }
+
+            override fun removeButtonHandler() {
+                // TODO event
+                selectHandler?.onEachSelectedItemsAction()
+            }
+
+            override fun onDestroyHandler() {
+                // TODO event
+                adapter.toggleEditState()
+            }
+        }
+        selectHandler = object : SelectItemsHandler<ExerciseWithSets>(adapter) {
+            override fun selectedItemAction(item: ExerciseWithSets) {
+                viewModel.onTriggerEvent(DeleteExercise(item.exercise.id))
+            }
+        }
         binding.apply {
             listRecycler.adapter = adapter
 
@@ -132,7 +162,8 @@ class WorkoutScreenFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                startEvent(ShowToast("Select exercise"))
+                adapter.toggleEditState()
+                actionMode = requireActivity().startActionMode(actionModeCallback)
                 true
             }
             else -> false

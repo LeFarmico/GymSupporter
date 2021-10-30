@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single
 interface WorkoutRecordsRepository : BaseRepository {
 
     fun getWorkoutWithExerciseAnsSets(workoutId: Int):
-        Observable<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
+        Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
 
     fun getWorkoutsWithExerciseAnsSets():
         Observable<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>

@@ -9,15 +9,10 @@ import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    lateinit var onAddSet: (Int) -> Unit
-    lateinit var onDeleteSet: (Int) -> Unit
-    lateinit var onDragButton: () -> Unit
-
-    private val oldList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
     var items = listOf<WorkoutRecordsViewData.ViewDataItemType>()
         set(value) {
             field = value
-            notifyDataSetChanged()
+            notifyItemRangeChanged(0, field.size)
         }
 
     class EditExerciseViewHolder(
@@ -25,8 +20,6 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     ) : RecyclerView.ViewHolder(itemEditRecordBinding.root) {
 
         private val exerciseTitle = itemEditRecordBinding.exerciseTitle
-//        val addSetButton = itemEditRecordBinding.plusButton
-//        val deleteSetButton = itemEditRecordBinding.minusButton
 
         fun bind(title: String) {
             exerciseTitle.text = title
@@ -96,8 +89,8 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return try {
-            (items as WorkoutRecordsViewData.ViewDataItemType).getItemType()
-        } catch (e: TypeCastException) {
+            (items[position]).getItemType()
+        } catch (e: ClassCastException) {
             throw ClassCastException("items must resolve ViewDataItemType interface")
         }
     }

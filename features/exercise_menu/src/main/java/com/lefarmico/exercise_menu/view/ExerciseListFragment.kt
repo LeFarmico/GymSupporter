@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentExerciseListBinding
 import com.lefarmico.exercise_menu.intent.ExerciseListIntent
@@ -23,9 +23,9 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
-    private val onItemClickListener: (LibraryDto) -> Unit =
+    private val onItemClickListener: (LibraryViewData) -> Unit =
         { item ->
-            item as LibraryDto.Exercise
+            item as LibraryViewData.Exercise
             if (params.isFromWorkoutScreen) {
                 viewModel.onTriggerEvent(
                     ExerciseListIntent.AddExerciseToWorkoutScreen(item.id)

@@ -2,7 +2,8 @@ package com.lefarmico.home.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.core.mapper.toViewDataWorkoutWithExAndSets
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.intent.HomeIntent
@@ -19,12 +20,24 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     @Inject
     lateinit var router: Router
 
-    val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>()
+    val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>>()
 
     private fun getWorkoutRecords() {
         repo.getWorkoutsWithExerciseAnsSets()
             .subscribe { dataState ->
-                workoutRecordsLiveData.postValue(dataState)
+                when (dataState) {
+                    is DataState.Success -> {
+                        val data = dataState.data.toViewDataWorkoutWithExAndSets()
+                        val success = DataState.Success(data)
+                        workoutRecordsLiveData.postValue(success)
+                    }
+                    else -> {
+                        workoutRecordsLiveData.postValue(
+                            dataState
+                                as DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>
+                        )
+                    }
+                }
             }
     }
 
@@ -35,18 +48,27 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
         )
     }
 
-    private fun editWorkout(workoutId: Int) {
+    private fun detailsWorkout(workoutId: Int) {
         router.navigate(
             screen = Screen.EDIT_WORKOUT_RECORD_SCREEN,
             data = RecordMenuParams.WorkoutRecord(workoutId)
         )
     }
 
+    private fun removeWorkout(workoutId: Int) {
+        repo.deleteWorkoutWithExAndSets(workoutId)
+            .doAfterSuccess {
+                getWorkoutRecords()
+            }
+            .subscribe()
+    }
+
     override fun onTriggerEvent(eventType: HomeIntent) {
         when (eventType) {
             HomeIntent.GetWorkoutRecords -> getWorkoutRecords()
             HomeIntent.StartWorkoutScreen -> startWorkoutScreen()
-            is HomeIntent.EditWorkout -> editWorkout(eventType.workoutId)
+            is HomeIntent.DetailsWorkout -> detailsWorkout(eventType.workoutId)
+            is HomeIntent.RemoveWorkout -> removeWorkout(eventType.workoutId)
         }
     }
 }

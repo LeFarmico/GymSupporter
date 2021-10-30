@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.lefarmico.core.databinding.ItemLibraryListBinding
-import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.core.entity.LibraryViewData
 
 class LibraryItemDelegate : AbsListItemAdapterDelegate<
-    LibraryDto,
-    LibraryDto,
+    LibraryViewData,
+    LibraryViewData,
     LibraryItemDelegate.MenuItemViewHolder
     >() {
 
@@ -19,11 +19,11 @@ class LibraryItemDelegate : AbsListItemAdapterDelegate<
 
         private val exerciseText = itemLibraryListBinding.text
 
-        fun bind(item: LibraryDto) {
+        fun bind(item: LibraryViewData) {
             when (item) {
-                is LibraryDto.Category -> exerciseText.text = item.title
-                is LibraryDto.SubCategory -> exerciseText.text = item.title
-                is LibraryDto.Exercise -> {
+                is LibraryViewData.Category -> exerciseText.text = item.title
+                is LibraryViewData.SubCategory -> exerciseText.text = item.title
+                is LibraryViewData.Exercise -> {
                     exerciseText.text = item.title
                     exerciseText.setCompoundDrawables(null, null, null, null)
                 }
@@ -32,8 +32,8 @@ class LibraryItemDelegate : AbsListItemAdapterDelegate<
     }
 
     override fun isForViewType(
-        item: LibraryDto,
-        items: MutableList<LibraryDto>,
+        item: LibraryViewData,
+        items: MutableList<LibraryViewData>,
         position: Int
     ): Boolean {
         return true
@@ -48,7 +48,7 @@ class LibraryItemDelegate : AbsListItemAdapterDelegate<
     }
 
     override fun onBindViewHolder(
-        item: LibraryDto,
+        item: LibraryViewData,
         holder: MenuItemViewHolder,
         payloads: MutableList<Any>
     ) {

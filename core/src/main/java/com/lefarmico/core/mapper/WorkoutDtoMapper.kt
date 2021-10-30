@@ -24,15 +24,15 @@ fun WorkoutRecordsDto.Workout.toViewData() = WorkoutRecordsViewData.Workout(
     date = date
 )
 
-fun List<WorkoutRecordsDto.Set>.toSetListViewData() = this.map { it.toViewData() }
+fun List<WorkoutRecordsDto.Set>.toViewDataSet() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.Exercise>.toExerciseListViewData() = this.map { it.toViewData() }
+fun List<WorkoutRecordsDto.Exercise>.toViewDataExercise() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.Workout>.toWorkoutListViewData() = this.map { it.toViewData() }
+fun List<WorkoutRecordsDto.Workout>.toViewDataWorkout() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.ExerciseWithSets>.toExerciseWithSetsListViewData() = this.map { it.toViewData() }
+fun List<WorkoutRecordsDto.ExerciseWithSets>.toViewDataExWithSets() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toWorkoutWithExercisesAndSetsViewData() =
+fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toViewDataWorkoutWithExAndSets() =
     this.map { it.toViewData() }
 
 fun WorkoutRecordsDto.MeasureType.toViewData(): WorkoutRecordsViewData.MeasureType {
@@ -45,10 +45,10 @@ fun WorkoutRecordsDto.MeasureType.toViewData(): WorkoutRecordsViewData.MeasureTy
 
 fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toViewData() = WorkoutRecordsViewData.WorkoutWithExercisesAndSets(
     workout = workout.toViewData(),
-    exerciseWithSetsList = exerciseWithSetsList.toExerciseWithSetsListViewData()
+    exerciseWithSetsList = exerciseWithSetsList.toViewDataExWithSets()
 )
 
 fun WorkoutRecordsDto.ExerciseWithSets.toViewData() = WorkoutRecordsViewData.ExerciseWithSets(
     exercise = exercise.toViewData(),
-    setList = setList.toSetListViewData()
+    setList = setList.toViewDataSet()
 )

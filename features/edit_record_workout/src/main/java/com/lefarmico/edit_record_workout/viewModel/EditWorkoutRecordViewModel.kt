@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.mapper.toViewData
-import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.edit_record_workout.intent.EditWorkoutRecordIntent

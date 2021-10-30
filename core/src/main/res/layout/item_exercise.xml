@@ -1,20 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
-    <include layout="@layout/item_exercise_title"
-        android:id="@+id/exercise_title"
+    <ToggleButton
+        android:id="@+id/edit_button"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/selector_edit_button"
+        android:textOff=""
+        android:textOn=""
+        android:backgroundTint="?attr/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/exercise_name"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/exercise_name"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/app_name"
+        style="@style/TextStyle.SubHead"
+        android:layout_marginHorizontal="16dp"
+        android:paddingBottom="4dp"
+        android:gravity="bottom"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exercise_list"
+        app:layout_constraintStart_toEndOf="@id/edit_button"
         />
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/exercise_list"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/shape_button_variant"
+        app:layout_constraintTop_toBottomOf="@id/exercise_name"
+        app:layout_constraintStart_toEndOf="@id/edit_button"
+        app:layout_constraintEnd_toEndOf="parent"
         >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercise_item"
@@ -32,4 +62,4 @@
             />
     </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>

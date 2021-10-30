@@ -22,8 +22,7 @@ class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWork
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
-    private val adapter = EditRecordAdapter().apply {
-    }
+    private val adapter = EditRecordAdapter()
 
     override fun setUpViews() {
         pushIntent(EditWorkoutRecordIntent.GetWorkout(params.workoutId))
@@ -42,6 +41,7 @@ class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWork
                 is DataState.Success -> {
                     binding.workoutDate.text = dataState.data.workout.date
                     val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
+                    // TODO : Избавиться от логики
                     val exerciseList = dataState.data.exerciseWithSetsList
                     for (i in exerciseList.indices) {
                         itemList.add(exerciseList[i].exercise)

@@ -1,16 +1,23 @@
 package com.lefarmico.core.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.diffUtil.WorkoutRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemNoteWorkoutBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.core.selector.SelectItemsHandler
 
-class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>() {
+class WorkoutRecordsAdapter :
+    RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>(),
+    SelectItemsHandler.Callback<WorkoutRecordsViewData.WorkoutWithExercisesAndSets> {
 
-    lateinit var editButtonCallback: (WorkoutRecordsViewData.Workout) -> Unit
+    private var toggleButtonVisibility = View.GONE
+    private val selectedItemsSet = mutableSetOf<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>()
+
+    lateinit var onEditButtonAction: (WorkoutRecordsViewData.Workout) -> Unit
 
     var items = listOf<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>()
         set(value) {
@@ -28,7 +35,8 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
         private val date = itemNoteWorkoutBinding.workoutDate
         private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
 
-        val editButton = itemNoteWorkoutBinding.edit
+        val selectToggleButton = itemNoteWorkoutBinding.editButton
+        val detailsButton = itemNoteWorkoutBinding.detailsButton
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
             date.text = noteWorkout.date
@@ -47,17 +55,79 @@ class WorkoutRecordsAdapter : RecyclerView.Adapter<WorkoutRecordsAdapter.Workout
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
+        // TODO переместить во VIewHolder
         val adapter = ExerciseRecordsAdapter()
-        adapter.setExercise(items[position].exerciseWithSetsList)
+        adapter.items = items[position].exerciseWithSetsList
+
         holder.bind(items[position].workout)
         holder.bindAdapter(adapter)
 
-        holder.editButton.setOnClickListener {
-            editButtonCallback(items[position].workout)
+        holder.detailsButton.setOnClickListener {
+            onEditButtonAction(items[position].workout)
+        }
+        holder.selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
+            when (isChecked) {
+                true -> selectedItemsSet.add(items[position])
+                false -> selectedItemsSet.remove(items[position])
+            }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: WorkoutNoteViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isNotEmpty()) {
+            when (payloads.last()) {
+                EDIT_STATE -> {
+                    holder.selectToggleButton.visibility = toggleButtonVisibility
+                    if (toggleButtonVisibility == View.GONE) {
+                        holder.selectToggleButton.isChecked = false
+                    }
+                }
+                SELECT_ALL -> holder.selectToggleButton.isChecked = true
+                UNSELECT_ALL -> holder.selectToggleButton.isChecked = false
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
         }
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
+
+    fun toggleEditState() {
+        toggleButtonVisibility = when (toggleButtonVisibility) {
+            View.GONE -> View.VISIBLE
+            View.VISIBLE -> View.GONE
+            else -> throw (
+                IllegalArgumentException(
+                    "toggleButtonVisibility should be " +
+                        "View.VISIBLE or View.GONE"
+                )
+                )
+        }
+        notifyItemRangeChanged(0, items.size, EDIT_STATE)
+    }
+
+    fun toggleSelectAll() {
+        selectedItemsSet.addAll(items)
+        notifyItemRangeChanged(0, items.size, SELECT_ALL)
+    }
+
+    fun toggleUnselectAll() {
+        selectedItemsSet.clear()
+        notifyItemRangeChanged(0, items.size, UNSELECT_ALL)
+    }
+
+    companion object {
+        const val EDIT_STATE = "edit_state"
+        const val SELECT_ALL = "select_all"
+        const val UNSELECT_ALL = "unselect_all"
+    }
+
+    override fun getSelectedItems(): Set<WorkoutRecordsViewData.WorkoutWithExercisesAndSets> =
+        selectedItemsSet
 }

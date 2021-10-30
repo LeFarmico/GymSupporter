@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.dialog.setParameter.SetParametersDialog
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
+import com.lefarmico.core.entity.CurrentWorkoutViewData
+import com.lefarmico.core.mapper.toViewDataExWithSets
 import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
@@ -31,7 +33,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     // TODO : убрать локальные переменные
     private var setId = 1
 
-    val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>>()
+    val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
     val setParametersDialogLiveData = SingleLiveEvent<DataState<Long>>()
 
     private fun addExercise(model: AddExercise) {
@@ -56,27 +58,28 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }
     }
 
-    private fun deleteExercise(model: DeleteExercise) {
-        repo.getExerciseWithSets(model.id)
-            .subscribe { dataState ->
-                when (dataState) {
-                    is DataState.Success -> {
-                        repo.deleteExercise(dataState.data.exercise.id)
-                            .doOnSuccess {
-                                getAll()
-                            }
-                            .subscribe()
-                        getAll()
-                    }
-                    else -> {}
-                }
+    private fun deleteExercise(exerciseId: Int) {
+        repo.deleteExercise(exerciseId)
+            .doAfterSuccess {
+                getAll()
             }
+            .subscribe()
     }
 
     private fun getAll() {
         repo.getExercisesWithSets()
             .subscribe { dataState ->
-                exerciseLiveData.postValue(dataState)
+                when (dataState) {
+                    is DataState.Success -> {
+                        val success = DataState.Success(dataState.data.toViewDataExWithSets())
+                        exerciseLiveData.postValue(success)
+                    }
+                    else -> {
+                        exerciseLiveData.postValue(
+                            dataState as DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>
+                        )
+                    }
+                }
             }
     }
 
@@ -96,7 +99,9 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                             .subscribe()
                     }
                     else -> {
-                        exerciseLiveData.postValue(dataState)
+                        exerciseLiveData.postValue(
+                            dataState as DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>
+                        )
                     }
                 }
             }
@@ -174,7 +179,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         when (eventType) {
             is AddExercise -> addExercise(eventType)
 
-            is DeleteExercise -> deleteExercise(eventType)
+            is DeleteExercise -> deleteExercise(eventType.id)
 
             GetAll -> getAll()
 
