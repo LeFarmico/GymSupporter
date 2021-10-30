@@ -2,4 +2,5 @@
 <resources>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
 </resources>

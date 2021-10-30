@@ -12,6 +12,7 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_book_24.xml" value="0.2703125" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_circle_unchecked_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_done_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_drag_handle_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_horizontal_rule_24.xml" value="0.2703125" />
@@ -21,9 +22,11 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_remove_circle_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_baseline_remove_circle_outline_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_outline_about_24.xml" value="0.2703125" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ic_sharp_check_circle_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/item_select.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/menu_selector.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/out_line_item_shape.xml" value="0.264" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/selector_edit_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_button_outline.xml" value="0.24722222222222223" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_outline_gradient.xml" value="0.2703125" />
@@ -39,15 +42,16 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_set.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_set_edit.xml" value="0.264" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_title.xml" value="0.25025641025641027" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_title.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_note_exercise.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_note_workout.xml" value="0.4" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_socket_exercise_preview.xml" value="0.264" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_socket_exercise_preview.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/state_empty.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/state_screen_loading.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/state_view.xml" value="0.1" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/menu/app_bar_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/menu/app_bar_menu.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/menu/bottom_main_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/menu/delete_action_menu.xml" value="0.536" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/create_new_exercise/src/main/res/layout/fragment_add_exercise.xml" value="0.1" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/create_new_exercise/src/main/res/layout/fragment_create_new_exercise.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/create_new_exercise/src/main/res/layout/fragment_new_exercise.xml" value="0.25416666666666665" />

@@ -1,11 +1,11 @@
 package com.lefarmico.core.adapter.diffUtil
 
 import androidx.recyclerview.widget.DiffUtil
-import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.core.entity.LibraryViewData
 
 class ExerciseLibraryDiffCallback(
-    private val oldList: List<LibraryDto>,
-    private val newList: List<LibraryDto>
+    private val oldList: List<LibraryViewData>,
+    private val newList: List<LibraryViewData>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size
@@ -17,28 +17,28 @@ class ExerciseLibraryDiffCallback(
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         when (oldList[oldItemPosition]) {
-            is LibraryDto.Exercise -> {
-                return if (newList[newItemPosition] is LibraryDto.Exercise) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.Exercise
-                    val newItem = newList[newItemPosition] as LibraryDto.Exercise
+            is LibraryViewData.Exercise -> {
+                return if (newList[newItemPosition] is LibraryViewData.Exercise) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.Exercise
+                    val newItem = newList[newItemPosition] as LibraryViewData.Exercise
                     oldItem.hashCode() == newItem.hashCode()
                 } else {
                     false
                 }
             }
-            is LibraryDto.Category -> {
-                return if (newList[newItemPosition] is LibraryDto.Category) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.Category
-                    val newItem = newList[newItemPosition] as LibraryDto.Category
+            is LibraryViewData.Category -> {
+                return if (newList[newItemPosition] is LibraryViewData.Category) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.Category
+                    val newItem = newList[newItemPosition] as LibraryViewData.Category
                     oldItem.hashCode() == newItem.hashCode()
                 } else {
                     false
                 }
             }
-            is LibraryDto.SubCategory -> {
-                return if (newList[newItemPosition] is LibraryDto.SubCategory) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.SubCategory
-                    val newItem = newList[newItemPosition] as LibraryDto.SubCategory
+            is LibraryViewData.SubCategory -> {
+                return if (newList[newItemPosition] is LibraryViewData.SubCategory) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.SubCategory
+                    val newItem = newList[newItemPosition] as LibraryViewData.SubCategory
                     oldItem.hashCode() == newItem.hashCode()
                 } else {
                     false
@@ -49,28 +49,28 @@ class ExerciseLibraryDiffCallback(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         when (oldList[oldItemPosition]) {
-            is LibraryDto.Exercise -> {
-                return if (newList[newItemPosition] is LibraryDto.Exercise) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.Exercise
-                    val newItem = newList[newItemPosition] as LibraryDto.Exercise
+            is LibraryViewData.Exercise -> {
+                return if (newList[newItemPosition] is LibraryViewData.Exercise) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.Exercise
+                    val newItem = newList[newItemPosition] as LibraryViewData.Exercise
                     oldItem == newItem
                 } else {
                     false
                 }
             }
-            is LibraryDto.SubCategory -> {
-                return if (newList[newItemPosition] is LibraryDto.SubCategory) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.SubCategory
-                    val newItem = newList[newItemPosition] as LibraryDto.SubCategory
+            is LibraryViewData.SubCategory -> {
+                return if (newList[newItemPosition] is LibraryViewData.SubCategory) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.SubCategory
+                    val newItem = newList[newItemPosition] as LibraryViewData.SubCategory
                     oldItem == newItem
                 } else {
                     false
                 }
             }
-            is LibraryDto.Category -> {
-                return if (newList[newItemPosition] is LibraryDto.Category) {
-                    val oldItem = oldList[oldItemPosition] as LibraryDto.Category
-                    val newItem = newList[newItemPosition] as LibraryDto.Category
+            is LibraryViewData.Category -> {
+                return if (newList[newItemPosition] is LibraryViewData.Category) {
+                    val oldItem = oldList[oldItemPosition] as LibraryViewData.Category
+                    val newItem = newList[newItemPosition] as LibraryViewData.Category
                     oldItem == newItem
                 } else {
                     false

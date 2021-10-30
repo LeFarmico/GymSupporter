@@ -8,18 +8,18 @@ import io.reactivex.rxjava3.core.Single
 interface WorkoutRecordsRepository : BaseRepository {
 
     fun getWorkoutWithExerciseAnsSets(workoutId: Int):
-        Observable<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
+        Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
 
     fun getWorkoutsWithExerciseAnsSets():
         Observable<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>
 
     fun addWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<Boolean>>
+    ): Single<DataState<String>>
 
-    fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Boolean>>
+    fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>>
 
     fun updateWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<Boolean>>
+    ): Single<DataState<String>>
 }

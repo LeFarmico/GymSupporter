@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.diffUtil.CurrentSetDiffCallback
 import com.lefarmico.core.databinding.ItemExerciseSetBinding
-import com.lefarmico.domain.entity.CurrentWorkoutDto
+import com.lefarmico.core.entity.CurrentWorkoutViewData
 
 class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
 
-    var items = mutableListOf<CurrentWorkoutDto.Set>()
+    var items = listOf<CurrentWorkoutViewData.Set>()
         set(value) {
             val oldField = field
             field = value
@@ -31,7 +31,7 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
 
         private val layout = itemExerciseSetBinding.root
 
-        fun bind(item: CurrentWorkoutDto.Set) {
+        fun bind(item: CurrentWorkoutViewData.Set) {
             setNumber.text = item.setNumber.toString()
             weights.text = item.weight.toString()
             reps.text = item.reps.toString()
@@ -41,10 +41,6 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         }
     }
 
-    fun addItem(item: CurrentWorkoutDto.Set) {
-        items.add(item)
-        notifyItemInserted(itemCount + 1)
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
         return SetViewHolder(
             ItemExerciseSetBinding.inflate(

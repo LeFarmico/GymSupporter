@@ -7,9 +7,9 @@ class CurrentWorkoutDataBase {
     val exerciseWithSetsList = mutableListOf<CurrentWorkoutData.ExerciseWithSets>()
     var exerciseId = 1
 
-    fun insertExerciseWithSets(exercise: CurrentWorkoutData.ExerciseWithSets) {
+    fun insertExerciseWithSets(exercise: CurrentWorkoutData.ExerciseWithSets): Long {
         val currentExercise = CurrentWorkoutData.Exercise.Builder()
-            .setId(exerciseId++)
+            .setId(exerciseId)
             .setTitle(exercise.exercise.title)
             .setLibraryId(exercise.exercise.libraryId)
             .build()
@@ -20,6 +20,7 @@ class CurrentWorkoutDataBase {
                 exercise.setList
             )
         )
+        return exerciseId++.toLong()
     }
     companion object {
         const val LOADING = 2L

@@ -4,8 +4,8 @@ import com.lefarmico.data.db.CurrentWorkoutDataBase
 import com.lefarmico.data.db.entity.CurrentWorkoutData
 import com.lefarmico.data.mapper.toData
 import com.lefarmico.data.mapper.toDto
-import com.lefarmico.data.mapper.toExerciseWithSetsDto
-import com.lefarmico.data.mapper.toSetDto
+import com.lefarmico.data.mapper.toDtoExWithSets
+import com.lefarmico.data.mapper.toDtoSet
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.utils.DataState
@@ -24,7 +24,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
         val data = dataBase.exerciseWithSetsList
         return Single.create<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
             if (data.isNotEmpty()) {
-                it.onSuccess(DataState.Success(data.toExerciseWithSetsDto()))
+                it.onSuccess(DataState.Success(data.toDtoExWithSets()))
             } else {
                 it.onSuccess(DataState.Empty)
             }
@@ -41,7 +41,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
         return Single.create<DataState<List<CurrentWorkoutDto.Set>>> {
             if (exercise != null) {
                 it.onSuccess(
-                    DataState.Success(exercise.setList.toSetDto())
+                    DataState.Success(exercise.setList.toDtoSet())
                         as DataState<List<CurrentWorkoutDto.Set>>
                 )
             } else {
@@ -57,7 +57,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
 
     override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>> {
         return Single.create<DataState<Long>> {
-            dataBase.insertExerciseWithSets(
+            val exerciseId = dataBase.insertExerciseWithSets(
                 CurrentWorkoutData.ExerciseWithSets(
                     CurrentWorkoutData.Exercise.Builder()
                         .setTitle(exercise.title)
@@ -65,7 +65,7 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                         .build()
                 )
             )
-            it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+            it.onSuccess(DataState.Success(exerciseId))
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

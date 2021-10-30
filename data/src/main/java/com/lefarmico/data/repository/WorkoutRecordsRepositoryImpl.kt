@@ -10,7 +10,6 @@ import com.lefarmico.data.utils.setWorkoutId
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -22,10 +21,10 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
 ) : WorkoutRecordsRepository {
 
     override fun getWorkoutWithExerciseAnsSets(workoutId: Int):
-        Observable<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
+        Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 DataState.Success(data.toDto())
                     as DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>
@@ -39,7 +38,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
         Observable<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSets()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 DataState.Success(data.toWorkoutWithExercisesAndSetsDto())
                     as DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
@@ -52,8 +51,8 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
 
     override fun addWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<Boolean>> {
-        Single.create<Long> {
+    ): Single<DataState<String>> {
+        return Single.create<Long> {
             it.onSuccess(dao.insertWorkout(workoutWithExercisesAndSets.workout.toData()))
         }
             .subscribeOn(Schedulers.io())
@@ -61,25 +60,34 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
             .onErrorReturn {
                 throw (it)
             }
-            .subscribe { workoutId ->
-                val exerciseList = workoutWithExercisesAndSets.exerciseWithSetsList.setWorkoutId(workoutId.toInt())
+            .map { workoutId ->
+                val exerciseList = workoutWithExercisesAndSets
+                    .exerciseWithSetsList
+                    .setWorkoutId(workoutId.toInt())
+
                 for (i in exerciseList.indices) {
                     val exercise = exerciseList[i].exercise.toData()
                     val exerciseId = dao.insertExercise(exercise)
                     val setList = exerciseList[i].setList.setExerciseId(exerciseId.toInt())
                     dao.insertSets(setList.toSetListData())
                 }
+                DataState.Success("New workout successfully added.")
             }
-        return Single.create<DataState<Boolean>> {
-            it.onSuccess(DataState.Success(true))
-        }
     }
 
-    override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Boolean>> {
-        TODO("Not yet implemented")
+    override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>> {
+        return dao.getWorkoutWithExerciseAnsSets(workoutId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map { data ->
+                dao.deleteWorkout(data.workout)
+                DataState.Success("Workout Deleted")
+            }
     }
 
-    override fun updateWorkoutWithExAndSets(workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets): Single<DataState<Boolean>> {
+    override fun updateWorkoutWithExAndSets(
+        workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
+    ): Single<DataState<String>> {
         TODO("Not yet implemented")
     }
 }

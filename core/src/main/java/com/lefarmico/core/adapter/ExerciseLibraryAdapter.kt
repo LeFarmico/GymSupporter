@@ -5,16 +5,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.lefarmico.core.adapter.delegates.exerciseLibraryDelegates.LibraryItemDelegate
 import com.lefarmico.core.adapter.diffUtil.ExerciseLibraryDiffCallback
-import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.core.entity.LibraryViewData
 
-class ExerciseLibraryAdapter : ListDelegationAdapter<List<LibraryDto>>() {
+class ExerciseLibraryAdapter : ListDelegationAdapter<List<LibraryViewData>>() {
 
-    lateinit var onClick: (LibraryDto) -> Unit
+    lateinit var onClick: (LibraryViewData) -> Unit
     init {
         delegatesManager.addDelegate(LibraryItemDelegate())
     }
 
-    override fun setItems(items: List<LibraryDto>?) {
+    override fun setItems(items: List<LibraryViewData>?) {
         val oldItems = super.items ?: listOf()
         super.setItems(items)
         val diffCallback = ExerciseLibraryDiffCallback(oldItems, super.items)

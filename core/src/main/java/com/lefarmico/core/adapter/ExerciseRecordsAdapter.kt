@@ -9,6 +9,10 @@ import com.lefarmico.core.entity.WorkoutRecordsViewData
 class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.WorkoutNoteViewHolder>() {
 
     var items = listOf<WorkoutRecordsViewData.ExerciseWithSets>()
+        set(value) {
+            field = value
+            notifyItemRangeChanged(0, items.size)
+        }
 
     class WorkoutNoteViewHolder(
         itemNoteExerciseBinding: ItemNoteExerciseBinding
@@ -27,17 +31,6 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
         fun setExerciseNumber(number: Int) {
             exerciseNumber.text = number.toString()
         }
-    }
-
-    fun setExercise(
-        exerciseWithSetsList: List<WorkoutRecordsViewData.ExerciseWithSets>
-    ) {
-//        val oldList = items
-        items = exerciseWithSetsList
-        notifyDataSetChanged()
-//        val diffCallback = ExerciseRecordsDiffCallback(oldList, items)
-//        val diffResult = DiffUtil.calculateDiff(diffCallback)
-//        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {

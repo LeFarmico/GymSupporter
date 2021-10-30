@@ -8,5 +8,7 @@ sealed class HomeIntent : BaseIntent() {
 
     object StartWorkoutScreen : HomeIntent()
 
-    data class EditWorkout(val workoutId: Int) : HomeIntent()
+    data class DetailsWorkout(val workoutId: Int) : HomeIntent()
+
+    data class RemoveWorkout(val workoutId: Int) : HomeIntent()
 }

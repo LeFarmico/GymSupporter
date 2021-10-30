@@ -2,6 +2,8 @@ package com.lefarmico.exercise_menu.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.entity.LibraryViewData
+import com.lefarmico.core.mapper.toViewDataSubCategory
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryIntent>() {
 
-    val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryDto.SubCategory>>>()
+    val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryViewData.SubCategory>>>()
 
     @Inject
     lateinit var repo: LibraryRepository
@@ -23,8 +25,18 @@ class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryInte
 
     fun getSubCategories(categoryId: Int) {
         repo.getSubCategories(categoryId)
-            .subscribe {
-                subCategoriesLiveData.postValue(it)
+            .subscribe { dataState ->
+                when (dataState) {
+                    is DataState.Success -> {
+                        val success = DataState.Success(dataState.data.toViewDataSubCategory())
+                        subCategoriesLiveData.postValue(success)
+                    }
+                    else -> {
+                        subCategoriesLiveData.postValue(
+                            dataState as DataState<List<LibraryViewData.SubCategory>>
+                        )
+                    }
+                }
             }
     }
 

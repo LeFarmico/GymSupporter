@@ -1,17 +1,26 @@
 package com.lefarmico.workout.viewModel
 
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.dialog.setParameter.SetParametersDialog
+import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
+import com.lefarmico.core.entity.CurrentWorkoutViewData
+import com.lefarmico.core.mapper.toViewDataExWithSets
+import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.extensions.toRecordsDto
 import com.lefarmico.workout.intent.WorkoutScreenIntent
+import com.lefarmico.workout.intent.WorkoutScreenIntent.*
 import javax.inject.Inject
 
 class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreenIntent>() {
@@ -22,12 +31,12 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     @Inject lateinit var router: Router
 
     // TODO : убрать локальные переменные
-    private var exerciseIds = 1
     private var setId = 1
 
-    val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>>()
+    val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
+    val setParametersDialogLiveData = SingleLiveEvent<DataState<Long>>()
 
-    private fun addExercise(model: WorkoutScreenIntent.AddExercise) {
+    private fun addExercise(model: AddExercise) {
         libraryRepository.getExercise(model.id)
             .subscribe { dataState ->
                 when (dataState) {
@@ -37,37 +46,40 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                             .setLibraryId(model.id)
                             .build()
                         repo.addExercise(exercise)
-                            .doOnSuccess {
+                            .doAfterSuccess {
                                 getAll()
                             }
-                            .subscribe()
+                            .subscribe { dataStateId ->
+                                setParametersDialogLiveData.postValue(dataStateId)
+                            }
                     }
                     else -> {}
                 }
             }
     }
 
-    private fun deleteExercise(model: WorkoutScreenIntent.DeleteExercise) {
-        repo.getExerciseWithSets(model.id)
-            .subscribe { dataState ->
-                when (dataState) {
-                    is DataState.Success -> {
-                        repo.deleteExercise(dataState.data.exercise.id)
-                            .doOnSuccess {
-                                getAll()
-                            }
-                            .subscribe()
-                        getAll()
-                    }
-                    else -> {}
-                }
+    private fun deleteExercise(exerciseId: Int) {
+        repo.deleteExercise(exerciseId)
+            .doAfterSuccess {
+                getAll()
             }
+            .subscribe()
     }
 
     private fun getAll() {
         repo.getExercisesWithSets()
             .subscribe { dataState ->
-                exerciseLiveData.postValue(dataState)
+                when (dataState) {
+                    is DataState.Success -> {
+                        val success = DataState.Success(dataState.data.toViewDataExWithSets())
+                        exerciseLiveData.postValue(success)
+                    }
+                    else -> {
+                        exerciseLiveData.postValue(
+                            dataState as DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>
+                        )
+                    }
+                }
             }
     }
 
@@ -75,6 +87,9 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         repo.getExercisesWithSets()
             .doAfterSuccess {
                 repo.clearCash()
+                onTriggerEvent(
+                    ShowToast("Workout successfully saved.")
+                )
             }
             .subscribe { dataState ->
                 when (dataState) {
@@ -84,7 +99,9 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                             .subscribe()
                     }
                     else -> {
-                        exerciseLiveData.postValue(dataState)
+                        exerciseLiveData.postValue(
+                            dataState as DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>
+                        )
                     }
                 }
             }
@@ -135,9 +152,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     private fun finishWorkout() {
         saveWorkout()
-        router.navigate(
-            screen = Screen.HOME_SCREEN
-        )
+        router.navigate(Screen.HOME_SCREEN)
     }
 
     private fun goToExerciseInfo(libraryId: Int) {
@@ -146,26 +161,49 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             data = LibraryParams.Exercise(libraryId)
         )
     }
+
+    private fun showToast(text: String) {
+        router.show(Notification.TOAST, ToastBarParams(text))
+    }
+
+    private fun initSetParameterDialog(
+        fragmentManager: FragmentManager,
+        exerciseId: Int,
+        callback: SetSettingDialogCallback,
+        tag: String
+    ) {
+        SetParametersDialog(exerciseId, callback).show(fragmentManager, tag)
+    }
+
     override fun onTriggerEvent(eventType: WorkoutScreenIntent) {
         when (eventType) {
-            is WorkoutScreenIntent.AddExercise -> addExercise(eventType)
+            is AddExercise -> addExercise(eventType)
 
-            is WorkoutScreenIntent.DeleteExercise -> deleteExercise(eventType)
+            is DeleteExercise -> deleteExercise(eventType.id)
 
-            WorkoutScreenIntent.GetAll -> getAll()
+            GetAll -> getAll()
 
-            is WorkoutScreenIntent.AddSetToExercise -> addSetToExercise(
+            is AddSetToExercise -> addSetToExercise(
                 eventType.exerciseId,
                 eventType.reps,
                 eventType.weight
             )
-            is WorkoutScreenIntent.DeleteLastSet -> deleteLastSet(eventType.exerciseId)
+            is DeleteLastSet -> deleteLastSet(eventType.exerciseId)
 
-            WorkoutScreenIntent.GoToCategoryScreen -> goToCategoryScreen()
+            GoToCategoryScreen -> goToCategoryScreen()
 
-            WorkoutScreenIntent.FinishWorkout -> finishWorkout()
+            FinishWorkout -> finishWorkout()
 
-            is WorkoutScreenIntent.GoToExerciseInfo -> goToExerciseInfo(eventType.libraryId)
+            is GoToExerciseInfo -> goToExerciseInfo(eventType.libraryId)
+
+            is ShowToast -> showToast(eventType.text)
+
+            is ShowSetParametersDialog -> initSetParameterDialog(
+                eventType.fragmentManager,
+                eventType.exerciseId,
+                eventType.callback,
+                eventType.tag
+            )
         }
     }
 }

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentCategoriesBinding
 import com.lefarmico.exercise_menu.intent.CategoryListIntent
@@ -25,7 +25,7 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
 
     private val adapter = ExerciseLibraryAdapter().apply {
         onClick = { item ->
-            item as LibraryDto.Category
+            item as LibraryViewData.Category
             viewModel.onTriggerEvent(
                 CategoryListIntent.GoToSubcategoryScreen(
                     item.id,

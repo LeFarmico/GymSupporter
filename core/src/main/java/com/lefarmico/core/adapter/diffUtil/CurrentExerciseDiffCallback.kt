@@ -1,11 +1,13 @@
 package com.lefarmico.core.adapter.diffUtil
 
+import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
-import com.lefarmico.domain.entity.CurrentWorkoutDto
+import com.lefarmico.core.adapter.CurrentExerciseAdapter
+import com.lefarmico.core.entity.CurrentWorkoutViewData
 
 class CurrentExerciseDiffCallback(
-    private val oldList: List<CurrentWorkoutDto.ExerciseWithSets>,
-    private val newList: List<CurrentWorkoutDto.ExerciseWithSets>
+    private val oldList: List<CurrentWorkoutViewData.ExerciseWithSets>,
+    private val newList: List<CurrentWorkoutViewData.ExerciseWithSets>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -26,5 +28,22 @@ class CurrentExerciseDiffCallback(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
         return oldItem == newItem
+    }
+
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+
+        val bundle = Bundle()
+
+        if (newItem.setList != oldItem.setList) {
+            val arraySetList = ArrayList<CurrentWorkoutViewData.Set>(newItem.setList)
+            bundle.putParcelableArrayList(CurrentExerciseAdapter.SET_LIST_UPDATE, arraySetList)
+        }
+        if (bundle.size() == 0) {
+            return null
+        }
+        return bundle
     }
 }

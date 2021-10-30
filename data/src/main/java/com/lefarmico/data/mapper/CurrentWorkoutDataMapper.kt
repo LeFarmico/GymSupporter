@@ -13,9 +13,9 @@ fun CurrentWorkoutDto.Set.toData() = CurrentWorkoutData.Set(
     id = id, exerciseId = exerciseId, setNumber = setNumber, weight = weight, reps = reps
 )
 
-fun List<CurrentWorkoutDto.Set>.toCurrentWorkoutData() = this.map { it.toData() }
+fun List<CurrentWorkoutDto.Set>.toDataSet() = this.map { it.toData() }
 
 fun CurrentWorkoutDto.ExerciseWithSets.toData() = CurrentWorkoutData.ExerciseWithSets(
     exercise = exercise.toData(),
-    setList = setList.toCurrentWorkoutData().toMutableList()
+    setList = setList.toDataSet().toMutableList()
 )

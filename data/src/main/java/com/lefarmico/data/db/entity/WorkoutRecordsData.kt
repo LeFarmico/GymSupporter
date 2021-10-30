@@ -3,6 +3,8 @@ package com.lefarmico.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
@@ -30,6 +32,14 @@ sealed class WorkoutRecordsData {
                 value = ["exercise_id"],
                 unique = true
             )
+        ],
+        foreignKeys = [
+            ForeignKey(
+                entity = Workout::class,
+                parentColumns = ["workout_id"],
+                childColumns = ["workout_id"],
+                onDelete = CASCADE
+            )
         ]
     )
     data class Exercise(
@@ -44,6 +54,14 @@ sealed class WorkoutRecordsData {
             Index(
                 value = ["set_id"],
                 unique = true
+            )
+        ],
+        foreignKeys = [
+            ForeignKey(
+                entity = Exercise::class,
+                parentColumns = ["exercise_id"],
+                childColumns = ["exercise_id"],
+                onDelete = CASCADE
             )
         ]
     )

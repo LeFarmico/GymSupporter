@@ -1,11 +1,11 @@
 package com.lefarmico.core.adapter.diffUtil
 
 import androidx.recyclerview.widget.DiffUtil
-import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class ExerciseRecordsDiffCallback(
-    private val oldList: List<WorkoutRecordsDto.Exercise>,
-    private val newList: List<WorkoutRecordsDto.Exercise>
+    private val oldList: List<WorkoutRecordsViewData.Exercise>,
+    private val newList: List<WorkoutRecordsViewData.Exercise>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

@@ -1,5 +1,8 @@
 package com.lefarmico.domain.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 sealed class CurrentWorkoutDto {
 
     data class Exercise private constructor(
@@ -29,13 +32,14 @@ sealed class CurrentWorkoutDto {
         }
     }
 
+    @Parcelize
     data class Set(
         val id: Int,
         val exerciseId: Int,
         val setNumber: Int,
         val weight: Float,
         val reps: Int
-    ) : CurrentWorkoutDto()
+    ) : CurrentWorkoutDto(), Parcelable
 
     data class ExerciseWithSets(
         val exercise: Exercise,

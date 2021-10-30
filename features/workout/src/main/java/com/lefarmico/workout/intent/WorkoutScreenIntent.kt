@@ -1,6 +1,8 @@
 package com.lefarmico.workout.intent
 
+import androidx.fragment.app.FragmentManager
 import com.lefarmico.core.base.BaseIntent
+import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 
 sealed class WorkoutScreenIntent : BaseIntent() {
 
@@ -23,4 +25,13 @@ sealed class WorkoutScreenIntent : BaseIntent() {
     object FinishWorkout : WorkoutScreenIntent()
 
     data class GoToExerciseInfo(val libraryId: Int) : WorkoutScreenIntent()
+
+    data class ShowToast(val text: String) : WorkoutScreenIntent()
+
+    data class ShowSetParametersDialog(
+        val fragmentManager: FragmentManager,
+        val exerciseId: Int,
+        val callback: SetSettingDialogCallback,
+        val tag: String
+    ) : WorkoutScreenIntent()
 }

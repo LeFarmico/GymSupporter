@@ -3,7 +3,7 @@ package com.lefarmico.core.mapper
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 
-fun CurrentWorkoutDto.Set.toRecords(exerciseId: Int) = WorkoutRecordsDto.Set(
+fun CurrentWorkoutDto.Set.toRecordsDto(exerciseId: Int) = WorkoutRecordsDto.Set(
     id = id,
     exerciseId = exerciseId,
     setNumber = setNumber,
@@ -12,11 +12,11 @@ fun CurrentWorkoutDto.Set.toRecords(exerciseId: Int) = WorkoutRecordsDto.Set(
     measureType = WorkoutRecordsDto.MeasureType.KILO
 )
 
-fun CurrentWorkoutDto.Exercise.toRecords(workoutId: Int) = WorkoutRecordsDto.Exercise(
+fun CurrentWorkoutDto.Exercise.toRecordsDto(workoutId: Int) = WorkoutRecordsDto.Exercise(
     id = id, workoutId = workoutId, exerciseName = title
 )
 
-fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecords() = this.map {
+fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDtoExWithSets() = this.map {
     WorkoutRecordsDto.ExerciseWithSets(
         exercise = WorkoutRecordsDto.Exercise(
             id = it.exercise.id,
