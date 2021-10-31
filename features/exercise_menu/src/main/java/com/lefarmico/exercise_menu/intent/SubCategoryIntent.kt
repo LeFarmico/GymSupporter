@@ -13,4 +13,6 @@ sealed class SubCategoryIntent : BaseIntent() {
         val subcategoryId: Int,
         val isFromWorkoutScreen: Boolean
     ) : SubCategoryIntent()
+
+    data class ShowToast(val text: String) : SubCategoryIntent()
 }

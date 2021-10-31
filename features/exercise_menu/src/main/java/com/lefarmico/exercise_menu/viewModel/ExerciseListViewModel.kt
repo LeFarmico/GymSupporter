@@ -26,14 +26,12 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
         repo.getExercises(subCategoryId)
             .subscribe { dataState ->
                 when (dataState) {
+                    DataState.Empty -> exercisesLiveData.postValue(DataState.Empty)
+                    DataState.Loading -> exercisesLiveData.postValue(DataState.Loading)
+                    is DataState.Error -> exercisesLiveData.postValue(dataState)
                     is DataState.Success -> {
                         val success = DataState.Success(dataState.data.toViewDataExercise())
                         exercisesLiveData.postValue(success)
-                    }
-                    else -> {
-                        exercisesLiveData.postValue(
-                            dataState as DataState<List<LibraryViewData.Exercise>>
-                        )
                     }
                 }
             }

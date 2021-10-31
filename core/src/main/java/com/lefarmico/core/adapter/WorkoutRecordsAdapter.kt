@@ -35,13 +35,12 @@ class WorkoutRecordsAdapter :
         private val date = itemNoteWorkoutBinding.workoutDate
         private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
 
+        val adapter = ExerciseRecordsAdapter()
         val selectToggleButton = itemNoteWorkoutBinding.editButton
         val detailsButton = itemNoteWorkoutBinding.detailsButton
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
             date.text = noteWorkout.date
-        }
-        fun bindAdapter(adapter: ExerciseRecordsAdapter) {
             exerciseNoteRecycler.adapter = adapter
         }
     }
@@ -55,17 +54,16 @@ class WorkoutRecordsAdapter :
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
-        // TODO переместить во VIewHolder
-        val adapter = ExerciseRecordsAdapter()
-        adapter.items = items[position].exerciseWithSetsList
+
+        holder.adapter.items = items[position].exerciseWithSetsList
 
         holder.bind(items[position].workout)
-        holder.bindAdapter(adapter)
 
         holder.detailsButton.setOnClickListener {
             onEditButtonAction(items[position].workout)
         }
         holder.selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
+            // TODO вынести логику, но куда?
             when (isChecked) {
                 true -> selectedItemsSet.add(items[position])
                 false -> selectedItemsSet.remove(items[position])
@@ -80,14 +78,14 @@ class WorkoutRecordsAdapter :
     ) {
         if (payloads.isNotEmpty()) {
             when (payloads.last()) {
+                SELECT_ALL -> holder.selectToggleButton.isChecked = true
+                UNSELECT_ALL -> holder.selectToggleButton.isChecked = false
                 EDIT_STATE -> {
                     holder.selectToggleButton.visibility = toggleButtonVisibility
                     if (toggleButtonVisibility == View.GONE) {
                         holder.selectToggleButton.isChecked = false
                     }
                 }
-                SELECT_ALL -> holder.selectToggleButton.isChecked = true
-                UNSELECT_ALL -> holder.selectToggleButton.isChecked = false
             }
         } else {
             super.onBindViewHolder(holder, position, payloads)
@@ -98,18 +96,17 @@ class WorkoutRecordsAdapter :
         return items.size
     }
 
-    fun toggleEditState() {
-        toggleButtonVisibility = when (toggleButtonVisibility) {
-            View.GONE -> View.VISIBLE
-            View.VISIBLE -> View.GONE
-            else -> throw (
-                IllegalArgumentException(
-                    "toggleButtonVisibility should be " +
-                        "View.VISIBLE or View.GONE"
-                )
-                )
+    fun turnOnEditState() {
+        if (toggleButtonVisibility != View.VISIBLE) {
+            toggleButtonVisibility = View.VISIBLE
+            notifyItemRangeChanged(0, items.size, EDIT_STATE)
         }
-        notifyItemRangeChanged(0, items.size, EDIT_STATE)
+    }
+    fun turnOffEditState() {
+        if (toggleButtonVisibility != View.GONE) {
+            toggleButtonVisibility = View.GONE
+            notifyItemRangeChanged(0, items.size, EDIT_STATE)
+        }
     }
 
     fun toggleSelectAll() {

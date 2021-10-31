@@ -70,7 +70,7 @@ interface WorkoutRecordsDao {
 
     @Transaction
     @Query("SELECT * FROM workout_records")
-    fun getWorkoutsWithExerciseAnsSets(): Observable<List<WorkoutRecordsData.WorkoutWithExercisesAndSets>>
+    fun getWorkoutsWithExerciseAnsSets(): Single<List<WorkoutRecordsData.WorkoutWithExercisesAndSets>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExercises(exerciseList: List<WorkoutRecordsData.Exercise>): List<Long>

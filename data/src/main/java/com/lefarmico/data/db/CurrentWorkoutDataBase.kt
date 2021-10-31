@@ -8,6 +8,7 @@ class CurrentWorkoutDataBase {
     var exerciseId = 1
 
     fun insertExerciseWithSets(exercise: CurrentWorkoutData.ExerciseWithSets): Long {
+        val list = exerciseWithSetsList
         val currentExercise = CurrentWorkoutData.Exercise.Builder()
             .setId(exerciseId)
             .setTitle(exercise.exercise.title)

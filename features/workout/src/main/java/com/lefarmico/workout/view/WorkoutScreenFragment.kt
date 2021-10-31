@@ -9,10 +9,11 @@ import android.view.MenuItem
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.core.customView.RemoveActionBarCallback
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData.*
 import com.lefarmico.core.selector.SelectItemsHandler
+import com.lefarmico.core.toolbar.RemoveActionBarCallback
+import com.lefarmico.core.toolbar.RemoveActionBarEvents.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.params.WorkoutScreenParams.*
@@ -54,27 +55,24 @@ class WorkoutScreenFragment :
     }
 
     override fun setUpViews() {
-        viewModel.onTriggerEvent(GetAll)
+        startEvent(GetAll)
 
         actionModeCallback = object : RemoveActionBarCallback() {
             override fun selectAllButtonHandler() {
-                // TODO event
-                adapter.toggleSelectAll()
+                startEvent(ActionBarEvent(SelectAll))
             }
 
             override fun removeButtonHandler() {
-                // TODO event
-                selectHandler?.onEachSelectedItemsAction()
+                startEvent(ActionBarEvent(DeleteItems))
             }
 
             override fun onDestroyHandler() {
-                // TODO event
-                adapter.toggleEditState()
+                startEvent(ActionBarEvent(Close))
             }
         }
         selectHandler = object : SelectItemsHandler<ExerciseWithSets>(adapter) {
             override fun selectedItemAction(item: ExerciseWithSets) {
-                viewModel.onTriggerEvent(DeleteExercise(item.exercise.id))
+                startEvent(DeleteExercise(item.exercise.id))
             }
         }
         binding.apply {
@@ -90,7 +88,7 @@ class WorkoutScreenFragment :
 
         adapter.apply {
             plusButtonCallback = {
-                initSetParameterDialog(it)
+                launchSetParameterDialog(it)
             }
             minusButtonCallback = {
                 startEvent(DeleteLastSet(it))
@@ -102,6 +100,23 @@ class WorkoutScreenFragment :
     }
 
     override fun observeData() {
+        viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                SelectAll -> adapter.toggleSelectAll()
+                DeleteItems -> {
+                    selectHandler?.onEachSelectedItemsAction()
+                    actionMode?.finish()
+                }
+                Launch -> {
+                    adapter.turnOnEditState()
+                    actionMode = requireActivity().startActionMode(actionModeCallback)
+                }
+                Close -> {
+                    adapter.turnOffEditState()
+                    actionMode?.finish()
+                }
+            }
+        }
         viewModel.exerciseLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -144,7 +159,7 @@ class WorkoutScreenFragment :
         startEvent(AddSetToExercise(exerciseId, reps, weight))
     }
 
-    private fun initSetParameterDialog(exerciseId: Int) {
+    private fun launchSetParameterDialog(exerciseId: Int) {
         startEvent(
             ShowSetParametersDialog(
                 childFragmentManager,
@@ -162,8 +177,7 @@ class WorkoutScreenFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                adapter.toggleEditState()
-                actionMode = requireActivity().startActionMode(actionModeCallback)
+                startEvent(ActionBarEvent(Launch))
                 true
             }
             else -> false

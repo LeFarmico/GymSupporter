@@ -10,7 +10,6 @@ import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
@@ -20,10 +19,10 @@ class LibraryRepositoryImpl @Inject constructor(
     private val dao: LibraryDao
 ) : LibraryRepository {
 
-    override fun getCategories(): Observable<DataState<List<LibraryDto.Category>>> {
+    override fun getCategories(): Single<DataState<List<LibraryDto.Category>>> {
         return dao.getCategories()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toDtoCategoryList())
@@ -36,10 +35,10 @@ class LibraryRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getSubCategories(categoryId: Int): Observable<DataState<List<LibraryDto.SubCategory>>> {
+    override fun getSubCategories(categoryId: Int): Single<DataState<List<LibraryDto.SubCategory>>> {
         return dao.getSubCategories(categoryId)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toDtoSubCategoryList())
@@ -52,10 +51,10 @@ class LibraryRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getExercises(subCategoryId: Int): Observable<DataState<List<LibraryDto.Exercise>>> {
+    override fun getExercises(subCategoryId: Int): Single<DataState<List<LibraryDto.Exercise>>> {
         return dao.getExercises(subCategoryId)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 if (data.isNotEmpty()) {
                     DataState.Success(data.toDtoExerciseList())
@@ -68,15 +67,15 @@ class LibraryRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getExercise(exerciseId: Int): Observable<DataState<LibraryDto.Exercise>> {
+    override fun getExercise(exerciseId: Int): Single<DataState<LibraryDto.Exercise>> {
         return dao.getExercise(exerciseId)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .map { data ->
                 DataState.Success(data.toDto()) as DataState<LibraryDto.Exercise>
             }
-            .onErrorReturn {
-                DataState.Error(it as Exception)
+            .onErrorReturn { err ->
+                DataState.Error(err as Exception)
             }
     }
 
@@ -86,7 +85,7 @@ class LibraryRepositoryImpl @Inject constructor(
             it.onSuccess(DataState.Success(data))
         }
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .onErrorReturn {
                 DataState.Error(it as Exception)
             }
@@ -98,7 +97,7 @@ class LibraryRepositoryImpl @Inject constructor(
             it.onSuccess(DataState.Success(data))
         }
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .onErrorReturn {
                 DataState.Error(it as Exception)
             }

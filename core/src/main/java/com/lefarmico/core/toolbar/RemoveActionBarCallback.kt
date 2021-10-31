@@ -1,4 +1,4 @@
-package com.lefarmico.core.customView
+package com.lefarmico.core.toolbar
 
 import android.view.ActionMode
 import android.view.Menu
@@ -26,7 +26,6 @@ abstract class RemoveActionBarCallback : ActionMode.Callback2() {
             }
             R.id.remove_items -> {
                 removeButtonHandler()
-                mode!!.finish()
                 return true
             }
             else -> false
