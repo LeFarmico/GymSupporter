@@ -6,9 +6,11 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
+import com.lefarmico.core.utils.EmptyTextValidator
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.exercise_menu.intent.SubCategoryIntent
+import com.lefarmico.exercise_menu.intent.SubCategoryIntent.*
 import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
@@ -25,14 +27,17 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     private val adapter = ExerciseLibraryAdapter()
 
     override fun setUpViews() {
-        viewModel.onTriggerEvent(SubCategoryIntent.GetSubcategories(params.categoryId))
+        startEvent(GetSubcategories(params.categoryId))
 
         binding.apply {
             recycler.adapter = adapter
+            editText.addTextChangedListener(
+                EmptyTextValidator(editText, textField)
+            )
             plusButton.setOnClickListener {
                 binding.textField.apply {
-                    viewModel.onTriggerEvent(
-                        SubCategoryIntent.AddNewSubCategory(editText?.text.toString(), params.categoryId)
+                    startEvent(
+                        AddNewSubCategory(editText?.text.toString(), params.categoryId)
                     )
                 }
             }
@@ -40,11 +45,11 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
         adapter.apply {
             onClick = { item ->
                 item as LibraryViewData.SubCategory
-                viewModel.onTriggerEvent(
-                    SubCategoryIntent.GoToExerciseListScreen(
-                        params.categoryId,
-                        item.id,
-                        params.isFromWorkoutScreen
+                startEvent(
+                    GoToExerciseListScreen(
+                        categoryId = params.categoryId,
+                        subcategoryId = item.id,
+                        isFromWorkoutScreen = params.isFromWorkoutScreen
                     )
                 )
             }
@@ -52,6 +57,9 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
     }
 
     override fun observeData() {
+        viewModel.notificationLiveData.observe(viewLifecycleOwner) { notification ->
+            startEvent(ShowToast(notification))
+        }
         viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -72,6 +80,10 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
                 }
             }
         }
+    }
+
+    private fun startEvent(event: SubCategoryIntent) {
+        viewModel.onTriggerEvent(event)
     }
 
     companion object {

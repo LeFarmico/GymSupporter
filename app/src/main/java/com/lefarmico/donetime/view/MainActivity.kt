@@ -23,8 +23,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appToolbar)
+        supportActionBar?.elevation = 0f
         router.bind(this)
-//        setUpBottomNavigation()
         router.bindNavigationUI(binding.bottomNavigation)
     }
 

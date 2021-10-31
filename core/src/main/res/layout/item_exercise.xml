@@ -16,7 +16,7 @@
         android:background="@drawable/selector_edit_button"
         android:textOff=""
         android:textOn=""
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="?attr/colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/exercise_name"

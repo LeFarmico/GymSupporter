@@ -3,6 +3,7 @@ package com.lefarmico.workout.intent
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.core.base.BaseIntent
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
+import com.lefarmico.core.toolbar.RemoveActionBarEvents
 
 sealed class WorkoutScreenIntent : BaseIntent() {
 
@@ -34,4 +35,6 @@ sealed class WorkoutScreenIntent : BaseIntent() {
         val callback: SetSettingDialogCallback,
         val tag: String
     ) : WorkoutScreenIntent()
+
+    data class ActionBarEvent(val event: RemoveActionBarEvents) : WorkoutScreenIntent()
 }

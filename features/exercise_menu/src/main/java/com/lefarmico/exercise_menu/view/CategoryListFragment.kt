@@ -6,9 +6,11 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
+import com.lefarmico.core.utils.EmptyTextValidator
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.databinding.FragmentCategoriesBinding
 import com.lefarmico.exercise_menu.intent.CategoryListIntent
+import com.lefarmico.exercise_menu.intent.CategoryListIntent.*
 import com.lefarmico.exercise_menu.viewModel.CategoryListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
@@ -26,33 +28,33 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
     private val adapter = ExerciseLibraryAdapter().apply {
         onClick = { item ->
             item as LibraryViewData.Category
-            viewModel.onTriggerEvent(
-                CategoryListIntent.GoToSubcategoryScreen(
-                    item.id,
-                    params.isFromWorkoutScreen
-                )
+            startEvent(
+                GoToSubcategoryScreen(item.id, params.isFromWorkoutScreen)
             )
         }
     }
 
     override fun setUpViews() {
-        viewModel.onTriggerEvent(CategoryListIntent.GetCategories)
+        startEvent(GetCategories)
 
         binding.apply {
+            editText.addTextChangedListener(
+                EmptyTextValidator(editText, textField)
+            )
             recycler.adapter = adapter
             plusButton.setOnClickListener {
                 textField.apply {
-                    viewModel.onTriggerEvent(
-                        CategoryListIntent.AddCategory(
-                            editText?.text.toString()
-                        )
-                    )
+                    val text = editText?.text.toString()
+                    startEvent(AddCategory(text))
                 }
             }
         }
     }
 
     override fun observeData() {
+        viewModel.notificationLiveData.observe(viewLifecycleOwner) { notification ->
+            startEvent(ShowToast(notification))
+        }
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -73,6 +75,10 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
                 }
             }
         }
+    }
+
+    private fun startEvent(event: CategoryListIntent) {
+        viewModel.onTriggerEvent(event)
     }
 
     companion object {

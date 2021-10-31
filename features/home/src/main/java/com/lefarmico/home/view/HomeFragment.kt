@@ -7,13 +7,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.lefarmico.core.adapter.WorkoutRecordsAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.core.customView.RemoveActionBarCallback
 import com.lefarmico.core.entity.WorkoutRecordsViewData.*
 import com.lefarmico.core.selector.SelectItemsHandler
+import com.lefarmico.core.toolbar.RemoveActionBarCallback
+import com.lefarmico.core.toolbar.RemoveActionBarEvents.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.R
 import com.lefarmico.home.databinding.FragmentHomeBinding
 import com.lefarmico.home.intent.HomeIntent
+import com.lefarmico.home.intent.HomeIntent.*
 import com.lefarmico.home.viewModel.HomeViewModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
@@ -33,41 +35,54 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
     }
 
     override fun setUpViews() {
-        startEvent(HomeIntent.GetWorkoutRecords)
+        startEvent(GetWorkoutRecords)
+
         binding.workoutNotes.adapter = noteAdapter.apply {
             onEditButtonAction = {
-                startEvent(HomeIntent.DetailsWorkout(it.id))
+                startEvent(NavigateToDetailsWorkout(it.id))
             }
         }
         binding.newWorkoutButton.setOnClickListener {
-            startEvent(HomeIntent.StartWorkoutScreen)
-            // TODO event
-            actionMode?.finish()
+            startEvent(NavigateToWorkout)
         }
         actionModeCallback = object : RemoveActionBarCallback() {
             override fun selectAllButtonHandler() {
-                // TODO event
-                noteAdapter.toggleSelectAll()
+                startEvent(ActionBarEvent(SelectAll))
             }
 
             override fun removeButtonHandler() {
-                // TODO event
-                selectHandler?.onEachSelectedItemsAction()
+                startEvent(ActionBarEvent(DeleteItems))
             }
 
             override fun onDestroyHandler() {
-                // TODO event
-                noteAdapter.toggleEditState()
+                startEvent(ActionBarEvent(Close))
             }
         }
         selectHandler = object : SelectItemsHandler<WorkoutWithExercisesAndSets>(noteAdapter) {
             override fun selectedItemAction(item: WorkoutWithExercisesAndSets) {
-                startEvent(HomeIntent.RemoveWorkout(item.workout.id))
+                startEvent(RemoveWorkout(item.workout.id))
             }
         }
     }
 
     override fun observeData() {
+        viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                SelectAll -> noteAdapter.toggleSelectAll()
+                DeleteItems -> {
+                    selectHandler?.onEachSelectedItemsAction()
+                    actionMode?.finish()
+                }
+                Launch -> {
+                    noteAdapter.turnOnEditState()
+                    actionMode = requireActivity().startActionMode(actionModeCallback)
+                }
+                Close -> {
+                    noteAdapter.turnOffEditState()
+                    actionMode?.finish()
+                }
+            }
+        }
         viewModel.workoutRecordsLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -93,10 +108,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            // TODO event
             R.id.edit -> {
-                noteAdapter.toggleEditState()
-                actionMode = requireActivity().startActionMode(actionModeCallback)
+                startEvent(ActionBarEvent(Launch))
                 true
             }
             else -> { false }

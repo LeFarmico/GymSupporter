@@ -12,4 +12,6 @@ sealed class CategoryListIntent : BaseIntent() {
         val categoryId: Int,
         val isFromWorkoutScreen: Boolean
     ) : CategoryListIntent()
+
+    data class ShowToast(val text: String) : CategoryListIntent()
 }

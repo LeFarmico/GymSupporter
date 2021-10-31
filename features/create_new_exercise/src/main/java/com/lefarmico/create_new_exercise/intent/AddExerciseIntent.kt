@@ -10,4 +10,8 @@ sealed class AddExerciseIntent : BaseIntent() {
         val imageRes: String,
         val subcategoryId: Int
     ) : AddExerciseIntent()
+
+    object Back : AddExerciseIntent()
+
+    data class ShowToast(val text: String) : AddExerciseIntent()
 }

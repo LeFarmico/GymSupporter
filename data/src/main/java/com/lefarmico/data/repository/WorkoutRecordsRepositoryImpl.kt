@@ -10,7 +10,6 @@ import com.lefarmico.data.utils.setWorkoutId
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
@@ -35,7 +34,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     }
 
     override fun getWorkoutsWithExerciseAnsSets():
-        Observable<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
+        Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSets()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())

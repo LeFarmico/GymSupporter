@@ -3,9 +3,11 @@ package com.lefarmico.create_new_exercise.view
 import android.os.Bundle
 import android.os.Parcelable
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.core.utils.EmptyTextValidator
 import com.lefarmico.create_new_exercise.BuildConfig
 import com.lefarmico.create_new_exercise.databinding.FragmentCreateNewExerciseBinding
 import com.lefarmico.create_new_exercise.intent.AddExerciseIntent
+import com.lefarmico.create_new_exercise.intent.AddExerciseIntent.*
 import com.lefarmico.create_new_exercise.viewModel.CreateNewExerciseViewModel
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.LibraryParams
@@ -16,29 +18,33 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
     CreateNewExerciseViewModel::class.java
 ) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     private val params: LibraryParams.NewExercise by lazy {
         arguments?.getParcelable<LibraryParams.NewExercise>(KEY_PARAMS)
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
     override fun setUpViews() {
-        binding.addButton.setOnClickListener {
-            viewModel.onTriggerEvent(
-                AddExerciseIntent.AddExerciseResult(
-                    getTitleField(),
-                    getDescriptionField(),
-                    getImageSource(),
-                    getSubcategory()
-                )
+        binding.apply {
+            exerciseEditText.addTextChangedListener(
+                EmptyTextValidator(exerciseEditText, exerciseTitleTextView)
             )
+            addButton.setOnClickListener {
+                startEvent(
+                    AddExerciseResult(
+                        getTitleField(),
+                        getDescriptionField(),
+                        getImageSource(),
+                        getSubcategory()
+                    )
+                )
+            }
         }
     }
 
     override fun observeData() {
+        viewModel.notificationLiveData.observe(viewLifecycleOwner) { s ->
+            startEvent(ShowToast(s))
+        }
         viewModel.addExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 DataState.Empty -> {
@@ -68,6 +74,10 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
     }
     private fun getSubcategory(): Int {
         return params.subCategoryId
+    }
+
+    private fun startEvent(event: AddExerciseIntent) {
+        viewModel.onTriggerEvent(event)
     }
 
     companion object {

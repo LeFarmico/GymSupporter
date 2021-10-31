@@ -145,6 +145,19 @@ class CurrentExerciseAdapter :
         notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
     }
 
+    fun turnOnEditState() {
+        if (toggleButtonVisibility != View.VISIBLE) {
+            toggleButtonVisibility = View.VISIBLE
+            notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
+        }
+    }
+    fun turnOffEditState() {
+        if (toggleButtonVisibility != View.GONE) {
+            toggleButtonVisibility = View.GONE
+            notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
+        }
+    }
+
     override fun getSelectedItems(): Set<CurrentWorkoutViewData.ExerciseWithSets> = selectedItemsSet
 
     fun toggleSelectAll() {
