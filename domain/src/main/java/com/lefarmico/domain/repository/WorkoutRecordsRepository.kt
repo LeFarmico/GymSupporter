@@ -14,9 +14,9 @@ interface WorkoutRecordsRepository : BaseRepository {
 
     fun addWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<String>>
+    ): Single<DataState<Long>>
 
-    fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>>
+    fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Int>>
 
     fun updateWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
