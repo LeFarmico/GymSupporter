@@ -21,7 +21,7 @@
             android:id="@+id/exercise_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@color/background.accent"
+            android:src="?attr/colorSecondary"
             android:contentDescription="@string/exercise_image"
             />
         <ImageView

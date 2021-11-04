@@ -14,4 +14,4 @@ include(
     ":features:create_new_exercise",
 )
 include(":navigation")
-include(":features:edit_record_workout")
+include(":features:detailed_record_workout")

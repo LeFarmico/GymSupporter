@@ -2,6 +2,7 @@ package com.lefarmico.exercise_menu.view
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.ExerciseLibraryAdapter
 import com.lefarmico.core.base.BaseFragment
@@ -47,6 +48,10 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
                     val text = editText?.text.toString()
                     startEvent(AddCategory(text))
                 }
+            }
+            if (recycler.itemDecorationCount == 0) {
+                val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+                recycler.addItemDecoration(decorator)
             }
         }
     }

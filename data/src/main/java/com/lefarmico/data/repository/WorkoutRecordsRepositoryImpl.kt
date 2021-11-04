@@ -11,7 +11,6 @@ import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -22,8 +21,6 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     override fun getWorkoutWithExerciseAnsSets(workoutId: Int):
         Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .map { data ->
                 DataState.Success(data.toDto())
                     as DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>
@@ -36,10 +33,9 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     override fun getWorkoutsWithExerciseAnsSets():
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSets()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .map { data ->
-                DataState.Success(data.toWorkoutWithExercisesAndSetsDto())
+                val dto = data.toWorkoutWithExercisesAndSetsDto()
+                DataState.Success(dto)
                     as DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
             }
             .onErrorReturn {
@@ -54,8 +50,6 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
         return Single.create<Long> {
             it.onSuccess(dao.insertWorkout(workoutWithExercisesAndSets.workout.toData()))
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .onErrorReturn {
                 throw (it)
             }
@@ -76,8 +70,6 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
 
     override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .map { data ->
                 dao.deleteWorkout(data.workout)
                 DataState.Success("Workout Deleted")

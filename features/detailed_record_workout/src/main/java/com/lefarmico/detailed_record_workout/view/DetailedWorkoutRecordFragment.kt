@@ -1,4 +1,4 @@
-package com.lefarmico.edit_record_workout.view
+package com.lefarmico.detailed_record_workout.view
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -7,14 +7,14 @@ import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.edit_record_workout.databinding.FragmentEditWorkoutRecordBinding
-import com.lefarmico.edit_record_workout.intent.EditWorkoutRecordIntent
-import com.lefarmico.edit_record_workout.viewModel.EditWorkoutRecordViewModel
+import com.lefarmico.detailed_record_workout.databinding.FragmentEditWorkoutRecordBinding
+import com.lefarmico.detailed_record_workout.intent.DetailedWorkoutRecordIntent
+import com.lefarmico.detailed_record_workout.viewModel.DetailedWorkoutRecordViewModel
 import com.lefarmico.navigation.params.RecordMenuParams
 
-class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWorkoutRecordBinding, EditWorkoutRecordViewModel>(
+class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWorkoutRecordBinding, DetailedWorkoutRecordViewModel>(
     FragmentEditWorkoutRecordBinding::inflate,
-    EditWorkoutRecordViewModel::class.java
+    DetailedWorkoutRecordViewModel::class.java
 ) {
 
     private val params: RecordMenuParams.WorkoutRecord by lazy {
@@ -25,7 +25,7 @@ class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWork
     private val adapter = EditRecordAdapter()
 
     override fun setUpViews() {
-        pushIntent(EditWorkoutRecordIntent.GetWorkout(params.workoutId))
+        pushIntent(DetailedWorkoutRecordIntent.GetWorkout(params.workoutId))
         binding.exerciseRecycler.adapter = adapter
     }
 
@@ -53,7 +53,7 @@ class EditWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWork
         }
     }
 
-    private fun pushIntent(eventType: EditWorkoutRecordIntent) {
+    private fun pushIntent(eventType: DetailedWorkoutRecordIntent) {
         viewModel.onTriggerEvent(eventType)
     }
 

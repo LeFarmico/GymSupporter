@@ -88,6 +88,6 @@
     </fragment>
     <dialog
         android:id="@+id/editWorkoutRecordFragment"
-        android:name="com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment"
+        android:name="com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment"
         android:label="EditWorkoutRecordFragment" />
 </navigation>

@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "356253837880",
+    "project_id": "ziofitness-bddc2",
+    "storage_bucket": "ziofitness-bddc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356253837880:android:eefb47ae1f44d5c6a854cd",
+        "android_client_info": {
+          "package_name": "com.lefarmico.donetime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356253837880-at88kumlmqs56rndovdn2d8rc6rq7o0n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lefarmico.donetime",
+            "certificate_hash": "8f10b567c3e8e554919604ca25327a7dc9b2437f"
+          }
+        },
+        {
+          "client_id": "356253837880-ubf9io3logb0dhln25sdlt05lhs5bhqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvUOjOLvW-V7QUBzXcknGL5idPQix0xTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356253837880-ubf9io3logb0dhln25sdlt05lhs5bhqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356253837880:android:6d7a969d86a2ed64a854cd",
+        "android_client_info": {
+          "package_name": "com.lefarmico.donetime.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356253837880-ubf9io3logb0dhln25sdlt05lhs5bhqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvUOjOLvW-V7QUBzXcknGL5idPQix0xTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356253837880-ubf9io3logb0dhln25sdlt05lhs5bhqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

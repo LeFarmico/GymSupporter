@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lefarmico.core.di.ViewModelFactory
 import com.lefarmico.create_new_exercise.viewModel.CreateNewExerciseViewModel
-import com.lefarmico.edit_record_workout.viewModel.EditWorkoutRecordViewModel
+import com.lefarmico.detailed_record_workout.viewModel.DetailedWorkoutRecordViewModel
 import com.lefarmico.exercise_menu.viewModel.CategoryListViewModel
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
@@ -63,6 +63,6 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(EditWorkoutRecordViewModel::class)
-    abstract fun addModelEditWorkoutRecordViewModel(viewModel: EditWorkoutRecordViewModel): ViewModel
+    @ViewModelKey(DetailedWorkoutRecordViewModel::class)
+    abstract fun addModelEditWorkoutRecordViewModel(viewModel: DetailedWorkoutRecordViewModel): ViewModel
 }

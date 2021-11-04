@@ -6,6 +6,8 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -70,7 +72,10 @@ dependencies {
     implementation(project(":features:home"))
     implementation(project(":features:workout"))
     implementation(project(":features:create_new_exercise"))
-    implementation(project(":features:edit_record_workout"))
+    implementation(project(":features:detailed_record_workout"))
+    implementation("com.google.firebase:firebase-analytics:20.0.0")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
+    implementation("com.google.firebase:firebase-analytics-ktx:20.0.0")
 
     // Tests
     androidTestImplementation(Deps.UiTest.junit)
@@ -95,4 +100,7 @@ dependencies {
     // Navigation
     implementation(Deps.Ktx.navigationUi)
     implementation(Deps.Ktx.navigationFragment)
+
+    // Firebase
+    implementation(Deps.Firebase.firebaseBom)
 }

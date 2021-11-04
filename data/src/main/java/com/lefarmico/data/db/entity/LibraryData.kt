@@ -12,36 +12,20 @@ sealed class LibraryData {
                 unique = true
             )
         ]
-    ) 
+    )
     data class Category(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int,
         @ColumnInfo(name = "title") val title: String
     ) : LibraryData()
 
-    @Entity(
-        tableName = "library_sub_category",
-        indices = [
-            Index(
-                value = ["title"],
-                unique = true
-            )
-        ]
-    )
+    @Entity(tableName = "library_sub_category")
     data class SubCategory(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
         @ColumnInfo(name = "title") val title: String,
         @ColumnInfo(name = "category_id") val categoryId: Int
     ) : LibraryData()
 
-    @Entity(
-        tableName = "library_exercise",
-        indices = [
-            Index(
-                value = ["title"],
-                unique = true
-            )
-        ]
-    )
+    @Entity(tableName = "library_exercise")
     data class Exercise(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
         @ColumnInfo(name = "title") val title: String,
