@@ -1,6 +1,8 @@
 package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
+import com.lefarmico.data.extensions.dataStateActionResolver
+import com.lefarmico.data.extensions.dataStateResolver
 import com.lefarmico.data.mapper.toData
 import com.lefarmico.data.mapper.toDto
 import com.lefarmico.data.mapper.toSetListData
@@ -21,59 +23,47 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     override fun getWorkoutWithExerciseAnsSets(workoutId: Int):
         Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .map { data ->
-                DataState.Success(data.toDto())
-                    as DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>
-            }
-            .onErrorReturn {
-                DataState.Error(it as Exception)
-            }
+            .doOnSubscribe { DataState.Loading }
+            .doOnError { DataState.Error(it as Exception) }
+            .map { data -> DataState.Success(data.toDto()) }
     }
 
     override fun getWorkoutsWithExerciseAnsSets():
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSets()
-            .map { data ->
-                val dto = data.toWorkoutWithExercisesAndSetsDto()
-                DataState.Success(dto)
-                    as DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>
-            }
-            .onErrorReturn {
-                DataState.Error(it as Exception)
-                throw (it)
-            }
+            .doOnSubscribe { DataState.Loading }
+            .doOnError { DataState.Error(it as Exception) }
+            .map { data -> dataStateResolver(data.toWorkoutWithExercisesAndSetsDto()) }
     }
 
+    // TODO упросить
     override fun addWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<String>> {
-        return Single.create<Long> {
-            it.onSuccess(dao.insertWorkout(workoutWithExercisesAndSets.workout.toData()))
-        }
-            .onErrorReturn {
-                throw (it)
-            }
-            .map { workoutId ->
-                val exerciseList = workoutWithExercisesAndSets
-                    .exerciseWithSetsList
-                    .setWorkoutId(workoutId.toInt())
+    ): Single<DataState<Long>> {
+        return Single.create<DataState<Long>> { emitter ->
+            emitter.onSuccess(
+                dataStateActionResolver {
+                    val workoutId = dao.insertWorkout(workoutWithExercisesAndSets.workout.toData())
+                    val exerciseList = workoutWithExercisesAndSets
+                        .exerciseWithSetsList
+                        .setWorkoutId(workoutId.toInt())
 
-                for (i in exerciseList.indices) {
-                    val exercise = exerciseList[i].exercise.toData()
-                    val exerciseId = dao.insertExercise(exercise)
-                    val setList = exerciseList[i].setList.setExerciseId(exerciseId.toInt())
-                    dao.insertSets(setList.toSetListData())
+                    exerciseList.forEach { exerciseWithSets ->
+                        val exercise = exerciseWithSets.exercise.toData()
+                        val exerciseId = dao.insertExercise(exercise)
+                        val setList = exerciseWithSets.setList.setExerciseId(exerciseId.toInt())
+                        dao.insertSets(setList.toSetListData())
+                    }
+                    return@dataStateActionResolver workoutId
                 }
-                DataState.Success("New workout successfully added.")
-            }
+            )
+        }.doOnError { e -> DataState.Error(e as Exception) }
     }
 
-    override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<String>> {
+    override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Int>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .map { data ->
-                dao.deleteWorkout(data.workout)
-                DataState.Success("Workout Deleted")
-            }
+            .doOnError { e -> DataState.Error(e as Exception) }
+            .map { data -> dataStateActionResolver { dao.deleteWorkout(data.workout) } }
     }
 
     override fun updateWorkoutWithExAndSets(
