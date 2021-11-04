@@ -5,9 +5,7 @@ import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.features.di.MainViewModel
 import com.lefarmico.navigation.Router
-import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.LibraryParams
-import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.view.WorkoutScreenFragment
 import javax.inject.Inject
@@ -46,10 +44,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
                         true
                     }
                     R.id.navigation_settings -> {
-                        router.show(
-                            Notification.TOAST,
-                            ToastBarParams("Not yet implemented")
-                        )
+//                        router.show(
+//                            Notification.TOAST,
+//                            ToastBarParams("Not yet implemented")
+//                        )
                         true
                     }
                     else -> false

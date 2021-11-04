@@ -6,9 +6,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
 import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
+import com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment
 import com.lefarmico.donetime.BuildConfig
 import com.lefarmico.donetime.R
-import com.lefarmico.edit_record_workout.view.EditWorkoutRecordFragment
 import com.lefarmico.exercise_menu.view.CategoryListFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
 import com.lefarmico.exercise_menu.view.SubCategoryListFragment
@@ -115,7 +115,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.EDIT_WORKOUT_RECORD_SCREEN -> {
                 navController?.navigate(
                     R.id.action_navigation_home_to_editWorkoutRecordFragment2,
-                    EditWorkoutRecordFragment.createBundle(data),
+                    DetailedWorkoutRecordFragment.createBundle(data),
                     null,
                     navExtras
                 )

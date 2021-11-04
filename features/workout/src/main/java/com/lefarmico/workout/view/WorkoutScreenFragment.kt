@@ -10,7 +10,7 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
-import com.lefarmico.core.entity.CurrentWorkoutViewData.*
+import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.RemoveActionBarCallback
 import com.lefarmico.core.toolbar.RemoveActionBarEvents.*
@@ -100,6 +100,9 @@ class WorkoutScreenFragment :
     }
 
     override fun observeData() {
+        viewModel.notificationLiveData.observe(viewLifecycleOwner) { string ->
+            startEvent(ShowToast(string))
+        }
         viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
                 SelectAll -> adapter.toggleSelectAll()
@@ -129,7 +132,6 @@ class WorkoutScreenFragment :
                 }
                 DataState.Loading -> {
                     binding.state.showLoadingState()
-                    adapter.items = listOf()
                 }
                 is DataState.Success -> {
                     adapter.items = dataState.data

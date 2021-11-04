@@ -2,7 +2,9 @@ package com.lefarmico.create_new_exercise.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.utils.SingleLiveEvent
+import com.lefarmico.core.utils.ValidationState
 import com.lefarmico.create_new_exercise.intent.AddExerciseIntent
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
@@ -10,7 +12,6 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.ToastBarParams
-import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<AddExerciseIntent>() {
@@ -31,43 +32,50 @@ class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<AddExerci
             imageRes = imageRes,
             subCategoryId = subcategoryId
         )
-        if (isFieldValid(exerciseTitle, subcategoryId)) {
-            repo.addExercise(exercise)
-                .doAfterSuccess {
-                    router.back()
-                }
-                .subscribe()
-        }
-    }
-
-    private fun isFieldValid(field: String, subcategoryId: Int): Boolean {
-        return when {
-            field.isEmpty() -> {
-                notificationLiveData.postValue("The field must not be empty.")
-                false
-            }
-            isFieldExist(field, subcategoryId) -> {
-                notificationLiveData.postValue("$field field already exist.")
-                false
-            }
-            else -> true
-        }
-    }
-
-    private fun isFieldExist(field: String, subcategoryId: Int): Boolean {
-        val subject = BehaviorSubject.create<Boolean>()
         repo.getExercises(subcategoryId)
-            .subscribe { dataState ->
+            .observeUi()
+            .doOnSuccess { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
-                        subject.onNext(dataState.data.any { it.title == field })
-                        subject.onComplete()
+                        when (isValidated(title, dataState.data)) {
+                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(exerciseTitle)
+                            is ValidationState.Success -> validateSuccessResolver(exercise)
+                            ValidationState.Empty -> validateEmptyResolver()
+                        }
                     }
-                    else -> {}
+                    DataState.Empty -> {
+                        when (isValidated(title)) {
+                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(exerciseTitle)
+                            is ValidationState.Success -> validateSuccessResolver(exercise)
+                            ValidationState.Empty -> validateEmptyResolver()
+                        }
+                    }
+                    else -> { throw (IllegalArgumentException()) }
                 }
-            }
+            }.subscribe()
+    }
 
-        return subject.blockingSingle()
+    private fun validateSuccessResolver(exercise: LibraryDto.Exercise) {
+        repo.addExercise(exercise)
+            .observeUi()
+            .doAfterSuccess { router.back() }
+            .subscribe()
+    }
+
+    private fun validateEmptyResolver() {
+        notificationLiveData.postValue("field should not be empty")
+    }
+
+    private fun validateAlreadyExistResolver(field: String) {
+        notificationLiveData.postValue("$field category already exist")
+    }
+
+    private fun isValidated(field: String, fieldList: List<LibraryDto.Exercise> = listOf()): ValidationState {
+        return when {
+            field.isEmpty() -> ValidationState.Empty
+            fieldList.none { it.title == field } -> ValidationState.Success(field)
+            else -> ValidationState.AlreadyExist(field)
+        }
     }
 
     private fun showToast(text: String) {

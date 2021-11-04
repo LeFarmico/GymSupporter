@@ -3,6 +3,7 @@ package com.lefarmico.exercise_menu.viewModel
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.LibraryViewData
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataExercise
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
@@ -24,7 +25,8 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
 
     private fun getExercises(subCategoryId: Int) {
         repo.getExercises(subCategoryId)
-            .subscribe { dataState ->
+            .observeUi()
+            .doOnSuccess { dataState ->
                 when (dataState) {
                     DataState.Empty -> exercisesLiveData.postValue(DataState.Empty)
                     DataState.Loading -> exercisesLiveData.postValue(DataState.Loading)
@@ -34,7 +36,7 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
                         exercisesLiveData.postValue(success)
                     }
                 }
-            }
+            }.subscribe()
     }
 
     private fun cleanAll() {

@@ -1,5 +1,6 @@
 package com.lefarmico.data.repository
 
+import com.lefarmico.data.BuildConfig
 import com.lefarmico.data.db.CurrentWorkoutDataBase
 import com.lefarmico.data.db.entity.CurrentWorkoutData
 import com.lefarmico.data.mapper.toData
@@ -9,9 +10,7 @@ import com.lefarmico.data.mapper.toDtoSet
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.utils.DataState
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
 import java.lang.NullPointerException
 import javax.inject.Inject
@@ -29,9 +28,10 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                 it.onSuccess(DataState.Empty)
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
@@ -48,9 +48,10 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                 it.onSuccess(DataState.Empty)
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
@@ -67,9 +68,10 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             )
             it.onSuccess(DataState.Success(exerciseId))
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
@@ -81,68 +83,84 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
                 exerciseWithSets.setList.add(set.toData())
                 it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
             } else {
+                if (BuildConfig.DEBUG) {
+                    throw (NullPointerException("That field is not exist"))
+                }
                 it.onError(NullPointerException())
             }
             it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
 
-    override fun deleteExercise(exerciseId: Int): Single<DataState<Long>> {
+    override fun deleteExercise(exerciseId: Int): Single<DataState<String>> {
         val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
-        return Single.create<DataState<Long>> { emitter ->
+        return Single.create<DataState<String>> { emitter ->
             if (exerciseWithSets != null) {
                 dataBase.exerciseWithSetsList.remove(exerciseWithSets)
-                emitter.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+                emitter.onSuccess(DataState.Success("Exercise deleted"))
             } else {
+                if (BuildConfig.DEBUG) {
+                    throw (NullPointerException("That field is not exist"))
+                }
                 emitter.onError(NullPointerException())
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
 
-    override fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>> {
+    override fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<String>> {
         val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == set.exerciseId }
-        return Single.create<DataState<Long>> {
+        return Single.create<DataState<String>> {
             if (exerciseWithSets != null) {
                 exerciseWithSets.setList - set
-                it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+                it.onSuccess(DataState.Success("Set deleted"))
             } else {
+                if (BuildConfig.DEBUG) {
+                    throw (NullPointerException("That field is not exist"))
+                }
                 it.onError(NullPointerException())
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
 
-    override fun deleteLastSet(exerciseId: Int): Single<DataState<Long>> {
+    override fun deleteLastSet(exerciseId: Int): Single<DataState<String>> {
         val exerciseWithSets = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
-        return Single.create<DataState<Long>> {
+        return Single.create<DataState<String>> {
             if (exerciseWithSets != null) {
                 val lastSet = exerciseWithSets.setList[exerciseWithSets.setList.size - 1]
                 exerciseWithSets.setList.remove(lastSet)
                 if (exerciseWithSets.setList.isEmpty()) {
                     dataBase.exerciseWithSetsList.remove(exerciseWithSets)
                 }
-                it.onSuccess(DataState.Success(CurrentWorkoutDataBase.SUCCESS))
+                it.onSuccess(DataState.Success("Set deleted"))
             } else {
+                if (BuildConfig.DEBUG) {
+                    throw (NullPointerException("That field is not exist"))
+                }
                 it.onError(NullPointerException())
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }
@@ -151,16 +169,19 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
         return Single.create<DataState<CurrentWorkoutDto.ExerciseWithSets>> { emitter ->
             val exercise = dataBase.exerciseWithSetsList.find { it.exercise.id == exerciseId }
             if (exercise != null) {
-                emitter.onSuccess(
-                    DataState.Success(exercise.toDto())
-                )
+                val dto = exercise.toDto()
+                emitter.onSuccess(DataState.Success(dto))
             } else {
+                if (BuildConfig.DEBUG) {
+                    throw (NullPointerException("That field is not exist"))
+                }
                 emitter.onError(NullPointerException())
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn {
+                if (BuildConfig.DEBUG) {
+                    throw (it)
+                }
                 DataState.Error(it as Exception)
             }
     }

@@ -14,11 +14,11 @@ interface CurrentWorkoutRepository : BaseRepository {
 
     fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
 
-    fun deleteExercise(exerciseId: Int): Single<DataState<Long>>
+    fun deleteExercise(exerciseId: Int): Single<DataState<String>>
 
-    fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
+    fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<String>>
 
-    fun deleteLastSet(exerciseId: Int): Single<DataState<Long>>
+    fun deleteLastSet(exerciseId: Int): Single<DataState<String>>
 
     fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>>
 

@@ -6,6 +6,7 @@ import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.dialog.setParameter.SetParametersDialog
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataExWithSets
 import com.lefarmico.core.toolbar.RemoveActionBarEvents
 import com.lefarmico.core.utils.SingleLiveEvent
@@ -37,39 +38,41 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
     val setParametersDialogLiveData = SingleLiveEvent<DataState<Long>>()
     val actionBarLiveData = SingleLiveEvent<RemoveActionBarEvents>()
+    val notificationLiveData = SingleLiveEvent<String>()
 
     // TODO переписать
     private fun addExercise(model: AddExercise) {
         libraryRepository.getExercise(model.id)
+            .observeUi()
             .doAfterSuccess { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
-                        val exercise = CurrentWorkoutDto.Exercise.Builder()
-                            .setTitle(dataState.data.title)
-                            .setLibraryId(model.id)
-                            .build()
+                        val exercise = CurrentWorkoutDto.Exercise(
+                            libraryId = model.id,
+                            title = dataState.data.title
+                        )
                         repo.addExercise(exercise)
-                            .doAfterSuccess {
-                                getAll()
-                            }
+                            .observeUi()
+                            .doAfterSuccess { getAll() }
                             .subscribe { dataStateId ->
                                 setParametersDialogLiveData.postValue(dataStateId)
                             }
                     }
                     else -> {}
                 }
-            }
-            .subscribe()
+            }.subscribe()
     }
 
     private fun deleteExercise(exerciseId: Int) {
         repo.deleteExercise(exerciseId)
+            .observeUi()
             .doAfterSuccess { getAll() }
             .subscribe()
     }
 
     private fun getAll() {
         repo.getExercisesWithSets()
+            .observeUi()
             .doOnSubscribe { exerciseLiveData.postValue(DataState.Loading) }
             .doAfterSuccess { dataState ->
                 when (dataState) {
@@ -86,10 +89,10 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     private fun saveWorkout() {
         repo.getExercisesWithSets()
+            .observeUi()
             .doAfterSuccess {
                 repo.clearCash()
-                // TODO вынести во вью
-                onTriggerEvent(ShowToast("Workout successfully saved."))
+                notificationLiveData.postValue("Workout successfully saved.")
             }
             .subscribe { dataState ->
                 when (dataState) {
@@ -98,7 +101,10 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                     is DataState.Error -> exerciseLiveData.postValue(dataState)
                     is DataState.Success -> {
                         val workoutDto = dataState.data.toRecordsDto()
-                        recordsRepository.addWorkoutWithExAndSets(workoutDto).subscribe()
+                        recordsRepository
+                            .addWorkoutWithExAndSets(workoutDto)
+                            .observeUi()
+                            .subscribe()
                     }
                 }
             }
@@ -112,6 +118,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     ) {
         var setNumber = 0
         repo.getSets(exerciseId)
+            .observeUi()
             .doAfterSuccess {
                 repo.addSet(
                     CurrentWorkoutDto.Set(
@@ -121,9 +128,11 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                         weight = weight,
                         reps = reps
                     )
-                ).doAfterSuccess {
-                    getAll()
-                }.subscribe()
+                )
+                    .observeUi()
+                    .doAfterSuccess {
+                        getAll()
+                    }.subscribe()
             }
             .subscribe { dataState ->
                 when (dataState) {
@@ -135,6 +144,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     private fun deleteLastSet(exerciseId: Int) {
         repo.deleteLastSet(exerciseId)
+            .observeUi()
             .doAfterSuccess { getAll() }
             .subscribe()
     }

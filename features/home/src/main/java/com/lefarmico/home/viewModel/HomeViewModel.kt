@@ -3,6 +3,7 @@ package com.lefarmico.home.viewModel
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataWorkoutWithExAndSets
 import com.lefarmico.core.toolbar.RemoveActionBarEvents
 import com.lefarmico.core.utils.SingleLiveEvent
@@ -27,6 +28,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
 
     private fun getWorkoutRecords() {
         repo.getWorkoutsWithExerciseAnsSets()
+            .observeUi()
             .doOnSubscribe { workoutRecordsLiveData.postValue(DataState.Loading) }
             .doAfterSuccess { dataState ->
                 when (dataState) {
@@ -60,6 +62,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
 
     private fun removeWorkout(workoutId: Int) {
         repo.deleteWorkoutWithExAndSets(workoutId)
+            .observeUi()
             .doAfterSuccess { getWorkoutRecords() }
             .subscribe()
     }

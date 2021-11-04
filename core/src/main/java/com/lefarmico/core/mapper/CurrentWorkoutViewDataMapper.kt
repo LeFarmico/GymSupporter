@@ -3,11 +3,7 @@ package com.lefarmico.core.mapper
 import com.lefarmico.core.entity.CurrentWorkoutViewData
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 
-fun CurrentWorkoutViewData.Exercise.toDto() = CurrentWorkoutDto.Exercise.Builder()
-    .setLibraryId(libraryId)
-    .setId(id)
-    .setTitle(title)
-    .build()
+fun CurrentWorkoutViewData.Exercise.toDto() = CurrentWorkoutDto.Exercise(id, libraryId, title)
 
 fun CurrentWorkoutViewData.Set.toDto() = CurrentWorkoutDto.Set(
     id = id, exerciseId = exerciseId, setNumber = setNumber, weight = weight, reps = reps

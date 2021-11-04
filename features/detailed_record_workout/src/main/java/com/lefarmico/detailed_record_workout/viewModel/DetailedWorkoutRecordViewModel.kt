@@ -1,16 +1,17 @@
-package com.lefarmico.edit_record_workout.viewModel
+package com.lefarmico.detailed_record_workout.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.WorkoutRecordsViewData
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewData
+import com.lefarmico.detailed_record_workout.intent.DetailedWorkoutRecordIntent
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
-import com.lefarmico.edit_record_workout.intent.EditWorkoutRecordIntent
 import com.lefarmico.navigation.Router
 import javax.inject.Inject
 
-class EditWorkoutRecordViewModel @Inject constructor() : BaseViewModel<EditWorkoutRecordIntent>() {
+class DetailedWorkoutRecordViewModel @Inject constructor() : BaseViewModel<DetailedWorkoutRecordIntent>() {
 
     @Inject
     lateinit var repo: WorkoutRecordsRepository
@@ -22,6 +23,7 @@ class EditWorkoutRecordViewModel @Inject constructor() : BaseViewModel<EditWorko
 
     private fun getRecordWorkout(workoutId: Int) {
         repo.getWorkoutWithExerciseAnsSets(workoutId)
+            .observeUi()
             .subscribe { dataState ->
                 when (dataState) {
                     is DataState.Success -> {
@@ -36,15 +38,15 @@ class EditWorkoutRecordViewModel @Inject constructor() : BaseViewModel<EditWorko
             }
     }
 
-    override fun onTriggerEvent(eventType: EditWorkoutRecordIntent) {
+    override fun onTriggerEvent(eventType: DetailedWorkoutRecordIntent) {
         when (eventType) {
-            EditWorkoutRecordIntent.AddExercise -> TODO()
-            is EditWorkoutRecordIntent.AddSet -> TODO()
-            is EditWorkoutRecordIntent.DeleteExercise -> TODO()
-            is EditWorkoutRecordIntent.DeleteSet -> TODO()
-            EditWorkoutRecordIntent.Cancel -> TODO()
-            EditWorkoutRecordIntent.Save -> TODO()
-            is EditWorkoutRecordIntent.GetWorkout -> getRecordWorkout(eventType.workoutId)
+            DetailedWorkoutRecordIntent.AddExercise -> TODO()
+            is DetailedWorkoutRecordIntent.AddSet -> TODO()
+            is DetailedWorkoutRecordIntent.DeleteExercise -> TODO()
+            is DetailedWorkoutRecordIntent.DeleteSet -> TODO()
+            DetailedWorkoutRecordIntent.Cancel -> TODO()
+            DetailedWorkoutRecordIntent.Save -> TODO()
+            is DetailedWorkoutRecordIntent.GetWorkout -> getRecordWorkout(eventType.workoutId)
         }
     }
 }

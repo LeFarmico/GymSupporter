@@ -80,18 +80,22 @@ object Deps {
         const val espressoIdling =
             "androidx.test.espresso:espresso-idling-resource:${Versions.espresso}"
     }
-    
+
     object RXJava {
         const val rxjavaAndroid = "io.reactivex.rxjava3:rxandroid:${Versions.rxJava}"
         const val rxjava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
         const val rxjavaKotlin = "io.reactivex.rxjava3:rxkotlin:${Versions.rxJava}"
         const val rxjavaRetrofitAdapter = "com.github.akarnokd:rxjava3-retrofit-adapter:${Versions.rxJava}"
     }
-    
+
     object Room {
         const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
         const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
         const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
         const val roomRx = "androidx.room:room-rxjava3:${Versions.room}"
+    }
+
+    object Firebase {
+        const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
     }
 }

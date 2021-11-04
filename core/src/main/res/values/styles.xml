@@ -2,7 +2,7 @@
 <resources>
     <style name="ButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/shape_button</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="ButtonStyle.Outline" parent="Widget.AppCompat.Button">
@@ -42,5 +42,11 @@
         <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
         <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
         <item name="background">@color/material_grey_900</item>
+    </style>
+
+    <style name="BottomNavigationBar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemIconTint">@drawable/selector_menu</item>
+        <item name="itemTextColor">@drawable/selector_menu</item>
     </style>
 </resources>

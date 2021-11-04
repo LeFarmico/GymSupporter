@@ -2,6 +2,7 @@ package com.lefarmico.workout_exercise_addition.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
@@ -12,12 +13,15 @@ class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<ExerciseDet
 
     @Inject lateinit var repo: LibraryRepository
 
+    // TODO change to ViewData
     val libraryExerciseLiveData = MutableLiveData<DataState<LibraryDto.Exercise>>()
 
     private fun getExerciseFromDB(exerciseId: Int) {
-        repo.getExercise(exerciseId).subscribe { dataState ->
-            libraryExerciseLiveData.postValue(dataState)
-        }
+        repo.getExercise(exerciseId)
+            .observeUi()
+            .subscribe { dataState ->
+                libraryExerciseLiveData.postValue(dataState)
+            }
     }
 
     override fun onTriggerEvent(eventType: ExerciseDetailsIntent) {

@@ -38,13 +38,11 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
+        style="@style/BottomNavigationBar"
         app:menu="@menu/bottom_main_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="?attr/colorPrimary"
-        app:itemIconTint="@drawable/selector_menu"
-        app:itemTextColor="@drawable/selector_menu"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
