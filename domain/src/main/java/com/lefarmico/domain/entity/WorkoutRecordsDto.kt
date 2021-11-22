@@ -1,10 +1,13 @@
 package com.lefarmico.domain.entity
 
+import java.time.LocalDateTime
+import java.util.*
+
 sealed class WorkoutRecordsDto {
 
     data class Workout(
         val id: Int = 0,
-        val date: String = "",
+        val date: LocalDateTime? = null,
     ) : WorkoutRecordsDto()
 
     data class Exercise(

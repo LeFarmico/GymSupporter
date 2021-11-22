@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:paddingBottom="4dp"
-        android:text="@string/date"
+        tools:text="01.01.2022"
         style="@style/TextStyle.SubHead"
         app:layout_constraintStart_toEndOf="@id/edit_button"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,10 +54,11 @@
         app:layout_constraintTop_toBottomOf="@id/workout_date"
         app:layout_constraintStart_toEndOf="@id/edit_button"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_note_exercise"
+        tools:listitem="@layout/item_socket_exercise_preview"
         tools:itemCount="5"
+        app:spanCount="2"
         android:background="@drawable/shape_button_variant"
         android:paddingHorizontal="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

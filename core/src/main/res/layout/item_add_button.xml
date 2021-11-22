@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:divider="@drawable/divider"
     android:dividerPadding="8dp"
     android:orientation="horizontal"
@@ -14,6 +15,7 @@
         android:gravity="center"
         android:text="@string/add_set"
         android:src="@drawable/ic_baseline_add_circle_24"
+        app:tint="?attr/colorOnSurface"
         android:padding="10dp"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_weight="1"
@@ -27,6 +29,7 @@
         android:text="@string/delete_set"
         android:padding="10dp"
         android:src="@drawable/ic_baseline_remove_circle_24"
+        app:tint="?attr/colorOnSurface"
         android:layout_weight="1"
         android:contentDescription="@string/delete_set" />
     <ImageView
@@ -37,6 +40,7 @@
         android:text="@string/delete_set"
         android:padding="10dp"
         android:src="@drawable/ic_baseline_info_24"
+        app:tint="?attr/colorOnSurface"
         android:layout_weight="1"
         android:contentDescription="@string/description" />
 </LinearLayout>

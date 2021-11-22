@@ -10,7 +10,9 @@ import com.lefarmico.core.utils.ValidationState
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.domain.utils.map
 import com.lefarmico.exercise_menu.intent.SubCategoryIntent
+import com.lefarmico.exercise_menu.intent.SubCategoryIntent.*
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.LibraryParams
@@ -22,6 +24,7 @@ class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryInte
 
     val subCategoriesLiveData = MutableLiveData<DataState<List<LibraryViewData.SubCategory>>>()
     val notificationLiveData = SingleLiveEvent<String>()
+    val validationLiveData = SingleLiveEvent<ValidationState>()
 
     @Inject
     lateinit var repo: LibraryRepository
@@ -32,64 +35,40 @@ class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryInte
     private fun getSubCategories(categoryId: Int) {
         repo.getSubCategories(categoryId)
             .observeUi()
-            .subscribe { dataState ->
-                when (dataState) {
-                    DataState.Empty -> subCategoriesLiveData.postValue(DataState.Empty)
-                    DataState.Loading -> subCategoriesLiveData.postValue(DataState.Loading)
-                    is DataState.Error -> subCategoriesLiveData.postValue(dataState)
-                    is DataState.Success -> {
-                        val success = DataState.Success(dataState.data.toViewDataSubCategory())
-                        subCategoriesLiveData.postValue(success)
-                    }
-                }
-            }
+            .doOnSuccess { dataState ->
+                val viewDataState = dataState.map { it.toViewDataSubCategory() }
+                subCategoriesLiveData.postValue(viewDataState)
+            }.subscribe()
     }
 
-    private fun addNewSubCategory(subcategoryTitle: String, categoryId: Int) {
+    private fun validateSubcategory(subcategoryTitle: String, categoryId: Int) {
         val title = subcategoryTitle.trim()
-        val subCategory = LibraryDto.SubCategory(
-            title = title,
-            categoryId = categoryId
-        )
         repo.getSubCategories(categoryId)
             .observeUi()
             .doOnSuccess { dataState ->
                 when (dataState) {
-                    is DataState.Success -> {
-                        when (isValidated(title, dataState.data)) {
-                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(title)
-                            is ValidationState.Success -> validateSuccessResolver(subCategory)
-                            ValidationState.Empty -> validateEmptyResolver()
-                        }
-                    }
-                    DataState.Empty -> {
-                        when (isValidated(title)) {
-                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(title)
-                            is ValidationState.Success -> validateSuccessResolver(subCategory)
-                            ValidationState.Empty -> validateEmptyResolver()
-                        }
-                    }
-                    else -> { throw (IllegalArgumentException()) }
+                    is DataState.Success -> validationLiveData.setValue(validate(title, dataState.data))
+                    DataState.Empty -> validationLiveData.setValue(validate(title))
+                    else -> throw (IllegalArgumentException())
                 }
             }.subscribe()
     }
 
-    private fun validateSuccessResolver(subCategory: LibraryDto.SubCategory) {
+    private fun addSubcategory(subcategoryTitle: String, categoryId: Int) {
+        val subCategory = LibraryDto.SubCategory(
+            title = subcategoryTitle,
+            categoryId = categoryId
+        )
         repo.addSubCategory(subCategory)
             .observeUi()
             .doAfterSuccess { getSubCategories(subCategory.categoryId) }
             .subscribe()
     }
 
-    private fun validateEmptyResolver() {
-        notificationLiveData.postValue("field should not be empty")
-    }
-
-    private fun validateAlreadyExistResolver(field: String) {
-        notificationLiveData.postValue("$field category already exist")
-    }
-
-    private fun isValidated(field: String, fieldList: List<LibraryDto.SubCategory> = listOf()): ValidationState {
+    private fun validate(
+        field: String,
+        fieldList: List<LibraryDto.SubCategory> = listOf()
+    ): ValidationState {
         return when {
             field.isEmpty() -> ValidationState.Empty
             fieldList.none { it.title == field } -> ValidationState.Success(field)
@@ -110,14 +89,15 @@ class SubCategoryViewModel @Inject constructor() : BaseViewModel<SubCategoryInte
 
     override fun onTriggerEvent(eventType: SubCategoryIntent) {
         when (eventType) {
-            is SubCategoryIntent.GetSubcategories -> getSubCategories(eventType.categoryId)
-            is SubCategoryIntent.AddNewSubCategory -> addNewSubCategory(eventType.title, eventType.categoryId)
-            is SubCategoryIntent.GoToExerciseListScreen -> goToExerciseListScreen(
+            is GetSubcategories -> getSubCategories(eventType.categoryId)
+            is ValidateSubcategory -> validateSubcategory(eventType.title, eventType.categoryId)
+            is AddSubcategory -> addSubcategory(eventType.title, eventType.categoryId)
+            is ShowToast -> showToast(eventType.text)
+            is GoToExerciseListScreen -> goToExerciseListScreen(
                 eventType.categoryId,
                 eventType.subcategoryId,
                 eventType.isFromWorkoutScreen
             )
-            is SubCategoryIntent.ShowToast -> showToast(eventType.text)
         }
     }
 }

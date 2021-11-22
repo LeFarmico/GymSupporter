@@ -10,6 +10,7 @@ import com.lefarmico.core.utils.ValidationState
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.domain.utils.map
 import com.lefarmico.exercise_menu.intent.CategoryListIntent
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
@@ -33,62 +34,36 @@ class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIn
         repo.getCategories()
             .observeUi()
             .subscribe { dataState ->
-                when (dataState) {
-                    DataState.Empty -> categoriesLiveData.postValue(DataState.Empty)
-                    DataState.Loading -> categoriesLiveData.postValue(DataState.Loading)
-                    is DataState.Error -> categoriesLiveData.postValue(dataState)
-                    is DataState.Success -> {
-                        val success = DataState.Success(dataState.data.toViewDataCategory())
-                        categoriesLiveData.postValue(success)
-                    }
-                }
+                val viewDataState = dataState.map { it.toViewDataCategory() }
+                categoriesLiveData.postValue(viewDataState)
             }
     }
 
-    private fun addNewCategory(categoryTitle: String) {
+    private fun validateCategory(categoryTitle: String) {
         val title = categoryTitle.trim()
-        val category = LibraryDto.Category(
-            title = title
-        )
         repo.getCategories()
             .observeUi()
             .doOnSuccess { dataState ->
                 when (dataState) {
-                    is DataState.Success -> {
-                        when (isValidated(title, dataState.data)) {
-                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(title)
-                            is ValidationState.Success -> validateSuccessResolver(category)
-                            ValidationState.Empty -> validateEmptyResolver()
-                        }
-                    }
-                    DataState.Empty -> {
-                        when (isValidated(title)) {
-                            is ValidationState.AlreadyExist -> validateAlreadyExistResolver(title)
-                            is ValidationState.Success -> validateSuccessResolver(category)
-                            ValidationState.Empty -> validateEmptyResolver()
-                        }
-                    }
-                    else -> { throw (IllegalArgumentException()) }
+                    is DataState.Success -> validationLiveData.setValue(validate(title, dataState.data))
+                    DataState.Empty -> validationLiveData.setValue(validate(title))
+                    else -> throw (IllegalArgumentException())
                 }
             }.subscribe()
     }
 
-    private fun validateSuccessResolver(category: LibraryDto.Category) {
+    private fun addCategory(categoryTitle: String) {
+        val category = LibraryDto.Category(title = categoryTitle)
         repo.addCategory(category)
             .observeUi()
             .doAfterSuccess { getCategories() }
             .subscribe()
     }
 
-    private fun validateEmptyResolver() {
-        notificationLiveData.postValue("field should not be empty")
-    }
-
-    private fun validateAlreadyExistResolver(field: String) {
-        notificationLiveData.postValue("$field category already exist")
-    }
-
-    private fun isValidated(field: String, fieldList: List<LibraryDto.Category> = listOf()): ValidationState {
+    private fun validate(
+        field: String,
+        fieldList: List<LibraryDto.Category> = listOf()
+    ): ValidationState {
         return when {
             field.isEmpty() -> ValidationState.Empty
             fieldList.none { it.title == field } -> ValidationState.Success(field)
@@ -109,13 +84,14 @@ class CategoryListViewModel @Inject constructor() : BaseViewModel<CategoryListIn
 
     override fun onTriggerEvent(eventType: CategoryListIntent) {
         when (eventType) {
-            is CategoryListIntent.AddCategory -> addNewCategory(eventType.categoryTitle)
+            is CategoryListIntent.ValidateCategory -> validateCategory(eventType.categoryTitle)
             is CategoryListIntent.GetCategories -> getCategories()
+            is CategoryListIntent.ShowToast -> showToast(eventType.text)
+            is CategoryListIntent.AddCategory -> addCategory(eventType.categoryTitle)
             is CategoryListIntent.GoToSubcategoryScreen -> goToSubcategoryScreen(
                 eventType.categoryId,
                 eventType.isFromWorkoutScreen
             )
-            is CategoryListIntent.ShowToast -> showToast(eventType.text)
         }
     }
 }

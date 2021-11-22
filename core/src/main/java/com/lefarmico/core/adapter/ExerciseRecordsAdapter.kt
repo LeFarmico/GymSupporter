@@ -3,6 +3,7 @@ package com.lefarmico.core.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.lefarmico.core.R
 import com.lefarmico.core.databinding.ItemNoteExerciseBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 
@@ -18,18 +19,15 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
         itemNoteExerciseBinding: ItemNoteExerciseBinding
     ) : RecyclerView.ViewHolder(itemNoteExerciseBinding.root) {
 
-        private var exercise = itemNoteExerciseBinding.exerciseName
-        private var exerciseNumber = itemNoteExerciseBinding.exerciseNumber
+        private val context = itemNoteExerciseBinding.root.context
+        private val exerciseField = itemNoteExerciseBinding.exercise
         private val setList = itemNoteExerciseBinding.setsList
 
-        fun bind(exercise: WorkoutRecordsViewData.Exercise) {
-            this.exercise.text = exercise.exerciseName
+        fun bind(exercise: WorkoutRecordsViewData.Exercise, number: Int) {
+            exerciseField.text = context.getString(R.string.exercise_field, number.toString(), exercise.exerciseName)
         }
         fun bindAdapter(adapter: SetRecordsAdapter) {
             setList.adapter = adapter
-        }
-        fun setExerciseNumber(number: Int) {
-            exerciseNumber.text = number.toString()
         }
     }
 
@@ -46,9 +44,8 @@ class ExerciseRecordsAdapter : RecyclerView.Adapter<ExerciseRecordsAdapter.Worko
         val setAdapter = SetRecordsAdapter().apply {
             items = exerciseSetList
         }
-        holder.bind(items[position].exercise)
+        holder.bind(items[position].exercise, position + 1)
         holder.bindAdapter(setAdapter)
-        holder.setExerciseNumber(position + 1)
     }
 
     override fun getItemCount(): Int {

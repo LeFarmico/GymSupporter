@@ -2,9 +2,7 @@ package com.lefarmico.core.utils
 
 sealed class ValidationState {
 
-    object Empty : ValidationState() {
-        const val exception = "field must not be empty"
-    }
+    object Empty : ValidationState()
 
     data class AlreadyExist(
         val field: String = ""

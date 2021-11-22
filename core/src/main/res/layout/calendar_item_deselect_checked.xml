@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="56dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_menu_item_single"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/day_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextStyle.SubHead"
+        tools:text="04"
+
+        />
+
+    <TextView
+        android:id="@+id/week_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Tue"
+        style="@style/TextStyle.Caption"
+
+        />
+
+    <View
+        android:id="@+id/deselected"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:visibility="visible"
+        android:background="@drawable/shape_button"
+        />
+</LinearLayout>

@@ -3,11 +3,13 @@ package com.lefarmico.create_new_exercise.view
 import android.os.Bundle
 import android.os.Parcelable
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
 import com.lefarmico.core.utils.EmptyTextValidator
+import com.lefarmico.core.utils.ValidationState
 import com.lefarmico.create_new_exercise.BuildConfig
 import com.lefarmico.create_new_exercise.databinding.FragmentCreateNewExerciseBinding
-import com.lefarmico.create_new_exercise.intent.AddExerciseIntent
-import com.lefarmico.create_new_exercise.intent.AddExerciseIntent.*
+import com.lefarmico.create_new_exercise.intent.CreateExerciseIntent
+import com.lefarmico.create_new_exercise.intent.CreateExerciseIntent.*
 import com.lefarmico.create_new_exercise.viewModel.CreateNewExerciseViewModel
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.LibraryParams
@@ -17,6 +19,11 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
     FragmentCreateNewExerciseBinding::inflate,
     CreateNewExerciseViewModel::class.java
 ) {
+
+    private val textField get() = binding.exerciseEditText.text.toString()
+    private val descriptionField get() = binding.descriptionEditText.text.toString()
+    private val imageSourceField get() = ""
+    private val subcategory get() = params.subCategoryId
 
     private val params: LibraryParams.NewExercise by lazy {
         arguments?.getParcelable<LibraryParams.NewExercise>(KEY_PARAMS)
@@ -29,14 +36,7 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
                 EmptyTextValidator(exerciseEditText, exerciseTitleTextView)
             )
             addButton.setOnClickListener {
-                startEvent(
-                    AddExerciseResult(
-                        getTitleField(),
-                        getDescriptionField(),
-                        getImageSource(),
-                        getSubcategory()
-                    )
-                )
+                startEvent(ValidateExercise(textField, subcategory))
             }
         }
     }
@@ -44,6 +44,18 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
     override fun observeData() {
         viewModel.notificationLiveData.observe(viewLifecycleOwner) { s ->
             startEvent(ShowToast(s))
+        }
+        viewModel.validationLiveData.observe(viewLifecycleOwner) { validationState ->
+            when (validationState) {
+                ValidationState.Empty -> startEvent(ShowToast("field should not be empty"))
+
+                is ValidationState.Success -> {
+                    startEvent(AddExercise(validationState.field, descriptionField, imageSourceField, subcategory))
+                }
+                is ValidationState.AlreadyExist -> {
+                    startEvent(ShowToast("${validationState.field} exercise already exist"))
+                }
+            }
         }
         viewModel.addExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
@@ -63,20 +75,7 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
         }
     }
 
-    private fun getTitleField(): String {
-        return binding.exerciseEditText.text.toString()
-    }
-    private fun getDescriptionField(): String {
-        return binding.descriptionEditText.text.toString()
-    }
-    private fun getImageSource(): String {
-        return ""
-    }
-    private fun getSubcategory(): Int {
-        return params.subCategoryId
-    }
-
-    private fun startEvent(event: AddExerciseIntent) {
+    private fun startEvent(event: CreateExerciseIntent) {
         viewModel.onTriggerEvent(event)
     }
 
@@ -91,7 +90,7 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
                     else -> {
                         if (BuildConfig.DEBUG) {
                             throw (
-                                IllegalArgumentException(
+                                IllegalBundleDataTypeException(
                                     "data should be LibraryParams.NewExercise type." +
                                         "but it's ${data!!.javaClass.simpleName}"
                                 )

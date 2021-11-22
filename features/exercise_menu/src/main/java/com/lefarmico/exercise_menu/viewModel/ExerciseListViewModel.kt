@@ -7,7 +7,9 @@ import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataExercise
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.domain.utils.map
 import com.lefarmico.exercise_menu.intent.ExerciseListIntent
+import com.lefarmico.exercise_menu.intent.ExerciseListIntent.*
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
@@ -27,15 +29,8 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
         repo.getExercises(subCategoryId)
             .observeUi()
             .doOnSuccess { dataState ->
-                when (dataState) {
-                    DataState.Empty -> exercisesLiveData.postValue(DataState.Empty)
-                    DataState.Loading -> exercisesLiveData.postValue(DataState.Loading)
-                    is DataState.Error -> exercisesLiveData.postValue(dataState)
-                    is DataState.Success -> {
-                        val success = DataState.Success(dataState.data.toViewDataExercise())
-                        exercisesLiveData.postValue(success)
-                    }
-                }
+                val viewDataState = dataState.map { it.toViewDataExercise() }
+                exercisesLiveData.postValue(viewDataState)
             }.subscribe()
     }
 
@@ -45,8 +40,8 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
 
     private fun addExerciseToWorkout(exerciseId: Int) {
         router.navigate(
-            Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN,
-            WorkoutScreenParams.NewExercise(exerciseId)
+            screen = Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN,
+            data = WorkoutScreenParams.NewExercise(exerciseId)
         )
     }
 
@@ -70,15 +65,11 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
 
     override fun onTriggerEvent(eventType: ExerciseListIntent) {
         when (eventType) {
-            is ExerciseListIntent.GetExercises -> getExercises(eventType.subcategoryId)
-            ExerciseListIntent.CleanAll -> cleanAll()
-            is ExerciseListIntent.AddExerciseToWorkoutScreen -> addExerciseToWorkout(
-                eventType.exerciseId
-            )
-            is ExerciseListIntent.GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(
-                eventType.exerciseId
-            )
-            is ExerciseListIntent.CreateNewExercise -> createNewExercise(
+            CleanAll -> cleanAll()
+            is GetExercises -> getExercises(eventType.subcategoryId)
+            is AddExerciseToWorkoutScreen -> addExerciseToWorkout(eventType.exerciseId)
+            is GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(eventType.exerciseId)
+            is CreateNewExercise -> createNewExercise(
                 eventType.categoryId,
                 eventType.categoryId,
                 eventType.isFromWorkoutScreen

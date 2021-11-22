@@ -161,6 +161,7 @@ class CurrentExerciseAdapter :
     override fun getSelectedItems(): Set<CurrentWorkoutViewData.ExerciseWithSets> = selectedItemsSet
 
     fun toggleSelectAll() {
+        selectedItemsSet.clear()
         selectedItemsSet.addAll(items)
         notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.SELECT_ALL)
     }

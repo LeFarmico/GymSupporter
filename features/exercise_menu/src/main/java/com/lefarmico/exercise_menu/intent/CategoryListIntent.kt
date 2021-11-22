@@ -4,6 +4,8 @@ import com.lefarmico.core.base.BaseIntent
 
 sealed class CategoryListIntent : BaseIntent() {
 
+    data class ValidateCategory(val categoryTitle: String) : CategoryListIntent()
+
     data class AddCategory(val categoryTitle: String) : CategoryListIntent()
 
     object GetCategories : CategoryListIntent()

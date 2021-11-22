@@ -98,4 +98,8 @@ object Deps {
     object Firebase {
         const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
     }
+
+    object CustomUi {
+        const val singleRowCalendar = "com.michalsvec:single-row-calendar:${Versions.singleRowCal}"
+    }
 }
