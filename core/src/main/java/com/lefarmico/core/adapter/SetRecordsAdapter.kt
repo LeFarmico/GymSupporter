@@ -23,7 +23,7 @@ class SetRecordsAdapter : RecyclerView.Adapter<SetRecordsAdapter.SetViewHolder>(
 
         fun bind(noteSet: WorkoutRecordsViewData.Set) {
             reps.text = context.getString(R.string.repetitions_field, noteSet.reps)
-            weights.text = context.getString(R.string.weight_field, noteSet.weight)
+            weights.text = context.getString(R.string.weight_field, noteSet.weight.toString())
         }
         fun bindSetNumber(number: Int) {
             setNumber.text = context.getString(R.string.set_field, number)

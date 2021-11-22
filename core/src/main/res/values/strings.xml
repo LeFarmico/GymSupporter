@@ -3,9 +3,9 @@
     <string name="app_name">DoneTime</string>
 
     <!-- Fields -->
-    <string name="repetitions_field">Reps. %1$i</string>
-    <string name="weight_field">Weight %1$f</string>
-    <string name="set_field">%1$i. Set </string>
+    <string name="repetitions_field">Reps. %1$d</string>
+    <string name="weight_field">Weight %1$s</string>
+    <string name="set_field">%1$d. Set </string>
     <string name="exercise_field">%1$s. %2$s</string>
 
     <!-- Menu -->
@@ -32,6 +32,8 @@
     <string name="select_all">Select all</string>
     <string name="delete_set">Delete last set</string>
     <string name="add_set">Add set to workout</string>
+    <string name="next_month_button">Next month</string>
+    <string name="last_month_button">Last month</string>
 
     <!-- Edit text fields   -->
     <string name="new_category">New category</string>

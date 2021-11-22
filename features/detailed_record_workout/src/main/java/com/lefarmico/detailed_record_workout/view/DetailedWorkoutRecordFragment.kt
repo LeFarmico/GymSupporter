@@ -11,7 +11,7 @@ import com.lefarmico.detailed_record_workout.intent.DetailedWorkoutRecordIntent
 import com.lefarmico.detailed_record_workout.viewModel.DetailedWorkoutRecordViewModel
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.RecordMenuParams
-import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
@@ -42,8 +42,8 @@ class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedReco
                 }
                 is DataState.Success -> {
                     // TODO : исправить
-                    val format = SimpleDateFormat("dd.mm.yyy", Locale.getDefault())
-                    val dateString = format.format(dataState.data.workout.date!!)
+                    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
+                    val dateString = dataState.data.workout.date!!.format(formatter)
                     binding.workoutDate.text = dateString
                     val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
                     // TODO : Избавиться от логики
