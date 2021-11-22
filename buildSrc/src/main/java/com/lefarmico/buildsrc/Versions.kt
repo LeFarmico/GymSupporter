@@ -1,8 +1,8 @@
 package com.lefarmico.buildsrc
 
 object Versions {
-    const val gradle = "7.0.2"
-    const val kotlin = "1.5.0"
+    const val gradle = "7.0.3"
+    const val kotlin = "1.6.0"
     const val ktlint = "10.1.0"
 
     const val coroutines = "1.5.0"
@@ -16,7 +16,7 @@ object Versions {
     const val lifecycleExtensions = "2.2.0"
     const val room = "2.3.0-rc01"
     const val rxJava = "3.0.0"
-    const val dagger = "2.34"
+    const val dagger = "2.40.1"
     const val viewpager2 = "1.0.0"
     const val flexBox = "2.0.1"
     const val cardView = "1.0.0"
@@ -37,4 +37,6 @@ object Versions {
     const val espresso = "3.2.0"
 
     const val firebase = "29.0.0"
+
+    const val singleRowCal = "1.0.0"
 }

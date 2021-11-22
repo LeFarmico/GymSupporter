@@ -1,6 +1,9 @@
 package com.lefarmico.data.utils
 
 import com.lefarmico.domain.entity.WorkoutRecordsDto
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 fun List<WorkoutRecordsDto.ExerciseWithSets>.setWorkoutId(workoutId: Int) = this.map {
     WorkoutRecordsDto.ExerciseWithSets(
@@ -20,4 +23,15 @@ fun List<WorkoutRecordsDto.Set>.setExerciseId(exerciseId: Int) = this.map {
         reps = it.reps,
         measureType = WorkoutRecordsDto.MeasureType.KILO
     )
+}
+
+fun LocalDate.getMonthDatesInRange(): List<LocalDateTime> {
+    val dates = mutableListOf<LocalDateTime>()
+    var localDate = this.withDayOfMonth(1)
+    val monthLength = localDate.lengthOfMonth()
+    while (dates.size <= monthLength - 1) {
+        dates.add(localDate.atStartOfDay())
+        localDate = localDate.plusDays(1)
+    }
+    return dates
 }

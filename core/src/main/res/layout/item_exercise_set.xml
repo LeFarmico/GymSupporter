@@ -1,113 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/exercise"
     android:layout_width="match_parent"
     android:layout_height="48dp"
+    android:layout_marginHorizontal="16dp"
+    android:orientation="horizontal"
     android:gravity="center_vertical">
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/first_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp"
-        />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/second_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="140dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/third_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp"
-        />
 
     <TextView
         android:id="@+id/set_number"
         style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/first_guide"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="99" />
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        tools:text="99. Set" />
 
-    <TextView
-        android:id="@+id/set"
-        style="@style/TextStyle.Body"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:text="@string/set"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
 
-        app:layout_constraintStart_toEndOf="@id/set_number"
-        app:layout_constraintTop_toTopOf="@id/set_number" />
-
-    <TextView
-        android:id="@+id/weights_text"
-        style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/weight_cur"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintStart_toEndOf="@id/second_guide"
-        app:layout_constraintTop_toTopOf="@id/set_number" />
 
     <TextView
         android:id="@+id/weight"
         style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="0dp"
         android:layout_marginVertical="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintStart_toEndOf="@id/weights_text"
-        app:layout_constraintTop_toTopOf="@id/set_number"
-        tools:text="5555" />
-
-    <TextView
-        android:id="@+id/measures"
-        style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/kg"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintStart_toEndOf="@id/weight"
-        app:layout_constraintTop_toTopOf="@id/set_number" />
-
-    <TextView
-        android:id="@+id/reps_text"
-        style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:text="@string/reps_cur"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintEnd_toStartOf="@+id/reps"
-        app:layout_constraintTop_toTopOf="@id/set_number" />
+        android:layout_weight="1"
+        tools:text="Weight 5555 kg." />
 
     <TextView
         android:id="@+id/reps"
         style="@style/TextStyle.Body"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="0dp"
         android:layout_marginVertical="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/set_number"
-        app:layout_constraintTop_toTopOf="@id/set_number"
-        app:layout_constraintEnd_toEndOf="@id/third_guide"
-        tools:text="150" />
+        android:layout_weight="1"
+        tools:text="Reps. 15" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

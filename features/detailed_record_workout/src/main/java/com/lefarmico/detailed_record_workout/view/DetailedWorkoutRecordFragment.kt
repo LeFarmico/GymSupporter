@@ -6,14 +6,16 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
 import com.lefarmico.core.entity.WorkoutRecordsViewData
-import com.lefarmico.domain.utils.DataState
-import com.lefarmico.detailed_record_workout.databinding.FragmentEditWorkoutRecordBinding
+import com.lefarmico.detailed_record_workout.databinding.DetailedRecordFragmentBinding
 import com.lefarmico.detailed_record_workout.intent.DetailedWorkoutRecordIntent
 import com.lefarmico.detailed_record_workout.viewModel.DetailedWorkoutRecordViewModel
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.RecordMenuParams
+import java.text.SimpleDateFormat
+import java.util.*
 
-class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEditWorkoutRecordBinding, DetailedWorkoutRecordViewModel>(
-    FragmentEditWorkoutRecordBinding::inflate,
+class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
+    DetailedRecordFragmentBinding::inflate,
     DetailedWorkoutRecordViewModel::class.java
 ) {
 
@@ -39,7 +41,10 @@ class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<FragmentEdit
                 DataState.Loading -> {
                 }
                 is DataState.Success -> {
-                    binding.workoutDate.text = dataState.data.workout.date
+                    // TODO : исправить
+                    val format = SimpleDateFormat("dd.mm.yyy", Locale.getDefault())
+                    val dateString = format.format(dataState.data.workout.date!!)
+                    binding.workoutDate.text = dateString
                     val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
                     // TODO : Избавиться от логики
                     val exerciseList = dataState.data.exerciseWithSetsList

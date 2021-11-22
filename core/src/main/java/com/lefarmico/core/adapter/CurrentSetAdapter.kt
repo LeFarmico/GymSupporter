@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.lefarmico.core.R
 import com.lefarmico.core.adapter.diffUtil.CurrentSetDiffCallback
 import com.lefarmico.core.databinding.ItemExerciseSetBinding
 import com.lefarmico.core.entity.CurrentWorkoutViewData
@@ -25,6 +26,7 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         itemExerciseSetBinding: ItemExerciseSetBinding
     ) : RecyclerView.ViewHolder(itemExerciseSetBinding.root) {
 
+        private val context = itemExerciseSetBinding.reps.context
         private val setNumber: TextView = itemExerciseSetBinding.setNumber
         private val weights: TextView = itemExerciseSetBinding.weight
         private var reps = itemExerciseSetBinding.reps
@@ -32,11 +34,11 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
         private val layout = itemExerciseSetBinding.root
 
         fun bind(item: CurrentWorkoutViewData.Set) {
-            setNumber.text = item.setNumber.toString()
-            weights.text = item.weight.toString()
-            reps.text = item.reps.toString()
+            setNumber.text = context.getString(R.string.set_field, item.setNumber)
+            weights.text = context.getString(R.string.weight_field, item.weight)
+            reps.text = context.getString(R.string.repetitions_field, item.reps)
             layout.setOnClickListener {
-                Toast.makeText(it.context, "Push", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Push", Toast.LENGTH_SHORT).show()
             }
         }
     }

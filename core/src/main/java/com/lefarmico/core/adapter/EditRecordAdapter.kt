@@ -2,9 +2,11 @@ package com.lefarmico.core.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.lefarmico.core.R
 import com.lefarmico.core.databinding.ItemEditRecordExerciseBinding
-import com.lefarmico.core.databinding.ItemEditRecordSetBinding
+import com.lefarmico.core.databinding.ItemExerciseSetBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 
 class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -27,17 +29,18 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class EditSetViewHolder(
-        itemEditRecordSetBinding: ItemEditRecordSetBinding
-    ) : RecyclerView.ViewHolder(itemEditRecordSetBinding.root) {
+        itemExerciseSetBinding: ItemExerciseSetBinding
+    ) : RecyclerView.ViewHolder(itemExerciseSetBinding.root) {
 
-        private val setNumber = itemEditRecordSetBinding.set.setNumber
-        private val reps = itemEditRecordSetBinding.set.reps
-        private val weight = itemEditRecordSetBinding.set.weight
+        private val context = itemExerciseSetBinding.reps.context
+        private val setNumber: TextView = itemExerciseSetBinding.setNumber
+        private val weights: TextView = itemExerciseSetBinding.weight
+        private var reps = itemExerciseSetBinding.reps
 
-        fun bind(setNumber: Int, repsCount: Int, weight: Float) {
-            this.setNumber.text = setNumber.toString()
-            this.reps.text = repsCount.toString()
-            this.weight.text = weight.toString()
+        fun bind(item: WorkoutRecordsViewData.Set) {
+            setNumber.text = context.getString(R.string.set_field, item.setNumber)
+            weights.text = context.getString(R.string.weight_field, item.weight)
+            reps.text = context.getString(R.string.repetitions_field, item.reps)
         }
     }
 
@@ -52,11 +55,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             WorkoutRecordsViewData.SET -> {
                 holder as EditSetViewHolder
                 item as WorkoutRecordsViewData.Set
-                holder.bind(
-                    item.setNumber,
-                    item.reps,
-                    item.weight
-                )
+                holder.bind(item)
             }
         }
     }
@@ -72,7 +71,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             WorkoutRecordsViewData.SET -> {
                 EditSetViewHolder(
-                    ItemEditRecordSetBinding.inflate(
+                    ItemExerciseSetBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )

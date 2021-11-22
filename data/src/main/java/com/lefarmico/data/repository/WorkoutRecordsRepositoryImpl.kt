@@ -1,5 +1,6 @@
 package com.lefarmico.data.repository
 
+import android.util.Log
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
 import com.lefarmico.data.extensions.dataStateActionResolver
 import com.lefarmico.data.extensions.dataStateResolver
@@ -14,6 +15,8 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
 import java.lang.Exception
+import java.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 
 class WorkoutRecordsRepositoryImpl @Inject constructor(
@@ -61,6 +64,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     }
 
     override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Int>> {
+        Log.e("TAGGG", "$workoutId !!!")
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
             .doOnError { e -> DataState.Error(e as Exception) }
             .map { data -> dataStateActionResolver { dao.deleteWorkout(data.workout) } }
@@ -70,5 +74,13 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
     ): Single<DataState<String>> {
         TODO("Not yet implemented")
+    }
+
+    override fun getWorkoutWithExerciseAndSetsByDate(date: LocalDateTime):
+        Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
+        return dao.getWorkoutsWithExerciseAnsSetsByDate(date)
+            .doOnSubscribe { DataState.Loading }
+            .doOnError { DataState.Error(it as Exception) }
+            .map { data -> dataStateResolver(data.toWorkoutWithExercisesAndSetsDto()) }
     }
 }

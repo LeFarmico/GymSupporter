@@ -9,6 +9,8 @@ import com.lefarmico.core.adapter.diffUtil.WorkoutRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemNoteWorkoutBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.selector.SelectItemsHandler
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class WorkoutRecordsAdapter :
     RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>(),
@@ -40,7 +42,13 @@ class WorkoutRecordsAdapter :
         val detailsButton = itemNoteWorkoutBinding.detailsButton
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
-            date.text = noteWorkout.date
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyy", Locale.getDefault())
+            val dateFormatted = try {
+                noteWorkout.date!!.format(formatter)
+            } catch (e: IllegalArgumentException) {
+                ""
+            }
+            date.text = dateFormatted
             exerciseNoteRecycler.adapter = adapter
         }
     }
@@ -54,19 +62,18 @@ class WorkoutRecordsAdapter :
     }
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
-
-        holder.adapter.items = items[position].exerciseWithSetsList
-
-        holder.bind(items[position].workout)
-
-        holder.detailsButton.setOnClickListener {
-            onEditButtonAction(items[position].workout)
-        }
-        holder.selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            // TODO вынести логику, но куда?
-            when (isChecked) {
-                true -> selectedItemsSet.add(items[position])
-                false -> selectedItemsSet.remove(items[position])
+        holder.apply {
+            adapter.items = items[position].exerciseWithSetsList
+            bind(items[position].workout)
+            detailsButton.setOnClickListener {
+                onEditButtonAction(items[position].workout)
+            }
+            selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
+                // TODO вынести логику, но куда?
+                when (isChecked) {
+                    true -> selectedItemsSet.add(items[bindingAdapterPosition])
+                    false -> selectedItemsSet.remove(items[bindingAdapterPosition])
+                }
             }
         }
     }
@@ -110,6 +117,7 @@ class WorkoutRecordsAdapter :
     }
 
     fun toggleSelectAll() {
+        selectedItemsSet.clear()
         selectedItemsSet.addAll(items)
         notifyItemRangeChanged(0, items.size, SELECT_ALL)
     }

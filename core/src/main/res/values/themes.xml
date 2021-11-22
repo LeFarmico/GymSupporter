@@ -22,6 +22,7 @@
 
         <!-- App bar. -->
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>
