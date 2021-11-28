@@ -1,7 +1,7 @@
 package com.lefarmico.home.intent
 
 import com.lefarmico.core.base.BaseIntent
-import com.lefarmico.core.toolbar.RemoveActionBarEvents
+import com.lefarmico.core.toolbar.EditActionBarEvents
 import java.time.LocalDateTime
 
 sealed class HomeIntent : BaseIntent() {
@@ -14,7 +14,7 @@ sealed class HomeIntent : BaseIntent() {
 
     data class RemoveWorkout(val workoutId: Int) : HomeIntent()
 
-    data class ActionBarEvent(val event: RemoveActionBarEvents) : HomeIntent()
+    data class ActionBarEvent(val event: EditActionBarEvents) : HomeIntent()
 
     data class GetCalendarDates(val date: LocalDateTime) : HomeIntent()
 

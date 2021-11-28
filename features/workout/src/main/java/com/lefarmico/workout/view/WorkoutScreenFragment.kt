@@ -13,7 +13,7 @@ import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.RemoveActionBarCallback
-import com.lefarmico.core.toolbar.RemoveActionBarEvents.*
+import com.lefarmico.core.toolbar.EditActionBarEvents.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.params.WorkoutScreenParams.*

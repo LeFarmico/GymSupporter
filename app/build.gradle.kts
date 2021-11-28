@@ -73,6 +73,7 @@ dependencies {
     implementation(project(":features:workout"))
     implementation(project(":features:create_new_exercise"))
     implementation(project(":features:detailed_record_workout"))
+
     implementation("com.google.firebase:firebase-analytics:20.0.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
     implementation("com.google.firebase:firebase-analytics-ktx:20.0.0")

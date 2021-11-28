@@ -40,33 +40,29 @@ dependencies {
     api(project(":domain"))
     api(project(":navigation"))
 
-    api(Deps.Androidx.appcompat)
-    api(Deps.Androidx.recyclerView)
-    api(Deps.Androidx.constraintLayout)
-    api(Deps.Androidx.cardView)
-    api(Deps.Androidx.material)
-    api(Deps.Androidx.lifecycleExtensions)
-    api(Deps.Androidx.viewpager2)
-    api(Deps.Ktx.core)
-    api(Deps.Ktx.fragment)
-    api(Deps.Ktx.liveDataCore)
-    api(Deps.Ktx.liveData)
-    api(Deps.Ktx.viewModel)
-    api(Deps.UiTest.espressoIdling)
+    implementation(Deps.Androidx.appcompat)
+    implementation(Deps.Androidx.recyclerView)
+    implementation(Deps.Androidx.constraintLayout)
+    implementation(Deps.Androidx.cardView)
+    implementation(Deps.Androidx.material)
+    implementation(Deps.Androidx.lifecycleExtensions)
+    implementation(Deps.Androidx.viewpager2)
+    implementation(Deps.Ktx.core)
+    implementation(Deps.Ktx.fragment)
+    implementation(Deps.Ktx.liveDataCore)
+    implementation(Deps.Ktx.liveData)
+    implementation(Deps.Ktx.viewModel)
 
     // RXJava
     implementation(Deps.RXJava.rxjava)
     implementation(Deps.RXJava.rxjavaAndroid)
     implementation(Deps.RXJava.rxjavaKotlin)
-    implementation(Deps.RXJava.rxjavaRetrofitAdapter)
 
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
     annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
 
+    testImplementation(Deps.UiTest.espressoIdling)
     testImplementation(Deps.Test.junit)
-
-    // AdapterDelegates
-    implementation(Deps.adapterDelegates)
 }

@@ -1,9 +1,9 @@
 package com.lefarmico.features.di
 
-import dagger.Subcomponent
+import dagger.Component
 
-@FragmentScope
-@Subcomponent(
+@FeatureScope
+@Component(
     modules = [
         ViewModelModule::class
     ]

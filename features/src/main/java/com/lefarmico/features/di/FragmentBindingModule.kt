@@ -14,35 +14,35 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBindingModule {
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideHomeFragment(): HomeFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideAddExerciseFragment(): CreateNewExerciseFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideWorkoutScreenFragment(): WorkoutScreenFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideExerciseDetailsFragment(): ExerciseDetailsFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideWorkoutCategoryFragment(): CategoryListFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideWorkoutExerciseFragment(): SubCategoryListFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideWorkoutSubcategoryFragment(): ExerciseListFragment
 
-    @FragmentScope
+    @FeatureScope
     @ContributesAndroidInjector
     abstract fun provideEditWorkoutRecordFragment(): DetailedWorkoutRecordFragment
 }

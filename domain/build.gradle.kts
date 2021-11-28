@@ -27,7 +27,4 @@ dependencies {
 
     // RXJava
     implementation(Deps.RXJava.rxjava)
-    implementation(Deps.RXJava.rxjavaAndroid)
-    implementation(Deps.RXJava.rxjavaKotlin)
-    implementation(Deps.RXJava.rxjavaRetrofitAdapter)
 }

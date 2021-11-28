@@ -8,7 +8,7 @@ import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataExWithSets
-import com.lefarmico.core.toolbar.RemoveActionBarEvents
+import com.lefarmico.core.toolbar.EditActionBarEvents
 import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
@@ -38,7 +38,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
     val setParametersDialogLiveData = SingleLiveEvent<DataState<Long>>()
-    val actionBarLiveData = SingleLiveEvent<RemoveActionBarEvents>()
+    val actionBarLiveData = SingleLiveEvent<EditActionBarEvents>()
     val notificationLiveData = SingleLiveEvent<String>()
 
     // TODO переписать
@@ -131,7 +131,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     }
 
     private fun goToCategoryScreen() {
-        actionBarLiveData.postValue(RemoveActionBarEvents.Close)
+        actionBarLiveData.postValue(EditActionBarEvents.Close)
         router.navigate(
             screen = Screen.CATEGORY_LIST_SCREEN,
             data = LibraryParams.CategoryList(true)
@@ -139,12 +139,12 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     }
 
     private fun finishWorkout() {
-        actionBarLiveData.postValue(RemoveActionBarEvents.Close)
+        actionBarLiveData.postValue(EditActionBarEvents.Close)
         saveWorkout()
     }
 
     private fun goToExerciseInfo(libraryId: Int) {
-        actionBarLiveData.postValue(RemoveActionBarEvents.Close)
+        actionBarLiveData.postValue(EditActionBarEvents.Close)
         router.navigate(
             screen = Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT,
             data = LibraryParams.Exercise(libraryId)
@@ -164,7 +164,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         SetParametersDialog(exerciseId, callback).show(fragmentManager, tag)
     }
 
-    private fun actionBarEvent(actionBarEvent: RemoveActionBarEvents) {
+    private fun actionBarEvent(actionBarEvent: EditActionBarEvents) {
         actionBarLiveData.postValue(actionBarEvent)
     }
 
