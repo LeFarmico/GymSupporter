@@ -1,6 +1,5 @@
 package com.lefarmico.donetime
 
-import com.lefarmico.data.di.DomainModule
 import com.lefarmico.donetime.di.AppComponent
 import com.lefarmico.donetime.di.DaggerAppComponent
 import dagger.android.AndroidInjector
@@ -16,7 +15,7 @@ class App : DaggerApplication() {
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         appComponent = DaggerAppComponent.builder()
             .application(this)
-            .domainModule(DomainModule(this))
+            .context(this)
             .build()
         return appComponent
     }

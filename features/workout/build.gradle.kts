@@ -63,8 +63,4 @@ dependencies {
     implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjava)
     implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaAndroid)
     implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaKotlin)
-    implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaRetrofitAdapter)
-
-    // AdapterDelegates
-    implementation(com.lefarmico.buildsrc.Deps.adapterDelegates)
 }

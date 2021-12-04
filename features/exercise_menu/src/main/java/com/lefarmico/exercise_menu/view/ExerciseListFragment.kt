@@ -14,10 +14,12 @@ import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
-class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
-    FragmentExerciseListBinding::inflate,
-    ExerciseListViewModel::class.java
-) {
+class ExerciseListFragment :
+    BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
+        FragmentExerciseListBinding::inflate,
+        ExerciseListViewModel::class.java
+    ),
+    ExerciseListView {
 
     private val params: LibraryParams.ExerciseList by lazy {
         arguments?.getParcelable<LibraryParams.ExerciseList>(KEY_PARAMS)
@@ -43,8 +45,9 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
     override fun setUpViews() {
         adapter.onClick = onItemClickListener
         binding.recycler.adapter = adapter
+        val subCategoryId = params.subCategoryId
         viewModel.onTriggerEvent(
-            ExerciseListIntent.GetExercises(params.subCategoryId)
+            ExerciseListIntent.GetExercises(subCategoryId)
         )
 
         if (binding.recycler.itemDecorationCount == 0) {
@@ -65,10 +68,7 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
     override fun observeData() {
         viewModel.exercisesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
-                DataState.Empty -> {
-                    adapter.items = mutableListOf()
-                    binding.state.showEmptyState()
-                }
+                DataState.Empty -> hideExercises()
                 is DataState.Error -> {
                     adapter.items = mutableListOf()
                     binding.state.showErrorState()
@@ -77,12 +77,19 @@ class ExerciseListFragment : BaseFragment<FragmentExerciseListBinding, ExerciseL
                     adapter.items = mutableListOf()
                     binding.state.showLoadingState()
                 }
-                is DataState.Success -> {
-                    adapter.items = dataState.data
-                    binding.state.showSuccessState()
-                }
+                is DataState.Success -> showExercises(dataState.data)
             }
         }
+    }
+
+    override fun showExercises(items: List<LibraryViewData.Exercise>) {
+        adapter.items = items
+        binding.state.showSuccessState()
+    }
+
+    override fun hideExercises() {
+        adapter.items = mutableListOf()
+        binding.state.showEmptyState()
     }
 
     companion object {

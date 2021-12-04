@@ -3,7 +3,6 @@ import android.os.Bundle
 import com.lefarmico.core.base.BaseActivity
 import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
-import com.lefarmico.features.di.MainViewModel
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.screen.Screen

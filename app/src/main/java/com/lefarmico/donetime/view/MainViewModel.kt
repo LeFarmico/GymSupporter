@@ -1,4 +1,4 @@
-package com.lefarmico.features.di
+package com.lefarmico.donetime.view
 
 import com.lefarmico.core.base.BaseIntent
 import com.lefarmico.core.base.BaseViewModel

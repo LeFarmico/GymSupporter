@@ -6,14 +6,15 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.lifecycle.LiveData
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
+import com.lefarmico.core.toolbar.EditActionBarEvents.*
 import com.lefarmico.core.toolbar.RemoveActionBarCallback
-import com.lefarmico.core.toolbar.RemoveActionBarEvents.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.params.WorkoutScreenParams.*
@@ -28,7 +29,8 @@ class WorkoutScreenFragment :
         FragmentWorkoutScreenBinding::inflate,
         WorkoutScreenViewModel::class.java
     ),
-    SetSettingDialogCallback {
+    SetSettingDialogCallback,
+    WorkoutScreenView {
 
     private val adapter = CurrentExerciseAdapter()
 
@@ -77,15 +79,9 @@ class WorkoutScreenFragment :
         }
         binding.apply {
             listRecycler.adapter = adapter
-
-            addExButton.setOnClickListener {
-                startEvent(GoToCategoryScreen)
-            }
-            finishButton.setOnClickListener {
-                startEvent(FinishWorkout)
-            }
+            addExButton.setOnClickListener { startEvent(GoToCategoryScreen) }
+            finishButton.setOnClickListener { startEvent(FinishWorkout) }
         }
-
         adapter.apply {
             plusButtonCallback = {
                 launchSetParameterDialog(it)
@@ -105,56 +101,30 @@ class WorkoutScreenFragment :
         }
         viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
-                SelectAll -> adapter.toggleSelectAll()
-                DeleteItems -> {
-                    selectHandler?.onEachSelectedItemsAction()
-                    actionMode?.finish()
-                }
-                Launch -> {
-                    adapter.turnOnEditState()
-                    actionMode = requireActivity().startActionMode(actionModeCallback)
-                }
-                Close -> {
-                    adapter.turnOffEditState()
-                    actionMode?.finish()
-                }
+                SelectAll -> selectAllExercises()
+                DeleteItems -> deleteSelectedExercises()
+                Launch -> showEditState()
+                Close -> hideEditState()
             }
         }
-        viewModel.exerciseLiveData.observe(viewLifecycleOwner) { dataState ->
-            when (dataState) {
-                DataState.Empty -> {
-                    binding.state.showEmptyState()
-                    adapter.items = listOf()
-                }
-                is DataState.Error -> {
-                    binding.state.showErrorState()
-                    adapter.items = listOf()
-                }
-                DataState.Loading -> {
-                    binding.state.showLoadingState()
-                }
-                is DataState.Success -> {
-                    adapter.items = dataState.data
-                    binding.state.showSuccessState()
-                }
-            }
-        }
-
-        viewModel.setParametersDialogLiveData.observe(viewLifecycleOwner) { dataState ->
-            when (dataState) {
-                is DataState.Success -> {
-                    startEvent(
-                        ShowSetParametersDialog(
-                            parentFragmentManager,
-                            dataState.data.toInt(),
-                            this,
-                            TAG_DIALOG
-                        )
+        observeLiveData(
+            viewModel.exerciseLiveData,
+            onSuccess = { showExercises(it) },
+            onEmpty = { hideExercises() }
+        )
+        observeLiveData(
+            viewModel.setParametersDialogLiveData,
+            onSuccess = {
+                startEvent(
+                    ShowSetParametersDialog(
+                        parentFragmentManager,
+                        it.toInt(),
+                        this,
+                        TAG_DIALOG
                     )
-                }
-                else -> {}
+                )
             }
-        }
+        )
     }
 
     override fun addSet(exerciseId: Int, reps: Int, weight: Float) {
@@ -189,6 +159,80 @@ class WorkoutScreenFragment :
     private fun startEvent(event: WorkoutScreenIntent) {
         viewModel.onTriggerEvent(event)
     }
+
+    override fun showLoading() {
+        binding.state.showLoadingState()
+    }
+
+    override fun showSuccess() {
+        binding.state.showSuccessState()
+    }
+
+    override fun showError(e: Exception) {
+        binding.state.showErrorState()
+        e.printStackTrace()
+    }
+
+    override fun showEmpty() {
+        binding.state.showEmptyState()
+    }
+
+    override fun showExercises(items: List<ExerciseWithSets>) {
+        adapter.items = items
+    }
+
+    override fun hideExercises() {
+        adapter.items = listOf()
+    }
+
+    override fun showEditState() {
+        adapter.turnOnEditState()
+        actionMode = requireActivity().startActionMode(actionModeCallback)
+    }
+
+    override fun hideEditState() {
+        adapter.turnOffEditState()
+        actionMode?.finish()
+    }
+
+    private fun deleteSelectedExercises() {
+        selectHandler?.onEachSelectedItemsAction()
+        actionMode?.finish()
+    }
+
+    private fun selectAllExercises() {
+        adapter.toggleSelectAll()
+    }
+
+    private fun <T> observeLiveData(
+        liveData: LiveData<DataState<T>>,
+        onEmpty: () -> Unit = {},
+        onLoading: () -> Unit = {},
+        onError: (Exception) -> Unit = { it.printStackTrace() },
+        onSuccess: (T) -> Unit = {}
+    ) {
+        liveData.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                DataState.Empty -> {
+                    onEmpty()
+                    showEmpty()
+                }
+                is DataState.Error -> {
+                    onError(dataState.exception)
+                    showError(dataState.exception)
+                }
+                DataState.Loading -> {
+                    onLoading()
+                    showLoading()
+                }
+                is DataState.Success -> {
+                    onSuccess(dataState.data)
+                    showSuccess()
+                }
+            }
+        }
+    }
+
     companion object {
         private const val KEY_PARAMS = "home_key"
         private const val TAG_DIALOG = "Set Setting"

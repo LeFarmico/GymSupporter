@@ -14,10 +14,12 @@ import com.lefarmico.navigation.params.RecordMenuParams
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
-    DetailedRecordFragmentBinding::inflate,
-    DetailedWorkoutRecordViewModel::class.java
-) {
+class DetailedWorkoutRecordFragment :
+    BaseBottomSheetDialogFragment<DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
+        DetailedRecordFragmentBinding::inflate,
+        DetailedWorkoutRecordViewModel::class.java
+    ),
+    DetailedWorkoutRecordView {
 
     private val params: RecordMenuParams.WorkoutRecord by lazy {
         arguments?.getParcelable<RecordMenuParams.WorkoutRecord>(KEY_PARAMS)
@@ -44,7 +46,8 @@ class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedReco
                     // TODO : исправить
                     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
                     val dateString = dataState.data.workout.date!!.format(formatter)
-                    binding.workoutDate.text = dateString
+                    showDate(dateString)
+
                     val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
                     // TODO : Избавиться от логики
                     val exerciseList = dataState.data.exerciseWithSetsList
@@ -52,7 +55,7 @@ class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedReco
                         itemList.add(exerciseList[i].exercise)
                         itemList.addAll(exerciseList[i].setList)
                     }
-                    adapter.items = itemList
+                    showExercises(itemList)
                 }
             }
         }
@@ -60,6 +63,18 @@ class DetailedWorkoutRecordFragment : BaseBottomSheetDialogFragment<DetailedReco
 
     private fun pushIntent(eventType: DetailedWorkoutRecordIntent) {
         viewModel.onTriggerEvent(eventType)
+    }
+
+    override fun showDate(date: String) {
+        binding.workoutDate.text = date
+    }
+
+    override fun showWorkoutTitle(title: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showExercises(items: MutableList<WorkoutRecordsViewData.ViewDataItemType>) {
+        adapter.items = items
     }
 
     companion object {

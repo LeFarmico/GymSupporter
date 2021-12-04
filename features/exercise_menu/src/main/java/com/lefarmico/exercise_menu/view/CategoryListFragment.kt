@@ -19,10 +19,12 @@ import com.lefarmico.exercise_menu.intent.CategoryListIntent.*
 import com.lefarmico.exercise_menu.viewModel.CategoryListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 
-class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryListViewModel>(
-    FragmentCategoriesBinding::inflate,
-    CategoryListViewModel::class.java
-) {
+class CategoryListFragment :
+    BaseFragment<FragmentCategoriesBinding, CategoryListViewModel>(
+        FragmentCategoriesBinding::inflate,
+        CategoryListViewModel::class.java
+    ),
+    CategoryListView {
 
     private val textFieldString get() = binding.editText.text.toString()
     private val decorator get() = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -76,10 +78,7 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
         }
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
-                DataState.Empty -> {
-                    adapter.items = mutableListOf()
-                    binding.state.showEmptyState()
-                }
+                DataState.Empty -> hideCategories()
                 is DataState.Error -> {
                     adapter.items = mutableListOf()
                     binding.state.showErrorState()
@@ -88,12 +87,19 @@ class CategoryListFragment : BaseFragment<FragmentCategoriesBinding, CategoryLis
                     adapter.items = mutableListOf()
                     binding.state.showLoadingState()
                 }
-                is DataState.Success -> {
-                    adapter.items = dataState.data
-                    binding.state.showSuccessState()
-                }
+                is DataState.Success -> showCategories(dataState.data)
             }
         }
+    }
+
+    override fun showCategories(items: List<LibraryViewData.Category>) {
+        adapter.items = items
+        binding.state.showSuccessState()
+    }
+
+    override fun hideCategories() {
+        adapter.items = mutableListOf()
+        binding.state.showEmptyState()
     }
 
     private fun startEvent(event: CategoryListIntent) {

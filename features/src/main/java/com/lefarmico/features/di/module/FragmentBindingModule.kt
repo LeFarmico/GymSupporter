@@ -1,10 +1,11 @@
-package com.lefarmico.features.di
+package com.lefarmico.features.di.module
 
 import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
 import com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment
 import com.lefarmico.exercise_menu.view.CategoryListFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
 import com.lefarmico.exercise_menu.view.SubCategoryListFragment
+import com.lefarmico.features.di.FragmentScope
 import com.lefarmico.home.view.HomeFragment
 import com.lefarmico.workout.view.WorkoutScreenFragment
 import com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment

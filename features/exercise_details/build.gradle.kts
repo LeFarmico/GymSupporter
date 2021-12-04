@@ -1,3 +1,6 @@
+import com.lefarmico.buildsrc.Base
+import com.lefarmico.buildsrc.Deps
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -25,39 +28,34 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.lifecycleExtensions)
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.appcompat)
-
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.core)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.legacySup)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.fragment)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.liveData)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.liveDataCore)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.viewModel)
+    implementation(Deps.Androidx.lifecycleExtensions)
+    implementation(Deps.Androidx.appcompat)
+    implementation(Deps.Ktx.core)
+    implementation(Deps.Ktx.legacySup)
+    implementation(Deps.Ktx.fragment)
+    implementation(Deps.Ktx.liveData)
+    implementation(Deps.Ktx.liveDataCore)
+    implementation(Deps.Ktx.viewModel)
 
     // Tests
-    androidTestImplementation(com.lefarmico.buildsrc.Deps.Test.junit)
+    androidTestImplementation(Deps.Test.junit)
 
     // Core
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.constraintLayout)
-    implementation(com.lefarmico.buildsrc.Deps.Ktx.legacySup)
+    implementation(Deps.Androidx.constraintLayout)
+    implementation(Deps.Ktx.legacySup)
 
     // Views
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.cardView)
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.recyclerView)
-    implementation(com.lefarmico.buildsrc.Deps.Androidx.material)
+    implementation(Deps.Androidx.cardView)
+    implementation(Deps.Androidx.recyclerView)
+    implementation(Deps.Androidx.material)
 
     // Dagger
-    implementation(com.lefarmico.buildsrc.Deps.Dagger.dagger)
-    implementation(com.lefarmico.buildsrc.Deps.Dagger.daggerAndroid)
-    annotationProcessor(com.lefarmico.buildsrc.Deps.Dagger.daggerAndroidProcessor)
+    implementation(Deps.Dagger.dagger)
+    implementation(Deps.Dagger.daggerAndroid)
+    annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
 
     // RXJava
-    implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjava)
-    implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaAndroid)
-    implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaKotlin)
-    implementation(com.lefarmico.buildsrc.Deps.RXJava.rxjavaRetrofitAdapter)
-
-    // AdapterDelegates
-    implementation(com.lefarmico.buildsrc.Deps.adapterDelegates)
+    implementation(Deps.RXJava.rxjava)
+    implementation(Deps.RXJava.rxjavaAndroid)
+    implementation(Deps.RXJava.rxjavaKotlin)
 }

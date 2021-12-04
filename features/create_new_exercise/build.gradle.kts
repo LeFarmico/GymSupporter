@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    api(project(":domain"))
+    implementation(project(":domain"))
     implementation(project(":core"))
 
     implementation(Deps.Androidx.lifecycleExtensions)
@@ -59,8 +59,4 @@ dependencies {
     implementation(Deps.RXJava.rxjava)
     implementation(Deps.RXJava.rxjavaAndroid)
     implementation(Deps.RXJava.rxjavaKotlin)
-    implementation(Deps.RXJava.rxjavaRetrofitAdapter)
-
-    // AdapterDelegates
-    implementation(Deps.adapterDelegates)
 }

@@ -60,6 +60,4 @@ dependencies {
     implementation(Deps.RXJava.rxjava)
     implementation(Deps.RXJava.rxjavaAndroid)
     implementation(Deps.RXJava.rxjavaKotlin)
-    implementation(Deps.RXJava.rxjavaRetrofitAdapter)
-    implementation("com.github.kizitonwose:CalendarView:1.0.4")
 }
