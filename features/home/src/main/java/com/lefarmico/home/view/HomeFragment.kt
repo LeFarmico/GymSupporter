@@ -18,6 +18,7 @@ import com.lefarmico.core.toolbar.RemoveActionBarCallback
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.R
 import com.lefarmico.home.databinding.FragmentHomeBinding
+import com.lefarmico.home.intent.HomeEvents
 import com.lefarmico.home.intent.HomeIntent
 import com.lefarmico.home.intent.HomeIntent.*
 import com.lefarmico.home.viewModel.HomeViewModel
@@ -30,8 +31,7 @@ class HomeFragment :
         FragmentHomeBinding::inflate,
         HomeViewModel::class.java
     ),
-    HomeView,
-    HomeViewActions {
+    HomeView {
 
     private var actionMode: ActionMode? = null
     private var selectHandler: SelectItemsHandler<WorkoutWithExercisesAndSets>? = null
@@ -71,13 +71,13 @@ class HomeFragment :
 
         actionModeCallback = object : RemoveActionBarCallback() {
             override fun selectAllButtonHandler() {
-                startEvent(ActionBarEvent(SelectAll))
+                startEvent(ScreenEvent(HomeEvents.SelectAllWorkouts))
             }
             override fun removeButtonHandler() {
-                startEvent(ActionBarEvent(DeleteItems))
+                startEvent(ScreenEvent(HomeEvents.DeleteSelectedWorkouts))
             }
             override fun onDestroyHandler() {
-                startEvent(ActionBarEvent(Close))
+                startEvent(ScreenEvent(HomeEvents.HideEditState))
             }
         }
         selectHandler = object : SelectItemsHandler<WorkoutWithExercisesAndSets>(noteAdapter) {
@@ -90,10 +90,13 @@ class HomeFragment :
     override fun observeData() {
         viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
-                Launch -> showEditState()
-                Close -> hideEditState()
-                SelectAll -> selectAllWorkouts()
-                DeleteItems -> deleteSelectedWorkouts()
+                HomeEvents.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
+                HomeEvents.HideEditState -> hideEditState()
+                HomeEvents.SelectAllWorkouts -> selectAllWorkouts()
+                HomeEvents.ShowEditState -> showEditState()
+                HomeEvents.StartNewWorkout -> startEvent(NavigateToWorkout)
+                HomeEvents.TurnNextMonth -> turnToNextMonth()
+                HomeEvents.TurnPrevMonth -> turnToPrevMonth()
             }
         }
         observeLiveData(
@@ -118,7 +121,7 @@ class HomeFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                startEvent(ActionBarEvent(Launch))
+                startEvent(ScreenEvent(HomeEvents.ShowEditState))
                 true
             }
             else -> { false }
@@ -168,27 +171,27 @@ class HomeFragment :
         actionMode?.finish()
     }
 
-    override fun turnToPrevMonth() {
+    private fun turnToPrevMonth() {
         localDateTime = localDateTime.minusMonths(1)
         setUpCalendar(localDateTime)
     }
 
-    override fun turnToNextMonth() {
+    private fun turnToNextMonth() {
         localDateTime = localDateTime.plusMonths(1)
         setUpCalendar(localDateTime)
     }
 
-    override fun startNewWorkout() {
-        startEvent(NavigateToWorkout)
-    }
-
-    override fun selectAllWorkouts() {
+    private fun selectAllWorkouts() {
         noteAdapter.toggleSelectAll()
     }
 
-    override fun deleteSelectedWorkouts() {
+    private fun deleteSelectedWorkouts() {
         selectHandler?.onEachSelectedItemsAction()
         actionMode?.finish()
+    }
+
+    private fun startNewWorkout() {
+        startEvent(ScreenEvent(HomeEvents.StartNewWorkout))
     }
 
     private fun startEvent(eventType: HomeIntent) {

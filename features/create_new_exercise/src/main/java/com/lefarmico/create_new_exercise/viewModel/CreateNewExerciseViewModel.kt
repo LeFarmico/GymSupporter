@@ -1,6 +1,5 @@
 package com.lefarmico.create_new_exercise.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.utils.SingleLiveEvent
@@ -22,7 +21,6 @@ class CreateNewExerciseViewModel @Inject constructor() : BaseViewModel<CreateExe
     @Inject
     lateinit var router: Router
 
-    val addExerciseLiveData = MutableLiveData<DataState<Long>>()
     val notificationLiveData = SingleLiveEvent<String>()
     val validationLiveData = SingleLiveEvent<ValidationState>()
 

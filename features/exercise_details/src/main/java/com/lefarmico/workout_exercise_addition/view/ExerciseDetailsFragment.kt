@@ -11,10 +11,12 @@ import com.lefarmico.workout_exercise_addition.intent.ExerciseDetailsIntent
 import com.lefarmico.workout_exercise_addition.viewModel.ExerciseDetailsViewModel
 import java.lang.IllegalArgumentException
 
-class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(
-    FragmentExerciseDetailsBinding::inflate,
-    ExerciseDetailsViewModel::class.java
-) {
+class ExerciseDetailsFragment :
+    BaseFragment<FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(
+        FragmentExerciseDetailsBinding::inflate,
+        ExerciseDetailsViewModel::class.java
+    ),
+    ExerciseDetailsView {
 
     private val params: LibraryParams.Exercise by lazy {
         arguments?.getParcelable<LibraryParams.Exercise>(KEY_PARAMS)
@@ -46,11 +48,17 @@ class ExerciseDetailsFragment : BaseFragment<FragmentExerciseDetailsBinding, Exe
                 }
                 is DataState.Success -> {
                     binding.state.showSuccessState()
-                    binding.exerciseTitleTextView.text = dataState.data.title
-                    binding.exerciseDescriptionTextView.text = dataState.data.description
+                    dataState.data.apply {
+                        showExerciseDetails(title, description, imageRes)
+                    }
                 }
             }
         }
+    }
+
+    override fun showExerciseDetails(title: String, description: String, imageRes: String) {
+        binding.exerciseTitleTextView.text = title
+        binding.exerciseDescriptionTextView.text = description
     }
 
     companion object {

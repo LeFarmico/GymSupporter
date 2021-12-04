@@ -7,12 +7,12 @@ import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.core.mapper.toViewDataWorkoutWithExAndSets
-import com.lefarmico.core.toolbar.EditActionBarEvents
 import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.repository.CalendarRepository
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
+import com.lefarmico.home.intent.HomeEvents
 import com.lefarmico.home.intent.HomeIntent
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.params.RecordMenuParams
@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     lateinit var calendarRepo: CalendarRepository
 
     val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>>()
-    val actionBarLiveData = SingleLiveEvent<EditActionBarEvents>()
+    val actionBarLiveData = SingleLiveEvent<HomeEvents>()
     val calendarLiveData = MutableLiveData<DataState<List<CalendarItemViewData>>>()
     val monthAndYearLiveData = MutableLiveData<DataState<String>>()
 
@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     }
 
     private fun navigateToWorkout() {
-        actionBarLiveData.postValue(EditActionBarEvents.Close)
+        actionBarLiveData.postValue(HomeEvents.HideEditState)
         router.navigate(
             screen = Screen.WORKOUT_SCREEN,
             data = WorkoutScreenParams.Empty
@@ -53,7 +53,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     }
 
     private fun navigateToDetailsWorkout(workoutId: Int) {
-        actionBarLiveData.postValue(EditActionBarEvents.Close)
+        actionBarLiveData.postValue(HomeEvents.HideEditState)
         router.navigate(
             screen = Screen.EDIT_WORKOUT_RECORD_SCREEN,
             data = RecordMenuParams.WorkoutRecord(workoutId)
@@ -67,8 +67,8 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
             .subscribe()
     }
 
-    private fun actionBarEvent(actionBarEvent: EditActionBarEvents) {
-        actionBarLiveData.postValue(actionBarEvent)
+    private fun actionBarEvent(homeEvents: HomeEvents) {
+        actionBarLiveData.postValue(homeEvents)
     }
 
     private fun getMonthDates(date: LocalDateTime) {
@@ -103,7 +103,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
             HomeIntent.NavigateToWorkout -> navigateToWorkout()
             is HomeIntent.NavigateToDetailsWorkout -> navigateToDetailsWorkout(eventType.workoutId)
             is HomeIntent.RemoveWorkout -> removeWorkout(eventType.workoutId)
-            is HomeIntent.ActionBarEvent -> actionBarEvent(eventType.event)
+            is HomeIntent.ScreenEvent -> actionBarEvent(eventType.event)
             is HomeIntent.GetCalendarDates -> getMonthDates(eventType.date)
             is HomeIntent.GetWorkoutRecordsByDate -> getWorkoutRecordsByDate(eventType.date)
             is HomeIntent.GetMonthAndYearByDate -> getMonthAndYear(eventType.date)

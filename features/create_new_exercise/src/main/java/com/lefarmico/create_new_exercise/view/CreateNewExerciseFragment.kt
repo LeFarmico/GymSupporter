@@ -11,7 +11,6 @@ import com.lefarmico.create_new_exercise.databinding.FragmentCreateNewExerciseBi
 import com.lefarmico.create_new_exercise.intent.CreateExerciseIntent
 import com.lefarmico.create_new_exercise.intent.CreateExerciseIntent.*
 import com.lefarmico.create_new_exercise.viewModel.CreateNewExerciseViewModel
-import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
@@ -54,22 +53,6 @@ class CreateNewExerciseFragment : BaseFragment<FragmentCreateNewExerciseBinding,
                 }
                 is ValidationState.AlreadyExist -> {
                     startEvent(ShowToast("${validationState.field} exercise already exist"))
-                }
-            }
-        }
-        viewModel.addExerciseLiveData.observe(viewLifecycleOwner) { dataState ->
-            when (dataState) {
-                DataState.Empty -> {
-                    binding.state.showEmptyState()
-                }
-                is DataState.Error -> {
-                    binding.state.showErrorState()
-                }
-                DataState.Loading -> {
-                    binding.state.showLoadingState()
-                }
-                is DataState.Success -> {
-                    binding.state.showSuccessState()
                 }
             }
         }

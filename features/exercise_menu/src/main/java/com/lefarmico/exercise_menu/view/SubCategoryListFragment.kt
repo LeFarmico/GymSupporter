@@ -20,10 +20,12 @@ import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
-class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, SubCategoryViewModel>(
-    FragmentSubcategoryListBinding::inflate,
-    SubCategoryViewModel::class.java
-) {
+class SubCategoryListFragment :
+    BaseFragment<FragmentSubcategoryListBinding, SubCategoryViewModel>(
+        FragmentSubcategoryListBinding::inflate,
+        SubCategoryViewModel::class.java
+    ),
+    SubCategoriesListView {
 
     private val adapter = ExerciseLibraryAdapter()
     private val textFieldString get() = binding.editText.text.toString()
@@ -42,9 +44,8 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
             recycler.addItemDecoration(decorator, 0)
 
             plusButton.setOnClickListener {
-                binding.textField.apply {
-                    startEvent(ValidateSubcategory(textFieldString, params.categoryId))
-                }
+                startEvent(ValidateSubcategory(textFieldString, params.categoryId))
+                defaultStateEditText(editText)
             }
             editText.setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
@@ -59,8 +60,9 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
         }
         adapter.onClick = { item ->
             item as LibraryViewData.SubCategory
+            val id = item.id
             startEvent(
-                GoToExerciseListScreen(params.categoryId, item.id, params.isFromWorkoutScreen)
+                GoToExerciseListScreen(params.categoryId, id, params.isFromWorkoutScreen)
             )
         }
     }
@@ -72,7 +74,6 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
         viewModel.validationLiveData.observe(viewLifecycleOwner) { validationState ->
             when (validationState) {
                 ValidationState.Empty -> startEvent(ShowToast("field should not be empty"))
-
                 is ValidationState.Success -> {
                     startEvent(AddSubcategory(validationState.field, params.categoryId))
                 }
@@ -83,10 +84,7 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
         }
         viewModel.subCategoriesLiveData.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
-                DataState.Empty -> {
-                    adapter.items = mutableListOf()
-                    binding.state.showEmptyState()
-                }
+                DataState.Empty -> hideSubcategories()
                 is DataState.Error -> {
                     adapter.items = mutableListOf()
                     binding.state.showErrorState()
@@ -95,12 +93,19 @@ class SubCategoryListFragment : BaseFragment<FragmentSubcategoryListBinding, Sub
                     adapter.items = mutableListOf()
                     binding.state.showLoadingState()
                 }
-                is DataState.Success -> {
-                    adapter.items = dataState.data
-                    binding.state.showSuccessState()
-                }
+                is DataState.Success -> showSubcategories(dataState.data)
             }
         }
+    }
+
+    override fun showSubcategories(items: List<LibraryViewData.SubCategory>) {
+        adapter.items = items
+        binding.state.showSuccessState()
+    }
+
+    override fun hideSubcategories() {
+        adapter.items = mutableListOf()
+        binding.state.showEmptyState()
     }
 
     private fun startEvent(event: SubCategoryIntent) {

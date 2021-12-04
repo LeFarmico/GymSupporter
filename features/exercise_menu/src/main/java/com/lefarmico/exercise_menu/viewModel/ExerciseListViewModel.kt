@@ -71,7 +71,7 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<ExerciseListIn
             is GoToExerciseDetailsScreen -> goToExerciseDetailsScreen(eventType.exerciseId)
             is CreateNewExercise -> createNewExercise(
                 eventType.categoryId,
-                eventType.categoryId,
+                eventType.subcategoryId,
                 eventType.isFromWorkoutScreen
             )
         }
