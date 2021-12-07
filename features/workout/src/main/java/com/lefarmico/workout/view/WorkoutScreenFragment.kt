@@ -2,19 +2,19 @@ package com.lefarmico.workout.view
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import androidx.lifecycle.LiveData
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
+import com.lefarmico.core.customView.StyledTextView
 import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.EditActionBarEvents.*
 import com.lefarmico.core.toolbar.RemoveActionBarCallback
+import com.lefarmico.core.utils.Utilities.getAnimation
+import com.lefarmico.core.utils.Utilities.getStringResource
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.params.WorkoutScreenParams.*
@@ -23,6 +23,9 @@ import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import com.lefarmico.workout.intent.WorkoutScreenIntent.*
 import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class WorkoutScreenFragment :
     BaseFragment<FragmentWorkoutScreenBinding, WorkoutScreenViewModel>(
@@ -33,6 +36,10 @@ class WorkoutScreenFragment :
     WorkoutScreenView {
 
     private val adapter = CurrentExerciseAdapter()
+
+    private var localDateTime = LocalDate.now().atStartOfDay()
+    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
+    private val defTitle: String by lazy { getStringResource(R.string.default_workout_title) }
 
     private var actionMode: ActionMode? = null
     private var selectHandler: SelectItemsHandler<ExerciseWithSets>? = null
@@ -58,6 +65,7 @@ class WorkoutScreenFragment :
 
     override fun setUpViews() {
         startEvent(GetAll)
+        setWorkoutDate(localDateTime.format(formatter))
 
         actionModeCallback = object : RemoveActionBarCallback() {
             override fun selectAllButtonHandler() {
@@ -81,17 +89,19 @@ class WorkoutScreenFragment :
             listRecycler.adapter = adapter
             addExButton.setOnClickListener { startEvent(GoToCategoryScreen) }
             finishButton.setOnClickListener { startEvent(FinishWorkout) }
+            workoutTitle.apply {
+                setFactory {
+                    StyledTextView(requireContext(), null, StyledTextView.HEADLINE_BOLD)
+                }
+                inAnimation = getAnimation(R.anim.left_slide_fade_animation)
+                outAnimation = getAnimation(R.anim.right_slide_fade_animation)
+                setCurrentText(defTitle)
+            }
         }
         adapter.apply {
-            plusButtonCallback = {
-                launchSetParameterDialog(it)
-            }
-            minusButtonCallback = {
-                startEvent(DeleteLastSet(it))
-            }
-            infoButtonCallback = {
-                startEvent(GoToExerciseInfo(it))
-            }
+            plusButtonCallback = { launchSetParameterDialog(it) }
+            minusButtonCallback = { startEvent(DeleteLastSet(it)) }
+            infoButtonCallback = { startEvent(GoToExerciseInfo(it)) }
         }
     }
 
@@ -193,6 +203,14 @@ class WorkoutScreenFragment :
     override fun hideEditState() {
         adapter.turnOffEditState()
         actionMode?.finish()
+    }
+
+    override fun setWorkoutTitle(title: String) {
+        binding.workoutTitle.setText(title)
+    }
+
+    override fun setWorkoutDate(date: String) {
+        binding.workoutDate.text = date
     }
 
     private fun deleteSelectedExercises() {
