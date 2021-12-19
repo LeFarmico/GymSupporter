@@ -45,7 +45,9 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/calendar_item_selected_checked.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/calendar_item_selected_empty.xml" value="0.536" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/calendar_item_selected_unchecked.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/dailog_workout_title.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/dialog_add_set.xml" value="0.4" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/dialog_date_picker.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_add_button.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_add_exercise.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_edit_record.xml" value="0.4" />
@@ -79,7 +81,8 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/exercise_menu/src/main/res/layout/fragment_exercise_lists.xml" value="0.1" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/exercise_menu/src/main/res/layout/fragment_subcategory_list.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/exercise_menu/src/main/res/layout/fragment_subcategory_lists.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/home/src/main/res/layout/fragment_home.xml" value="0.4" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/home/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/workout/src/main/res/layout/dailog_workout_title.xml" value="0.2490740740740741" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/workout/src/main/res/layout/dialog_add_set.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/features/workout/src/main/res/layout/fragment_workout_screen.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/presentation/src/main/res/drawable/bottom_corners_shape.xml" value="0.2703125" />

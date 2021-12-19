@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
+    android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/current_month"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:gravity="center"
         style="@style/TextStyle.Headline"
         android:layout_marginVertical="8dp"
@@ -49,6 +50,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginVertical="8dp"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/calendar_item_deselect_unchecked"
         app:layout_constraintTop_toBottomOf="@id/current_month"
@@ -59,12 +61,13 @@
         android:id="@+id/workout_notes"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/calendar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/new_workout_button"
-        tools:listitem="@layout/item_note_workout"
+        tools:listitem="@layout/item_socket_exercise_preview"
         tools:itemCount="5"
         android:layout_marginBottom="8dp"
         />

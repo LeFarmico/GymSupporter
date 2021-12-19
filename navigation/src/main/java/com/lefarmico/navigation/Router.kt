@@ -3,6 +3,7 @@ package com.lefarmico.navigation
 import android.app.Activity
 import android.os.Parcelable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.lefarmico.navigation.dialog.Dialog
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.screen.Screen
 
@@ -21,7 +22,11 @@ interface Router {
     fun show(
         notification: Notification,
         data: Parcelable? = null,
-        anchor: Any? = null // should be a view
+        anchor: Any? = null
+    )
+
+    fun showDialog(
+        dialog: Dialog
     )
 
     fun back()

@@ -2,8 +2,7 @@ package com.lefarmico.donetime.di
 
 import android.app.Application
 import android.content.Context
-import com.lefarmico.data.di.DaoModule
-import com.lefarmico.data.di.RepositoryModule
+import com.lefarmico.data.di.*
 import com.lefarmico.donetime.App
 import com.lefarmico.donetime.di.module.ActivityBindingModule
 import com.lefarmico.donetime.di.module.NavigationModule
@@ -23,7 +22,10 @@ import javax.inject.Singleton
         RepositoryModule::class,
         DaoModule::class,
         ViewModelModule::class,
-        NavigationModule::class
+        NavigationModule::class,
+        PreferenceModule::class,
+        ManagerModule::class,
+        LocalCacheModule::class
     ]
 )
 @Singleton

@@ -8,8 +8,7 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import java.time.LocalDateTime
-import java.util.*
+import java.time.LocalDate
 
 sealed class WorkoutRecordsData {
 
@@ -24,7 +23,8 @@ sealed class WorkoutRecordsData {
     )
     data class Workout(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "workout_id") val id: Int,
-        @ColumnInfo(name = "date") val date: LocalDateTime? = null,
+        @ColumnInfo(name = "date") val date: LocalDate,
+        @ColumnInfo(name = "title") val title: String = ""
     ) : WorkoutRecordsData()
 
     @Entity(

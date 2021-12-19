@@ -1,7 +1,7 @@
 package com.lefarmico.home.intent
 
 import com.lefarmico.core.base.BaseIntent
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 sealed class HomeIntent : BaseIntent() {
 
@@ -15,9 +15,15 @@ sealed class HomeIntent : BaseIntent() {
 
     data class ScreenEvent(val event: HomeEvents) : HomeIntent()
 
-    data class GetCalendarDates(val date: LocalDateTime) : HomeIntent()
+    object GetWorkoutRecordsByCurrentDate : HomeIntent()
 
-    data class GetWorkoutRecordsByDate(val date: LocalDateTime) : HomeIntent()
+    object GetCurrentDaysInMonth : HomeIntent()
 
-    data class GetMonthAndYearByDate(val date: LocalDateTime) : HomeIntent()
+    object GetCurrentMonth : HomeIntent()
+
+    object GetNextMonth : HomeIntent()
+
+    object GetPrevMonth : HomeIntent()
+
+    data class SetClickedDate(val localDate: LocalDate) : HomeIntent()
 }

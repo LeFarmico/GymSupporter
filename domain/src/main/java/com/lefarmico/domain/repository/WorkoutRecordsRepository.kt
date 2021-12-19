@@ -3,7 +3,7 @@ package com.lefarmico.domain.repository
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 interface WorkoutRecordsRepository : BaseRepository {
 
@@ -23,6 +23,6 @@ interface WorkoutRecordsRepository : BaseRepository {
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
     ): Single<DataState<String>>
 
-    fun getWorkoutWithExerciseAndSetsByDate(date: LocalDateTime):
+    fun getWorkoutWithExerciseAndSetsByDate(date: LocalDate):
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>>
 }

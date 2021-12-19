@@ -56,4 +56,10 @@
         <item name="itemIconTint">@drawable/selector_menu</item>
         <item name="itemTextColor">@drawable/selector_menu</item>
     </style>
+
+    <style name="DatePickerTheme" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">calendar</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
 </resources>

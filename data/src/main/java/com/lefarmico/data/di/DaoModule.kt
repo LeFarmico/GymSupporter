@@ -35,6 +35,7 @@ class DaoModule {
     }
 
     @Provides
+    @Singleton
     fun provideCurrentWorkoutDataBase(): CurrentWorkoutDataBase {
         return CurrentWorkoutDataBase()
     }

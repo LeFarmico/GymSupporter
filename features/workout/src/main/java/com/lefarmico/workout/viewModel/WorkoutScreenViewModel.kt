@@ -1,29 +1,29 @@
 package com.lefarmico.workout.viewModel
 
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.lefarmico.core.base.BaseViewModel
-import com.lefarmico.core.dialog.setParameter.SetParametersDialog
-import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewDataExWithSets
 import com.lefarmico.core.toolbar.EditActionBarEvents
 import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
-import com.lefarmico.domain.repository.CurrentWorkoutRepository
-import com.lefarmico.domain.repository.LibraryRepository
-import com.lefarmico.domain.repository.WorkoutRecordsRepository
+import com.lefarmico.domain.entity.WorkoutRecordsDto
+import com.lefarmico.domain.repository.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.dialog.Dialog
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.LibraryParams
+import com.lefarmico.navigation.params.SetParameterParams
 import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.workout.extensions.toRecordsDto
 import com.lefarmico.workout.intent.WorkoutScreenIntent
 import com.lefarmico.workout.intent.WorkoutScreenIntent.*
+import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreenIntent>() {
@@ -32,14 +32,26 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     @Inject lateinit var libraryRepository: LibraryRepository
     @Inject lateinit var repo: CurrentWorkoutRepository
     @Inject lateinit var router: Router
+    @Inject lateinit var dateTimeRepository: DateTimeManager
+    @Inject lateinit var formatterManager: FormatterManager
 
     // TODO : убрать локальные переменные
     private var setId = 1
+    private var title = "Your workout"
+//    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
 
     val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
+    val formattedDateLiveData = MutableLiveData<String>()
+    val titleLiveData = MutableLiveData<String>()
+
     val setParametersDialogLiveData = SingleLiveEvent<DataState<Long>>()
     val actionBarLiveData = SingleLiveEvent<EditActionBarEvents>()
-    val notificationLiveData = SingleLiveEvent<String>()
+    val notifyLiveData = SingleLiveEvent<String>()
+
+    init {
+
+        titleLiveData.value = title
+    }
 
     // TODO переписать
     private fun addExercise(model: AddExercise) {
@@ -78,7 +90,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }.subscribe()
     }
 
-    private fun saveWorkout() {
+    private fun saveWorkout(title: String, date: LocalDate) {
         repo.getExercisesWithSets()
             .observeUi()
             .doAfterSuccess {
@@ -90,9 +102,13 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
                     DataState.Loading -> exerciseLiveData.value = DataState.Loading
                     is DataState.Error -> exerciseLiveData.value = dataState
                     is DataState.Success -> {
-                        val workoutDto = dataState.data.toRecordsDto()
+                        val workoutDto = WorkoutRecordsDto.Workout(date = date, title = title)
+                        val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
+                            workoutDto,
+                            dataState.data.toRecordsDto()
+                        )
                         recordsRepository
-                            .addWorkoutWithExAndSets(workoutDto)
+                            .addWorkoutWithExAndSets(workAndExDto)
                             .observeUi()
                             .doAfterSuccess { router.navigate(Screen.HOME_SCREEN) }
                             .subscribe()
@@ -102,21 +118,16 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     }
 
     // TODO : убрать локальные переменные
-    private fun addSetToExercise(
-        exerciseId: Int,
-        reps: Int,
-        weight: Float
-    ) {
-        repo.getSets(exerciseId)
+    private fun addSetToExercise(params: SetParameterParams) {
+        repo.getSets(params.exerciseId)
             .observeUi()
             .doAfterSuccess { dataState ->
                 var setNumber = 1
                 if (dataState is DataState.Success) {
                     setNumber = dataState.data.size + 1
                 }
-                repo.addSet(
-                    CurrentWorkoutDto.Set(setId++, exerciseId, setNumber, weight, reps)
-                )
+                val set = CurrentWorkoutDto.Set(setId++, params.exerciseId, setNumber, params.weight, params.reps)
+                repo.addSet(set)
                     .observeUi()
                     .doAfterSuccess { getAll() }
                     .subscribe()
@@ -140,7 +151,12 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
 
     private fun finishWorkout() {
         actionBarLiveData.postValue(EditActionBarEvents.Close)
-        saveWorkout()
+        dateTimeRepository.getSelectedDate()
+            .observeUi()
+            .doAfterSuccess {
+                val data = (it as DataState.Success).data
+                saveWorkout(title, data)
+            }.subscribe()
     }
 
     private fun goToExerciseInfo(libraryId: Int) {
@@ -155,51 +171,89 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         router.show(Notification.TOAST, ToastBarParams(text))
     }
 
-    private fun initSetParameterDialog(
-        fragmentManager: FragmentManager,
-        exerciseId: Int,
-        callback: SetSettingDialogCallback,
-        tag: String
-    ) {
-        SetParametersDialog(exerciseId, callback).show(fragmentManager, tag)
+    private fun showDialog(dialog: Dialog) {
+        router.showDialog(dialog)
+    }
+
+    private fun showCalendarPickerDialog() {
+        dateTimeRepository.getSelectedDate()
+            .observeUi()
+            .doAfterSuccess {
+                val data = (it as DataState.Success).data
+                val dialog = Dialog.CalendarPickerDialog(data) { clickedDate ->
+                    setWorkoutDate(clickedDate)
+                }
+                router.showDialog(dialog)
+            }.subscribe()
+    }
+
+    private fun showWorkoutTitleDialog() {
+        val dialog = Dialog.FieldEditorDialog(title) {
+            setWorkoutTitle(it)
+        }
+        router.showDialog(dialog)
+    }
+
+    private fun showSetParameterDialog(exerciseId: Int) {
+        val dialog = Dialog.SetParameterPickerDialog(exerciseId) {
+            addSetToExercise(it)
+        }
+        router.showDialog(dialog)
     }
 
     private fun actionBarEvent(actionBarEvent: EditActionBarEvents) {
         actionBarLiveData.postValue(actionBarEvent)
     }
 
+    private fun setWorkoutDate(localDate: LocalDate) {
+        formatterManager.getSelectedFormatter()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                dateTimeRepository.selectDate(localDate)
+                    .observeUi()
+                    .doAfterSuccess {
+                        val data = (it as DataState.Success).data
+                        formattedDateLiveData.value = data.format(dto.formatter)
+                    }.subscribe()
+            }.subscribe()
+    }
+
+    private fun getWorkoutDate() {
+        formatterManager.getSelectedFormatter()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                dateTimeRepository.getSelectedDate()
+                    .observeUi()
+                    .doAfterSuccess {
+                        val data = (it as DataState.Success).data
+                        formattedDateLiveData.value = data.format(dto.formatter)
+                    }.subscribe()
+            }.subscribe()
+    }
+
+    private fun setWorkoutTitle(title: String) {
+        titleLiveData.value = title
+        this.title = title
+    }
+
     override fun onTriggerEvent(eventType: WorkoutScreenIntent) {
         when (eventType) {
             is AddExercise -> addExercise(eventType)
-
             is DeleteExercise -> deleteExercise(eventType.id)
-
-            GetAll -> getAll()
-
-            GoToCategoryScreen -> goToCategoryScreen()
-
-            FinishWorkout -> finishWorkout()
-
             is DeleteLastSet -> deleteLastSet(eventType.exerciseId)
-
             is GoToExerciseInfo -> goToExerciseInfo(eventType.libraryId)
-
             is ShowToast -> showToast(eventType.text)
-
             is ActionBarEvent -> actionBarEvent(eventType.event)
-
-            is AddSetToExercise -> addSetToExercise(
-                eventType.exerciseId,
-                eventType.reps,
-                eventType.weight
-            )
-
-            is ShowSetParametersDialog -> initSetParameterDialog(
-                eventType.fragmentManager,
-                eventType.exerciseId,
-                eventType.callback,
-                eventType.tag
-            )
+            is ShowDialog -> showDialog(eventType.dialog)
+            is AddSetToExercise -> addSetToExercise(eventType.params)
+            FinishWorkout -> finishWorkout()
+            GetExercises -> getAll()
+            GoToCategoryScreen -> goToCategoryScreen()
+            // TODO : ЗАКИНУТЬ ДАТУ В SHARED PREFERENCES
+            is StartSetParameterDialog -> showSetParameterDialog(eventType.exerciseId)
+            StartCalendarPickerDialog -> showCalendarPickerDialog()
+            StartWorkoutTitleDialog -> showWorkoutTitleDialog()
+            GetSelectedDate -> getWorkoutDate()
         }
     }
 }

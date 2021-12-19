@@ -1,19 +1,15 @@
 package com.lefarmico.home.view
 
 import android.os.Bundle
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.lefarmico.core.adapter.CalendarAdapter
 import com.lefarmico.core.adapter.WorkoutRecordsAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.CalendarItemViewData
-import com.lefarmico.core.entity.WorkoutRecordsViewData.*
+import com.lefarmico.core.entity.WorkoutRecordsViewData.WorkoutWithExercisesAndSets
 import com.lefarmico.core.selector.SelectItemsHandler
-import com.lefarmico.core.toolbar.EditActionBarEvents.*
 import com.lefarmico.core.toolbar.RemoveActionBarCallback
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.home.R
@@ -23,8 +19,6 @@ import com.lefarmico.home.intent.HomeIntent
 import com.lefarmico.home.intent.HomeIntent.*
 import com.lefarmico.home.viewModel.HomeViewModel
 import java.time.LocalDate
-import java.time.LocalDateTime
-import kotlin.Exception
 
 class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeViewModel>(
@@ -37,7 +31,8 @@ class HomeFragment :
     private var selectHandler: SelectItemsHandler<WorkoutWithExercisesAndSets>? = null
     private var actionModeCallback: RemoveActionBarCallback? = null
 
-    private var localDateTime = LocalDate.now().atStartOfDay()
+    // TODO : Взять из репозитория
+    private var localDateTime = LocalDate.now()
 
     private val noteAdapter = WorkoutRecordsAdapter()
     private val calendarAdapter = CalendarAdapter(localDateTime)
@@ -48,7 +43,8 @@ class HomeFragment :
     }
 
     override fun setUpViews() {
-        setUpCalendar(localDateTime)
+        startEvent(GetCurrentMonth)
+        startEvent(GetWorkoutRecordsByCurrentDate)
 
         binding.apply {
             prevMonthButton.setOnClickListener { turnToPrevMonth() }
@@ -59,7 +55,7 @@ class HomeFragment :
             snapHelper.attachToRecyclerView(calendar)
             calendar.adapter = calendarAdapter.apply {
                 clickListener = {
-                    startEvent(GetWorkoutRecordsByDate(it))
+                    startEvent(SetClickedDate(it))
                 }
             }
             workoutNotes.adapter = noteAdapter.apply {
@@ -163,22 +159,32 @@ class HomeFragment :
 
     override fun showEditState() {
         noteAdapter.turnOnEditState()
+        binding.calendar.visibility = View.GONE
+        binding.nextMonthButton.isEnabled = false
+        binding.prevMonthButton.isEnabled = false
+        binding.newWorkoutButton.isEnabled = false
         actionMode = requireActivity().startActionMode(actionModeCallback)
     }
 
     override fun hideEditState() {
         noteAdapter.turnOffEditState()
+        binding.calendar.visibility = View.VISIBLE
+        binding.nextMonthButton.isEnabled = true
+        binding.prevMonthButton.isEnabled = true
+        binding.newWorkoutButton.isEnabled = true
         actionMode?.finish()
     }
 
     private fun turnToPrevMonth() {
-        localDateTime = localDateTime.minusMonths(1)
-        setUpCalendar(localDateTime)
+        startEvent(GetPrevMonth)
+//        localDateTime = localDateTime.minusMonths(1)
+//        setUpCalendar(localDateTime)
     }
 
     private fun turnToNextMonth() {
-        localDateTime = localDateTime.plusMonths(1)
-        setUpCalendar(localDateTime)
+        startEvent(GetNextMonth)
+//        localDateTime = localDateTime.plusMonths(1)
+//        setUpCalendar(localDateTime)
     }
 
     private fun selectAllWorkouts() {
@@ -227,13 +233,13 @@ class HomeFragment :
         }
     }
 
-    private fun recyclerScrollToPos(list: List<CalendarItemViewData>, date: LocalDateTime) {
-        val pos = list.indexOfFirst { it.date.isEqual(date) }
+    private fun recyclerScrollToPos(list: List<CalendarItemViewData>, date: LocalDate) {
+        val pos = list.indexOfFirst { it.date == date }
         binding.calendar.scrollToPosition(pos - 1)
     }
 
-    private fun setUpCalendar(date: LocalDateTime) {
-        startEvent(GetMonthAndYearByDate(date))
-        startEvent(GetCalendarDates(date))
-    }
+//    private fun setUpCalendar(date: LocalDateTime) {
+//        startEvent(GetMonthAndYearByDate(date))
+//        startEvent(GetCalendarDates(date))
+//    }
 }

@@ -1,9 +1,9 @@
 package com.lefarmico.workout.intent
 
-import androidx.fragment.app.FragmentManager
 import com.lefarmico.core.base.BaseIntent
-import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.toolbar.EditActionBarEvents
+import com.lefarmico.navigation.dialog.Dialog
+import com.lefarmico.navigation.params.SetParameterParams
 
 sealed class WorkoutScreenIntent : BaseIntent() {
 
@@ -12,14 +12,12 @@ sealed class WorkoutScreenIntent : BaseIntent() {
     data class DeleteExercise(val id: Int) : WorkoutScreenIntent()
 
     data class AddSetToExercise(
-        val exerciseId: Int,
-        val reps: Int,
-        val weight: Float
+        val params: SetParameterParams
     ) : WorkoutScreenIntent()
 
     data class DeleteLastSet(val exerciseId: Int) : WorkoutScreenIntent()
 
-    object GetAll : WorkoutScreenIntent()
+    object GetExercises : WorkoutScreenIntent()
 
     object GoToCategoryScreen : WorkoutScreenIntent()
 
@@ -29,12 +27,15 @@ sealed class WorkoutScreenIntent : BaseIntent() {
 
     data class ShowToast(val text: String) : WorkoutScreenIntent()
 
-    data class ShowSetParametersDialog(
-        val fragmentManager: FragmentManager,
-        val exerciseId: Int,
-        val callback: SetSettingDialogCallback,
-        val tag: String
-    ) : WorkoutScreenIntent()
+    data class ShowDialog(val dialog: Dialog) : WorkoutScreenIntent()
 
     data class ActionBarEvent(val event: EditActionBarEvents) : WorkoutScreenIntent()
+
+    data class StartSetParameterDialog(val exerciseId: Int) : WorkoutScreenIntent()
+
+    object StartCalendarPickerDialog : WorkoutScreenIntent()
+
+    object StartWorkoutTitleDialog : WorkoutScreenIntent()
+
+    object GetSelectedDate : WorkoutScreenIntent()
 }

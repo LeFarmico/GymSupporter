@@ -2,12 +2,16 @@ package com.lefarmico.donetime.navigation
 
 import android.app.Activity
 import android.os.Parcelable
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lefarmico.donetime.R
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.dialog.Dialog
+import com.lefarmico.navigation.dialog.DialogResolver
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.notification.NotificationResolver
 import com.lefarmico.navigation.screen.Screen
@@ -16,15 +20,18 @@ import javax.inject.Inject
 
 class RouterImpl @Inject constructor(
     private val screenResolver: ScreenResolver,
-    private val notificationResolver: NotificationResolver
+    private val notificationResolver: NotificationResolver,
+    private val dialogResolver: DialogResolver
 ) : Router {
 
     private var navController: NavController? = null
     private var activity: Activity? = null
+    private var fragmentManager: FragmentManager? = null
 
     override fun bind(activity: Activity) {
         this.navController = activity.findNavController(R.id.fragment)
         this.activity = activity
+        this.fragmentManager = (activity as FragmentActivity).supportFragmentManager
     }
 
     override fun bindNavigationUI(bottomNavigationView: BottomNavigationView) {
@@ -45,6 +52,12 @@ class RouterImpl @Inject constructor(
         anchor: Any?
     ) {
         notificationResolver.show(activity, notification, data, anchor)
+    }
+
+    override fun showDialog(
+        dialog: Dialog
+    ) {
+        dialogResolver.show(fragmentManager!!, dialog)
     }
 
     override fun navigate(

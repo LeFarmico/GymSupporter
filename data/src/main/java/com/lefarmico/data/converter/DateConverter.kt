@@ -1,20 +1,17 @@
 package com.lefarmico.data.converter
 
 import androidx.room.TypeConverter
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.*
+import java.time.LocalDate
 
 class DateConverter {
 
     @TypeConverter
-    fun fromTimestamp(value: Long): LocalDateTime {
-        return value.let { LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC) }
+    fun fromTimestamp(value: Long): LocalDate {
+        return value.let { LocalDate.ofEpochDay(value) }
     }
 
     @TypeConverter
-    fun dateToTimestamp(value: LocalDateTime): Long {
-        return value.atZone(ZoneOffset.UTC).toInstant().toEpochMilli()
+    fun dateToTimestamp(value: LocalDate): Long {
+        return value.let { value.toEpochDay() }
     }
 }

@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.lefarmico.core.adapter.ExerciseLibraryAdapter.MenuItemViewHolder
+import com.lefarmico.core.adapter.LibraryItemAdapter.MenuItemViewHolder
 import com.lefarmico.core.adapter.diffUtil.ExerciseLibraryDiffCallback
 import com.lefarmico.core.databinding.ItemLibraryListBinding
 import com.lefarmico.core.entity.LibraryViewData
 
-class ExerciseLibraryAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
+class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
 
     lateinit var onClick: (LibraryViewData) -> Unit
 

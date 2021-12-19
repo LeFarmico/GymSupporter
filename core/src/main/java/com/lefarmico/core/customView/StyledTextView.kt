@@ -9,7 +9,7 @@ import com.lefarmico.core.R
 class StyledTextView(
     context: Context,
     attributeSet: AttributeSet?,
-    @TextStyle textStyle: Int
+    @TextStyleRes textStyle: Int
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
@@ -25,7 +25,7 @@ class StyledTextView(
 
         @IntDef(DEFAULT, HEADLINE, HEADLINE_BOLD, CAPTION, SUBHEAD)
         @Retention(AnnotationRetention.SOURCE)
-        annotation class TextStyle
+        annotation class TextStyleRes
 
         const val DEFAULT = 0
         const val HEADLINE = 1

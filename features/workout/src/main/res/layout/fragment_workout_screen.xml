@@ -18,12 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextSwitcher
+        <TextView
             android:id="@+id/workout_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/TextStyle.HeadlineBold"
             android:layout_marginHorizontal="16dp"
             android:layout_gravity="bottom"
+            tools:text="Workout"
             />
 
         <TextView

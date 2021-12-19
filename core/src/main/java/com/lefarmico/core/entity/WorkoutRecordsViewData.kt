@@ -1,12 +1,13 @@
 package com.lefarmico.core.entity
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 sealed class WorkoutRecordsViewData {
 
     data class Workout(
         val id: Int = 0,
-        val date: LocalDateTime? = null
+        val date: LocalDate,
+        val title: String = ""
     ) : WorkoutRecordsViewData()
 
     data class Exercise(
