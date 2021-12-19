@@ -38,7 +38,6 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     // TODO : убрать локальные переменные
     private var setId = 1
     private var title = "Your workout"
-//    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
 
     val exerciseLiveData = MutableLiveData<DataState<List<CurrentWorkoutViewData.ExerciseWithSets>>>()
     val formattedDateLiveData = MutableLiveData<String>()
@@ -53,25 +52,16 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         titleLiveData.value = title
     }
 
-    // TODO переписать
     private fun addExercise(model: AddExercise) {
         libraryRepository.getExercise(model.id)
             .observeUi()
-            .doAfterSuccess { dataState ->
-                when (dataState) {
-                    is DataState.Success -> {
-                        val exercise = CurrentWorkoutDto.Exercise(
-                            libraryId = model.id,
-                            title = dataState.data.title
-                        )
-                        repo.addExercise(exercise)
-                            .observeUi()
-                            .doAfterSuccess { getAll() }
-                            .subscribe { id -> setParametersDialogLiveData.postValue(id) }
-                    }
-                    else -> {}
-                }
-            }.subscribe()
+            .flatMap {
+                val data = (it as DataState.Success).data
+                val ex = CurrentWorkoutDto.Exercise(0, model.id, data.title)
+                repo.addExercise(ex).observeUi()
+            }
+            .doAfterSuccess { getAll() }
+            .subscribe { id -> setParametersDialogLiveData.postValue(id) }
     }
 
     private fun deleteExercise(exerciseId: Int) {
@@ -93,27 +83,20 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     private fun saveWorkout(title: String, date: LocalDate) {
         repo.getExercisesWithSets()
             .observeUi()
-            .doAfterSuccess {
-                repo.clearCash()
-            }
-            .doOnSuccess { dataState ->
-                when (dataState) {
-                    DataState.Empty -> exerciseLiveData.value = DataState.Empty
-                    DataState.Loading -> exerciseLiveData.value = DataState.Loading
-                    is DataState.Error -> exerciseLiveData.value = dataState
-                    is DataState.Success -> {
-                        val workoutDto = WorkoutRecordsDto.Workout(date = date, title = title)
-                        val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
-                            workoutDto,
-                            dataState.data.toRecordsDto()
-                        )
-                        recordsRepository
-                            .addWorkoutWithExAndSets(workAndExDto)
-                            .observeUi()
-                            .doAfterSuccess { router.navigate(Screen.HOME_SCREEN) }
-                            .subscribe()
-                    }
+            .flatMap {
+                val data = (it as DataState.Success).data
+                val workoutDto = WorkoutRecordsDto.Workout(date = date, title = title)
+                val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
+                    workoutDto,
+                    data.toRecordsDto()
+                )
+                recordsRepository.addWorkoutWithExAndSets(workAndExDto).observeUi()
+            }.doAfterSuccess {
+                if (it is DataState.Error) {
+                    throw (it.exception)
                 }
+                repo.clearCash()
+                router.navigate(Screen.HOME_SCREEN)
             }.subscribe()
     }
 
@@ -121,17 +104,16 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
     private fun addSetToExercise(params: SetParameterParams) {
         repo.getSets(params.exerciseId)
             .observeUi()
-            .doAfterSuccess { dataState ->
+            .flatMap {
                 var setNumber = 1
-                if (dataState is DataState.Success) {
-                    setNumber = dataState.data.size + 1
+                if (it is DataState.Success) {
+                    setNumber = it.data.size + 1
                 }
                 val set = CurrentWorkoutDto.Set(setId++, params.exerciseId, setNumber, params.weight, params.reps)
-                repo.addSet(set)
-                    .observeUi()
-                    .doAfterSuccess { getAll() }
-                    .subscribe()
-            }.subscribe()
+                repo.addSet(set).observeUi()
+            }
+            .doAfterSuccess { getAll() }
+            .subscribe()
     }
 
     private fun deleteLastSet(exerciseId: Int) {
@@ -205,6 +187,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
         actionBarLiveData.postValue(actionBarEvent)
     }
 
+    // TODO убрать вложенность
     private fun setWorkoutDate(localDate: LocalDate) {
         formatterManager.getSelectedFormatter()
             .observeUi()
@@ -218,6 +201,7 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             }.subscribe()
     }
 
+    // TODO убрать вложенность
     private fun getWorkoutDate() {
         formatterManager.getSelectedFormatter()
             .observeUi()

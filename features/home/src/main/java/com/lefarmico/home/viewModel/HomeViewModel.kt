@@ -9,7 +9,7 @@ import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.core.mapper.toViewDataWorkoutWithExAndSets
 import com.lefarmico.core.utils.SingleLiveEvent
 import com.lefarmico.domain.repository.DateTimeManager
-import com.lefarmico.domain.repository.FormatterManager
+import com.lefarmico.domain.repository.FormatterMonthManager
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
@@ -20,7 +20,6 @@ import com.lefarmico.navigation.params.RecordMenuParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
@@ -32,14 +31,12 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     @Inject
     lateinit var dateTimeRepo: DateTimeManager
     @Inject
-    lateinit var formatterManager: FormatterManager
+    lateinit var formatterMonthManager: FormatterMonthManager
 
     val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>>()
     val actionBarLiveData = SingleLiveEvent<HomeEvents>()
     val calendarLiveData = MutableLiveData<DataState<List<CalendarItemViewData>>>()
     val monthAndYearLiveData = MutableLiveData<DataState<String>>()
-
-    val formatter = DateTimeFormatter.ofPattern("MMMM yyyy")
 
     private fun getAllWorkoutRecords() {
         repo.getWorkoutsWithExerciseAnsSets()
@@ -103,28 +100,40 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     }
 
     private fun getCurrentMonth() {
-        dateTimeRepo.currentMonth()
+        formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
-            .doAfterSuccess { dataState ->
-                monthAndYearLiveData.value = dataState.map { it.format(formatter) }
-                getMonthDates()
+            .doAfterSuccess { dto ->
+                dateTimeRepo.currentMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
             }.subscribe()
     }
 
     private fun nextMonth() {
-        dateTimeRepo.nextMonth()
+        formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
-            .doAfterSuccess { dataState ->
-                monthAndYearLiveData.value = dataState.map { it.format(formatter) }
-                getMonthDates()
+            .doAfterSuccess { dto ->
+                dateTimeRepo.nextMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
             }.subscribe()
     }
     private fun prevMonth() {
-        dateTimeRepo.prevMonth()
+        formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
-            .doAfterSuccess { dataState ->
-                monthAndYearLiveData.value = dataState.map { it.format(formatter) }
-                getMonthDates()
+            .doAfterSuccess { dto ->
+                dateTimeRepo.prevMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
             }.subscribe()
     }
 

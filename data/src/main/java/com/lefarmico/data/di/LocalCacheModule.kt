@@ -1,6 +1,7 @@
 package com.lefarmico.data.di
 
 import com.lefarmico.data.db.FormatterCache
+import com.lefarmico.data.db.FormatterMonthCache
 import com.lefarmico.data.db.LocalDateTimeCache
 import dagger.Module
 import dagger.Provides
@@ -13,6 +14,12 @@ class LocalCacheModule {
     @Singleton
     fun provideFormatterCache(): FormatterCache {
         return FormatterCache()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFormatterMonthCache(): FormatterMonthCache {
+        return FormatterMonthCache()
     }
 
     @Provides
