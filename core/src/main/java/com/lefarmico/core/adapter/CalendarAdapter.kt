@@ -4,28 +4,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.R
+import com.lefarmico.core.adapter.diffUtil.CalendarDiffCallback
 import com.lefarmico.core.databinding.CalendarItemDeselectUncheckedBinding
 import com.lefarmico.core.entity.CalendarItemViewData
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CalendarAdapter(
-    private val currentDate: LocalDateTime
+    private val currentDate: LocalDate,
 ) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
-    var clickListener: ((date: LocalDateTime) -> Unit) = {}
+    var clickListener: ((date: LocalDate) -> Unit) = {}
 
-    var selectedItemIndex = -1
+    private var selectedItemIndex = -1
     private var currentDateSelect = true
-    private var selectedDate: LocalDateTime? = null
+    private var selectedDate: LocalDate? = null
 
     var items = mutableListOf<CalendarItemViewData>()
         set(value) {
+            val oldField = field
             field = value
-            notifyItemRangeChanged(0, items.size)
+            val diffCallback = CalendarDiffCallback(oldField, field)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     class CalendarViewHolder(
@@ -77,7 +82,7 @@ class CalendarAdapter(
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         holder.bind(items[position])
-        if (selectedDate != null && selectedDate!!.isEqual(items[position].date)) {
+        if (selectedDate != null && selectedDate!!.equals(items[position].date)) {
             holder.bindSelected()
         } else {
             holder.bindDeselected()
@@ -90,7 +95,7 @@ class CalendarAdapter(
             notifyItemChanged(position)
             clickListener(items[position].date)
         }
-        if (currentDate.isEqual(items[position].date) && currentDateSelect) {
+        if (currentDate == items[position].date && currentDateSelect) {
             holder.bindSelected()
             currentDateSelect = false
             selectedDate = items[holder.absoluteAdapterPosition].date

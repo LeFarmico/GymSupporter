@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.diffUtil.WorkoutRecordsDiffCallback
-import com.lefarmico.core.databinding.ItemNoteWorkoutBinding
+import com.lefarmico.core.databinding.ItemSocketExercisePreviewBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.selector.SelectItemsHandler
 import java.time.format.DateTimeFormatter
@@ -31,31 +31,26 @@ class WorkoutRecordsAdapter :
         }
 
     class WorkoutNoteViewHolder(
-        itemNoteWorkoutBinding: ItemNoteWorkoutBinding
-    ) : RecyclerView.ViewHolder(itemNoteWorkoutBinding.root) {
+        itemSocketExercisePreviewBinding: ItemSocketExercisePreviewBinding
+    ) : RecyclerView.ViewHolder(itemSocketExercisePreviewBinding.root) {
 
-        private val date = itemNoteWorkoutBinding.workoutDate
-        private val exerciseNoteRecycler = itemNoteWorkoutBinding.exercisesRecycler
+        private val date = itemSocketExercisePreviewBinding.date
+        private val title = itemSocketExercisePreviewBinding.title
 
-        val adapter = ExerciseRecordsAdapter()
-        val selectToggleButton = itemNoteWorkoutBinding.editButton
-        val detailsButton = itemNoteWorkoutBinding.detailsButton
+        val selectToggleButton = itemSocketExercisePreviewBinding.editButton
+        val detailsButton = itemSocketExercisePreviewBinding.detailsButton
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
-            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyy", Locale.getDefault())
-            val dateFormatted = try {
-                noteWorkout.date!!.format(formatter)
-            } catch (e: IllegalArgumentException) {
-                ""
-            }
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
+            val dateFormatted = noteWorkout.date.format(formatter)
             date.text = dateFormatted
-            exerciseNoteRecycler.adapter = adapter
+            title.text = noteWorkout.title
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutNoteViewHolder {
         return WorkoutNoteViewHolder(
-            ItemNoteWorkoutBinding.inflate(
+            ItemSocketExercisePreviewBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -63,7 +58,6 @@ class WorkoutRecordsAdapter :
 
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
         holder.apply {
-            adapter.items = items[position].exerciseWithSetsList
             bind(items[position].workout)
             detailsButton.setOnClickListener {
                 onEditButtonAction(items[position].workout)

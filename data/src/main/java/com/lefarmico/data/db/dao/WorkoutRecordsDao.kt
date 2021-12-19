@@ -10,7 +10,7 @@ import androidx.room.Update
 import com.lefarmico.data.db.entity.WorkoutRecordsData
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @Dao
 interface WorkoutRecordsDao {
@@ -76,7 +76,7 @@ interface WorkoutRecordsDao {
     @Transaction
     @Query("SELECT * FROM workout_records WHERE date = :date")
     fun getWorkoutsWithExerciseAnsSetsByDate(
-        date: LocalDateTime
+        date: LocalDate
     ): Single<List<WorkoutRecordsData.WorkoutWithExercisesAndSets>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -86,5 +86,5 @@ interface WorkoutRecordsDao {
     fun insertSets(setList: List<WorkoutRecordsData.Set>)
 
     @Query("SELECT date FROM workout_records WHERE date BETWEEN :from AND :to")
-    fun getWorkoutDateByTime(from: LocalDateTime, to: LocalDateTime): Single<List<LocalDateTime>>
+    fun getWorkoutDateByTime(from: LocalDate, to: LocalDate): Single<List<LocalDate>>
 }

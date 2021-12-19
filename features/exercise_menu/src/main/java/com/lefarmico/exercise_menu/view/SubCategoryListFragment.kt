@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.BuildConfig
-import com.lefarmico.core.adapter.ExerciseLibraryAdapter
+import com.lefarmico.core.adapter.LibraryItemAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
@@ -27,7 +27,7 @@ class SubCategoryListFragment :
     ),
     SubCategoriesListView {
 
-    private val adapter = ExerciseLibraryAdapter()
+    private val adapter = LibraryItemAdapter()
     private val textFieldString get() = binding.editText.text.toString()
     private val decorator get() = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
 

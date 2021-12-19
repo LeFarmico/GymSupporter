@@ -15,7 +15,7 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
 import java.lang.Exception
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -76,7 +76,7 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getWorkoutWithExerciseAndSetsByDate(date: LocalDateTime):
+    override fun getWorkoutWithExerciseAndSetsByDate(date: LocalDate):
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSetsByDate(date)
             .doOnSubscribe { DataState.Loading }

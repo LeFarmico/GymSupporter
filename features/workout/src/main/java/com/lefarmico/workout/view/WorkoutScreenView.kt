@@ -19,4 +19,8 @@ interface WorkoutScreenView {
     fun showEditState()
 
     fun hideEditState()
+
+    fun setWorkoutTitle(title: String)
+
+    fun setWorkoutDate(date: String)
 }

@@ -21,7 +21,8 @@ fun WorkoutRecordsData.Set.toDto() = WorkoutRecordsDto.Set(
 
 fun WorkoutRecordsData.Workout.toDto() = WorkoutRecordsDto.Workout(
     id = id,
-    date = date
+    date = date,
+    title = title
 )
 
 fun List<WorkoutRecordsData.Set>.toSetListDto() = this.map { it.toDto() }

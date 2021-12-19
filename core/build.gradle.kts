@@ -61,6 +61,7 @@ dependencies {
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
+    implementation("com.google.android.material:material:1.4.0")
     annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
 
     testImplementation(Deps.UiTest.espressoIdling)

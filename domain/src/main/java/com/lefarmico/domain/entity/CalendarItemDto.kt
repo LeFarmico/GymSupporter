@@ -1,8 +1,8 @@
 package com.lefarmico.domain.entity
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class CalendarItemDto(
-    val date: LocalDateTime,
+    val date: LocalDate,
     val isChecked: Boolean = false
 )

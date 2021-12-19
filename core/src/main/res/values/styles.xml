@@ -10,7 +10,7 @@
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
-    <style name="TextStyle">
+    <style name="TextStyle" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">sans-serif</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">normal</item>
@@ -25,6 +25,13 @@
     <style name="TextStyle.Headline">
         <item name="android:textSize">24sp</item>
         <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <style name="TextStyle.HeadlineBold" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
     </style>
 
@@ -48,5 +55,11 @@
         <item name="android:background">?attr/colorPrimary</item>
         <item name="itemIconTint">@drawable/selector_menu</item>
         <item name="itemTextColor">@drawable/selector_menu</item>
+    </style>
+
+    <style name="DatePickerTheme" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">calendar</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="android:windowIsFloating">true</item>
     </style>
 </resources>

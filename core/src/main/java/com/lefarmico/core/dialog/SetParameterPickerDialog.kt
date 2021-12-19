@@ -1,4 +1,4 @@
-package com.lefarmico.core.dialog.setParameter
+package com.lefarmico.core.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lefarmico.core.databinding.DialogAddSetBinding
+import com.lefarmico.navigation.params.SetParameterParams
 
-class SetParametersDialog(
+class SetParameterPickerDialog(
     private val exerciseId: Int,
-    private val callback: SetSettingDialogCallback
+    private val callback: (SetParameterParams) -> Unit = {}
 ) : BottomSheetDialogFragment() {
 
     private var _binding: DialogAddSetBinding? = null
@@ -39,9 +40,10 @@ class SetParametersDialog(
             maxValue = 100
         }
         binding.addButton.setOnClickListener {
-            val repsValue = binding.repsPicker.value
-            val weightValue = getWeightValue(binding.weightPicker.value)
-            callback.addSet(exerciseId, repsValue, weightValue)
+            val reps = binding.repsPicker.value
+            val weight = getWeightValue(binding.weightPicker.value)
+            val params = SetParameterParams(exerciseId, reps, weight)
+            callback(params)
             dismiss()
         }
     }
@@ -56,5 +58,9 @@ class SetParametersDialog(
 
     private fun getWeightValue(position: Int): Float {
         return weightValues[position - 1].toFloat()
+    }
+
+    companion object {
+        const val TAG = "SetParameterPicker"
     }
 }

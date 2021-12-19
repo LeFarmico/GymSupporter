@@ -41,6 +41,10 @@
     <string name="exercise_title">Exercise title</string>
     <string name="description">Description</string>
     <string name="exercise_image">Exercise Image</string>
+    <string name="dialog_reps">Reps.</string>
+    <string name="dialog_weight_kilos">kg.</string>
+    <string name="dialog_weight_pounds">lb.</string>
+    <string name="default_workout_title">Your workout</string>
 
     <!-- State -->
     <string name="empty_state">Now that screen is empty, try to fill it up!</string>

@@ -2,7 +2,6 @@ package com.lefarmico.workout.extensions
 
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.mapper.toRecordsDtoExWithSets
-import com.lefarmico.core.utils.Utilities.getCurrentDate
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 
@@ -26,8 +25,6 @@ fun CurrentWorkoutDto.Set.toRecordsViewData() = WorkoutRecordsViewData.Set(
 
 fun List<CurrentWorkoutDto.Set>.toSetViewData() = this.map { it.toRecordsViewData() }
 
-fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDto(): WorkoutRecordsDto.WorkoutWithExercisesAndSets {
-    val workoutDto = WorkoutRecordsDto.Workout(date = getCurrentDate())
-    val exerciseWithSets = this.toRecordsDtoExWithSets()
-    return WorkoutRecordsDto.WorkoutWithExercisesAndSets(workoutDto, exerciseWithSets)
+fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDto(): List<WorkoutRecordsDto.ExerciseWithSets> {
+    return toRecordsDtoExWithSets()
 }

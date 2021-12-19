@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.BuildConfig
-import com.lefarmico.core.adapter.ExerciseLibraryAdapter
+import com.lefarmico.core.adapter.LibraryItemAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.utils.DataState
@@ -40,7 +40,7 @@ class ExerciseListFragment :
             }
         }
 
-    private val adapter = ExerciseLibraryAdapter()
+    private val adapter = LibraryItemAdapter()
 
     override fun setUpViews() {
         adapter.onClick = onItemClickListener

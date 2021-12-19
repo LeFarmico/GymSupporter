@@ -8,7 +8,8 @@ import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.core.mapper.toViewDataWorkoutWithExAndSets
 import com.lefarmico.core.utils.SingleLiveEvent
-import com.lefarmico.domain.repository.CalendarRepository
+import com.lefarmico.domain.repository.DateTimeManager
+import com.lefarmico.domain.repository.FormatterMonthManager
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
@@ -18,7 +19,7 @@ import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.params.RecordMenuParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
@@ -28,14 +29,16 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     @Inject
     lateinit var router: Router
     @Inject
-    lateinit var calendarRepo: CalendarRepository
+    lateinit var dateTimeRepo: DateTimeManager
+    @Inject
+    lateinit var formatterMonthManager: FormatterMonthManager
 
     val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>>()
     val actionBarLiveData = SingleLiveEvent<HomeEvents>()
     val calendarLiveData = MutableLiveData<DataState<List<CalendarItemViewData>>>()
     val monthAndYearLiveData = MutableLiveData<DataState<String>>()
 
-    private fun getWorkoutRecords() {
+    private fun getAllWorkoutRecords() {
         repo.getWorkoutsWithExerciseAnsSets()
             .observeUi()
             .doAfterSuccess { dataState ->
@@ -63,7 +66,10 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
     private fun removeWorkout(workoutId: Int) {
         repo.deleteWorkoutWithExAndSets(workoutId)
             .observeUi()
-            .doAfterSuccess { getWorkoutRecords() }
+            .doAfterSuccess {
+                getWorkoutRecordsByDate()
+                getMonthDates()
+            }
             .subscribe()
     }
 
@@ -71,8 +77,8 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
         actionBarLiveData.postValue(homeEvents)
     }
 
-    private fun getMonthDates(date: LocalDateTime) {
-        calendarRepo.getDaysByDate(date)
+    private fun getMonthDates() {
+        dateTimeRepo.getCurrentDaysInMonth()
             .observeUi()
             .doAfterSuccess { dataState ->
                 val viewDataState = dataState.map { it.toViewData() }
@@ -80,33 +86,77 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
             }.subscribe()
     }
 
-    private fun getWorkoutRecordsByDate(date: LocalDateTime) {
-        repo.getWorkoutWithExerciseAndSetsByDate(date)
+    private fun getWorkoutRecordsByDate() {
+        dateTimeRepo.getSelectedDate()
             .observeUi()
-            .doAfterSuccess { dataState ->
+            .flatMap {
+                // Всегда Success
+                val data = (it as DataState.Success).data
+                repo.getWorkoutWithExerciseAndSetsByDate(data).observeUi()
+            }.doAfterSuccess { dataState ->
                 val viewDataState = dataState.map { it.toViewDataWorkoutWithExAndSets() }
                 workoutRecordsLiveData.value = viewDataState
             }.subscribe()
     }
 
-    private fun getMonthAndYear(date: LocalDateTime) {
-        calendarRepo.getCurrentMonthAndYear(date)
+    private fun getCurrentMonth() {
+        formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
-            .doAfterSuccess { dataState ->
-                monthAndYearLiveData.value = dataState
+            .doAfterSuccess { dto ->
+                dateTimeRepo.currentMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
             }.subscribe()
+    }
+
+    private fun nextMonth() {
+        formatterMonthManager.getSelectedMonthFormatter()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                dateTimeRepo.nextMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
+            }.subscribe()
+    }
+    private fun prevMonth() {
+        formatterMonthManager.getSelectedMonthFormatter()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                dateTimeRepo.prevMonth()
+                    .observeUi()
+                    .doAfterSuccess { dataState ->
+                        monthAndYearLiveData.value = dataState.map { it.format(dto.formatter) }
+                        getMonthDates()
+                    }.subscribe()
+            }.subscribe()
+    }
+
+    private fun setWorkoutRecordsByDate(localDate: LocalDate) {
+        dateTimeRepo.selectDate(localDate)
+            .observeUi()
+            .doAfterSuccess { getWorkoutRecordsByDate() }
+            .subscribe()
     }
 
     override fun onTriggerEvent(eventType: HomeIntent) {
         when (eventType) {
-            HomeIntent.GetWorkoutRecords -> getWorkoutRecords()
+            HomeIntent.GetWorkoutRecords -> getAllWorkoutRecords()
             HomeIntent.NavigateToWorkout -> navigateToWorkout()
             is HomeIntent.NavigateToDetailsWorkout -> navigateToDetailsWorkout(eventType.workoutId)
             is HomeIntent.RemoveWorkout -> removeWorkout(eventType.workoutId)
             is HomeIntent.ScreenEvent -> actionBarEvent(eventType.event)
-            is HomeIntent.GetCalendarDates -> getMonthDates(eventType.date)
-            is HomeIntent.GetWorkoutRecordsByDate -> getWorkoutRecordsByDate(eventType.date)
-            is HomeIntent.GetMonthAndYearByDate -> getMonthAndYear(eventType.date)
+            is HomeIntent.GetCurrentDaysInMonth -> getMonthDates()
+            is HomeIntent.GetWorkoutRecordsByCurrentDate -> getWorkoutRecordsByDate()
+            is HomeIntent.GetCurrentMonth -> getCurrentMonth()
+            HomeIntent.GetNextMonth -> nextMonth()
+            HomeIntent.GetPrevMonth -> prevMonth()
+            is HomeIntent.SetClickedDate -> setWorkoutRecordsByDate(eventType.localDate)
         }
     }
 }

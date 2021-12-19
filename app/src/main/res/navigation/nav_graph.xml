@@ -73,7 +73,7 @@
         android:label="ExerciseDetailsFragment" />
     <dialog
         android:id="@+id/setParametersDialog"
-        android:name="com.lefarmico.core.dialog.setParameter.SetParametersDialog"
+        android:name="com.lefarmico.core.dialog.SetParameterPickerDialog"
         android:label="SetParametersDialog" />
     <fragment
         android:id="@+id/createNewExerciseFragment"

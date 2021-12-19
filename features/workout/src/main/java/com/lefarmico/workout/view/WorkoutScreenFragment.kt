@@ -2,15 +2,11 @@ package com.lefarmico.workout.view
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import androidx.lifecycle.LiveData
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.core.dialog.setParameter.SetSettingDialogCallback
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.EditActionBarEvents.*
@@ -29,10 +25,13 @@ class WorkoutScreenFragment :
         FragmentWorkoutScreenBinding::inflate,
         WorkoutScreenViewModel::class.java
     ),
-    SetSettingDialogCallback,
     WorkoutScreenView {
 
-    private val adapter = CurrentExerciseAdapter()
+    private val adapter = CurrentExerciseAdapter().apply {
+        plusButtonCallback = { startEvent(StartSetParameterDialog(it)) }
+        minusButtonCallback = { startEvent(DeleteLastSet(it)) }
+        infoButtonCallback = { startEvent(GoToExerciseInfo(it)) }
+    }
 
     private var actionMode: ActionMode? = null
     private var selectHandler: SelectItemsHandler<ExerciseWithSets>? = null
@@ -46,7 +45,9 @@ class WorkoutScreenFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
 
+    override fun setUpViews() {
         when (params) {
             is NewExercise -> {
                 val data = params as NewExercise
@@ -54,10 +55,8 @@ class WorkoutScreenFragment :
             }
             else -> {}
         }
-    }
-
-    override fun setUpViews() {
-        startEvent(GetAll)
+        startEvent(GetExercises)
+        startEvent(GetSelectedDate)
 
         actionModeCallback = object : RemoveActionBarCallback() {
             override fun selectAllButtonHandler() {
@@ -79,26 +78,28 @@ class WorkoutScreenFragment :
         }
         binding.apply {
             listRecycler.adapter = adapter
+
             addExButton.setOnClickListener { startEvent(GoToCategoryScreen) }
             finishButton.setOnClickListener { startEvent(FinishWorkout) }
-        }
-        adapter.apply {
-            plusButtonCallback = {
-                launchSetParameterDialog(it)
-            }
-            minusButtonCallback = {
-                startEvent(DeleteLastSet(it))
-            }
-            infoButtonCallback = {
-                startEvent(GoToExerciseInfo(it))
-            }
+            workoutTitle.setOnClickListener { startEvent(StartWorkoutTitleDialog) }
+            workoutDate.setOnClickListener { startEvent(StartCalendarPickerDialog) }
         }
     }
 
     override fun observeData() {
-        viewModel.notificationLiveData.observe(viewLifecycleOwner) { string ->
-            startEvent(ShowToast(string))
-        }
+        viewModel.notifyLiveData.observe(viewLifecycleOwner) { startEvent(ShowToast(it)) }
+
+        observeLiveData(
+            viewModel.exerciseLiveData,
+            onSuccess = { showExercises(it) },
+            onEmpty = { hideExercises() }
+        )
+
+        observeLiveData(
+            viewModel.setParametersDialogLiveData,
+            onSuccess = { startEvent(StartSetParameterDialog(it.toInt())) }
+        )
+
         viewModel.actionBarLiveData.observe(viewLifecycleOwner) { event ->
             when (event) {
                 SelectAll -> selectAllExercises()
@@ -107,39 +108,9 @@ class WorkoutScreenFragment :
                 Close -> hideEditState()
             }
         }
-        observeLiveData(
-            viewModel.exerciseLiveData,
-            onSuccess = { showExercises(it) },
-            onEmpty = { hideExercises() }
-        )
-        observeLiveData(
-            viewModel.setParametersDialogLiveData,
-            onSuccess = {
-                startEvent(
-                    ShowSetParametersDialog(
-                        parentFragmentManager,
-                        it.toInt(),
-                        this,
-                        TAG_DIALOG
-                    )
-                )
-            }
-        )
-    }
 
-    override fun addSet(exerciseId: Int, reps: Int, weight: Float) {
-        startEvent(AddSetToExercise(exerciseId, reps, weight))
-    }
-
-    private fun launchSetParameterDialog(exerciseId: Int) {
-        startEvent(
-            ShowSetParametersDialog(
-                childFragmentManager,
-                exerciseId,
-                this,
-                TAG_DIALOG
-            )
-        )
+        viewModel.formattedDateLiveData.observe(viewLifecycleOwner) { setWorkoutDate(it) }
+        viewModel.titleLiveData.observe(viewLifecycleOwner) { setWorkoutTitle(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -156,25 +127,17 @@ class WorkoutScreenFragment :
         }
     }
 
-    private fun startEvent(event: WorkoutScreenIntent) {
-        viewModel.onTriggerEvent(event)
-    }
+    private fun startEvent(event: WorkoutScreenIntent) = viewModel.onTriggerEvent(event)
 
-    override fun showLoading() {
-        binding.state.showLoadingState()
-    }
+    override fun showLoading() = binding.state.showLoadingState()
 
-    override fun showSuccess() {
-        binding.state.showSuccessState()
-    }
+    override fun showSuccess() = binding.state.showSuccessState()
+
+    override fun showEmpty() = binding.state.showEmptyState()
 
     override fun showError(e: Exception) {
         binding.state.showErrorState()
         e.printStackTrace()
-    }
-
-    override fun showEmpty() {
-        binding.state.showEmptyState()
     }
 
     override fun showExercises(items: List<ExerciseWithSets>) {
@@ -193,6 +156,14 @@ class WorkoutScreenFragment :
     override fun hideEditState() {
         adapter.turnOffEditState()
         actionMode?.finish()
+    }
+
+    override fun setWorkoutTitle(title: String) {
+        binding.workoutTitle.text = title
+    }
+
+    override fun setWorkoutDate(date: String) {
+        binding.workoutDate.text = date
     }
 
     private fun deleteSelectedExercises() {
@@ -235,7 +206,6 @@ class WorkoutScreenFragment :
 
     companion object {
         private const val KEY_PARAMS = "home_key"
-        private const val TAG_DIALOG = "Set Setting"
 
         fun createBundle(data: Parcelable?): Bundle {
             return Bundle().apply {

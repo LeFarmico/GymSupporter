@@ -23,6 +23,9 @@
         <!-- App bar. -->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Date picker theme -->
+        <item name="android:datePickerStyle">@style/DatePickerTheme</item>
     </style>
 
 </resources>
