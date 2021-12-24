@@ -233,7 +233,6 @@ class WorkoutScreenViewModel @Inject constructor() : BaseViewModel<WorkoutScreen
             FinishWorkout -> finishWorkout()
             GetExercises -> getAll()
             GoToCategoryScreen -> goToCategoryScreen()
-            // TODO : ЗАКИНУТЬ ДАТУ В SHARED PREFERENCES
             is StartSetParameterDialog -> showSetParameterDialog(eventType.exerciseId)
             StartCalendarPickerDialog -> showCalendarPickerDialog()
             StartWorkoutTitleDialog -> showWorkoutTitleDialog()

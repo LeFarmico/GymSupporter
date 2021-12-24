@@ -43,10 +43,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
                         true
                     }
                     R.id.navigation_settings -> {
-//                        router.show(
-//                            Notification.TOAST,
-//                            ToastBarParams("Not yet implemented")
-//                        )
+                        router.navigate(Screen.SETTINGS_SCREEN)
                         true
                     }
                     else -> false

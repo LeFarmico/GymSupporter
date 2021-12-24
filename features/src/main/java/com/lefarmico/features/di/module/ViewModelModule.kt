@@ -10,6 +10,7 @@ import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
 import com.lefarmico.features.di.ViewModelKey
 import com.lefarmico.home.viewModel.HomeViewModel
+import com.lefarmico.settings_screen.viewModel.SettingsScreenViewModel
 import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
 import com.lefarmico.workout_exercise_addition.viewModel.ExerciseDetailsViewModel
 import dagger.Binds
@@ -61,4 +62,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DetailedWorkoutRecordViewModel::class)
     abstract fun addModelEditWorkoutRecordViewModel(viewModel: DetailedWorkoutRecordViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsScreenViewModel::class)
+    abstract fun addSettingsScreenViewModel(viewModel: SettingsScreenViewModel): ViewModel
 }

@@ -45,7 +45,7 @@ class DetailedWorkoutRecordFragment :
                 is DataState.Success -> {
                     // TODO : исправить
                     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
-                    val dateString = dataState.data.workout.date!!.format(formatter)
+                    val dateString = dataState.data.workout.date.format(formatter)
                     showDate(dateString)
 
                     val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()

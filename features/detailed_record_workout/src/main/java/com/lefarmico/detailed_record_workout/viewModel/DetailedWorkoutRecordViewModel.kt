@@ -14,10 +14,8 @@ import javax.inject.Inject
 
 class DetailedWorkoutRecordViewModel @Inject constructor() : BaseViewModel<DetailedWorkoutRecordIntent>() {
 
-    @Inject
-    lateinit var repo: WorkoutRecordsRepository
-    @Inject
-    lateinit var router: Router
+    @Inject lateinit var repo: WorkoutRecordsRepository
+    @Inject lateinit var router: Router
 
     val noteWorkoutLiveData =
         MutableLiveData<DataState<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>()

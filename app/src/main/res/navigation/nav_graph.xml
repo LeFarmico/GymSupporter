@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_navigation_home_to_editWorkoutRecordFragment2"
             app:destination="@id/editWorkoutRecordFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_settingsScreenFragment"
+            app:destination="@id/navigation_settings" />
     </fragment>
     <fragment
         android:id="@+id/workoutScreenFragment"
@@ -90,4 +93,8 @@
         android:id="@+id/editWorkoutRecordFragment"
         android:name="com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment"
         android:label="EditWorkoutRecordFragment" />
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.lefarmico.settings_screen.view.SettingsScreenFragment"
+        android:label="SettingsScreenFragment" />
 </navigation>

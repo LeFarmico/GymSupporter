@@ -24,14 +24,10 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
 
-    @Inject
-    lateinit var repo: WorkoutRecordsRepository
-    @Inject
-    lateinit var router: Router
-    @Inject
-    lateinit var dateTimeRepo: DateTimeManager
-    @Inject
-    lateinit var formatterMonthManager: FormatterMonthManager
+    @Inject lateinit var repo: WorkoutRecordsRepository
+    @Inject lateinit var router: Router
+    @Inject lateinit var dateTimeRepo: DateTimeManager
+    @Inject lateinit var formatterMonthManager: FormatterMonthManager
 
     val workoutRecordsLiveData = MutableLiveData<DataState<List<WorkoutRecordsViewData.WorkoutWithExercisesAndSets>>>()
     val actionBarLiveData = SingleLiveEvent<HomeEvents>()
@@ -99,6 +95,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
             }.subscribe()
     }
 
+    // TODO убрать вложенность
     private fun getCurrentMonth() {
         formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
@@ -112,6 +109,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
             }.subscribe()
     }
 
+    // TODO убрать вложенность
     private fun nextMonth() {
         formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
@@ -124,6 +122,7 @@ class HomeViewModel @Inject constructor() : BaseViewModel<HomeIntent>() {
                     }.subscribe()
             }.subscribe()
     }
+    // TODO убрать вложенность
     private fun prevMonth() {
         formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()

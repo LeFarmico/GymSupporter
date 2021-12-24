@@ -2,6 +2,7 @@ package com.lefarmico.donetime.navigation
 
 import androidx.fragment.app.FragmentManager
 import com.lefarmico.core.dialog.FieldEditorDialog
+import com.lefarmico.core.dialog.ListItemPickerDialog
 import com.lefarmico.core.dialog.LocalDatePickerDialog
 import com.lefarmico.core.dialog.SetParameterPickerDialog
 import com.lefarmico.navigation.dialog.Dialog
@@ -26,6 +27,11 @@ class DialogResolverImpl @Inject constructor() : DialogResolver {
                 dialog.exerciseId,
                 dialog.callback
             ).show(fragmentManager, SetParameterPickerDialog.TAG)
+
+            is Dialog.ListItemPickerDialog -> ListItemPickerDialog(
+                dialog.itemList,
+                dialog.callbackPosition
+            ).show(fragmentManager, ListItemPickerDialog.TAG)
         }
     }
 }

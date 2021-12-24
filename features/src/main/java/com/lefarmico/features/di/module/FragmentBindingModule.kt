@@ -7,6 +7,7 @@ import com.lefarmico.exercise_menu.view.ExerciseListFragment
 import com.lefarmico.exercise_menu.view.SubCategoryListFragment
 import com.lefarmico.features.di.FragmentScope
 import com.lefarmico.home.view.HomeFragment
+import com.lefarmico.settings_screen.view.SettingsScreenFragment
 import com.lefarmico.workout.view.WorkoutScreenFragment
 import com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment
 import dagger.Module
@@ -46,4 +47,8 @@ abstract class FragmentBindingModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun provideEditWorkoutRecordFragment(): DetailedWorkoutRecordFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun provideSettingsMenuFragment(): SettingsScreenFragment
 }

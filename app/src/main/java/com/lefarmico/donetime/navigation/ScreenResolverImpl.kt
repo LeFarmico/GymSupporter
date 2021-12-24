@@ -46,14 +46,14 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                     navExtras
                 )
             }
-//            Screen.SETTINGS_SCREEN -> {
-//                navController?.navigate(
-//                    R.id.fragment,
-//                    null,
-//                null,
-//                    navExtras
-//                )
-//            }
+            Screen.SETTINGS_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_navigation_home_to_settingsScreenFragment,
+                    null,
+                    null,
+                    navExtras
+                )
+            }
             Screen.CREATE_NEW_EXERCISE_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_createNewExerciseFragment,

@@ -45,9 +45,6 @@ class WorkoutScreenFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun setUpViews() {
         when (params) {
             is NewExercise -> {
                 val data = params as NewExercise
@@ -55,6 +52,9 @@ class WorkoutScreenFragment :
             }
             else -> {}
         }
+    }
+
+    override fun setUpViews() {
         startEvent(GetExercises)
         startEvent(GetSelectedDate)
 

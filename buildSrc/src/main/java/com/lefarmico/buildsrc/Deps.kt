@@ -68,6 +68,8 @@ object Deps {
     object Test {
         const val junit =
             "junit:junit:${Versions.junit}"
+        const val junitKtx =
+            "androidx.test.ext:junit-ktx:${Versions.junitKtx}"
     }
 
     object UiTest {
