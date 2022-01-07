@@ -15,3 +15,4 @@ include(
 )
 include(":navigation")
 include(":features:detailed_record_workout")
+include(":features:settings_screen")

@@ -3,6 +3,7 @@ package com.lefarmico.core.mapper
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import java.lang.IllegalArgumentException
+import java.time.format.DateTimeFormatter
 
 fun WorkoutRecordsDto.Exercise.toViewData() = WorkoutRecordsViewData.Exercise(
     id = id,
@@ -19,22 +20,22 @@ fun WorkoutRecordsDto.Set.toViewData() = WorkoutRecordsViewData.Set(
     measureType = measureType.toViewData()
 )
 
-fun WorkoutRecordsDto.Workout.toViewData() = WorkoutRecordsViewData.Workout(
+fun WorkoutRecordsDto.Workout.toViewData(formatter: DateTimeFormatter) = WorkoutRecordsViewData.Workout(
     id = id,
-    date = date,
+    date = date.format(formatter),
     title = title
 )
 
 fun List<WorkoutRecordsDto.Set>.toViewDataSet() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.Exercise>.toViewDataExercise() = this.map { it.toViewData() }
+fun List<WorkoutRecordsDto.Exercise>.toViewData() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.Workout>.toViewDataWorkout() = this.map { it.toViewData() }
+@JvmName("viewDataExWithSets")
+fun List<WorkoutRecordsDto.ExerciseWithSets>.toViewData() = this.map { it.toViewData() }
 
-fun List<WorkoutRecordsDto.ExerciseWithSets>.toViewDataExWithSets() = this.map { it.toViewData() }
-
-fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toViewDataWorkoutWithExAndSets() =
-    this.map { it.toViewData() }
+@JvmName("viewDataWorkoutWithExAndSets")
+fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toViewData(formatter: DateTimeFormatter) =
+    this.map { it.toViewData(formatter) }
 
 fun WorkoutRecordsDto.MeasureType.toViewData(): WorkoutRecordsViewData.MeasureType {
     return when (this.typeNumber) {
@@ -44,10 +45,11 @@ fun WorkoutRecordsDto.MeasureType.toViewData(): WorkoutRecordsViewData.MeasureTy
     }
 }
 
-fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toViewData() = WorkoutRecordsViewData.WorkoutWithExercisesAndSets(
-    workout = workout.toViewData(),
-    exerciseWithSetsList = exerciseWithSetsList.toViewDataExWithSets()
-)
+fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toViewData(formatter: DateTimeFormatter) =
+    WorkoutRecordsViewData.WorkoutWithExercisesAndSets(
+        workout = workout.toViewData(formatter),
+        exerciseWithSetsList = exerciseWithSetsList.toViewData()
+    )
 
 fun WorkoutRecordsDto.ExerciseWithSets.toViewData() = WorkoutRecordsViewData.ExerciseWithSets(
     exercise = exercise.toViewData(),

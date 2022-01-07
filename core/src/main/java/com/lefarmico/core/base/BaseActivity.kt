@@ -1,16 +1,15 @@
 package com.lefarmico.core.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.lefarmico.core.di.ViewModelFactory
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-typealias LayoutInflate<T> = (LayoutInflater) -> T
-
-abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
+abstract class BaseActivity<I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+    VB : ViewBinding,
+    VM : BaseViewModel<I, A, S, E>>(
     private val inflate: LayoutInflate<VB>,
     private val provideViewModel: Class<VM>
 ) : DaggerAppCompatActivity() {

@@ -26,4 +26,5 @@ fun List<LibraryDto.Category>.toViewDataCategory() = this.map { it.toViewData() 
 
 fun List<LibraryDto.SubCategory>.toViewDataSubCategory() = this.map { it.toViewData() }
 
-fun List<LibraryDto.Exercise>.toViewDataExercise() = this.map { it.toViewData() }
+@JvmName("toLibraryViewDataExercise")
+fun List<LibraryDto.Exercise>.toViewData() = this.map { it.toViewData() }

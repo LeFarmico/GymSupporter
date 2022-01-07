@@ -10,12 +10,12 @@ import com.lefarmico.core.di.ViewModelFactory
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
-
-abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
+abstract class BaseFragment<I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+    VB : ViewBinding,
+    VM : BaseViewModel<I, A, S, E>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
-) : DaggerFragment(), ISetupBaseActions {
+) : DaggerFragment(), IViewSetup, IViewStateReceiver<S, E> {
 
     lateinit var viewModel: VM
 
@@ -43,6 +43,12 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            receive(state)
+        }
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            receive(event)
+        }
         observeData()
         observeView()
     }
@@ -52,9 +58,10 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>
         _binding = null
     }
 
+    fun dispatchIntent(intent: I) {
+        viewModel.dispatchIntent(intent)
+    }
     override fun setUpViews() {}
-
-    override fun observeView() {}
-
     override fun observeData() {}
+    override fun observeView() {}
 }

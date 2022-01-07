@@ -47,7 +47,6 @@ dependencies {
     // Views
     implementation(Deps.Androidx.cardView)
     implementation(Deps.Androidx.recyclerView)
-    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
     implementation(Deps.Androidx.material)
 

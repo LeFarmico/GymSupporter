@@ -19,4 +19,9 @@ sealed class Dialog {
         val exerciseId: Int,
         val callback: (SetParameterParams) -> Unit
     ) : Dialog()
+
+    data class ListItemPickerDialog(
+        val itemList: List<String>,
+        val callbackPosition: (Int) -> Unit
+    ) : Dialog()
 }

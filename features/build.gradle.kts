@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":features:workout"))
     implementation(project(":features:create_new_exercise"))
     implementation(project(":features:detailed_record_workout"))
+    implementation(project(":features:settings_screen"))
 
     // Tests
     androidTestImplementation(com.lefarmico.buildsrc.Deps.Test.junit)

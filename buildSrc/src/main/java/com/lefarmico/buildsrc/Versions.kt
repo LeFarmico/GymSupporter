@@ -16,7 +16,7 @@ object Versions {
     const val lifecycleExtensions = "2.2.0"
     const val room = "2.3.0-rc01"
     const val rxJava = "3.0.0"
-    const val dagger = "2.40.1"
+    const val dagger = "2.40.5"
     const val viewpager2 = "1.0.0"
     const val flexBox = "2.0.1"
     const val cardView = "1.0.0"
@@ -33,6 +33,7 @@ object Versions {
     const val legacySup = "1.0.0"
 
     const val junit = "4.13.2"
+    const val junitKtx = "1.1.3"
     const val junitUi = "1.1.3"
     const val espresso = "3.2.0"
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.adapter.LibraryItemAdapter.MenuItemViewHolder
 import com.lefarmico.core.adapter.diffUtil.ExerciseLibraryDiffCallback
-import com.lefarmico.core.databinding.ItemLibraryListBinding
+import com.lefarmico.core.databinding.MenuItemBinding
 import com.lefarmico.core.entity.LibraryViewData
 
 class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
@@ -24,7 +24,7 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
         }
 
     class MenuItemViewHolder(
-        itemLibraryListBinding: ItemLibraryListBinding
+        itemLibraryListBinding: MenuItemBinding
     ) : RecyclerView.ViewHolder(itemLibraryListBinding.root) {
 
         private val exerciseText = itemLibraryListBinding.text
@@ -74,7 +74,7 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuItemViewHolder {
         return MenuItemViewHolder(
-            ItemLibraryListBinding.inflate(
+            MenuItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

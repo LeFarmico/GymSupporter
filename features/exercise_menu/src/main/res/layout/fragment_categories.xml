@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_library_list"
+        tools:listitem="@layout/menu_item"
         tools:itemCount="20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

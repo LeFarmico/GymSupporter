@@ -9,8 +9,6 @@ import com.lefarmico.core.adapter.diffUtil.WorkoutRecordsDiffCallback
 import com.lefarmico.core.databinding.ItemSocketExercisePreviewBinding
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.core.selector.SelectItemsHandler
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class WorkoutRecordsAdapter :
     RecyclerView.Adapter<WorkoutRecordsAdapter.WorkoutNoteViewHolder>(),
@@ -41,8 +39,7 @@ class WorkoutRecordsAdapter :
         val detailsButton = itemSocketExercisePreviewBinding.detailsButton
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
-            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.getDefault())
-            val dateFormatted = noteWorkout.date.format(formatter)
+            val dateFormatted = noteWorkout.date
             date.text = dateFormatted
             title.text = noteWorkout.title
         }
