@@ -5,17 +5,17 @@ import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
-import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
-import com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment
+import com.lefarmico.create_new_exercise.CreateExerciseFragment
+import com.lefarmico.detailed_record_workout.DetailedWorkoutRecordFragment
 import com.lefarmico.donetime.BuildConfig
 import com.lefarmico.donetime.R
-import com.lefarmico.exercise_menu.view.CategoryListFragment
+import com.lefarmico.exercise_menu.view.CategoryFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
-import com.lefarmico.exercise_menu.view.SubCategoryListFragment
+import com.lefarmico.exercise_menu.view.SubcategoryFragment
 import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.navigation.screen.ScreenResolver
-import com.lefarmico.workout.view.WorkoutScreenFragment
-import com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment
+import com.lefarmico.workout.WorkoutFragment
+import com.lefarmico.workout_exercise_addition.ExerciseDetailsFragment
 import java.lang.IllegalStateException
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.WORKOUT_SCREEN -> {
                 navController?.navigate(
                     R.id.action_homeFragment_to_workoutScreenFragment,
-                    WorkoutScreenFragment.createBundle(data),
+                    WorkoutFragment.createBundle(data),
                     null,
                     navExtras
                 )
@@ -57,7 +57,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.CREATE_NEW_EXERCISE_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_createNewExerciseFragment,
-                    CreateNewExerciseFragment.createBundle(data),
+                    CreateExerciseFragment.createBundle(data),
                     null,
                     navExtras
                 )
@@ -65,7 +65,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.CATEGORY_LIST_SCREEN -> {
                 navController?.navigate(
                     R.id.action_workoutScreenFragment_to_categoryListFragment,
-                    CategoryListFragment.createBundle(data),
+                    CategoryFragment.createBundle(data),
                     null,
                     navExtras
                 )
@@ -73,7 +73,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.SUBCATEGORY_LIST_SCREEN -> {
                 navController?.navigate(
                     R.id.action_categoryListFragment_to_subCategoryListFragment,
-                    SubCategoryListFragment.createBundle(data),
+                    SubcategoryFragment.createBundle(data),
                     null,
                     navExtras
                 )
@@ -107,7 +107,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_workoutScreenFragment,
-                    WorkoutScreenFragment.createBundle(data),
+                    WorkoutFragment.createBundle(data),
                     null,
                     navExtras
                 )

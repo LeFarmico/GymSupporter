@@ -1,15 +1,15 @@
 package com.lefarmico.features.di.module
 
-import com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment
-import com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment
-import com.lefarmico.exercise_menu.view.CategoryListFragment
+import com.lefarmico.create_new_exercise.CreateExerciseFragment
+import com.lefarmico.detailed_record_workout.DetailedWorkoutRecordFragment
+import com.lefarmico.exercise_menu.view.CategoryFragment
 import com.lefarmico.exercise_menu.view.ExerciseListFragment
-import com.lefarmico.exercise_menu.view.SubCategoryListFragment
+import com.lefarmico.exercise_menu.view.SubcategoryFragment
 import com.lefarmico.features.di.FragmentScope
-import com.lefarmico.home.view.HomeFragment
-import com.lefarmico.settings_screen.view.SettingsScreenFragment
-import com.lefarmico.workout.view.WorkoutScreenFragment
-import com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment
+import com.lefarmico.home.HomeFragment
+import com.lefarmico.settings_screen.SettingsScreenFragment
+import com.lefarmico.workout.WorkoutFragment
+import com.lefarmico.workout_exercise_addition.ExerciseDetailsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -22,11 +22,11 @@ abstract class FragmentBindingModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideAddExerciseFragment(): CreateNewExerciseFragment
+    abstract fun provideAddExerciseFragment(): CreateExerciseFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideWorkoutScreenFragment(): WorkoutScreenFragment
+    abstract fun provideWorkoutScreenFragment(): WorkoutFragment
 
     @FragmentScope
     @ContributesAndroidInjector
@@ -34,11 +34,11 @@ abstract class FragmentBindingModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideWorkoutCategoryFragment(): CategoryListFragment
+    abstract fun provideWorkoutCategoryFragment(): CategoryFragment
 
     @FragmentScope
     @ContributesAndroidInjector
-    abstract fun provideWorkoutExerciseFragment(): SubCategoryListFragment
+    abstract fun provideWorkoutExerciseFragment(): SubcategoryFragment
 
     @FragmentScope
     @ContributesAndroidInjector

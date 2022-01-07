@@ -30,7 +30,6 @@ sealed class LibraryParams : Parcelable {
 
     @Parcelize
     data class NewExercise(
-        val categoryId: Int,
         val subCategoryId: Int,
         val isFromWorkoutScreen: Boolean
     ) : LibraryParams()

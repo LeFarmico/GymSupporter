@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.lefarmico.home.view.HomeFragment"
+        android:name="com.lefarmico.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_workoutScreenFragment"
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/workoutScreenFragment"
-        android:name="com.lefarmico.workout.view.WorkoutScreenFragment"
+        android:name="com.lefarmico.workout.WorkoutFragment"
         android:label="fragment_workout_screen"
         tools:layout="@layout/fragment_workout_screen" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_exercises"
-        android:name="com.lefarmico.exercise_menu.view.CategoryListFragment"
+        android:name="com.lefarmico.exercise_menu.view.CategoryFragment"
         android:label="CategoryListFragment" >
         <action
             android:id="@+id/action_categoryListFragment_to_subCategoryListFragment"
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/subCategoryListFragment"
-        android:name="com.lefarmico.exercise_menu.view.SubCategoryListFragment"
+        android:name="com.lefarmico.exercise_menu.view.SubcategoryFragment"
         android:label="SubCategoryListFragment" >
         <action
             android:id="@+id/action_subCategoryListFragment_to_exerciseListFragment"
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseDetailsFragment"
-        android:name="com.lefarmico.workout_exercise_addition.view.ExerciseDetailsFragment"
+        android:name="com.lefarmico.workout_exercise_addition.ExerciseDetailsFragment"
         android:label="ExerciseDetailsFragment" />
     <dialog
         android:id="@+id/setParametersDialog"
@@ -80,7 +80,7 @@
         android:label="SetParametersDialog" />
     <fragment
         android:id="@+id/createNewExerciseFragment"
-        android:name="com.lefarmico.create_new_exercise.view.CreateNewExerciseFragment"
+        android:name="com.lefarmico.create_new_exercise.CreateExerciseFragment"
         android:label="CreateNewExerciseFragment" >
         <action
             android:id="@+id/action_createNewExerciseFragment_to_exerciseListFragment"
@@ -91,10 +91,10 @@
     </fragment>
     <dialog
         android:id="@+id/editWorkoutRecordFragment"
-        android:name="com.lefarmico.detailed_record_workout.view.DetailedWorkoutRecordFragment"
+        android:name="com.lefarmico.detailed_record_workout.DetailedWorkoutRecordFragment"
         android:label="EditWorkoutRecordFragment" />
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.lefarmico.settings_screen.view.SettingsScreenFragment"
+        android:name="com.lefarmico.settings_screen.SettingsScreenFragment"
         android:label="SettingsScreenFragment" />
 </navigation>

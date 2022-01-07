@@ -3,16 +3,16 @@ package com.lefarmico.features.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lefarmico.core.di.ViewModelFactory
-import com.lefarmico.create_new_exercise.viewModel.CreateNewExerciseViewModel
-import com.lefarmico.detailed_record_workout.viewModel.DetailedWorkoutRecordViewModel
-import com.lefarmico.exercise_menu.viewModel.CategoryListViewModel
+import com.lefarmico.create_new_exercise.CreateExerciseViewModel
+import com.lefarmico.detailed_record_workout.DetailedWorkoutRecordViewModel
+import com.lefarmico.exercise_menu.viewModel.CategoryViewModel
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
-import com.lefarmico.exercise_menu.viewModel.SubCategoryViewModel
+import com.lefarmico.exercise_menu.viewModel.SubcategoryViewModel
 import com.lefarmico.features.di.ViewModelKey
-import com.lefarmico.home.viewModel.HomeViewModel
-import com.lefarmico.settings_screen.viewModel.SettingsScreenViewModel
-import com.lefarmico.workout.viewModel.WorkoutScreenViewModel
-import com.lefarmico.workout_exercise_addition.viewModel.ExerciseDetailsViewModel
+import com.lefarmico.home.HomeViewModel
+import com.lefarmico.settings_screen.SettingsScreenViewModel
+import com.lefarmico.workout.WorkoutViewModel
+import com.lefarmico.workout_exercise_addition.ExerciseDetailsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -25,13 +25,13 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(CategoryListViewModel::class)
-    abstract fun addCategoryListViewModel(viewModel: CategoryListViewModel): ViewModel
+    @ViewModelKey(CategoryViewModel::class)
+    abstract fun addCategoryListViewModel(viewModel: CategoryViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(CreateNewExerciseViewModel::class)
-    abstract fun addAddExerciseViewModel(viewModel: CreateNewExerciseViewModel): ViewModel
+    @ViewModelKey(CreateExerciseViewModel::class)
+    abstract fun addAddExerciseViewModel(viewModel: CreateExerciseViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -50,13 +50,13 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SubCategoryViewModel::class)
-    abstract fun addSubCategoryViewModel(viewModel: SubCategoryViewModel): ViewModel
+    @ViewModelKey(SubcategoryViewModel::class)
+    abstract fun addSubCategoryViewModel(viewModel: SubcategoryViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(WorkoutScreenViewModel::class)
-    abstract fun addWorkoutScreenViewModel(viewModel: WorkoutScreenViewModel): ViewModel
+    @ViewModelKey(WorkoutViewModel::class)
+    abstract fun addWorkoutScreenViewModel(viewModel: WorkoutViewModel): ViewModel
 
     @Binds
     @IntoMap

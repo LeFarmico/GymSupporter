@@ -7,38 +7,33 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.LibraryItemAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
-import com.lefarmico.domain.utils.DataState
+import com.lefarmico.exercise_menu.action.ExerciseAction
 import com.lefarmico.exercise_menu.databinding.FragmentExerciseListBinding
-import com.lefarmico.exercise_menu.intent.ExerciseListIntent
+import com.lefarmico.exercise_menu.intent.ExerciseIntent
+import com.lefarmico.exercise_menu.intent.ExerciseIntent.*
+import com.lefarmico.exercise_menu.state.LibraryListEvent
+import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.navigation.params.LibraryParams
 import java.lang.IllegalArgumentException
 
 class ExerciseListFragment :
-    BaseFragment<FragmentExerciseListBinding, ExerciseListViewModel>(
+    BaseFragment<
+        ExerciseIntent, ExerciseAction, LibraryListState, LibraryListEvent,
+        FragmentExerciseListBinding, ExerciseListViewModel>(
         FragmentExerciseListBinding::inflate,
         ExerciseListViewModel::class.java
-    ),
-    ExerciseListView {
+    ) {
 
     private val params: LibraryParams.ExerciseList by lazy {
         arguments?.getParcelable<LibraryParams.ExerciseList>(KEY_PARAMS)
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
-    private val onItemClickListener: (LibraryViewData) -> Unit =
-        { item ->
-            item as LibraryViewData.Exercise
-            if (params.isFromWorkoutScreen) {
-                viewModel.onTriggerEvent(
-                    ExerciseListIntent.AddExerciseToWorkoutScreen(item.id)
-                )
-            } else {
-                viewModel.onTriggerEvent(
-                    ExerciseListIntent.GoToExerciseDetailsScreen(item.id)
-                )
-            }
-        }
+    private val onItemClickListener: (LibraryViewData) -> Unit = { item ->
+        item as LibraryViewData.Exercise
+        dispatchIntent(ClickItem(item, params.isFromWorkoutScreen))
+    }
 
     private val adapter = LibraryItemAdapter()
 
@@ -46,50 +41,44 @@ class ExerciseListFragment :
         adapter.onClick = onItemClickListener
         binding.recycler.adapter = adapter
         val subCategoryId = params.subCategoryId
-        viewModel.onTriggerEvent(
-            ExerciseListIntent.GetExercises(subCategoryId)
-        )
+        dispatchIntent(GetExercises(subCategoryId))
 
-        if (binding.recycler.itemDecorationCount == 0) {
-            val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-            binding.recycler.addItemDecoration(decorator)
-        }
+        val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        binding.recycler.addItemDecoration(decorator, 0)
+
         binding.plusButton.setOnClickListener {
-            viewModel.onTriggerEvent(
-                ExerciseListIntent.CreateNewExercise(
-                    params.categoryId,
-                    params.subCategoryId,
-                    params.isFromWorkoutScreen
-                )
-            )
+            dispatchIntent(CreateNewExercise(params.subCategoryId, params.isFromWorkoutScreen))
         }
     }
 
-    override fun observeData() {
-        viewModel.exercisesLiveData.observe(viewLifecycleOwner) { dataState ->
-            when (dataState) {
-                DataState.Empty -> hideExercises()
-                is DataState.Error -> {
-                    adapter.items = mutableListOf()
-                    binding.state.showErrorState()
-                }
-                DataState.Loading -> {
-                    adapter.items = mutableListOf()
-                    binding.state.showLoadingState()
-                }
-                is DataState.Success -> showExercises(dataState.data)
-            }
-        }
-    }
-
-    override fun showExercises(items: List<LibraryViewData.Exercise>) {
+    private fun showExercises(items: List<LibraryViewData>) {
         adapter.items = items
+        if (items.isEmpty()) {
+            binding.state.showEmptyState()
+            return
+        }
         binding.state.showSuccessState()
     }
 
-    override fun hideExercises() {
-        adapter.items = mutableListOf()
-        binding.state.showEmptyState()
+    private fun showLoading() {
+        binding.state.showLoadingState()
+    }
+
+    override fun receive(state: LibraryListState) {
+        when (state) {
+            is LibraryListState.ExceptionResult -> throw (state.exception)
+            is LibraryListState.LibraryResult -> showExercises(state.libraryList)
+            LibraryListState.Loading -> showLoading()
+        }
+    }
+
+    override fun receive(event: LibraryListEvent) {
+        when (event) {
+            is LibraryListEvent.ShowToast -> {}
+            LibraryListEvent.ValidationResult.AlreadyExist -> {}
+            LibraryListEvent.ValidationResult.Empty -> {}
+            LibraryListEvent.ValidationResult.Success -> {}
+        }
     }
 
     companion object {

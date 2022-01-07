@@ -16,4 +16,4 @@ fun CurrentWorkoutDto.ExerciseWithSets.toViewData() = CurrentWorkoutViewData.Exe
     setList = setList.toViewDataSet().toMutableList()
 )
 
-fun List<CurrentWorkoutDto.ExerciseWithSets>.toViewDataExWithSets() = this.map { it.toViewData() }
+fun List<CurrentWorkoutDto.ExerciseWithSets>.toViewData() = this.map { it.toViewData() }

@@ -15,10 +15,13 @@ import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, VM : BaseViewModel<out BaseIntent>>(
+abstract class BaseBottomSheetDialogFragment<
+    I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+    VB : ViewBinding,
+    VM : BaseViewModel<I, A, S, E>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
-) : BottomSheetDialogFragment(), ISetupBaseActions, HasAndroidInjector {
+) : BottomSheetDialogFragment(), IViewSetup, IViewStateReceiver<S, E>, HasAndroidInjector {
 
     lateinit var viewModel: VM
 
@@ -29,12 +32,11 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, VM : BaseViewMode
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     private var _binding: VB? = null
+    val binding get() = _binding!!
 
     override fun androidInjector(): AndroidInjector<Any> {
         return androidInjector
     }
-
-    val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,9 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, VM : BaseViewMode
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            receive(state)
+        }
         observeData()
         observeView()
     }
@@ -68,9 +73,11 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, VM : BaseViewMode
         super.onAttach(context)
     }
 
+    fun dispatchIntent(intent: I) {
+        viewModel.dispatchIntent(intent)
+    }
+
     override fun setUpViews() {}
-
     override fun observeView() {}
-
     override fun observeData() {}
 }
