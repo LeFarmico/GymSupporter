@@ -39,7 +39,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(item: WorkoutRecordsViewData.Set) {
             setNumber.text = context.getString(R.string.set_field, item.setNumber)
-            weights.text = context.getString(R.string.weight_field, item.weight)
+            weights.text = context.getString(R.string.weight_field, item.weight.toString())
             reps.text = context.getString(R.string.repetitions_field, item.reps)
         }
     }

@@ -11,5 +11,8 @@ sealed class WorkoutState : BaseState.State {
     data class DateResult(val date: String) : WorkoutState()
     data class TitleResult(val title: String) : WorkoutState()
     data class ExceptionResult(val exception: Exception) : WorkoutState()
+    data class TimeResult(val time: String) : WorkoutState()
+    data class SwitchState(val isOn: Boolean) : WorkoutState()
+    data class EndWorkoutResult(val workoutId: Long) : WorkoutState()
     object Loading : WorkoutState()
 }

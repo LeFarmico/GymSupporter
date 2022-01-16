@@ -1,6 +1,7 @@
 package com.lefarmico.create_new_exercise
 
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.extensions.debounceImmediate
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.validator.EmptyValidator
 import com.lefarmico.core.validator.ExistedValidator
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CreateExerciseViewModel @Inject constructor() : BaseViewModel<
-    CreateExerciseIntent, CreateExerciseAction, CreateExerciseState, CreateExerciseEvent
+    CreateExerciseIntent, CreateExerciseState, CreateExerciseEvent
     >() {
 
     @Inject lateinit var repo: LibraryRepository
@@ -58,7 +59,7 @@ class CreateExerciseViewModel @Inject constructor() : BaseViewModel<
 
     private fun validator() {
         Observable.create<String> { input -> validateSubject.subscribe { input.onNext(it) } }
-            .debounce(1, TimeUnit.SECONDS)
+            .debounceImmediate(1, TimeUnit.SECONDS)
             .distinctUntilChanged()
             .observeUi()
             .doOnNext { validateField -> validate(validateField, validateCache) }
@@ -86,36 +87,15 @@ class CreateExerciseViewModel @Inject constructor() : BaseViewModel<
         router.back()
     }
 
-    override fun triggerAction(action: CreateExerciseAction) {
-        when (action) {
-            CreateExerciseAction.Back -> back()
-            is CreateExerciseAction.ShowToast -> showToast(action.text)
-            is CreateExerciseAction.ValidateExercise -> validateSubject.onNext(action.title)
-            is CreateExerciseAction.GetExercises -> getExistedExercises(action.subcategoryId)
-            is CreateExerciseAction.AddExercise -> {
-                action.apply { addExercise(title, description, imageRes, subcategoryId) }
+    override fun triggerIntent(intent: CreateExerciseIntent) {
+        when (intent) {
+            Back -> back()
+            is ShowToast -> showToast(intent.text)
+            is ValidateExercise -> validateSubject.onNext(intent.title)
+            is AddExercise -> {
+                intent.apply { addExercise(title, description, imageRes, subcategoryId) }
             }
-        }
-    }
-
-    override fun intentToAction(intent: CreateExerciseIntent): CreateExerciseAction {
-        return when (intent) {
-            Back -> CreateExerciseAction.Back
-            is ShowToast ->
-                CreateExerciseAction
-                    .ShowToast(intent.text)
-
-            is ValidateExercise ->
-                CreateExerciseAction
-                    .ValidateExercise(intent.title)
-
-            is AddExercise ->
-                CreateExerciseAction
-                    .AddExercise(intent.title, intent.description, intent.imageRes, intent.subcategoryId)
-
-            is GetExercises ->
-                CreateExerciseAction
-                    .GetExercises(intent.subcategoryId)
+            is GetExercises -> getExistedExercises(intent.subcategoryId)
         }
     }
 }

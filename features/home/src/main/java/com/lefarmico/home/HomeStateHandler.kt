@@ -12,7 +12,6 @@ fun DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>.reduce(
     formatter: DateTimeFormatter
 ): HomeState {
     return when (this) {
-        DataState.Empty -> HomeState.WorkoutResult(listOf())
         is DataState.Error -> HomeState.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.WorkoutResult(this.data.toViewData(formatter))
@@ -21,7 +20,6 @@ fun DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>.reduce(
 @JvmName("reduceCalendarItemDto")
 fun DataState<List<CalendarItemDto>>.reduce(): HomeState {
     return when (this) {
-        DataState.Empty -> HomeState.CalendarResult(listOf())
         is DataState.Error -> HomeState.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.CalendarResult(this.data.toViewData())
@@ -31,7 +29,6 @@ fun DataState<List<CalendarItemDto>>.reduce(): HomeState {
 @JvmName("reduceMonthAndYearText")
 fun DataState<String>.reduce(): HomeState {
     return when (this) {
-        DataState.Empty -> HomeState.MonthAndYearResult(MonthAndYearText(""))
         is DataState.Error -> HomeState.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.MonthAndYearResult(MonthAndYearText(this.data))
@@ -40,7 +37,6 @@ fun DataState<String>.reduce(): HomeState {
 
 fun DataState<LocalDate>.resolve(): LocalDate {
     return when (this) {
-        DataState.Empty -> LocalDate.now()
         is DataState.Error -> throw (exception)
         DataState.Loading -> throw (IllegalArgumentException())
         is DataState.Success -> data

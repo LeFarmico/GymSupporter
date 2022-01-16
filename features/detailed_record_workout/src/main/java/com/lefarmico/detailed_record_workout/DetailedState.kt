@@ -11,4 +11,5 @@ sealed class DetailedState : BaseState.State {
     object Loading : DetailedState()
     data class ExceptionResult(val exception: Exception) : DetailedState()
     data class DateResult(val dateText: String) : DetailedState()
+    data class TitleResult(val title: String) : DetailedState()
 }

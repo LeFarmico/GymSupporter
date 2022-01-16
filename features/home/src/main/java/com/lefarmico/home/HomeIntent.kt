@@ -11,12 +11,22 @@ sealed class HomeIntent : BaseIntent {
     data class DeleteWorkout(val workoutId: Int) : HomeIntent()
     data class ClickDate(val localDate: LocalDate) : HomeIntent()
     object GetDaysInMonth : HomeIntent()
-    object CurrentMonth : HomeIntent()
-    object NextMonth : HomeIntent()
-    object PrevMonth : HomeIntent()
 
-    object ShowEditState : HomeIntent()
-    object HideEditState : HomeIntent()
-    object SelectAllWorkouts : HomeIntent()
-    object DeleteSelectedWorkouts : HomeIntent()
+    data class ChangeMonth(val change: Change) : HomeIntent() {
+        sealed class Change {
+            object Next : Change()
+            object Prev : Change()
+            object Current : Change()
+        }
+    }
+
+    data class EditState(val action: Action) : HomeIntent() {
+        sealed class Action {
+            object Show : Action()
+            object Hide : Action()
+            object SelectAll : Action()
+            object DeselectAll : Action()
+            object DeleteSelected : Action()
+        }
+    }
 }

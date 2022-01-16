@@ -3,257 +3,273 @@ package com.lefarmico.workout
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.entity.CurrentWorkoutDto
-import com.lefarmico.domain.entity.WorkoutRecordsDto
-import com.lefarmico.domain.repository.*
+import com.lefarmico.domain.repository.CurrentWorkoutRepository
+import com.lefarmico.domain.repository.LibraryRepository
+import com.lefarmico.domain.repository.WorkoutRecordsRepository
+import com.lefarmico.domain.repository.manager.*
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.Router
-import com.lefarmico.navigation.dialog.Dialog
-import com.lefarmico.navigation.notification.Notification
-import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.params.SetParameterParams
-import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
-import com.lefarmico.workout.WorkoutAction.EditState.Action
-import com.lefarmico.workout.WorkoutAction.EditState.Action.*
-import com.lefarmico.workout.WorkoutAction.EditState.Action.DeselectAll
 import com.lefarmico.workout.WorkoutIntent.*
-import com.lefarmico.workout.extensions.toRecordsDto
+import com.lefarmico.workout.interactor.DateTimeHelper
+import com.lefarmico.workout.interactor.ExerciseHelper
+import com.lefarmico.workout.interactor.NavigateHelper
+import com.lefarmico.workout.interactor.WorkoutHelper
+import com.lefarmico.workout_notification.WorkoutRemindNotificationHelper
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class WorkoutViewModel @Inject constructor() : BaseViewModel<
-    WorkoutIntent, WorkoutAction, WorkoutState, WorkoutEvent
+    WorkoutIntent, WorkoutState, WorkoutEvent
     >() {
 
     @Inject lateinit var recordsRepository: WorkoutRecordsRepository
     @Inject lateinit var libraryRepository: LibraryRepository
-    @Inject lateinit var repo: CurrentWorkoutRepository
-    @Inject lateinit var router: Router
-    @Inject lateinit var dateTimeRepository: DateTimeManager
-    @Inject lateinit var formatterManager: FormatterManager
+    @Inject lateinit var workoutRepository: CurrentWorkoutRepository
 
-    // TODO : убрать локальные переменные
-    private var setId = 1
-    private var title = "Your workout"
+    @Inject lateinit var dateManager: DateManager
+    @Inject lateinit var formatterManager: FormatterManager
+    @Inject lateinit var timeScheduleManager: TimeScheduleManager
+    @Inject lateinit var workoutTitleManager: WorkoutTitleManager
+    @Inject lateinit var formatterTimeManager: FormatterTimeManager
+    @Inject lateinit var notificationHelper: WorkoutRemindNotificationHelper
+
+    @Inject lateinit var router: Router
+
+    private val exerciseHelper by lazy { ExerciseHelper(workoutRepository, libraryRepository) }
+    private val navigateHelper by lazy { NavigateHelper(router) }
+    private val dateTimeHelper by lazy {
+        DateTimeHelper(
+            dateManager, timeScheduleManager, formatterManager, formatterTimeManager
+        )
+    }
+    private val workoutHelper by lazy {
+        WorkoutHelper(
+            recordsRepository, workoutRepository, dateManager,
+            timeScheduleManager, workoutTitleManager
+        )
+    }
+
+    private val switchObject = BehaviorSubject.create<Boolean>()
+    private val switchStateObservable: Observable<Boolean>
+
+    init {
+        switchObject.onNext(false)
+        switchStateObservable = scheduleTimeSwitcher().apply { subscribe() }
+        mState.value = WorkoutState.SwitchState(false)
+    }
 
     private fun addExercise(id: Int) {
-        libraryRepository.getExercise(id)
+        exerciseHelper.addExercise(id) { event -> mEvent.postValue(event) }
             .observeUi()
-            .flatMap {
-                val data = (it as DataState.Success).data
-                val ex = CurrentWorkoutDto.Exercise(0, id, data.title)
-                repo.addExercise(ex).observeUi()
-            }
-            .doAfterSuccess { getAll() }
-            .doOnSuccess { exId -> mEvent.postValue(exId.reduce()) }
+            .doAfterSuccess { state -> mState.value = state }
             .subscribe()
     }
 
     private fun deleteExercise(exerciseId: Int) {
-        repo.deleteExercise(exerciseId)
+        exerciseHelper.deleteExercise(exerciseId)
             .observeUi()
-            .doAfterSuccess { getAll() }
+            .doAfterSuccess { state -> mState.value = state }
             .subscribe()
     }
 
-    private fun getAll() {
-        repo.getExercisesWithSets()
+    private fun getExercises() {
+        exerciseHelper.getAllExercises()
             .observeUi()
-            .doAfterSuccess { dataState -> mState.value = dataState.reduce() }
+            .doAfterSuccess { state -> mState.value = state }
             .subscribe()
     }
 
-    private fun saveWorkout(title: String, date: LocalDate) {
-        repo.getExercisesWithSets()
-            .observeUi()
-            .flatMap {
-                val data = (it as DataState.Success).data
-                val workoutDto = WorkoutRecordsDto.Workout(date = date, title = title)
-                val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
-                    workoutDto,
-                    data.toRecordsDto()
-                )
-                recordsRepository.addWorkoutWithExAndSets(workAndExDto).observeUi()
-            }.doAfterSuccess {
-                if (it is DataState.Error) {
-                    throw (it.exception)
-                }
-                repo.clearCash()
-                router.navigate(Screen.HOME_SCREEN)
-            }.subscribe()
-    }
-
-    // TODO : убрать локальные переменные
     private fun addSetToExercise(params: SetParameterParams) {
-        repo.getSets(params.exerciseId)
+        exerciseHelper.addSetToExercise(params)
             .observeUi()
-            .flatMap {
-                var setNumber = 1
-                if (it is DataState.Success) {
-                    setNumber = it.data.size + 1
-                }
-                val set = CurrentWorkoutDto.Set(setId++, params.exerciseId, setNumber, params.weight, params.reps)
-                repo.addSet(set).observeUi()
-            }
-            .doAfterSuccess { getAll() }
+            .doAfterSuccess { state -> mState.value = state }
             .subscribe()
     }
 
     private fun deleteLastSet(exerciseId: Int) {
-        repo.deleteLastSet(exerciseId)
+        exerciseHelper.deleteLastSet(exerciseId)
             .observeUi()
-            .doAfterSuccess { getAll() }
+            .doAfterSuccess { state -> mState.value = state }
             .subscribe()
     }
 
-    private fun goToCategoryScreen() {
-        editStateAction(Hide)
-        router.navigate(
-            screen = Screen.CATEGORY_LIST_SCREEN,
-            data = LibraryParams.CategoryList(true)
-        )
-    }
-
     private fun finishWorkout() {
-        editStateAction(Hide)
-        dateTimeRepository.getSelectedDate()
+        editStateAction(EditState.Action.Hide)
+        workoutHelper.finishWorkout()
             .observeUi()
-            .doAfterSuccess {
-                val data = (it as DataState.Success).data
-                saveWorkout(title, data)
+            .doAfterSuccess { quad ->
+                if (quad.fourth.isEmpty()) {
+                    clear()
+                    return@doAfterSuccess
+                }
+                switchObject.subscribe { switchState ->
+                    val time = if (switchState) { quad.second } else { null }
+                    saveWorkout(quad.third, quad.first, time, quad.fourth)
+                }.dispose()
             }.subscribe()
     }
 
-    private fun goToExerciseInfo(libraryId: Int) {
-        editStateAction(Hide)
-        router.navigate(
-            screen = Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT,
-            data = LibraryParams.Exercise(libraryId)
-        )
+    private fun saveWorkout(
+        title: String,
+        date: LocalDate,
+        time: LocalTime?,
+        exercises: List<CurrentWorkoutDto.ExerciseWithSets>
+    ) {
+        workoutHelper.saveWorkout(title, date, time, exercises)
+            .observeUi()
+            .doAfterSuccess { state -> mState.value = state }
+            .subscribe()
     }
 
-    private fun showToast(text: String) {
-        router.show(Notification.TOAST, ToastBarParams(text))
+    private fun clear(workoutId: Int) {
+        recordsRepository.getWorkoutWithExerciseAnsSets(workoutId)
+            .observeUi()
+            .doAfterSuccess { dataState ->
+                if (dataState is DataState.Success &&
+                    dataState.data.workout.time != null
+                ) {
+                    val workoutDto = dataState.reduceWorkoutDto()
+                    notificationHelper.startWorkoutReminderEvent(workoutDto)
+                }
+                clear()
+            }.subscribe()
     }
 
-    private fun showDialog(dialog: Dialog) {
-        router.showDialog(dialog)
+    private fun clear() {
+        workoutRepository.clearCache()
+        timeScheduleManager.clearCache()
+        workoutTitleManager.clearCache()
+        switchObject.onNext(false)
+        router.navigate(Screen.HOME_SCREEN)
+    }
+
+    private fun navigateToCategoryScreen() {
+        navigateHelper.navigateToCategoryScreen { editStateAction(EditState.Action.Hide) }
+    }
+
+    private fun navigateToExerciseInfo(exerciseId: Int) {
+        navigateHelper.navigateToExerciseInfo(exerciseId) { editStateAction(EditState.Action.Hide) }
     }
 
     private fun showCalendarPickerDialog() {
-        dateTimeRepository.getSelectedDate()
+        dateManager.getSelectedDate()
             .observeUi()
-            .doAfterSuccess {
-                val data = (it as DataState.Success).data
-                val dialog = Dialog.CalendarPickerDialog(data) { clickedDate ->
-                    setWorkoutDate(clickedDate)
-                }
-                router.showDialog(dialog)
+            .doAfterSuccess { dataState ->
+                val data = (dataState as DataState.Success).data
+                navigateHelper.startCalendarPickerDialog(data) { date -> setWorkoutDate(date) }
             }.subscribe()
     }
 
     private fun showWorkoutTitleDialog() {
-        val dialog = Dialog.FieldEditorDialog(title) {
-            setWorkoutTitle(it)
-        }
-        router.showDialog(dialog)
+        workoutTitleManager.getTitle()
+            .observeUi()
+            .doAfterSuccess { title ->
+                navigateHelper.startWorkoutTitleDialog(title) { newTitle ->
+                    setWorkoutTitle(newTitle)
+                }
+            }.subscribe()
     }
 
     private fun showSetParameterDialog(exerciseId: Int) {
-        val dialog = Dialog.SetParameterPickerDialog(exerciseId) {
-            addSetToExercise(it)
-        }
-        router.showDialog(dialog)
+        navigateHelper.startSetParameterDialog(exerciseId) { params -> addSetToExercise(params) }
     }
 
-    private fun editStateAction(action: Action) {
+    private fun showTimePickerDialog() {
+        val localTime = LocalTime.now()
+        navigateHelper.startTimePickerDialog(localTime) { time -> setWorkoutTime(time) }
+    }
+
+    private fun setWorkoutDate(localDate: LocalDate) {
+        dateTimeHelper.setDate(localDate)
+            .observeUi()
+            .doAfterSuccess { state -> mState.value = state }
+            .subscribe()
+    }
+
+    private fun getWorkoutDate() {
+        dateTimeHelper.getDate()
+            .observeUi()
+            .doAfterSuccess { state -> mState.value = state }
+            .subscribe()
+    }
+
+    private fun getWorkoutTime() {
+        dateTimeHelper.getTime()
+            .observeUi()
+            .doAfterSuccess { state -> mState.value = state }
+            .subscribe()
+    }
+
+    private fun setWorkoutTime(localTime: LocalTime) {
+        dateTimeHelper.setTime(localTime)
+            .observeUi()
+            .doAfterSuccess { state -> mState.value = state }
+            .subscribe()
+    }
+
+    private fun editStateAction(action: EditState.Action) {
         val event = when (action) {
-            DeselectAll -> WorkoutEvent.DeselectAllExercises
-            Hide -> WorkoutEvent.HideEditState
-            SelectAll -> WorkoutEvent.SelectAllExercises
-            Show -> WorkoutEvent.ShowEditState
-            DeleteSelected -> WorkoutEvent.DeleteSelectedExercises
+            EditState.Action.DeleteSelected -> WorkoutEvent.HideEditState
+            EditState.Action.DeselectAll -> WorkoutEvent.DeselectAllExercises
+            EditState.Action.Hide -> WorkoutEvent.HideEditState
+            EditState.Action.SelectAll -> WorkoutEvent.SelectAllExercises
+            EditState.Action.Show -> WorkoutEvent.ShowEditState
         }
         mEvent.postValue(event)
     }
 
-    // TODO убрать вложенность
-    private fun setWorkoutDate(localDate: LocalDate) {
-        formatterManager.getSelectedFormatter()
-            .observeUi()
-            .doAfterSuccess { dto ->
-                dateTimeRepository.selectDate(localDate)
-                    .observeUi()
-                    .doAfterSuccess { date -> mState.value = date.reduce(dto.formatter) }
-                    .subscribe()
-            }.subscribe()
-    }
-
-    // TODO убрать вложенность
-    private fun getWorkoutDate() {
-        formatterManager.getSelectedFormatter()
-            .observeUi()
-            .doAfterSuccess { dto ->
-                dateTimeRepository.getSelectedDate()
-                    .observeUi()
-                    .doAfterSuccess { date -> mState.value = date.reduce(dto.formatter) }
-                    .subscribe()
-            }.subscribe()
-    }
-
     private fun setWorkoutTitle(title: String) {
-        mState.value = WorkoutState.TitleResult(title)
-        this.title = title
+        workoutTitleManager.setTitle(title)
+            .observeUi()
+            .doAfterSuccess { newTitle -> mState.postValue(WorkoutState.TitleResult(newTitle)) }
+            .subscribe()
     }
 
     private fun getWorkoutTitle() {
-        mState.value = WorkoutState.TitleResult(title)
+        workoutTitleManager.getTitle()
+            .observeUi()
+            .doAfterSuccess { title -> mState.postValue(WorkoutState.TitleResult(title)) }
+            .subscribe()
     }
 
-    override fun triggerAction(action: WorkoutAction) {
-        when (action) {
-            is WorkoutAction.EditState -> editStateAction(action.action)
-            is WorkoutAction.AddSetToExercise -> addSetToExercise(action.params)
-            is WorkoutAction.AddExercise -> addExercise(action.id)
-            is WorkoutAction.DeleteExercise -> deleteExercise(action.id)
-            is WorkoutAction.DeleteLastSet -> deleteLastSet(action.exerciseId)
-            WorkoutAction.FinishWorkout -> finishWorkout()
-            WorkoutAction.GetExercises -> getAll()
-            WorkoutAction.GetSelectedDate -> getWorkoutDate()
-            WorkoutAction.GoToCategoryScreen -> goToCategoryScreen()
-            is WorkoutAction.GoToExerciseInfo -> goToExerciseInfo(action.libraryId)
-            is WorkoutAction.ShowDialog -> showDialog(action.dialog)
-            is WorkoutAction.ShowToast -> showToast(action.text)
-            WorkoutAction.StartCalendarPickerDialog -> showCalendarPickerDialog()
-            is WorkoutAction.StartSetParameterDialog -> showSetParameterDialog(action.exerciseId)
-            WorkoutAction.StartWorkoutTitleDialog -> showWorkoutTitleDialog()
-            WorkoutAction.GetTitle -> getWorkoutTitle()
-        }
+    // TODO почему не срабатывает после второго включения?
+    private fun scheduleTimeSwitcher(): Observable<Boolean> {
+        return Observable.create<Boolean> { input -> switchObject.subscribe { input.onNext(it) } }
+            .doOnNext { switchMode ->
+                when (switchMode) {
+                    true -> getWorkoutTime()
+                    false -> mState.value = WorkoutState.TimeResult("")
+                }
+            }
     }
 
-    override fun intentToAction(intent: WorkoutIntent): WorkoutAction {
-        return when (intent) {
-            is AddExercise -> WorkoutAction.AddExercise(intent.id)
-            is AddSetToExercise -> WorkoutAction.AddSetToExercise(intent.params)
-            is DeleteExercise -> WorkoutAction.DeleteExercise(intent.id)
-            is DeleteLastSet -> WorkoutAction.DeleteLastSet(intent.exerciseId)
-            FinishWorkout -> WorkoutAction.FinishWorkout
-            GetExercises -> WorkoutAction.GetExercises
-            GetSelectedDate -> WorkoutAction.GetSelectedDate
-            GoToCategoryScreen -> WorkoutAction.GoToCategoryScreen
-            is GoToExerciseInfo -> WorkoutAction.GoToExerciseInfo(intent.libraryId)
-            is ShowDialog -> WorkoutAction.ShowDialog(intent.dialog)
-            is ShowToast -> WorkoutAction.ShowToast(intent.text)
-            StartCalendarPickerDialog -> WorkoutAction.StartCalendarPickerDialog
-            is StartSetParameterDialog -> WorkoutAction.StartSetParameterDialog(intent.exerciseId)
-            StartWorkoutTitleDialog -> WorkoutAction.StartWorkoutTitleDialog
+    override fun triggerIntent(intent: WorkoutIntent) {
+        when (intent) {
+            is EditState -> editStateAction(intent.action)
+            is AddSetToExercise -> addSetToExercise(intent.params)
+            is AddExercise -> addExercise(intent.id)
+            is DeleteExercise -> deleteExercise(intent.id)
+            is DeleteLastSet -> deleteLastSet(intent.exerciseId)
+            FinishWorkout -> finishWorkout()
+            GetExercises -> getExercises()
+            GetSelectedDate -> getWorkoutDate()
+            GoToCategoryScreen -> navigateToCategoryScreen()
+            is GoToExerciseInfo -> navigateToExerciseInfo(intent.libraryId)
+            is ShowToast -> navigateHelper.showToast(intent.text)
+            GetTitle -> getWorkoutTitle()
+            is SwitchTimeScheduler -> switchObject.onNext(intent.isOn)
 
-            HideEditState -> WorkoutAction.EditState(Hide)
-            ShowEditState -> WorkoutAction.EditState(Show)
-            SelectAllWorkouts -> WorkoutAction.EditState(SelectAll)
-            DeleteSelectedWorkouts -> WorkoutAction.EditState(DeselectAll)
-            WorkoutIntent.DeselectAll -> WorkoutAction.EditState(DeleteSelected)
-            GetTitle -> WorkoutAction.GetTitle
+            StartTimePickerDialog -> showTimePickerDialog()
+            StartCalendarPickerDialog -> showCalendarPickerDialog()
+            is StartSetParameterDialog -> showSetParameterDialog(intent.exerciseId)
+            StartWorkoutTitleDialog -> showWorkoutTitleDialog()
+            is CloseWorkout -> clear(intent.workoutId)
+            GetTime -> switchObject.subscribe()
         }
     }
 }

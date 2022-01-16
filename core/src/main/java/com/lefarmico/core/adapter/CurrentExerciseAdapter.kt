@@ -131,20 +131,6 @@ class CurrentExerciseAdapter :
         return items.size
     }
 
-    fun toggleEditState() {
-        toggleButtonVisibility = when (toggleButtonVisibility) {
-            View.GONE -> View.VISIBLE
-            View.VISIBLE -> View.GONE
-            else -> throw (
-                IllegalArgumentException(
-                    "toggleButtonVisibility should be " +
-                        "View.VISIBLE or View.GONE"
-                )
-                )
-        }
-        notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
-    }
-
     fun turnOnEditState() {
         if (toggleButtonVisibility != View.VISIBLE) {
             toggleButtonVisibility = View.VISIBLE
@@ -166,6 +152,7 @@ class CurrentExerciseAdapter :
         notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.SELECT_ALL)
     }
 
+    // TODO реализовать
     fun toggleUnselectAll() {
         selectedItemsSet.clear()
         notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.UNSELECT_ALL)

@@ -1,8 +1,6 @@
 package com.lefarmico.data.di
 
-import com.lefarmico.data.db.FormatterCache
-import com.lefarmico.data.db.FormatterMonthCache
-import com.lefarmico.data.db.LocalDateTimeCache
+import com.lefarmico.data.db.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -24,7 +22,30 @@ class LocalCacheModule {
 
     @Provides
     @Singleton
-    fun provideLocalDateTimeCache(): LocalDateTimeCache {
-        return LocalDateTimeCache()
+    fun provideLocalDateTimeCache(): LocalDateCache {
+        return LocalDateCache()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalTimeCache(): WorkoutSwitchTimeCache {
+        return WorkoutSwitchTimeCache()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFormatterTimeCache(): FormatterTimeCache {
+        return FormatterTimeCache()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemindTimeCache(): RemindTimeCache {
+        return RemindTimeCache()
+    }
+    @Provides
+    @Singleton
+    fun provideWorkoutTitleCache(): WorkoutTitleCache {
+        return WorkoutTitleCache()
     }
 }

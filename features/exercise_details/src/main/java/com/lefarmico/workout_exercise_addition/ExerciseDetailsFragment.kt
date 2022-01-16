@@ -9,7 +9,7 @@ import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.workout_exercise_addition.databinding.FragmentExerciseDetailsBinding
 
 class ExerciseDetailsFragment : BaseFragment<
-    ExerciseDetailsIntent, ExerciseDetailsAction, ExerciseDetailsState, ExerciseDetailsEvent,
+    ExerciseDetailsIntent, ExerciseDetailsState, ExerciseDetailsEvent,
     FragmentExerciseDetailsBinding, ExerciseDetailsViewModel>(
     FragmentExerciseDetailsBinding::inflate,
     ExerciseDetailsViewModel::class.java

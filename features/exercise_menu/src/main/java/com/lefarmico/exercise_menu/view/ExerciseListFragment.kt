@@ -7,7 +7,6 @@ import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.LibraryItemAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
-import com.lefarmico.exercise_menu.action.ExerciseAction
 import com.lefarmico.exercise_menu.databinding.FragmentExerciseListBinding
 import com.lefarmico.exercise_menu.intent.ExerciseIntent
 import com.lefarmico.exercise_menu.intent.ExerciseIntent.*
@@ -15,11 +14,10 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.navigation.params.LibraryParams
-import java.lang.IllegalArgumentException
 
 class ExerciseListFragment :
     BaseFragment<
-        ExerciseIntent, ExerciseAction, LibraryListState, LibraryListEvent,
+        ExerciseIntent, LibraryListState, LibraryListEvent,
         FragmentExerciseListBinding, ExerciseListViewModel>(
         FragmentExerciseListBinding::inflate,
         ExerciseListViewModel::class.java

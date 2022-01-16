@@ -11,7 +11,7 @@ sealed class WorkoutEvent : BaseState.Event {
     object DeselectAllExercises : WorkoutEvent()
     object DeleteSelectedExercises : WorkoutEvent()
 
-    data class SetParamsDialog(val exerciseId: Long) : WorkoutEvent()
+    data class SetParamsDialog(val exerciseId: Int) : WorkoutEvent()
     data class ExceptionEvent(val exception: Exception) : WorkoutEvent()
     object Loading : WorkoutEvent()
 }

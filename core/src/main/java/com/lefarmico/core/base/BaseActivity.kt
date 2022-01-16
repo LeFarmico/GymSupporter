@@ -7,9 +7,9 @@ import com.lefarmico.core.di.ViewModelFactory
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-abstract class BaseActivity<I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+abstract class BaseActivity<I : BaseIntent, S : BaseState.State, E : BaseState.Event,
     VB : ViewBinding,
-    VM : BaseViewModel<I, A, S, E>>(
+    VM : BaseViewModel<I, S, E>>(
     private val inflate: LayoutInflate<VB>,
     private val provideViewModel: Class<VM>
 ) : DaggerAppCompatActivity() {

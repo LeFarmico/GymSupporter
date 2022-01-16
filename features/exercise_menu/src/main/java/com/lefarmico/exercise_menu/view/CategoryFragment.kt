@@ -13,7 +13,6 @@ import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
 import com.lefarmico.core.extensions.hideSoftKeyboard
-import com.lefarmico.exercise_menu.action.CategoryAction
 import com.lefarmico.exercise_menu.databinding.FragmentCategoriesBinding
 import com.lefarmico.exercise_menu.intent.CategoryIntent
 import com.lefarmico.exercise_menu.intent.CategoryIntent.*
@@ -24,7 +23,7 @@ import com.lefarmico.navigation.params.LibraryParams
 
 class CategoryFragment :
     BaseFragment<
-        CategoryIntent, CategoryAction, LibraryListState, LibraryListEvent,
+        CategoryIntent, LibraryListState, LibraryListEvent,
         FragmentCategoriesBinding, CategoryViewModel>(
         FragmentCategoriesBinding::inflate,
         CategoryViewModel::class.java
@@ -41,6 +40,7 @@ class CategoryFragment :
 
     override fun setUpViews() {
         dispatchIntent(GetCategories)
+        isAddButtonShown(false)
 
         binding.apply {
             adapter.onClick = { item ->
@@ -56,16 +56,22 @@ class CategoryFragment :
             }
             editText.doOnTextChanged { text, _, _, _ ->
                 dispatchIntent(Validate(text.toString()))
+                isAddButtonActive(false)
             }
-
+            editText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    dispatchIntent(Validate(editText.text.toString()))
+                    isAddButtonShown(true)
+                } else {
+                    isAddButtonShown(false)
+                }
+            }
             editText.setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
-//                        dispatchIntent(Validate(textFieldString))
                         defaultStateEditText(editText)
                         true
                     }
-
                     else -> false
                 }
             }
@@ -87,7 +93,6 @@ class CategoryFragment :
 
     private fun defaultStateEditText(editText: EditText) {
         hideSoftKeyboard()
-        editText.text!!.clear()
         editText.clearFocus()
         editText.isCursorVisible = false
     }
@@ -104,8 +109,15 @@ class CategoryFragment :
         binding.plusButton.focusable = View.FOCUSABLE
     }
 
+    private fun isAddButtonShown(isShown: Boolean) {
+        when (isShown) {
+            true -> binding.plusButton.visibility = View.VISIBLE
+            false -> binding.plusButton.visibility = View.GONE
+        }
+    }
+
     private fun setEditTextError(errorText: String) {
-        binding.editText.error = errorText
+        binding.textField.error = errorText
     }
 
     override fun receive(state: LibraryListState) {
@@ -124,7 +136,7 @@ class CategoryFragment :
                 isAddButtonActive(false)
             }
             LibraryListEvent.ValidationResult.Empty -> {
-                setEditTextError("That field already exist")
+                setEditTextError("That field is empty")
                 isAddButtonActive(false)
             }
             LibraryListEvent.ValidationResult.Success -> {

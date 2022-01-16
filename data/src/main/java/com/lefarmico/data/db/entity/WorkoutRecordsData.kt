@@ -9,6 +9,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.time.LocalDate
+import java.time.LocalTime
 
 sealed class WorkoutRecordsData {
 
@@ -24,7 +25,8 @@ sealed class WorkoutRecordsData {
     data class Workout(
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "workout_id") val id: Int,
         @ColumnInfo(name = "date") val date: LocalDate,
-        @ColumnInfo(name = "title") val title: String = ""
+        @ColumnInfo(name = "title") val title: String = "",
+        @ColumnInfo(name = "time") val time: LocalTime?
     ) : WorkoutRecordsData()
 
     @Entity(

@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter
 
 class FormatterCache {
 
+    private val lock = Any()
     private val formatterSet = mutableSetOf<FormatterData>()
 
     init {
@@ -23,12 +24,16 @@ class FormatterCache {
     }
 
     fun getFormatterById(@FormatterId formatterId: Int): FormatterData {
-        return formatterSet.find { it.id == formatterId }
-            ?: throw IllegalArgumentException("that formatterId is not exist")
+        synchronized(lock) {
+            return formatterSet.find { it.id == formatterId }
+                ?: throw IllegalArgumentException("that formatterId is not exist")
+        }
     }
 
     fun getFormattersDataList(): List<FormatterData> {
-        return formatterSet.toList()
+        synchronized(lock) {
+            return formatterSet.toList()
+        }
     }
 
     companion object {

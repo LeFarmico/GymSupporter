@@ -22,8 +22,11 @@ fun LibraryData.Exercise.toDto() = LibraryDto.Exercise(
     subCategoryId = subCategoryId
 )
 
-fun List<LibraryData.Category>.toDtoCategoryList() = this.map { it.toDto() }
+@JvmName("LibraryDataCategoryToDto")
+fun List<LibraryData.Category>.toDto() = this.map { it.toDto() }
 
-fun List<LibraryData.SubCategory>.toDtoSubCategoryList() = this.map { it.toDto() }
+@JvmName("LibraryDataSubCategoryToDto")
+fun List<LibraryData.SubCategory>.toDto() = this.map { it.toDto() }
 
-fun List<LibraryData.Exercise>.toDtoExerciseList() = this.map { it.toDto() }
+@JvmName("LibraryDataExerciseToDto")
+fun List<LibraryData.Exercise>.toDto() = this.map { it.toDto() }

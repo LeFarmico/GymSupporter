@@ -22,18 +22,18 @@ fun WorkoutRecordsData.Set.toDto() = WorkoutRecordsDto.Set(
 fun WorkoutRecordsData.Workout.toDto() = WorkoutRecordsDto.Workout(
     id = id,
     date = date,
-    title = title
+    title = title,
+    time = time
 )
 
-fun List<WorkoutRecordsData.Set>.toSetListDto() = this.map { it.toDto() }
+@JvmName("WorkoutRecordsDataSetToDto")
+fun List<WorkoutRecordsData.Set>.toDto() = this.map { it.toDto() }
 
-fun List<WorkoutRecordsData.Exercise>.toExerciseListDto() = this.map { it.toDto() }
+@JvmName("WorkoutRecordsDataExerciseWithSetsToDto")
+fun List<WorkoutRecordsData.ExerciseWithSets>.toDto() = this.map { it.toDto() }
 
-fun List<WorkoutRecordsData.Workout>.toWorkoutListDto() = this.map { it.toDto() }
-
-fun List<WorkoutRecordsData.ExerciseWithSets>.toExerciseWithSetsListDto() = this.map { it.toDto() }
-
-fun List<WorkoutRecordsData.WorkoutWithExercisesAndSets>.toWorkoutWithExercisesAndSetsDto() =
+@JvmName("WorkoutRecordsDataWorkoutWithExercisesAndSets")
+fun List<WorkoutRecordsData.WorkoutWithExercisesAndSets>.toDto() =
     this.map { it.toDto() }
 
 fun WorkoutRecordsData.MeasureType.toDto(): WorkoutRecordsDto.MeasureType {
@@ -46,10 +46,10 @@ fun WorkoutRecordsData.MeasureType.toDto(): WorkoutRecordsDto.MeasureType {
 
 fun WorkoutRecordsData.WorkoutWithExercisesAndSets.toDto() = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
     workout = workout.toDto(),
-    exerciseWithSetsList = exerciseWithSetsList.toExerciseWithSetsListDto()
+    exerciseWithSetsList = exerciseWithSetsList.toDto()
 )
 
 fun WorkoutRecordsData.ExerciseWithSets.toDto() = WorkoutRecordsDto.ExerciseWithSets(
     exercise = exercise.toDto(),
-    setList = setList.toSetListDto()
+    setList = setList.toDto()
 )

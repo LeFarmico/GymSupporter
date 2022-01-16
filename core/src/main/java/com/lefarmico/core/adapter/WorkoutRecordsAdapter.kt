@@ -60,7 +60,6 @@ class WorkoutRecordsAdapter :
                 onEditButtonAction(items[position].workout)
             }
             selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
-                // TODO вынести логику, но куда?
                 when (isChecked) {
                     true -> selectedItemsSet.add(items[bindingAdapterPosition])
                     false -> selectedItemsSet.remove(items[bindingAdapterPosition])
@@ -113,6 +112,7 @@ class WorkoutRecordsAdapter :
         notifyItemRangeChanged(0, items.size, SELECT_ALL)
     }
 
+    // TODO реализовать
     fun toggleUnselectAll() {
         selectedItemsSet.clear()
         notifyItemRangeChanged(0, items.size, UNSELECT_ALL)

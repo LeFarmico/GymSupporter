@@ -5,7 +5,9 @@ import android.content.Context
 import com.lefarmico.data.di.*
 import com.lefarmico.donetime.App
 import com.lefarmico.donetime.di.module.ActivityBindingModule
+import com.lefarmico.donetime.di.module.BroadcastReceiverModule
 import com.lefarmico.donetime.di.module.NavigationModule
+import com.lefarmico.donetime.di.module.NotificationModule
 import com.lefarmico.features.di.module.FragmentBindingModule
 import com.lefarmico.features.di.module.ViewModelModule
 import dagger.BindsInstance
@@ -25,7 +27,9 @@ import javax.inject.Singleton
         NavigationModule::class,
         PreferenceModule::class,
         ManagerModule::class,
-        LocalCacheModule::class
+        LocalCacheModule::class,
+        NotificationModule::class,
+        BroadcastReceiverModule::class
     ]
 )
 @Singleton

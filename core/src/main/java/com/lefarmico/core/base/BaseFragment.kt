@@ -10,9 +10,9 @@ import com.lefarmico.core.di.ViewModelFactory
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+abstract class BaseFragment<I : BaseIntent, S : BaseState.State, E : BaseState.Event,
     VB : ViewBinding,
-    VM : BaseViewModel<I, A, S, E>>(
+    VM : BaseViewModel<I, S, E>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
 ) : DaggerFragment(), IViewSetup, IViewStateReceiver<S, E> {

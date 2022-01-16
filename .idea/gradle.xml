@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/features/home" />
             <option value="$PROJECT_DIR$/features/settings_screen" />
             <option value="$PROJECT_DIR$/features/workout" />
+            <option value="$PROJECT_DIR$/features/workout_notification" />
             <option value="$PROJECT_DIR$/navigation" />
           </set>
         </option>

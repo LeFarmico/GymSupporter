@@ -10,22 +10,28 @@ import com.lefarmico.core.decorator.ItemSpaceDecoration
 import com.lefarmico.core.entity.CalendarItemViewData
 import com.lefarmico.core.entity.WorkoutRecordsViewData.WorkoutWithExercisesAndSets
 import com.lefarmico.core.selector.SelectItemsHandler
-import com.lefarmico.core.toolbar.RemoveActionBarCallback
+import com.lefarmico.core.toolbar.EditStateActionBarCallback
+import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.home.HomeIntent.*
+import com.lefarmico.home.HomeIntent.ChangeMonth.Change.*
+import com.lefarmico.home.HomeIntent.EditState.Action.*
 import com.lefarmico.home.databinding.FragmentHomeBinding
+import com.lefarmico.workout_notification.WorkoutRemindNotificationHelper
 import java.time.LocalDate
 
 class HomeFragment :
-    BaseFragment<HomeIntent, HomeAction, HomeState, HomeEvent,
+    BaseFragment<HomeIntent, HomeState, HomeEvent,
         FragmentHomeBinding,
         HomeViewModel>(
         FragmentHomeBinding::inflate,
         HomeViewModel::class.java
     ) {
-
+    private val params: WorkoutRecordsDto.Workout? by lazy {
+        arguments?.getParcelable(WorkoutRemindNotificationHelper.DATA_KEY)
+    }
     private var actionMode: ActionMode? = null
     private var selectHandler: SelectItemsHandler<WorkoutWithExercisesAndSets>? = null
-    private var actionModeCallback: RemoveActionBarCallback? = null
+    private var actionModeCallback: EditStateActionBarCallback? = null
 
     private val noteAdapter = WorkoutRecordsAdapter()
     private val calendarAdapter = CalendarAdapter(LocalDate.now())
@@ -35,14 +41,23 @@ class HomeFragment :
         setHasOptionsMenu(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (params != null) {
+            dispatchIntent(NavigateToDetailsWorkoutScreen(params!!.id))
+            arguments?.clear()
+        }
+    }
+
     override fun setUpViews() {
-        dispatchIntent(CurrentMonth)
+
+        dispatchIntent(ChangeMonth(Current))
         dispatchIntent(GetWorkoutRecordsByCurrentDate)
         dispatchIntent(GetDaysInMonth)
 
         binding.apply {
-            prevMonthButton.setOnClickListener { dispatchIntent(PrevMonth) }
-            nextMonthButton.setOnClickListener { dispatchIntent(NextMonth) }
+            prevMonthButton.setOnClickListener { dispatchIntent(ChangeMonth(Prev)) }
+            nextMonthButton.setOnClickListener { dispatchIntent(ChangeMonth(Next)) }
             newWorkoutButton.setOnClickListener { dispatchIntent(NavigateToWorkoutScreen) }
 
             val snapHelper = LinearSnapHelper()
@@ -62,15 +77,15 @@ class HomeFragment :
             }
         }
 
-        actionModeCallback = object : RemoveActionBarCallback() {
+        actionModeCallback = object : EditStateActionBarCallback() {
             override fun selectAllButtonHandler() {
-                dispatchIntent(SelectAllWorkouts)
+                dispatchIntent(EditState(SelectAll))
             }
             override fun removeButtonHandler() {
-                dispatchIntent(DeleteSelectedWorkouts)
+                dispatchIntent(EditState(DeleteSelected))
             }
             override fun onDestroyHandler() {
-                dispatchIntent(HideEditState)
+                dispatchIntent(EditState(Hide))
             }
         }
         selectHandler = object : SelectItemsHandler<WorkoutWithExercisesAndSets>(noteAdapter) {
@@ -87,7 +102,7 @@ class HomeFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                dispatchIntent(ShowEditState)
+                dispatchIntent(EditState(Show))
                 true
             }
             else -> { false }

@@ -3,7 +3,6 @@ package com.lefarmico.exercise_menu.viewModel
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.repository.LibraryRepository
-import com.lefarmico.exercise_menu.action.ExerciseAction
 import com.lefarmico.exercise_menu.intent.ExerciseIntent
 import com.lefarmico.exercise_menu.intent.ExerciseIntent.*
 import com.lefarmico.exercise_menu.reduce
@@ -18,7 +17,7 @@ import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
 
 class ExerciseListViewModel @Inject constructor() : BaseViewModel<
-    ExerciseIntent, ExerciseAction, LibraryListState, LibraryListEvent
+    ExerciseIntent, LibraryListState, LibraryListEvent
     >() {
 
     @Inject
@@ -57,21 +56,12 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<
         router.show(Notification.TOAST, ToastBarParams(text))
     }
 
-    override fun triggerAction(action: ExerciseAction) {
-        when (action) {
-            is ExerciseAction.ClickItem -> onExerciseClick(action.item.id, action.isFromWorkoutScreen)
-            is ExerciseAction.CreateNewExercise -> createNewExercise(action.subcategoryId, action.isFromWorkoutScreen)
-            is ExerciseAction.GetExercises -> getExercises(action.subcategoryId)
-            is ExerciseAction.ShowToast -> showToast(action.text)
-        }
-    }
-
-    override fun intentToAction(intent: ExerciseIntent): ExerciseAction {
+    override fun triggerIntent(intent: ExerciseIntent) {
         return when (intent) {
-            is ClickItem -> ExerciseAction.ClickItem(intent.item, intent.isFromWorkoutScreen)
-            is CreateNewExercise -> ExerciseAction.CreateNewExercise(intent.subcategoryId, intent.isFromWorkoutScreen)
-            is GetExercises -> ExerciseAction.GetExercises(intent.subcategoryId)
-            is ShowToast -> ExerciseAction.ShowToast(intent.text)
+            is ClickItem -> onExerciseClick(intent.item.subCategoryId, intent.isFromWorkoutScreen)
+            is CreateNewExercise -> createNewExercise(intent.subcategoryId, intent.isFromWorkoutScreen)
+            is GetExercises -> getExercises(intent.subcategoryId)
+            is ShowToast -> showToast(intent.text)
         }
     }
 }

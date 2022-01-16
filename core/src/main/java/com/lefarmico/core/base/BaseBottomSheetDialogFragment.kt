@@ -16,9 +16,9 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 abstract class BaseBottomSheetDialogFragment<
-    I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event,
+    I : BaseIntent, S : BaseState.State, E : BaseState.Event,
     VB : ViewBinding,
-    VM : BaseViewModel<I, A, S, E>>(
+    VM : BaseViewModel<I, S, E>>(
     private val inflate: Inflate<VB>,
     private val provideViewModel: Class<VM>
 ) : BottomSheetDialogFragment(), IViewSetup, IViewStateReceiver<S, E>, HasAndroidInjector {

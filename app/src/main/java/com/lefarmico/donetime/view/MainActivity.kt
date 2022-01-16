@@ -5,9 +5,9 @@ import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.navigation.Router
 import javax.inject.Inject
 
-class MainActivity : BaseActivity<MainIntent, MainAction, MainState, MainEvent,
-    ActivityMainBinding,
-    MainViewModel>(
+class MainActivity : BaseActivity<
+    MainIntent, MainState, MainEvent,
+    ActivityMainBinding, MainViewModel>(
     ActivityMainBinding::inflate,
     MainViewModel::class.java
 ) {

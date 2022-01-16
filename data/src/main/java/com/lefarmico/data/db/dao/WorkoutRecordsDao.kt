@@ -64,7 +64,6 @@ interface WorkoutRecordsDao {
     fun deleteSet(set: WorkoutRecordsData.Set): Int
 
     /* cross queries */
-
     @Transaction
     @Query("SELECT * FROM workout_records WHERE workout_id = :workoutId")
     fun getWorkoutWithExerciseAnsSets(workoutId: Int): Single<WorkoutRecordsData.WorkoutWithExercisesAndSets>

@@ -4,9 +4,13 @@
 
     <!-- Fields -->
     <string name="repetitions_field">Reps. %1$d</string>
+    <string name="repetitions_parameter">Reps.</string>
     <string name="weight_field">Weight %1$s</string>
+    <string name="weight_parameter">Weight</string>
     <string name="set_field">%1$d. Set </string>
     <string name="exercise_field">%1$s. %2$s</string>
+    <string name="schedule_time">Schedule time</string>
+    <string name="default_workout_name">Your workout</string>
 
     <!-- Menu -->
     <string name="home">Home</string>
@@ -49,4 +53,14 @@
     <!-- State -->
     <string name="empty_state">Now that screen is empty, try to fill it up!</string>
     <string name="error_state">Something went wrong. Try again.</string>
+
+    <!-- Settings -->
+    <string name="full_date_format">Full date format</string>
+    <string name="month_year_date_format">Month and Year format</string>
+    <string name="remind_workout_before">Before %1$d</string>
+    <string name="workout_remind">Workout remind</string>
+
+    <!-- Notifications   -->
+    <string name="next_workout_notification_title">Next workout soon!</string>
+    <string name="next_workout_notification">"Your next workout starts in %1$d hours"</string>
 </resources>

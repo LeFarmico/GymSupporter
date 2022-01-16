@@ -6,5 +6,13 @@ sealed class SettingsScreenIntent : BaseIntent {
 
     object SetFullDateFormatter : SettingsScreenIntent()
 
-    object GetCurrentDateFormatter : SettingsScreenIntent()
+    object GetFullDateFormatter : SettingsScreenIntent()
+
+    object GetMonthDateFormatter : SettingsScreenIntent()
+
+    object SetMonthDateFormatter : SettingsScreenIntent()
+
+    object SetRemindTime : SettingsScreenIntent()
+
+    object GetRemindTime : SettingsScreenIntent()
 }

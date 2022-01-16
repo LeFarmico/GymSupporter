@@ -10,7 +10,7 @@ import com.lefarmico.detailed_record_workout.databinding.DetailedRecordFragmentB
 import com.lefarmico.navigation.params.RecordMenuParams
 
 class DetailedWorkoutRecordFragment :
-    BaseBottomSheetDialogFragment< DetailedIntent, DetailedAction, DetailedState, DetailedEvent,
+    BaseBottomSheetDialogFragment< DetailedIntent, DetailedState, DetailedEvent,
         DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
         DetailedRecordFragmentBinding::inflate,
         DetailedWorkoutRecordViewModel::class.java
@@ -39,18 +39,35 @@ class DetailedWorkoutRecordFragment :
         }
         showExercises(itemList)
         showDate(workout.workout.date)
+        showWorkoutTitle(workout.workout.title)
     }
 
     private fun showDate(date: String) {
         binding.workoutDate.text = date
     }
 
-    fun showWorkoutTitle(title: String) {
-        TODO("Not yet implemented")
+    private fun showWorkoutTitle(title: String) {
+        binding.workoutTitle.text = title
     }
 
     private fun showExercises(items: MutableList<WorkoutRecordsViewData.ViewDataItemType>) {
         adapter.items = items
+    }
+
+    override fun receive(state: DetailedState) {
+        when (state) {
+            is DetailedState.ExceptionResult -> throw (state.exception)
+            DetailedState.Loading -> {}
+            is DetailedState.WorkoutResult -> showWorkout(state.workout)
+            is DetailedState.DateResult -> showDate(state.dateText)
+            is DetailedState.TitleResult -> showWorkoutTitle(state.title)
+        }
+    }
+
+    override fun receive(event: DetailedEvent) {
+        when (event) {
+            is DetailedEvent.ShowToast -> TODO()
+        }
     }
 
     companion object {
@@ -72,21 +89,6 @@ class DetailedWorkoutRecordFragment :
                     }
                 }
             }
-        }
-    }
-
-    override fun receive(state: DetailedState) {
-        when (state) {
-            is DetailedState.ExceptionResult -> throw (state.exception)
-            DetailedState.Loading -> {}
-            is DetailedState.WorkoutResult -> showWorkout(state.workout)
-            is DetailedState.DateResult -> showDate(state.dateText)
-        }
-    }
-
-    override fun receive(event: DetailedEvent) {
-        when (event) {
-            is DetailedEvent.ShowToast -> TODO()
         }
     }
 }

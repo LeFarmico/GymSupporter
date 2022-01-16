@@ -1,14 +1,19 @@
 package com.lefarmico.domain.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
+import java.time.LocalTime
 
 sealed class WorkoutRecordsDto {
 
+    @Parcelize
     data class Workout(
         val id: Int = 0,
         val date: LocalDate,
-        val title: String = ""
-    ) : WorkoutRecordsDto()
+        val title: String = "",
+        val time: LocalTime?
+    ) : WorkoutRecordsDto(), Parcelable
 
     data class Exercise(
         val id: Int = 0,

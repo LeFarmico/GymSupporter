@@ -19,7 +19,6 @@ class FormatterPreferenceHelperImpl @Inject constructor(
     }
 
     companion object {
-
         const val FORMATTER_PREFERENCE_KEY = "FORMATTER_PREFERENCE_KEY"
         const val FORMATTER_FILE = "FORMATTER_FILE"
     }

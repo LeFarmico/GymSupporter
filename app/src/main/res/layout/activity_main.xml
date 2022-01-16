@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="MoviesFinder"
+        app:title="@string/app_name"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent"

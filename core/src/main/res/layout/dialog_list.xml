@@ -4,5 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/shape_menu_item_single"
+    android:alpha="1"
     android:orientation="vertical"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>

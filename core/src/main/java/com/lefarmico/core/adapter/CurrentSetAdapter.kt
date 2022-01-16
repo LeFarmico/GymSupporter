@@ -35,7 +35,7 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
 
         fun bind(item: CurrentWorkoutViewData.Set) {
             setNumber.text = context.getString(R.string.set_field, item.setNumber)
-            weights.text = context.getString(R.string.weight_field, item.weight)
+            weights.text = context.getString(R.string.weight_field, item.weight.toString())
             reps.text = context.getString(R.string.repetitions_field, item.reps)
             layout.setOnClickListener {
                 Toast.makeText(context, "Push", Toast.LENGTH_SHORT).show()

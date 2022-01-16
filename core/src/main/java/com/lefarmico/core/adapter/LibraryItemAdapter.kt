@@ -20,7 +20,6 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
             val diffCallback = ExerciseLibraryDiffCallback(oldItems, field)
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(this)
-//            notifyItemRangeChanged(0, items.size)
         }
 
     class MenuItemViewHolder(
@@ -28,12 +27,7 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
     ) : RecyclerView.ViewHolder(itemLibraryListBinding.root) {
 
         private val exerciseText = itemLibraryListBinding.text
-        private val root = itemLibraryListBinding.root
 
-//        fun bindBackground(@DrawableRes backgroundId: Int) {
-//            val drawable = ContextCompat.getDrawable(root.context, backgroundId)
-//            root.background = drawable
-//        }
         fun bind(item: LibraryViewData) {
             when (item) {
                 is LibraryViewData.Category -> exerciseText.text = item.title
@@ -51,16 +45,6 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
         holder.itemView.setOnClickListener {
             onClick(items[position])
         }
-
-//        if (items.size == 1) {
-//            holder.bindBackground(R.drawable.shape_menu_item_single)
-//        } else if (items.size > 1) {
-//            when (position) {
-//                0 -> holder.bindBackground(R.drawable.shape_menu_item_top)
-//                (items.size - 1) -> holder.bindBackground(R.drawable.shape_menu_item_bottom)
-//                else -> holder.bindBackground(R.drawable.shape_menu_item_middle)
-//            }
-//        }
     }
 
     override fun onBindViewHolder(
@@ -68,7 +52,6 @@ class LibraryItemAdapter : RecyclerView.Adapter<MenuItemViewHolder>() {
         position: Int,
         payloads: MutableList<Any>
     ) {
-
         super.onBindViewHolder(holder, position, payloads)
     }
 

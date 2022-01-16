@@ -2,18 +2,13 @@ package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.CurrentWorkoutDataBase
 import com.lefarmico.data.db.entity.CurrentWorkoutData
-import com.lefarmico.data.extensions.dataStateActionResolver
-import com.lefarmico.data.extensions.dataStateNullResolver
 import com.lefarmico.data.extensions.dataStateResolver
 import com.lefarmico.data.mapper.toData
 import com.lefarmico.data.mapper.toDto
-import com.lefarmico.data.mapper.toDtoExWithSets
-import com.lefarmico.data.mapper.toDtoSet
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
-import java.lang.Exception
 import javax.inject.Inject
 
 class CurrentWorkoutRepositoryImpl @Inject constructor(
@@ -21,80 +16,52 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
 ) : CurrentWorkoutRepository {
 
     override fun getExercisesWithSets(): Single<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
-        return Single.create<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
-            it.onSuccess(
-                dataStateResolver(dataBase.getExercises().toDtoExWithSets())
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dataBase.getExercises()
+            .doOnSubscribe { DataState.Loading }
+            .map { data -> dataStateResolver { data.toDto() } }
     }
 
-    override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateActionResolver {
-                    val exerciseData = CurrentWorkoutData.Exercise(
-                        libraryId = exercise.libraryId,
-                        title = exercise.title
-                    )
-                    return@dataStateActionResolver dataBase.insertExercise(
-                        CurrentWorkoutData.ExerciseWithSets(exerciseData)
-                    )
-                }
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+    override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Int>> {
+        val exerciseData = CurrentWorkoutData.Exercise(
+            libraryId = exercise.libraryId,
+            title = exercise.title
+        )
+        val curExData = CurrentWorkoutData.ExerciseWithSets(exerciseData)
+        return dataBase.insertExercise(curExData)
+            .map { data -> dataStateResolver { data } }
     }
 
-    override fun deleteExercise(exerciseId: Int): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateNullResolver(dataBase.deleteExercise(exerciseId)!!)
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+    override fun deleteExercise(exerciseId: Int): Single<DataState<Int>> {
+        return dataBase.deleteExercise(exerciseId)
+            .map { data -> dataStateResolver { data } }
     }
 
-    override fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateNullResolver(dataBase.insertSet(set.toData())!!)
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+    override fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>> {
+        return dataBase.insertSet(set.toData())
+            .map { data -> dataStateResolver { data } }
     }
 
-    override fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateNullResolver(dataBase.deleteSetFromExercise(set.toData())!!)
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+    override fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>> {
+        return dataBase.deleteSetFromExercise(set.toData())
+            .map { data -> dataStateResolver { data } }
     }
 
-    override fun deleteLastSet(exerciseId: Int): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateNullResolver(dataBase.deleteLastSet(exerciseId)!!)
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+    override fun deleteLastSet(exerciseId: Int): Single<DataState<Int>> {
+        return dataBase.deleteLastSet(exerciseId)
+            .map { data -> dataStateResolver { data } }
     }
 
     override fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>> {
-        return Single.create<DataState<CurrentWorkoutDto.ExerciseWithSets>> { emitter ->
-            emitter.onSuccess(
-                dataStateActionResolver {
-                    dataBase.getExercise(exerciseId)!!.toDto()
-                }
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dataBase.getExercise(exerciseId)
+            .map { data -> dataStateResolver { data.toDto() } }
     }
 
     override fun getSets(exerciseId: Int): Single<DataState<List<CurrentWorkoutDto.Set>>> {
-        return Single.create<DataState<List<CurrentWorkoutDto.Set>>> { emitter ->
-            emitter.onSuccess(
-                dataStateNullResolver(dataBase.getSets(exerciseId)!!.toDtoSet())
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dataBase.getSets(exerciseId)
+            .map { data -> dataStateResolver { data.toDto() } }
     }
 
-    override fun clearCash() {
+    override fun clearCache() {
         dataBase.clearData()
     }
 }

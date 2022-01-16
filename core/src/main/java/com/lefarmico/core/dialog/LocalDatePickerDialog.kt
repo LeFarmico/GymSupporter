@@ -20,11 +20,11 @@ class LocalDatePickerDialog(
         )
     }
 
-    companion object {
-        const val TAG_DIALOG = "LocalDatePicker"
-    }
-
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         callback(LocalDate.of(year, month + 1, dayOfMonth))
+    }
+
+    companion object {
+        const val TAG_DIALOG = "LocalDatePicker"
     }
 }

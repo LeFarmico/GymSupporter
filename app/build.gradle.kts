@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":features:create_new_exercise"))
     implementation(project(":features:detailed_record_workout"))
     implementation(project(":features:settings_screen"))
+    implementation(project(":features:workout_notification"))
 
     implementation("com.google.firebase:firebase-analytics:20.0.2")
     implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.6")

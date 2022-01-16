@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.lefarmico.core.utils.SingleLiveEvent
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
-abstract class BaseViewModel<
-    I : BaseIntent, A : BaseAction, S : BaseState.State, E : BaseState.Event
-    > :
+abstract class BaseViewModel<I : BaseIntent, S : BaseState.State, E : BaseState.Event> :
     ViewModel(),
     IViewModelDispatcher<I, S, E> {
 
@@ -24,9 +22,8 @@ abstract class BaseViewModel<
     }
 
     final override fun dispatchIntent(intent: I) {
-        triggerAction(intentToAction(intent))
+        triggerIntent(intent)
     }
 
-    abstract fun triggerAction(action: A)
-    abstract fun intentToAction(intent: I): A
+    abstract fun triggerIntent(intent: I)
 }

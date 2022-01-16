@@ -22,19 +22,12 @@ fun WorkoutRecordsDto.Set.toData() = WorkoutRecordsData.Set(
 fun WorkoutRecordsDto.Workout.toData() = WorkoutRecordsData.Workout(
     id = id,
     date = date,
-    title = title
+    title = title,
+    time = time
 )
 
-fun List<WorkoutRecordsDto.Set>.toSetListData() = this.map { it.toData() }
-
-fun List<WorkoutRecordsDto.Exercise>.toExerciseListData() = this.map { it.toData() }
-
-fun List<WorkoutRecordsDto.Workout>.toWorkoutListData() = this.map { it.toData() }
-
-fun List<WorkoutRecordsDto.ExerciseWithSets>.toExerciseWithSetsListData() = this.map { it.toData() }
-
-fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toWorkoutWithExercisesAndSetsData() =
-    this.map { it.toData() }
+@JvmName("WorkoutRecordsDtoSetToData")
+fun List<WorkoutRecordsDto.Set>.toData() = this.map { it.toData() }
 
 fun WorkoutRecordsDto.MeasureType.toData(): WorkoutRecordsData.MeasureType {
     return when (this.typeNumber) {
@@ -43,13 +36,3 @@ fun WorkoutRecordsDto.MeasureType.toData(): WorkoutRecordsData.MeasureType {
         else -> throw (IllegalArgumentException())
     }
 }
-
-fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toData() = WorkoutRecordsData.WorkoutWithExercisesAndSets(
-    workout = workout.toData(),
-    exerciseWithSetsList = exerciseWithSetsList.toExerciseWithSetsListData()
-)
-
-fun WorkoutRecordsDto.ExerciseWithSets.toData() = WorkoutRecordsData.ExerciseWithSets(
-    exercise = exercise.toData(),
-    setList = setList.toSetListData()
-)

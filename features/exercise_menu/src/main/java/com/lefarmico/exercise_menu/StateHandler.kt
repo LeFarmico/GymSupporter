@@ -7,7 +7,6 @@ import com.lefarmico.exercise_menu.state.LibraryListState
 
 fun DataState<List<LibraryDto>>.reduce(): LibraryListState {
     return when (this) {
-        DataState.Empty -> LibraryListState.LibraryResult(listOf())
         is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
         DataState.Loading -> LibraryListState.Loading
         is DataState.Success -> LibraryListState.LibraryResult(data.map { it.toViewData() })

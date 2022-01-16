@@ -2,7 +2,9 @@ package com.lefarmico.settings_screen
 
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
-import com.lefarmico.domain.repository.FormatterManager
+import com.lefarmico.domain.repository.manager.FormatterManager
+import com.lefarmico.domain.repository.manager.FormatterMonthManager
+import com.lefarmico.domain.repository.manager.RemindTimeManager
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.dialog.Dialog
 import com.lefarmico.settings_screen.SettingsScreenIntent.*
@@ -10,13 +12,15 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class SettingsScreenViewModel @Inject constructor() : BaseViewModel<
-    SettingsScreenIntent, SettingsScreenAction, SettingsScreenState, SettingsScreenEvent
+    SettingsScreenIntent, SettingsScreenState, SettingsScreenEvent
     >() {
 
     @Inject lateinit var formatterManager: FormatterManager
+    @Inject lateinit var formatterMonthManager: FormatterMonthManager
+    @Inject lateinit var remindTimeManager: RemindTimeManager
     @Inject lateinit var router: Router
 
-    private fun getFullDateTimeFormatters() {
+    private fun setFullDateFormatter() {
         formatterManager.getDateFormatters()
             .observeUi()
             .doAfterSuccess { dto ->
@@ -30,24 +34,62 @@ class SettingsScreenViewModel @Inject constructor() : BaseViewModel<
             }.subscribe()
     }
 
+    private fun setMonthYearFormatter() {
+        formatterMonthManager.getMonthFormatters()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                val date = LocalDate.now()
+                val stringList = dto.map { date.format(it.formatter) }
+                val dialog = Dialog.ListItemPickerDialog(stringList) {
+                    formatterMonthManager.selectMonthFormatter(dto[it])
+                    getCurrentMonthYearFormatter()
+                }
+                router.showDialog(dialog)
+            }.subscribe()
+    }
+
+    private fun setRemindTime() {
+        remindTimeManager.getRemindTimeList()
+            .observeUi()
+            .doAfterSuccess { dto ->
+                val stringList = dto.map { it.hoursBefore.toString() }
+                val dialog = Dialog.ListItemPickerDialog(stringList) {
+                    remindTimeManager.selectRemindTime(dto[it])
+                    getCurrentTimeRemind()
+                }
+                router.showDialog(dialog)
+            }.subscribe()
+    }
+
+    private fun getCurrentTimeRemind() {
+        remindTimeManager.getSelectedRemindTime()
+            .observeUi()
+            .doAfterSuccess { remindDto -> mState.value = remindDto.reduce() }
+            .subscribe()
+    }
     private fun getCurrentFullDateFormat() {
         formatterManager.getSelectedFormatter()
             .observeUi()
-            .doAfterSuccess { formatterDto -> mState.value = formatterDto.reduce() }
+            .doAfterSuccess { formatterDto -> mState.value = formatterDto.reduceFull() }
             .subscribe()
     }
 
-    override fun triggerAction(action: SettingsScreenAction) {
-        when (action) {
-            SettingsScreenAction.GetCurrentDateFormatter -> getCurrentFullDateFormat()
-            SettingsScreenAction.SetFullDateFormatter -> getFullDateTimeFormatters()
-        }
+    private fun getCurrentMonthYearFormatter() {
+        formatterMonthManager.getSelectedMonthFormatter()
+            .observeUi()
+            .doAfterSuccess { formatterDto ->
+                mState.value = formatterDto.reduceMY()
+            }.subscribe()
     }
 
-    override fun intentToAction(intent: SettingsScreenIntent): SettingsScreenAction {
+    override fun triggerIntent(intent: SettingsScreenIntent) {
         return when (intent) {
-            GetCurrentDateFormatter -> SettingsScreenAction.GetCurrentDateFormatter
-            SetFullDateFormatter -> SettingsScreenAction.SetFullDateFormatter
+            GetFullDateFormatter -> getCurrentFullDateFormat()
+            SetFullDateFormatter -> setFullDateFormatter()
+            GetMonthDateFormatter -> getCurrentMonthYearFormatter()
+            SetMonthDateFormatter -> setMonthYearFormatter()
+            GetRemindTime -> getCurrentTimeRemind()
+            SetRemindTime -> setRemindTime()
         }
     }
 }

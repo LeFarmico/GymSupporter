@@ -2,6 +2,7 @@ package com.lefarmico.navigation.dialog
 
 import com.lefarmico.navigation.params.SetParameterParams
 import java.time.LocalDate
+import java.time.LocalTime
 
 sealed class Dialog {
 
@@ -23,5 +24,10 @@ sealed class Dialog {
     data class ListItemPickerDialog(
         val itemList: List<String>,
         val callbackPosition: (Int) -> Unit
+    ) : Dialog()
+
+    data class TimePickerDialog(
+        val timeParameter: LocalTime,
+        val callback: (LocalTime) -> Unit
     ) : Dialog()
 }

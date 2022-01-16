@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":features:workout_notification"))
 
     implementation(Deps.Androidx.lifecycleExtensions)
     implementation(Deps.Androidx.appcompat)

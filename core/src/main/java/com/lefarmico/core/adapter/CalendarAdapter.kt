@@ -24,7 +24,7 @@ class CalendarAdapter(
     private var currentDateSelect = true
     private var selectedDate: LocalDate? = null
 
-    var items = mutableListOf<CalendarItemViewData>()
+    var items = listOf<CalendarItemViewData>()
         set(value) {
             val oldField = field
             field = value

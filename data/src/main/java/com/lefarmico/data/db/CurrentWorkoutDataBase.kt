@@ -1,85 +1,111 @@
 package com.lefarmico.data.db
 
 import com.lefarmico.data.db.entity.CurrentWorkoutData
+import io.reactivex.rxjava3.core.Single
 import java.lang.NullPointerException
 
 class CurrentWorkoutDataBase {
 
+    private val lock = Any()
     private val exerciseWithSetsList = mutableListOf<CurrentWorkoutData.ExerciseWithSets>()
     private var exerciseId = 1
 
-    fun insertExercise(exercise: CurrentWorkoutData.ExerciseWithSets): Long {
-        val currentExercise = CurrentWorkoutData.Exercise(
-            id = exerciseId,
-            libraryId = exercise.exercise.libraryId,
-            title = exercise.exercise.title
-        )
-
-        exerciseWithSetsList.add(
-            CurrentWorkoutData.ExerciseWithSets(
-                currentExercise,
-                exercise.setList
-            )
-        )
-        return exerciseId++.toLong()
-    }
-
-    fun getExercises(): List<CurrentWorkoutData.ExerciseWithSets> {
-        return exerciseWithSetsList
-    }
-
-    fun getExercise(exerciseId: Int): CurrentWorkoutData.ExerciseWithSets? {
-        return exerciseWithSetsList.find { it.exercise.id == exerciseId }
-    }
-
-    fun getSets(exerciseId: Int): List<CurrentWorkoutData.Set>? {
-        val exercise = exerciseWithSetsList.find { it.exercise.id == exerciseId }
-        return exercise?.setList
-    }
-
-    fun deleteExercise(exerciseId: Int): Long? = actionResolver {
-        val exerciseWithSets = exerciseWithSetsList.find { it.exercise.id == exerciseId }
-        exerciseWithSetsList.remove(exerciseWithSets)
-        exerciseId.toLong()
-    }
-
-    fun insertSet(set: CurrentWorkoutData.Set): Long? = actionResolver {
-        val exerciseWithSets = exerciseWithSetsList.find { it.exercise.id == set.exerciseId }
-        exerciseWithSets?.setList?.add(set)
-        set.id.toLong()
-    }
-
-    fun deleteSetFromExercise(set: CurrentWorkoutData.Set): Long? = actionResolver {
-        val exerciseWithSets = exerciseWithSetsList.find { it.exercise.id == set.exerciseId }
-        exerciseWithSets?.setList?.remove(set)
-        set.id.toLong()
-    }
-
-    fun deleteLastSet(exerciseId: Int): Long? = actionResolver {
-        val exerciseWithSets = exerciseWithSetsList.find { it.exercise.id == exerciseId }
-        val lastSet = exerciseWithSets?.setList?.get(exerciseWithSets.setList.size - 1)
-        exerciseWithSets?.setList?.remove(lastSet)
-        if (exerciseWithSets?.setList?.isEmpty()!!) {
-            exerciseWithSetsList.remove(exerciseWithSets)
+    fun insertExercise(exercise: CurrentWorkoutData.ExerciseWithSets): Single<Int> {
+        return Single.create { emitter ->
+            synchronized(lock) {
+                val currentExercise = CurrentWorkoutData.Exercise(
+                    id = exerciseId,
+                    libraryId = exercise.exercise.libraryId,
+                    title = exercise.exercise.title
+                )
+                exerciseWithSetsList.add(
+                    CurrentWorkoutData.ExerciseWithSets(
+                        currentExercise,
+                        exercise.setList
+                    )
+                )
+                emitter.onSuccess(exerciseId++)
+            }
         }
-        return@actionResolver lastSet!!.id.toLong()
+    }
+
+    fun getExercises(): Single<List<CurrentWorkoutData.ExerciseWithSets>> {
+        return Single.create { emitter ->
+            synchronized(lock) {
+                emitter.onSuccess(exerciseWithSetsList)
+            }
+        }
+    }
+
+    fun getExercise(exerciseId: Int): Single<CurrentWorkoutData.ExerciseWithSets> {
+        return Single.create { emitter ->
+            validateExercise(exerciseId) { exercise -> emitter.onSuccess(exercise) }
+        }
+    }
+
+    fun getSets(exerciseId: Int): Single<List<CurrentWorkoutData.Set>> {
+        return Single.create { emitter ->
+            validateExercise(exerciseId) { exercise -> emitter.onSuccess(exercise.setList) }
+        }
+    }
+
+    fun deleteExercise(exerciseId: Int): Single<Int> {
+        return Single.create { emitter ->
+            validateExercise(exerciseId) { exercise ->
+                exerciseWithSetsList.remove(exercise)
+                emitter.onSuccess(exerciseId)
+            }
+        }
+    }
+
+    fun insertSet(set: CurrentWorkoutData.Set): Single<Int> {
+        return Single.create { emitter ->
+            validateExercise(set.exerciseId) { exercise ->
+                exercise.setList.add(set)
+                emitter.onSuccess(set.id)
+            }
+        }
+    }
+
+    fun deleteSetFromExercise(set: CurrentWorkoutData.Set): Single<Int> {
+        return Single.create { emitter ->
+            validateExercise(set.exerciseId) { exercise ->
+                exercise.setList.remove(set)
+                emitter.onSuccess(set.id)
+            }
+        }
+    }
+
+    fun deleteLastSet(exerciseId: Int): Single<Int> {
+        return Single.create { emitter ->
+            validateExercise(exerciseId) { exercise ->
+                val lastSet = exercise.setList[exercise.setList.size - 1]
+                exercise.setList.remove(lastSet)
+                if (exercise.setList.isEmpty()) {
+                    exerciseWithSetsList.remove(exercise)
+                }
+                emitter.onSuccess(lastSet.id)
+            }
+        }
     }
 
     fun clearData() {
-        exerciseWithSetsList.clear()
-    }
-
-    private fun actionResolver(action: () -> Long): Long? {
-        return try {
-            action()
-        } catch (e: NullPointerException) {
-            null
+        synchronized(lock) {
+            exerciseWithSetsList.clear()
         }
     }
-    companion object {
-        const val LOADING = 2L
-        const val SUCCESS = 1L
-        const val EMPTY = 0L
-        const val ERROR = -1L
+
+    private fun validateExercise(
+        id: Int,
+        onExist: (CurrentWorkoutData.ExerciseWithSets) -> Unit,
+    ) {
+        synchronized(lock) {
+            val exercise = exerciseWithSetsList.find { it.exercise.id == id }
+            if (exercise == null) {
+                throw (NullPointerException("Exercise with id = $id is not exist"))
+            } else {
+                onExist(exercise)
+            }
+        }
     }
 }

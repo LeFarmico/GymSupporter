@@ -2,6 +2,7 @@ package com.lefarmico.exercise_menu.viewModel
 
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.LibraryViewData
+import com.lefarmico.core.extensions.debounceImmediate
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.validator.EmptyValidator
 import com.lefarmico.core.validator.ExistedValidator
@@ -9,7 +10,6 @@ import com.lefarmico.core.validator.ValidateHandler
 import com.lefarmico.core.validator.ValidationState
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
-import com.lefarmico.exercise_menu.action.CategoryAction
 import com.lefarmico.exercise_menu.intent.CategoryIntent
 import com.lefarmico.exercise_menu.reduce
 import com.lefarmico.exercise_menu.state.LibraryListEvent
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CategoryViewModel @Inject constructor() : BaseViewModel<
-    CategoryIntent, CategoryAction, LibraryListState, LibraryListEvent>() {
+    CategoryIntent, LibraryListState, LibraryListEvent>() {
 
     @Inject
     lateinit var repo: LibraryRepository
@@ -63,7 +63,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
 
     private fun validator() {
         Observable.create<String> { input -> validateSubject.subscribe { input.onNext(it) } }
-            .debounce(1, TimeUnit.SECONDS)
+            .debounceImmediate(500, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .observeUi()
             .doOnNext { validateField -> validate(validateField, validateCache) }
@@ -102,25 +102,13 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         router.show(Notification.TOAST, ToastBarParams(text))
     }
 
-    override fun triggerAction(action: CategoryAction) {
-        when (action) {
-            is CategoryAction.AddCategory -> addCategory(action.title)
-            is CategoryAction.ClickCategory -> goToSubcategoryScreen(action.categoryId, action.isFromWorkoutScreen)
-            CategoryAction.GetCategories -> getCategories()
-            is CategoryAction.ShowToast -> showToast(action.text)
-            is CategoryAction.Validate -> validateSubject.onNext(action.text)
-        }
-    }
-
-    override fun intentToAction(intent: CategoryIntent): CategoryAction {
+    override fun triggerIntent(intent: CategoryIntent) {
         return when (intent) {
-            is CategoryIntent.AddCategory -> CategoryAction.AddCategory(intent.title)
-            is CategoryIntent.ClickItem -> CategoryAction.ClickCategory(
-                intent.item.id, intent.isFromWorkoutScreen
-            )
-            CategoryIntent.GetCategories -> CategoryAction.GetCategories
-            is CategoryIntent.ShowToast -> CategoryAction.ShowToast(intent.text)
-            is CategoryIntent.Validate -> CategoryAction.Validate(intent.text)
+            is CategoryIntent.AddCategory -> addCategory(intent.title)
+            is CategoryIntent.ClickItem -> goToSubcategoryScreen(intent.item.id, intent.isFromWorkoutScreen)
+            CategoryIntent.GetCategories -> getCategories()
+            is CategoryIntent.ShowToast -> showToast(intent.text)
+            is CategoryIntent.Validate -> validateSubject.onNext(intent.text)
         }
     }
 }

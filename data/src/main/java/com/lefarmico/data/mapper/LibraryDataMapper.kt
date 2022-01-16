@@ -21,9 +21,3 @@ fun LibraryDto.Exercise.toData() = LibraryData.Exercise(
     imageRes = imageRes,
     subCategoryId = subCategoryId
 )
-
-fun List<LibraryDto.Category>.toDtoCategoryList() = this.map { it.toData() }
-
-fun List<LibraryDto.SubCategory>.toDtoSubCategoryList() = this.map { it.toData() }
-
-fun List<LibraryDto.Exercise>.toDtoExerciseList() = this.map { it.toData() }

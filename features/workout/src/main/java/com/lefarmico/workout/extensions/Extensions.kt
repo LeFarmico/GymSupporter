@@ -1,7 +1,7 @@
 package com.lefarmico.workout.extensions
 
 import com.lefarmico.core.entity.WorkoutRecordsViewData
-import com.lefarmico.core.mapper.toRecordsDtoExWithSets
+import com.lefarmico.core.mapper.toRecordsDto
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 
@@ -26,5 +26,5 @@ fun CurrentWorkoutDto.Set.toRecordsViewData() = WorkoutRecordsViewData.Set(
 fun List<CurrentWorkoutDto.Set>.toSetViewData() = this.map { it.toRecordsViewData() }
 
 fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDto(): List<WorkoutRecordsDto.ExerciseWithSets> {
-    return toRecordsDtoExWithSets()
+    return toRecordsDto()
 }

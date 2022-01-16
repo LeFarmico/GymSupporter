@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":features:workout_notification"))
 
     implementation(com.lefarmico.buildsrc.Deps.Androidx.lifecycleExtensions)
     implementation(com.lefarmico.buildsrc.Deps.Androidx.appcompat)

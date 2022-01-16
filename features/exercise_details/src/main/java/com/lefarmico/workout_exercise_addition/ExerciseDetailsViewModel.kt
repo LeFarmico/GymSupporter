@@ -6,7 +6,7 @@ import com.lefarmico.domain.repository.LibraryRepository
 import javax.inject.Inject
 
 class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<
-    ExerciseDetailsIntent, ExerciseDetailsAction, ExerciseDetailsState, ExerciseDetailsEvent
+    ExerciseDetailsIntent, ExerciseDetailsState, ExerciseDetailsEvent
     >() {
 
     @Inject lateinit var repo: LibraryRepository
@@ -18,15 +18,9 @@ class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<
             .subscribe()
     }
 
-    override fun triggerAction(action: ExerciseDetailsAction) {
-        when (action) {
-            is ExerciseDetailsAction.GetExercise -> getExerciseFromDB(action.exerciseId)
-        }
-    }
-
-    override fun intentToAction(intent: ExerciseDetailsIntent): ExerciseDetailsAction {
+    override fun triggerIntent(intent: ExerciseDetailsIntent) {
         return when (intent) {
-            is ExerciseDetailsIntent.GetExercise -> ExerciseDetailsAction.GetExercise(intent.exerciseId)
+            is ExerciseDetailsIntent.GetExercise -> getExerciseFromDB(intent.exerciseId)
         }
     }
 }

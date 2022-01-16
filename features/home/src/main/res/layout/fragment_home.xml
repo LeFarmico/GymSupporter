@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_baseline_arrow_back_ios_new_24"
         android:contentDescription="@string/last_month_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/current_month"
         app:layout_constraintTop_toTopOf="@id/current_month"
         app:layout_constraintBottom_toBottomOf="@id/current_month"
@@ -40,7 +41,7 @@
         android:contentDescription="@string/next_month_button"
         app:layout_constraintTop_toTopOf="@id/current_month"
         app:layout_constraintBottom_toBottomOf="@id/current_month"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/current_month"
         />
 
 

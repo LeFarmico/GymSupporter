@@ -22,6 +22,6 @@ sealed class CurrentWorkoutViewData {
 
     data class ExerciseWithSets(
         val exercise: Exercise,
-        val setList: List<Set> = mutableListOf()
+        val setList: List<Set> = listOf()
     ) : CurrentWorkoutViewData()
 }

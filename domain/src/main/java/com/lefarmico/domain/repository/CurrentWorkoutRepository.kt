@@ -10,17 +10,17 @@ interface CurrentWorkoutRepository : BaseRepository {
 
     fun getSets(exerciseId: Int): Single<DataState<List<CurrentWorkoutDto.Set>>>
 
-    fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Long>>
+    fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Int>>
 
-    fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
+    fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>>
 
-    fun deleteExercise(exerciseId: Int): Single<DataState<Long>>
+    fun deleteExercise(exerciseId: Int): Single<DataState<Int>>
 
-    fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Long>>
+    fun deleteSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>>
 
-    fun deleteLastSet(exerciseId: Int): Single<DataState<Long>>
+    fun deleteLastSet(exerciseId: Int): Single<DataState<Int>>
 
     fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>>
 
-    fun clearCash()
+    fun clearCache()
 }

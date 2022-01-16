@@ -13,7 +13,6 @@ import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
 import com.lefarmico.core.extensions.hideSoftKeyboard
-import com.lefarmico.exercise_menu.action.SubcategoryAction
 import com.lefarmico.exercise_menu.databinding.FragmentSubcategoryListBinding
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent.*
@@ -21,10 +20,9 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.SubcategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
-import java.lang.IllegalArgumentException
 
 class SubcategoryFragment :
-    BaseFragment<SubcategoryIntent, SubcategoryAction, LibraryListState, LibraryListEvent,
+    BaseFragment<SubcategoryIntent, LibraryListState, LibraryListEvent,
         FragmentSubcategoryListBinding, SubcategoryViewModel>(
         FragmentSubcategoryListBinding::inflate,
         SubcategoryViewModel::class.java
@@ -41,6 +39,7 @@ class SubcategoryFragment :
 
     override fun setUpViews() {
         dispatchIntent(GetSubcategories(params.categoryId))
+        isAddButtonShown(false)
 
         binding.apply {
             recycler.adapter = adapter
@@ -52,11 +51,19 @@ class SubcategoryFragment :
             }
             editText.doOnTextChanged { text, _, _, _ ->
                 dispatchIntent(Validate(text.toString()))
+                isAddButtonActive(false)
+            }
+            editText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    dispatchIntent(Validate(editText.text.toString()))
+                    isAddButtonShown(true)
+                } else {
+                    isAddButtonShown(false)
+                }
             }
             editText.setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
-//                        dispatchIntent(Validate(textFieldString))
                         defaultStateEditText(editText)
                         true
                     }
@@ -85,13 +92,12 @@ class SubcategoryFragment :
 
     private fun defaultStateEditText(editText: EditText) {
         hideSoftKeyboard()
-        editText.text!!.clear()
         editText.clearFocus()
         editText.isCursorVisible = false
     }
 
     private fun setEditTextError(errorText: String) {
-        binding.editText.error = errorText
+        binding.textField.error = errorText
     }
 
     private fun isAddButtonActive(isActive: Boolean) {
@@ -106,24 +112,10 @@ class SubcategoryFragment :
         binding.plusButton.focusable = View.FOCUSABLE
     }
 
-    companion object {
-        private const val KEY_PARAMS = "subcategory_key"
-
-        fun createBundle(data: Parcelable?): Bundle {
-            return Bundle().apply {
-                when (data) {
-                    is LibraryParams.SubcategoryList -> putParcelable(KEY_PARAMS, data)
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            throw (
-                                IllegalBundleDataTypeException(
-                                    "data should be NewExerciseParams.Exercise type."
-                                )
-                                )
-                        }
-                    }
-                }
-            }
+    private fun isAddButtonShown(isShown: Boolean) {
+        when (isShown) {
+            true -> binding.plusButton.visibility = View.VISIBLE
+            false -> binding.plusButton.visibility = View.GONE
         }
     }
 
@@ -143,12 +135,33 @@ class SubcategoryFragment :
                 isAddButtonActive(false)
             }
             LibraryListEvent.ValidationResult.Empty -> {
-                setEditTextError("That field already exist")
+                setEditTextError("That field is empty")
                 isAddButtonActive(false)
             }
             LibraryListEvent.ValidationResult.Success -> {
                 setEditTextError("")
                 isAddButtonActive(true)
+            }
+        }
+    }
+
+    companion object {
+        private const val KEY_PARAMS = "subcategory_key"
+
+        fun createBundle(data: Parcelable?): Bundle {
+            return Bundle().apply {
+                when (data) {
+                    is LibraryParams.SubcategoryList -> putParcelable(KEY_PARAMS, data)
+                    else -> {
+                        if (BuildConfig.DEBUG) {
+                            throw (
+                                IllegalBundleDataTypeException(
+                                    "data should be NewExerciseParams.Exercise type."
+                                )
+                                )
+                        }
+                    }
+                }
             }
         }
     }

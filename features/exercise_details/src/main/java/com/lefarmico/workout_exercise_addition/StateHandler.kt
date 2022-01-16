@@ -6,7 +6,6 @@ import com.lefarmico.domain.utils.DataState
 
 fun DataState<LibraryDto.Exercise>.reduce(): ExerciseDetailsState {
     return when (this) {
-        DataState.Empty -> ExerciseDetailsState.ExceptionResult(NullPointerException())
         is DataState.Error -> ExerciseDetailsState.ExceptionResult(exception)
         DataState.Loading -> ExerciseDetailsState.Loading
         is DataState.Success -> ExerciseDetailsState.ExerciseResult(data.toViewData())

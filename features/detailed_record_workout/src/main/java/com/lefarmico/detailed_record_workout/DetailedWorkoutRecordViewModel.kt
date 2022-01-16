@@ -2,8 +2,8 @@ package com.lefarmico.detailed_record_workout
 
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
-import com.lefarmico.domain.repository.FormatterManager
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
+import com.lefarmico.domain.repository.manager.FormatterManager
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.ToastBarParams
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DetailedWorkoutRecordViewModel @Inject constructor() : BaseViewModel<
-    DetailedIntent, DetailedAction, DetailedState, DetailedEvent>() {
+    DetailedIntent, DetailedState, DetailedEvent>() {
 
     @Inject lateinit var repo: WorkoutRecordsRepository
     @Inject lateinit var router: Router
@@ -36,17 +36,10 @@ class DetailedWorkoutRecordViewModel @Inject constructor() : BaseViewModel<
             .subscribe()
     }
 
-    override fun triggerAction(action: DetailedAction) {
-        when (action) {
-            is DetailedAction.GetWorkout -> getRecordWorkout(action.workoutId)
-            is DetailedAction.ShowToast -> showToast(action.text)
-        }
-    }
-
-    override fun intentToAction(intent: DetailedIntent): DetailedAction {
+    override fun triggerIntent(intent: DetailedIntent) {
         return when (intent) {
-            is DetailedIntent.GetWorkout -> DetailedAction.GetWorkout(intent.workoutId)
-            is DetailedIntent.ShowToast -> DetailedAction.ShowToast(intent.text)
+            is DetailedIntent.GetWorkout -> getRecordWorkout(intent.workoutId)
+            is DetailedIntent.ShowToast -> showToast(intent.text)
         }
     }
 }
