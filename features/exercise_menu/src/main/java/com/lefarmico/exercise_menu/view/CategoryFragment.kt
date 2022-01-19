@@ -24,8 +24,7 @@ import com.lefarmico.exercise_menu.viewModel.CategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
 
 class CategoryFragment :
-    BaseFragment<
-        CategoryIntent, LibraryListState, LibraryListEvent,
+    BaseFragment<CategoryIntent, LibraryListState, LibraryListEvent,
         FragmentCategoriesBinding, CategoryViewModel>(
         FragmentCategoriesBinding::inflate,
         CategoryViewModel::class.java
@@ -84,7 +83,7 @@ class CategoryFragment :
                 require(category is LibraryViewData.Category)
                 dispatchIntent(ClickItem(category, params.isFromWorkoutScreen))
             }
-            recycler.adapter = adapter
+            recycler.adapter = adapter.apply {  }
             recycler.addItemDecoration(decorator, 0)
 
             plusButton.setOnClickListener {

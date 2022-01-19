@@ -11,13 +11,12 @@ import com.lefarmico.navigation.params.ToastBarParams
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class DetailedWorkoutRecordViewModel @Inject constructor() : BaseViewModel<
-    DetailedIntent, DetailedState, DetailedEvent>() {
-
-    @Inject lateinit var repo: WorkoutRecordsRepository
-    @Inject lateinit var router: Router
-    @Inject lateinit var formatterManager: FormatterManager
-    @Inject lateinit var formatterTimeManager: FormatterTimeManager
+class DetailedWorkoutRecordViewModel @Inject constructor(
+    private val repo: WorkoutRecordsRepository,
+    private val router: Router,
+    private val formatterManager: FormatterManager,
+    private val formatterTimeManager: FormatterTimeManager
+) : BaseViewModel<DetailedIntent, DetailedState, DetailedEvent>() {
 
     private fun getRecordWorkout(workoutId: Int) {
         repo.getWorkoutWithExerciseAnsSets(workoutId)

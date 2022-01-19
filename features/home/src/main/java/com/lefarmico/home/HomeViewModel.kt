@@ -17,15 +17,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor() :
+class HomeViewModel @Inject constructor(
+    private val repo: WorkoutRecordsRepository,
+    private val router: Router,
+    private val dateRepo: DateManager,
+    private val formatterMonthManager: FormatterMonthManager,
+    private val formatterManager: FormatterManager,
+    private val formatterTimeManager: FormatterTimeManager
+) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
-
-    @Inject lateinit var repo: WorkoutRecordsRepository
-    @Inject lateinit var router: Router
-    @Inject lateinit var dateRepo: DateManager
-    @Inject lateinit var formatterMonthManager: FormatterMonthManager
-    @Inject lateinit var formatterManager: FormatterManager
-    @Inject lateinit var formatterTimeManager: FormatterTimeManager
 
     private fun navigateToWorkout() {
         dispatchIntent(HomeIntent.EditState(Hide))

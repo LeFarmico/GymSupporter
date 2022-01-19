@@ -5,11 +5,11 @@ import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.repository.LibraryRepository
 import javax.inject.Inject
 
-class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<
+class ExerciseDetailsViewModel @Inject constructor(
+    private val repo: LibraryRepository
+) : BaseViewModel<
     ExerciseDetailsIntent, ExerciseDetailsState, ExerciseDetailsEvent
     >() {
-
-    @Inject lateinit var repo: LibraryRepository
 
     private fun getExerciseFromDB(exerciseId: Int) {
         repo.getExercise(exerciseId)

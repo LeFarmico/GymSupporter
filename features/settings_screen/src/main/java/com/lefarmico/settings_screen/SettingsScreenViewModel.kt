@@ -11,14 +11,14 @@ import com.lefarmico.settings_screen.SettingsScreenIntent.*
 import java.time.LocalDate
 import javax.inject.Inject
 
-class SettingsScreenViewModel @Inject constructor() : BaseViewModel<
+class SettingsScreenViewModel @Inject constructor(
+    private val formatterManager: FormatterManager,
+    private val formatterMonthManager: FormatterMonthManager,
+    private val remindTimeManager: RemindTimeManager,
+    private val router: Router
+) : BaseViewModel<
     SettingsScreenIntent, SettingsScreenState, SettingsScreenEvent
     >() {
-
-    @Inject lateinit var formatterManager: FormatterManager
-    @Inject lateinit var formatterMonthManager: FormatterMonthManager
-    @Inject lateinit var remindTimeManager: RemindTimeManager
-    @Inject lateinit var router: Router
 
     private fun setFullDateFormatter() {
         formatterManager.getDateFormatters()

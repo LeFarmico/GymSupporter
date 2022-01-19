@@ -16,18 +16,19 @@ class LibraryItemAdapter :
     SelectItemsHandler.Callback<LibraryViewData> {
 
     private var toggleButtonVisibility = View.GONE
+    private var isEditState = false
     private val selectedItemsSet = mutableSetOf<LibraryViewData>()
 
     lateinit var onClick: (LibraryViewData) -> Unit
 
     var items = listOf<LibraryViewData>()
         set(value) {
+            toggleButtonVisibility = View.GONE
             val oldItems = field
             field = value
             val diffCallback = ExerciseLibraryDiffCallback(oldItems, field)
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(this)
-            turnOffEditState()
         }
 
     class MenuItemViewHolder(
@@ -53,7 +54,7 @@ class LibraryItemAdapter :
     override fun onBindViewHolder(holder: MenuItemViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener {
-            onClick(items[position])
+            if (!isEditState) onClick(items[position])
         }
         holder.selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
@@ -97,12 +98,14 @@ class LibraryItemAdapter :
     override fun getSelectedItems(): Set<LibraryViewData> = selectedItemsSet
 
     fun turnOnEditState() {
+        isEditState = true
         if (toggleButtonVisibility != View.VISIBLE) {
             toggleButtonVisibility = View.VISIBLE
             notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
         }
     }
     fun turnOffEditState() {
+        isEditState = false
         if (toggleButtonVisibility != View.GONE) {
             toggleButtonVisibility = View.GONE
             notifyItemRangeChanged(0, items.size, WorkoutRecordsAdapter.EDIT_STATE)
