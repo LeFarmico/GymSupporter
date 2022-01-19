@@ -23,30 +23,26 @@ import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
-class WorkoutViewModel @Inject constructor() : BaseViewModel<
+class WorkoutViewModel @Inject constructor(
+    private val recordsRepository: WorkoutRecordsRepository,
+    private val libraryRepository: LibraryRepository,
+    private val workoutRepository: CurrentWorkoutRepository,
+    private val dateManager: DateManager,
+    private val formatterManager: FormatterManager,
+    private val timeScheduleManager: TimeScheduleManager,
+    private val workoutTitleManager: WorkoutTitleManager,
+    private val formatterTimeManager: FormatterTimeManager,
+    private val notificationHelper: WorkoutRemindNotificationHelper,
+    private val router: Router
+) : BaseViewModel<
     WorkoutIntent, WorkoutState, WorkoutEvent
     >() {
 
-    @Inject lateinit var recordsRepository: WorkoutRecordsRepository
-    @Inject lateinit var libraryRepository: LibraryRepository
-    @Inject lateinit var workoutRepository: CurrentWorkoutRepository
-
-    @Inject lateinit var dateManager: DateManager
-    @Inject lateinit var formatterManager: FormatterManager
-    @Inject lateinit var timeScheduleManager: TimeScheduleManager
-    @Inject lateinit var workoutTitleManager: WorkoutTitleManager
-    @Inject lateinit var formatterTimeManager: FormatterTimeManager
-    @Inject lateinit var notificationHelper: WorkoutRemindNotificationHelper
-
-    @Inject lateinit var router: Router
-
-    private val exerciseHelper by lazy { ExerciseHelper(workoutRepository, libraryRepository) }
-    private val navigateHelper by lazy { NavigateHelper(router) }
-    private val dateTimeHelper by lazy {
-        DateTimeHelper(
-            dateManager, timeScheduleManager, formatterManager, formatterTimeManager
-        )
-    }
+    private val exerciseHelper = ExerciseHelper(workoutRepository, libraryRepository)
+    private val navigateHelper = NavigateHelper(router)
+    private val dateTimeHelper = DateTimeHelper(
+        dateManager, timeScheduleManager, formatterManager, formatterTimeManager
+    )
     private val workoutHelper by lazy {
         WorkoutHelper(
             recordsRepository, workoutRepository, dateManager,

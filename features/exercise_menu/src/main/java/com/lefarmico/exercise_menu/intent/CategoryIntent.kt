@@ -17,4 +17,16 @@ sealed class CategoryIntent : BaseIntent {
         val item: LibraryViewData.Category,
         val isFromWorkoutScreen: Boolean
     ) : CategoryIntent()
+
+    data class EditState(val action: Action) : CategoryIntent() {
+        sealed class Action {
+            object Show : Action()
+            object Hide : Action()
+            object SelectAll : Action()
+            object DeselectAll : Action()
+            object DeleteSelected : Action()
+        }
+    }
+
+    data class DeleteCategory(val categoryId: Int) : CategoryIntent()
 }

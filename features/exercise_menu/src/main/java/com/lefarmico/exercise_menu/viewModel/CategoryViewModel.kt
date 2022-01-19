@@ -11,6 +11,7 @@ import com.lefarmico.core.validator.ValidationState
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.exercise_menu.intent.CategoryIntent
+import com.lefarmico.exercise_menu.intent.CategoryIntent.EditState.Action.*
 import com.lefarmico.exercise_menu.reduce
 import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
@@ -102,6 +103,24 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         router.show(Notification.TOAST, ToastBarParams(text))
     }
 
+    private fun editStateAction(action: CategoryIntent.EditState.Action) {
+        val event = when (action) {
+            DeselectAll -> LibraryListEvent.DeselectAllWorkouts
+            Hide -> LibraryListEvent.HideEditState
+            SelectAll -> LibraryListEvent.SelectAllWorkouts
+            Show -> LibraryListEvent.ShowEditState
+            DeleteSelected -> LibraryListEvent.DeleteSelectedWorkouts
+        }
+        mEvent.postValue(event)
+    }
+
+    private fun deleteCategory(categoryId: Int) {
+        repo.deleteCategory(categoryId)
+            .observeUi()
+            .doAfterSuccess { getCategories() }
+            .subscribe()
+    }
+
     override fun triggerIntent(intent: CategoryIntent) {
         return when (intent) {
             is CategoryIntent.AddCategory -> addCategory(intent.title)
@@ -109,6 +128,8 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
             CategoryIntent.GetCategories -> getCategories()
             is CategoryIntent.ShowToast -> showToast(intent.text)
             is CategoryIntent.Validate -> validateSubject.onNext(intent.text)
+            is CategoryIntent.DeleteCategory -> deleteCategory(intent.categoryId)
+            is CategoryIntent.EditState -> editStateAction(intent.action)
         }
     }
 }

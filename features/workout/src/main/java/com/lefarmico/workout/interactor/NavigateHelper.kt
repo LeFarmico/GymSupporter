@@ -31,8 +31,7 @@ class NavigateHelper(
     }
 
     fun startTimePickerDialog(localTime: LocalTime, callback: (LocalTime) -> Unit) {
-        val time = LocalTime.now()
-        val dialog = Dialog.TimePickerDialog(time) {
+        val dialog = Dialog.TimePickerDialog(localTime) {
             callback(it)
         }
         router.showDialog(dialog)

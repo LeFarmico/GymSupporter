@@ -9,4 +9,10 @@ sealed class LibraryListEvent : BaseState.Event {
         object AlreadyExist : ValidationResult()
         object Success : ValidationResult()
     }
+
+    object ShowEditState : LibraryListEvent()
+    object HideEditState : LibraryListEvent()
+    object SelectAllWorkouts : LibraryListEvent()
+    object DeselectAllWorkouts : LibraryListEvent()
+    object DeleteSelectedWorkouts : LibraryListEvent()
 }

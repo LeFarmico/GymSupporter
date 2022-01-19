@@ -17,4 +17,16 @@ sealed class SubcategoryIntent : BaseIntent {
     ) : SubcategoryIntent()
 
     data class ShowToast(val text: String) : SubcategoryIntent()
+
+    data class EditState(val action: Action) : SubcategoryIntent() {
+        sealed class Action {
+            object Show : Action()
+            object Hide : Action()
+            object SelectAll : Action()
+            object DeselectAll : Action()
+            object DeleteSelected : Action()
+        }
+    }
+
+    data class DeleteSubCategory(val subcategoryId: Int, val categoryId: Int) : SubcategoryIntent()
 }

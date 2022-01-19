@@ -14,7 +14,7 @@ class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel<
     private fun getExerciseFromDB(exerciseId: Int) {
         repo.getExercise(exerciseId)
             .observeUi()
-            .doAfterSuccess { dataState -> dataState.reduce() }
+            .doAfterSuccess { dataState -> mState.value = dataState.reduce() }
             .subscribe()
     }
 

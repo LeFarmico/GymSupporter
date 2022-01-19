@@ -18,4 +18,16 @@ sealed class ExerciseIntent : BaseIntent {
     ) : ExerciseIntent()
 
     data class ShowToast(val text: String) : ExerciseIntent()
+
+    data class EditState(val action: Action) : ExerciseIntent() {
+        sealed class Action {
+            object Show : Action()
+            object Hide : Action()
+            object SelectAll : Action()
+            object DeselectAll : Action()
+            object DeleteSelected : Action()
+        }
+    }
+
+    data class DeleteExercise(val exerciseId: Int, val subcategoryId: Int) : ExerciseIntent()
 }

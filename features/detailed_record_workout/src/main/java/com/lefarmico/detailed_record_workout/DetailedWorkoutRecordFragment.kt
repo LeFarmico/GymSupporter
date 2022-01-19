@@ -2,6 +2,7 @@ package com.lefarmico.detailed_record_workout
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
@@ -40,6 +41,7 @@ class DetailedWorkoutRecordFragment :
         showExercises(itemList)
         showDate(workout.workout.date)
         showWorkoutTitle(workout.workout.title)
+        showTime(workout.workout.time)
     }
 
     private fun showDate(date: String) {
@@ -48,6 +50,15 @@ class DetailedWorkoutRecordFragment :
 
     private fun showWorkoutTitle(title: String) {
         binding.workoutTitle.text = title
+    }
+
+    private fun showTime(time: String) {
+        if (time == "") {
+            binding.workoutTime.visibility = View.GONE
+        } else {
+            binding.workoutTime.text = time
+            binding.workoutTime.visibility = View.VISIBLE
+        }
     }
 
     private fun showExercises(items: MutableList<WorkoutRecordsViewData.ViewDataItemType>) {
