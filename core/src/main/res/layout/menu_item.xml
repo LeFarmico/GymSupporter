@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/text"
-    style="@style/TextStyle.Body"
+<androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:gravity="center_vertical"
-    android:paddingHorizontal="16dp"
-    tools:text="Hello"
-    app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24"
-    app:drawableTint="?attr/colorOnPrimary" />
+    android:orientation="horizontal"
+    android:animateLayoutChanges="true">
+
+    <ToggleButton
+        android:id="@+id/edit_button"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/selector_edit_button"
+        android:textOff=""
+        android:textOn=""
+        android:backgroundTint="?attr/colorSecondary"
+        android:visibility="gone"
+        />
+
+    <TextView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/text"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="48dp"
+        style="@style/TextStyle.Body"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        tools:text="Hello"
+        app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24"
+        app:drawableTint="?attr/colorOnPrimary"
+        />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

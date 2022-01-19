@@ -5,6 +5,7 @@ sealed class WorkoutRecordsViewData {
     data class Workout(
         val id: Int = 0,
         val date: String,
+        val time: String,
         val title: String = ""
     ) : WorkoutRecordsViewData()
 

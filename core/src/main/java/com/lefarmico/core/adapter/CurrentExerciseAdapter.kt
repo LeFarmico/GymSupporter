@@ -51,9 +51,7 @@ class CurrentExerciseAdapter :
 
         fun bindAdapter() {
             recycler.adapter = adapter
-            if (recycler.itemDecorationCount == 0) {
-                recycler.addItemDecoration(decorator)
-            }
+            recycler.addItemDecoration(decorator, 0)
         }
         fun bind(title: String) {
             exerciseTitle.text = title

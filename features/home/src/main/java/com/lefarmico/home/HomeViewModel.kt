@@ -6,6 +6,7 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.repository.manager.DateManager
 import com.lefarmico.domain.repository.manager.FormatterManager
 import com.lefarmico.domain.repository.manager.FormatterMonthManager
+import com.lefarmico.domain.repository.manager.FormatterTimeManager
 import com.lefarmico.domain.utils.map
 import com.lefarmico.home.HomeIntent.EditState.Action.*
 import com.lefarmico.navigation.Router
@@ -16,14 +17,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor() :
+class HomeViewModel @Inject constructor(
+    private val repo: WorkoutRecordsRepository,
+    private val router: Router,
+    private val dateRepo: DateManager,
+    private val formatterMonthManager: FormatterMonthManager,
+    private val formatterManager: FormatterManager,
+    private val formatterTimeManager: FormatterTimeManager
+) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
-
-    @Inject lateinit var repo: WorkoutRecordsRepository
-    @Inject lateinit var router: Router
-    @Inject lateinit var dateRepo: DateManager
-    @Inject lateinit var formatterMonthManager: FormatterMonthManager
-    @Inject lateinit var formatterManager: FormatterManager
 
     private fun navigateToWorkout() {
         dispatchIntent(HomeIntent.EditState(Hide))
@@ -64,7 +66,7 @@ class HomeViewModel @Inject constructor() :
             .flatMap { dataState ->
                 repo.getWorkoutWithExerciseAndSetsByDate(dataState.resolve()).observeUi()
             }.doAfterSuccess { dataState ->
-                getSelectedFormatter { formatter -> mState.value = dataState.reduce(formatter) }
+                getSelectedFormatters { dateF, timeF -> mState.value = dataState.reduce(dateF, timeF) }
             }.subscribe()
     }
 
@@ -75,9 +77,11 @@ class HomeViewModel @Inject constructor() :
             HomeIntent.ChangeMonth.Change.Prev -> dateRepo.prevMonth()
         }
         currentMonthFormatterListener { formatter ->
-            dateObservable.observeUi()
+            dateObservable
+                .observeUi()
                 .doAfterSuccess { dataState ->
                     mState.value = dataState.map { it.format(formatter) }.reduce()
+                    getMonthDates()
                 }.subscribe()
         }
     }
@@ -100,10 +104,15 @@ class HomeViewModel @Inject constructor() :
             .subscribe()
     }
 
-    private fun getSelectedFormatter(formatter: (DateTimeFormatter) -> Unit) {
+    private fun getSelectedFormatters(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
         formatterManager.getSelectedFormatter()
             .observeUi()
-            .doAfterSuccess { formatterDto -> formatter(formatterDto.formatter) }
+            .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF ->
+
+                Pair(dateF, timeF)
+            }.doAfterSuccess { pair ->
+                formatter(pair.first.formatter, pair.second.formatter)
+            }
             .subscribe()
     }
 

@@ -6,11 +6,12 @@ import com.lefarmico.domain.utils.DataState
 import java.time.format.DateTimeFormatter
 
 fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduce(
-    formatter: DateTimeFormatter
+    dateFormatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter
 ): DetailedState {
     return when (this) {
         is DataState.Error -> DetailedState.ExceptionResult(exception)
         DataState.Loading -> DetailedState.Loading
-        is DataState.Success -> DetailedState.WorkoutResult(data.toViewData(formatter))
+        is DataState.Success -> DetailedState.WorkoutResult(data.toViewData(dateFormatter, timeFormatter))
     }
 }

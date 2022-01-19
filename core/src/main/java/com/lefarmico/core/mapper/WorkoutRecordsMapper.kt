@@ -41,9 +41,13 @@ fun WorkoutRecordsDto.Set.toViewData() = WorkoutRecordsViewData.Set(
  *
  *  Used as ViewData entity
  */
-fun WorkoutRecordsDto.Workout.toViewData(formatter: DateTimeFormatter) = WorkoutRecordsViewData.Workout(
+fun WorkoutRecordsDto.Workout.toViewData(
+    dateFormatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter
+) = WorkoutRecordsViewData.Workout(
     id = id,
-    date = date.format(formatter),
+    date = date.format(dateFormatter),
+    time = time?.format(timeFormatter) ?: "",
     title = title
 )
 
@@ -82,8 +86,10 @@ fun List<WorkoutRecordsDto.ExerciseWithSets>.toViewData() = this.map { it.toView
  *  Used as ViewData entity
  */
 @JvmName("viewDataWorkoutWithExAndSets")
-fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toViewData(formatter: DateTimeFormatter) =
-    this.map { it.toViewData(formatter) }
+fun List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.toViewData(
+    formatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter
+) = this.map { it.toViewData(formatter, timeFormatter) }
 
 /**
  *  Converts the [WorkoutRecordsDto.MeasureType] to the [WorkoutRecordsViewData.MeasureType]
@@ -106,9 +112,12 @@ fun WorkoutRecordsDto.MeasureType.toViewData(): WorkoutRecordsViewData.MeasureTy
  *
  *  Used as ViewData entity
  */
-fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toViewData(formatter: DateTimeFormatter) =
+fun WorkoutRecordsDto.WorkoutWithExercisesAndSets.toViewData(
+    dateFormatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter
+) =
     WorkoutRecordsViewData.WorkoutWithExercisesAndSets(
-        workout = workout.toViewData(formatter),
+        workout = workout.toViewData(dateFormatter, timeFormatter),
         exerciseWithSetsList = exerciseWithSetsList.toViewData()
     )
 

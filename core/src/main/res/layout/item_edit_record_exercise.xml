@@ -12,7 +12,7 @@
         android:gravity="bottom"
         tools:text="Exercise"
         android:layout_marginHorizontal="16dp"
-        style="@style/TextAppearance.AppCompat.Subhead"
+        style="@style/TextStyle.SubHead"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

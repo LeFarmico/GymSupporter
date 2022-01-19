@@ -24,19 +24,16 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SubcategoryViewModel @Inject constructor() : BaseViewModel<
+class SubcategoryViewModel @Inject constructor(
+    private val repo: LibraryRepository,
+    private val router: Router
+) : BaseViewModel<
     SubcategoryIntent, LibraryListState, LibraryListEvent
     >() {
 
     private val validator = ValidateHandler()
     private val validateSubject = PublishSubject.create<String>()
     private var validateCache = listOf<String>()
-
-    @Inject
-    lateinit var repo: LibraryRepository
-
-    @Inject
-    lateinit var router: Router
 
     init {
         validator()
@@ -92,6 +89,24 @@ class SubcategoryViewModel @Inject constructor() : BaseViewModel<
             .subscribe()
     }
 
+    private fun deleteSubcategory(subcategoryId: Int, categoryId: Int) {
+        repo.deleteSubcategory(subcategoryId)
+            .observeUi()
+            .doAfterSuccess { getSubCategories(categoryId) }
+            .subscribe()
+    }
+
+    private fun editStateAction(action: EditState.Action) {
+        val event = when (action) {
+            EditState.Action.DeselectAll -> LibraryListEvent.DeselectAllWorkouts
+            EditState.Action.Hide -> LibraryListEvent.HideEditState
+            EditState.Action.SelectAll -> LibraryListEvent.SelectAllWorkouts
+            EditState.Action.Show -> LibraryListEvent.ShowEditState
+            EditState.Action.DeleteSelected -> LibraryListEvent.DeleteSelectedWorkouts
+        }
+        mEvent.postValue(event)
+    }
+
     private fun goToExerciseListScreen(
         subcategory: LibraryViewData.SubCategory,
         isFromWorkoutScreen: Boolean
@@ -115,6 +130,8 @@ class SubcategoryViewModel @Inject constructor() : BaseViewModel<
             is GetSubcategories -> getSubCategories(intent.categoryId)
             is ShowToast -> showToast(intent.text)
             is Validate -> validateSubject.onNext(intent.title)
+            is DeleteSubCategory -> deleteSubcategory(intent.subcategoryId, intent.categoryId)
+            is EditState -> editStateAction(intent.action)
         }
     }
 }

@@ -19,4 +19,10 @@ interface LibraryRepository : BaseRepository {
     fun addSubCategory(subCategory: LibraryDto.SubCategory): Single<DataState<Long>>
 
     fun addExercise(exercise: LibraryDto.Exercise): Single<DataState<Long>>
+
+    fun deleteCategory(categoryId: Int): Single<DataState<Int>>
+
+    fun deleteSubcategory(subCategoryId: Int): Single<DataState<Int>>
+
+    fun deleteExercise(exerciseId: Int): Single<DataState<Int>>
 }

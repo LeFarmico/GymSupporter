@@ -34,6 +34,7 @@ class WorkoutRecordsAdapter :
 
         private val date = itemSocketExercisePreviewBinding.date
         private val title = itemSocketExercisePreviewBinding.title
+        private val time = itemSocketExercisePreviewBinding.time
 
         val selectToggleButton = itemSocketExercisePreviewBinding.editButton
         val detailsButton = itemSocketExercisePreviewBinding.detailsButton
@@ -42,6 +43,12 @@ class WorkoutRecordsAdapter :
             val dateFormatted = noteWorkout.date
             date.text = dateFormatted
             title.text = noteWorkout.title
+            if (noteWorkout.time == "") {
+                time.visibility = View.GONE
+            } else {
+                time.text = noteWorkout.time
+                time.visibility = View.VISIBLE
+            }
         }
     }
 

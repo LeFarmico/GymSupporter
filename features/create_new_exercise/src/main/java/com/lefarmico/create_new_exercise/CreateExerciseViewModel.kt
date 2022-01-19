@@ -18,12 +18,10 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class CreateExerciseViewModel @Inject constructor() : BaseViewModel<
-    CreateExerciseIntent, CreateExerciseState, CreateExerciseEvent
-    >() {
-
-    @Inject lateinit var repo: LibraryRepository
-    @Inject lateinit var router: Router
+class CreateExerciseViewModel @Inject constructor(
+    private val repo: LibraryRepository,
+    private val router: Router
+) : BaseViewModel<CreateExerciseIntent, CreateExerciseState, CreateExerciseEvent>() {
 
     private val validator = ValidateHandler()
     private val validateSubject = PublishSubject.create<String>()

@@ -16,14 +16,10 @@ import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
 import javax.inject.Inject
 
-class ExerciseListViewModel @Inject constructor() : BaseViewModel<
-    ExerciseIntent, LibraryListState, LibraryListEvent
-    >() {
-
-    @Inject
-    lateinit var repo: LibraryRepository
-    @Inject
-    lateinit var router: Router
+class ExerciseListViewModel @Inject constructor(
+    private val repo: LibraryRepository,
+    private val router: Router
+) : BaseViewModel<ExerciseIntent, LibraryListState, LibraryListEvent>() {
 
     private fun getExercises(subCategoryId: Int) {
         repo.getExercises(subCategoryId)
@@ -52,6 +48,23 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<
         )
     }
 
+    private fun deleteExercise(exerciseId: Int, subcategoryId: Int) {
+        repo.deleteExercise(exerciseId)
+            .observeUi()
+            .doAfterSuccess { getExercises(subcategoryId) }
+            .subscribe()
+    }
+
+    private fun editStateAction(action: EditState.Action) {
+        val event = when (action) {
+            EditState.Action.DeselectAll -> LibraryListEvent.DeselectAllWorkouts
+            EditState.Action.Hide -> LibraryListEvent.HideEditState
+            EditState.Action.SelectAll -> LibraryListEvent.SelectAllWorkouts
+            EditState.Action.Show -> LibraryListEvent.ShowEditState
+            EditState.Action.DeleteSelected -> LibraryListEvent.DeleteSelectedWorkouts
+        }
+        mEvent.postValue(event)
+    }
     private fun showToast(text: String) {
         router.show(Notification.TOAST, ToastBarParams(text))
     }
@@ -62,6 +75,8 @@ class ExerciseListViewModel @Inject constructor() : BaseViewModel<
             is CreateNewExercise -> createNewExercise(intent.subcategoryId, intent.isFromWorkoutScreen)
             is GetExercises -> getExercises(intent.subcategoryId)
             is ShowToast -> showToast(intent.text)
+            is DeleteExercise -> deleteExercise(intent.exerciseId, intent.subcategoryId)
+            is EditState -> editStateAction(intent.action)
         }
     }
 }

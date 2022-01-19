@@ -9,12 +9,13 @@ import java.time.format.DateTimeFormatter
 
 @JvmName("reduceWorkoutWithExercisesAndSets")
 fun DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>.reduce(
-    formatter: DateTimeFormatter
+    dateFormatter: DateTimeFormatter,
+    timeFormatter: DateTimeFormatter
 ): HomeState {
     return when (this) {
         is DataState.Error -> HomeState.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
-        is DataState.Success -> HomeState.WorkoutResult(this.data.toViewData(formatter))
+        is DataState.Success -> HomeState.WorkoutResult(this.data.toViewData(dateFormatter, timeFormatter))
     }
 }
 @JvmName("reduceCalendarItemDto")

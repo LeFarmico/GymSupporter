@@ -35,6 +35,16 @@
             android:gravity="end"
             tools:text="01.01.2022"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/workout_time"
+            style="@style/TextStyle.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="end"
+            tools:text="12:40"
+            android:textStyle="bold" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView

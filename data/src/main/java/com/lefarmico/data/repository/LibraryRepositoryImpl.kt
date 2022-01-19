@@ -44,26 +44,38 @@ class LibraryRepositoryImpl @Inject constructor(
     }
 
     override fun addCategory(category: LibraryDto.Category): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateResolver { dao.insertCategory(category.toData()) }
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dao.insertCategory(category.toData())
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
     }
 
     override fun addSubCategory(subCategory: LibraryDto.SubCategory): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateResolver { dao.insertSubCategory(subCategory.toData()) }
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dao.insertSubCategory(subCategory.toData())
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
     }
 
     override fun addExercise(exercise: LibraryDto.Exercise): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateResolver { dao.insertExercise(exercise.toData()) }
-            )
-        }.doOnError { DataState.Error(it as Exception) }
+        return dao.insertExercise(exercise.toData())
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
+    }
+
+    override fun deleteCategory(categoryId: Int): Single<DataState<Int>> {
+        return dao.deleteCategory(categoryId)
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
+    }
+
+    override fun deleteSubcategory(subCategoryId: Int): Single<DataState<Int>> {
+        return dao.deleteSubcategory(subCategoryId)
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
+    }
+
+    override fun deleteExercise(exerciseId: Int): Single<DataState<Int>> {
+        return dao.deleteExercise(exerciseId)
+            .map { dataStateResolver { it } }
+            .doOnError { DataState.Error(it as Exception) }
     }
 }

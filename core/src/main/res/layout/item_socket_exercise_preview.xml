@@ -58,6 +58,19 @@
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintBottom_toBottomOf="parent"
     />
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="12:40"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginStart="8dp"
+        style="@style/TextStyle.Caption"
+        app:layout_constraintTop_toTopOf="@+id/date"
+        app:layout_constraintStart_toEndOf="@id/date"
+        app:layout_constraintBottom_toBottomOf="@id/date"
+    />
 
     <ImageView
         android:id="@+id/details_button"
