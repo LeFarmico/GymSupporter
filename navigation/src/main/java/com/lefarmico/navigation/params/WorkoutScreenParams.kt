@@ -12,4 +12,7 @@ sealed class WorkoutScreenParams : Parcelable {
 
     @Parcelize
     object Empty : WorkoutScreenParams()
+
+    @Parcelize
+    data class UpdateWorkout(val recordWorkoutId: Int) : WorkoutScreenParams()
 }

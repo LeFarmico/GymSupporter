@@ -51,6 +51,7 @@ sealed class WorkoutRecordsData {
         @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "exercise_id") val id: Int,
         @ColumnInfo(name = "workout_id") val workoutId: Int,
         @ColumnInfo(name = "exercise_name") val exerciseName: String,
+        @ColumnInfo(name = "library_id") val libraryId: Int
     ) : WorkoutRecordsData()
 
     @Entity(

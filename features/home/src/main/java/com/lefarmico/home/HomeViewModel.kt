@@ -107,12 +107,8 @@ class HomeViewModel @Inject constructor(
     private fun getSelectedFormatters(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
         formatterManager.getSelectedFormatter()
             .observeUi()
-            .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF ->
-
-                Pair(dateF, timeF)
-            }.doAfterSuccess { pair ->
-                formatter(pair.first.formatter, pair.second.formatter)
-            }
+            .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF -> Pair(dateF, timeF) }
+            .doAfterSuccess { pair -> formatter(pair.first.formatter, pair.second.formatter) }
             .subscribe()
     }
 

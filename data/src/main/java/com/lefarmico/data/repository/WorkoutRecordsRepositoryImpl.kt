@@ -2,8 +2,6 @@ package com.lefarmico.data.repository
 
 import com.lefarmico.data.db.dao.WorkoutRecordsDao
 import com.lefarmico.data.extensions.dataStateResolver
-import com.lefarmico.data.extensions.setExerciseId
-import com.lefarmico.data.extensions.setWorkoutId
 import com.lefarmico.data.mapper.toData
 import com.lefarmico.data.mapper.toDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
@@ -35,40 +33,27 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
             .map { data -> dataStateResolver { data.toDto() } }
     }
 
-    // TODO упросить
     override fun addWorkoutWithExAndSets(
         workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
     ): Single<DataState<Long>> {
-        return Single.create<DataState<Long>> { emitter ->
-            emitter.onSuccess(
-                dataStateResolver {
-                    val workoutId = dao.insertWorkout(workoutWithExercisesAndSets.workout.toData())
-                    val exerciseList = workoutWithExercisesAndSets
-                        .exerciseWithSetsList
-                        .setWorkoutId(workoutId.toInt())
-
-                    exerciseList.forEach { exerciseWithSets ->
-                        val exercise = exerciseWithSets.exercise.toData()
-                        val exerciseId = dao.insertExercise(exercise)
-                        val setList = exerciseWithSets.setList.setExerciseId(exerciseId.toInt())
-                        dao.insertSets(setList.toData())
-                    }
-                    return@dataStateResolver workoutId
+        return dao.insertWorkout(workoutWithExercisesAndSets.workout.toData())
+            .map { workoutId ->
+                dao.deleteExercises(workoutId.toInt())
+                val exercises = workoutWithExercisesAndSets.exerciseWithSetsList.map { it.exercise.copy(workoutId = workoutId.toInt()) }
+                val exIds = dao.insertExercises(exercises.toData())
+                val setList = workoutWithExercisesAndSets.exerciseWithSetsList.map { it.setList }
+                for (i in exIds.indices) {
+                    val sets = setList[i].map { it.copy(exerciseId = exIds[i].toInt()) }
+                    dao.insertSets(sets.toData())
                 }
-            )
-        }.doOnError { e -> DataState.Error(e as Exception) }
+                dataStateResolver { workoutId }
+            }.doOnError { DataState.Error(it as Exception) }
     }
 
     override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Int>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
             .doOnError { e -> DataState.Error(e as Exception) }
             .map { data -> dataStateResolver { dao.deleteWorkout(data.workout) } }
-    }
-
-    override fun updateWorkoutWithExAndSets(
-        workoutWithExercisesAndSets: WorkoutRecordsDto.WorkoutWithExercisesAndSets
-    ): Single<DataState<String>> {
-        TODO("Not yet implemented")
     }
 
     override fun getWorkoutWithExerciseAndSetsByDate(date: LocalDate):

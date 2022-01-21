@@ -7,7 +7,8 @@ fun List<WorkoutRecordsDto.ExerciseWithSets>.setWorkoutId(workoutId: Int) = this
     WorkoutRecordsDto.ExerciseWithSets(
         exercise = WorkoutRecordsDto.Exercise(
             workoutId = workoutId,
-            exerciseName = it.exercise.exerciseName
+            exerciseName = it.exercise.exerciseName,
+            libraryId = it.exercise.libraryId
         ),
         setList = it.setList
     )

@@ -14,7 +14,7 @@ class EditRecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items = listOf<WorkoutRecordsViewData.ViewDataItemType>()
         set(value) {
             field = value
-            notifyItemRangeChanged(0, field.size)
+            notifyDataSetChanged()
         }
 
     class EditExerciseViewHolder(

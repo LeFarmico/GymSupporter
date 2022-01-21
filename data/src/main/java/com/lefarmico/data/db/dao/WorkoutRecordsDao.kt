@@ -17,7 +17,7 @@ interface WorkoutRecordsDao {
 
     /* workout_records table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWorkout(workout: WorkoutRecordsData.Workout): Long
+    fun insertWorkout(workout: WorkoutRecordsData.Workout): Single<Long>
 
     @Query("SELECT * FROM workout_records")
     fun getWorkoutRecords(): Observable<List<WorkoutRecordsData.Workout>>
@@ -47,6 +47,9 @@ interface WorkoutRecordsDao {
     @Delete
     fun deleteExercise(exercise: WorkoutRecordsData.Exercise): Int
 
+    @Query("DELETE FROM exercise_records WHERE workout_id = :workoutId ")
+    fun deleteExercises(workoutId: Int)
+
     /* set_records table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSet(set: WorkoutRecordsData.Set): Long
@@ -57,8 +60,14 @@ interface WorkoutRecordsDao {
     @Query("SELECT * FROM set_records WHERE set_id = :setId")
     fun getSet(setId: Int): Observable<WorkoutRecordsData.Set>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSets(setList: List<WorkoutRecordsData.Set>)
+
     @Update
     fun updateSet(set: WorkoutRecordsData.Set): Int
+
+    @Update
+    fun updateSets(setList: List<WorkoutRecordsData.Set>)
 
     @Delete
     fun deleteSet(set: WorkoutRecordsData.Set): Int
@@ -80,9 +89,6 @@ interface WorkoutRecordsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExercises(exerciseList: List<WorkoutRecordsData.Exercise>): List<Long>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSets(setList: List<WorkoutRecordsData.Set>)
 
     @Query("SELECT date FROM workout_records WHERE date BETWEEN :from AND :to")
     fun getWorkoutDateByTime(from: LocalDate, to: LocalDate): Single<List<LocalDate>>
