@@ -2,6 +2,7 @@ package com.lefarmico.workout
 
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
+import com.lefarmico.core.mapper.toCurrent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
@@ -43,15 +44,16 @@ class WorkoutViewModel @Inject constructor(
     private val dateTimeHelper = DateTimeHelper(
         dateManager, timeScheduleManager, formatterManager, formatterTimeManager
     )
-    private val workoutHelper by lazy {
-        WorkoutHelper(
-            recordsRepository, workoutRepository, dateManager,
-            timeScheduleManager, workoutTitleManager
-        )
-    }
+    private val workoutHelper = WorkoutHelper(
+        recordsRepository, workoutRepository, dateManager,
+        timeScheduleManager, workoutTitleManager
+    )
 
     private val switchObject = BehaviorSubject.create<Boolean>()
     private val switchStateObservable: Observable<Boolean>
+
+    // def id value
+    private var workoutRecordId = 0
 
     init {
         switchObject.onNext(false)
@@ -105,18 +107,20 @@ class WorkoutViewModel @Inject constructor(
                 }
                 switchObject.subscribe { switchState ->
                     val time = if (switchState) { quad.second } else { null }
-                    saveWorkout(quad.third, quad.first, time, quad.fourth)
+                    save(quad.third, quad.first, time, quad.fourth, workoutRecordId)
+                    workoutRecordId = 0
                 }.dispose()
             }.subscribe()
     }
 
-    private fun saveWorkout(
+    private fun save(
         title: String,
         date: LocalDate,
         time: LocalTime?,
-        exercises: List<CurrentWorkoutDto.ExerciseWithSets>
+        exercises: List<CurrentWorkoutDto.ExerciseWithSets>,
+        workoutRecordId: Int
     ) {
-        workoutHelper.saveWorkout(title, date, time, exercises)
+        workoutHelper.saveWorkout(title, date, time, exercises, workoutRecordId)
             .observeUi()
             .doAfterSuccess { state -> mState.value = state }
             .subscribe()
@@ -176,8 +180,12 @@ class WorkoutViewModel @Inject constructor(
     }
 
     private fun showTimePickerDialog() {
-        val localTime = LocalTime.now()
-        navigateHelper.startTimePickerDialog(localTime) { time -> setWorkoutTime(time) }
+        timeScheduleManager.getTime()
+            .observeUi()
+            .doAfterSuccess { time ->
+                require(time is DataState.Success)
+                navigateHelper.startTimePickerDialog(time.data) { newTime -> setWorkoutTime(newTime) }
+            }
     }
 
     private fun setWorkoutDate(localDate: LocalDate) {
@@ -244,6 +252,24 @@ class WorkoutViewModel @Inject constructor(
             }
     }
 
+    private fun loadWorkoutRecord(workoutRecordId: Int) {
+        this.workoutRecordId = workoutRecordId
+        recordsRepository.getWorkoutWithExerciseAnsSets(workoutRecordId)
+            .observeUi()
+            .flatMap { dataState ->
+                require(dataState is DataState.Success)
+                val exercises = dataState.data.exerciseWithSetsList.toCurrent()
+                val workout = dataState.data.workout
+
+                setWorkoutDate(workout.date)
+                if (workout.time != null) { setWorkoutTime(workout.time!!) }
+                setWorkoutTitle(workout.title)
+
+                workoutRepository.addExercises(exercises)
+            }.doAfterSuccess { getExercises() }
+            .subscribe()
+    }
+
     override fun triggerIntent(intent: WorkoutIntent) {
         when (intent) {
             is EditState -> editStateAction(intent.action)
@@ -266,6 +292,7 @@ class WorkoutViewModel @Inject constructor(
             StartWorkoutTitleDialog -> showWorkoutTitleDialog()
             is CloseWorkout -> clear(intent.workoutId)
             GetTime -> switchObject.subscribe()
+            is LoadWorkoutRecord -> loadWorkoutRecord(intent.workoutRecordId)
         }
     }
 }

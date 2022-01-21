@@ -12,7 +12,8 @@ sealed class WorkoutRecordsViewData {
     data class Exercise(
         val id: Int,
         val exerciseName: String,
-        val workoutId: Int
+        val workoutId: Int,
+        val libraryId: Int = -1
     ) : WorkoutRecordsViewData(), ViewDataItemType {
         override fun getItemType(): Int = EXERCISE
     }

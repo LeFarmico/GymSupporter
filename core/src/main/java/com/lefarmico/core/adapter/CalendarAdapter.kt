@@ -82,7 +82,7 @@ class CalendarAdapter(
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         holder.bind(items[position])
-        if (selectedDate != null && selectedDate!!.equals(items[position].date)) {
+        if (selectedDate != null && selectedDate!! == items[position].date) {
             holder.bindSelected()
         } else {
             holder.bindDeselected()

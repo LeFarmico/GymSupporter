@@ -8,4 +8,14 @@ fun CurrentWorkoutDto.Set.toData() = CurrentWorkoutData.Set(
 )
 
 @JvmName("CurrentWorkoutDtoSetToData")
-fun List<CurrentWorkoutDto.Set>.toData() = this.map { it.toData() }
+fun List<CurrentWorkoutDto.Set>.toData() = this.map { it.toData() }.toMutableList()
+
+fun CurrentWorkoutDto.Exercise.toData() = CurrentWorkoutData.Exercise(id, libraryId, title)
+
+fun List<CurrentWorkoutDto.Exercise>.toData() = this.map { it.toData() }
+
+fun CurrentWorkoutDto.ExerciseWithSets.toData() = CurrentWorkoutData.ExerciseWithSets(
+    exercise.toData(), setList.toData()
+)
+@JvmName("CurrentWorkoutDtoExerciseWithSetsToData")
+fun List<CurrentWorkoutDto.ExerciseWithSets>.toData() = this.map { it.toData() }

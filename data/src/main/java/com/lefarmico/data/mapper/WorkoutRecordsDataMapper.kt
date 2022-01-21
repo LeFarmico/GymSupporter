@@ -7,7 +7,8 @@ import java.lang.IllegalArgumentException
 fun WorkoutRecordsDto.Exercise.toData() = WorkoutRecordsData.Exercise(
     id = id,
     exerciseName = exerciseName,
-    workoutId = workoutId
+    workoutId = workoutId,
+    libraryId = libraryId
 )
 
 fun WorkoutRecordsDto.Set.toData() = WorkoutRecordsData.Set(
@@ -25,6 +26,8 @@ fun WorkoutRecordsDto.Workout.toData() = WorkoutRecordsData.Workout(
     title = title,
     time = time
 )
+
+fun List<WorkoutRecordsDto.Exercise>.toData() = this.map { it.toData() }
 
 @JvmName("WorkoutRecordsDtoSetToData")
 fun List<WorkoutRecordsDto.Set>.toData() = this.map { it.toData() }

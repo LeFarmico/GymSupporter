@@ -15,7 +15,8 @@ fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDto() = this.map {
     WorkoutRecordsDto.ExerciseWithSets(
         exercise = WorkoutRecordsDto.Exercise(
             id = it.exercise.id,
-            exerciseName = it.exercise.title
+            exerciseName = it.exercise.title,
+            libraryId = it.exercise.libraryId
         ),
         setList = it.setList.map { set ->
             WorkoutRecordsDto.Set(

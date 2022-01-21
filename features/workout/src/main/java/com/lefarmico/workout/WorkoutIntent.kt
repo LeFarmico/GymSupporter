@@ -50,4 +50,6 @@ sealed class WorkoutIntent : BaseIntent {
             object DeleteSelected : Action()
         }
     }
+
+    data class LoadWorkoutRecord(val workoutRecordId: Int) : WorkoutIntent()
 }

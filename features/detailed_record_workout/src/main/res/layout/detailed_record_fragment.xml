@@ -65,7 +65,7 @@
         android:id="@+id/accept_button"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="@string/finish"
+        android:text="@string/edit"
         style="@style/ButtonStyle"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp"

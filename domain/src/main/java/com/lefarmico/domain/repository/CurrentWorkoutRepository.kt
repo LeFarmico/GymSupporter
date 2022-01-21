@@ -12,6 +12,8 @@ interface CurrentWorkoutRepository : BaseRepository {
 
     fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Int>>
 
+    fun addExercises(exerciseList: List<CurrentWorkoutDto.ExerciseWithSets>): Single<DataState<Int>>
+
     fun addSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>>
 
     fun deleteExercise(exerciseId: Int): Single<DataState<Int>>

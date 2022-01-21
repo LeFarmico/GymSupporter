@@ -8,6 +8,8 @@ import com.lefarmico.domain.repository.manager.FormatterTimeManager
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.ToastBarParams
+import com.lefarmico.navigation.params.WorkoutScreenParams
+import com.lefarmico.navigation.screen.Screen
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -41,10 +43,18 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
             .subscribe()
     }
 
+    private fun navigateToWorkout(workoutId: Int) {
+        router.navigate(
+            Screen.WORKOUT_SCREEN_FROM_DETAILED_SCREEN,
+            WorkoutScreenParams.UpdateWorkout(workoutId)
+        )
+    }
+
     override fun triggerIntent(intent: DetailedIntent) {
         return when (intent) {
             is DetailedIntent.GetWorkout -> getRecordWorkout(intent.workoutId)
             is DetailedIntent.ShowToast -> showToast(intent.text)
+            is DetailedIntent.EditWorkout -> navigateToWorkout(intent.workoutId)
         }
     }
 }

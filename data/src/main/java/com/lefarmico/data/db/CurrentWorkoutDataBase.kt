@@ -10,21 +10,26 @@ class CurrentWorkoutDataBase {
     private val exerciseWithSetsList = mutableListOf<CurrentWorkoutData.ExerciseWithSets>()
     private var exerciseId = 1
 
-    fun insertExercise(exercise: CurrentWorkoutData.ExerciseWithSets): Single<Int> {
+    fun insertExercise(exerciseWithSets: CurrentWorkoutData.ExerciseWithSets): Single<Int> {
         return Single.create { emitter ->
             synchronized(lock) {
-                val currentExercise = CurrentWorkoutData.Exercise(
-                    id = exerciseId,
-                    libraryId = exercise.exercise.libraryId,
-                    title = exercise.exercise.title
-                )
-                exerciseWithSetsList.add(
-                    CurrentWorkoutData.ExerciseWithSets(
-                        currentExercise,
-                        exercise.setList
-                    )
-                )
+                val exercise = exerciseWithSets.exercise.copy(id = exerciseId)
+                val withSets = exerciseWithSets.copy(exercise = exercise)
+                exerciseWithSetsList.add(withSets)
                 emitter.onSuccess(exerciseId++)
+            }
+        }
+    }
+
+    fun insertExercises(exerciseList: List<CurrentWorkoutData.ExerciseWithSets>): Single<Int> {
+        return Single.create { emitter ->
+            synchronized(lock) {
+                val withSets = exerciseList.map { exWithSets ->
+                    val exercise = exWithSets.exercise.copy(id = exerciseId++)
+                    exWithSets.copy(exercise = exercise)
+                }
+                exerciseWithSetsList.addAll(withSets)
+                emitter.onSuccess(exerciseId)
             }
         }
     }

@@ -16,7 +16,6 @@ import com.lefarmico.navigation.screen.Screen
 import com.lefarmico.navigation.screen.ScreenResolver
 import com.lefarmico.workout.WorkoutFragment
 import com.lefarmico.workout_exercise_addition.ExerciseDetailsFragment
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class ScreenResolverImpl @Inject constructor() : ScreenResolver {
@@ -120,9 +119,17 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                     navExtras
                 )
             }
+            Screen.WORKOUT_SCREEN_FROM_DETAILED_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_editWorkoutRecordFragment_to_workoutScreenFragment,
+                    WorkoutFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
             else -> {
                 if (BuildConfig.DEBUG) {
-                    throw (IllegalStateException("Screen is not exist $this"))
+                    throw (IllegalArgumentException("Screen is not exist $this"))
                 }
             }
         }

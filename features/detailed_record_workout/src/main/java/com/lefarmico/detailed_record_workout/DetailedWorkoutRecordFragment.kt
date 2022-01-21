@@ -3,7 +3,6 @@ package com.lefarmico.detailed_record_workout
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
 import com.lefarmico.core.entity.WorkoutRecordsViewData
@@ -27,6 +26,12 @@ class DetailedWorkoutRecordFragment :
     override fun setUpViews() {
         dispatchIntent(DetailedIntent.GetWorkout(params.workoutId))
         binding.exerciseRecycler.adapter = adapter
+        binding.acceptButton.setOnClickListener {
+            dispatchIntent(DetailedIntent.EditWorkout(params.workoutId))
+        }
+        binding.cancelButton.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun showWorkout(workout: WorkoutRecordsViewData.WorkoutWithExercisesAndSets) {
@@ -85,21 +90,9 @@ class DetailedWorkoutRecordFragment :
         private const val KEY_PARAMS = "edit_key"
 
         fun createBundle(data: Parcelable?): Bundle {
-            return Bundle().apply {
-                when (data) {
-                    is RecordMenuParams.WorkoutRecord -> putParcelable(KEY_PARAMS, data)
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            throw (
-                                IllegalArgumentException(
-                                    "data should be RecordMenuParams.WorkoutRecord type." +
-                                        "but it's type ${data!!.javaClass.canonicalName}"
-                                )
-                                )
-                        }
-                    }
-                }
-            }
+            requireNotNull(data)
+            require(data is RecordMenuParams.WorkoutRecord)
+            return Bundle().apply { putParcelable(KEY_PARAMS, data) }
         }
     }
 }

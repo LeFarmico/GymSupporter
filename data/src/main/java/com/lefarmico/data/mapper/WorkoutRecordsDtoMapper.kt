@@ -7,7 +7,8 @@ import java.lang.IllegalArgumentException
 fun WorkoutRecordsData.Exercise.toDto() = WorkoutRecordsDto.Exercise(
     id = id,
     exerciseName = exerciseName,
-    workoutId = workoutId
+    workoutId = workoutId,
+    libraryId = libraryId
 )
 
 fun WorkoutRecordsData.Set.toDto() = WorkoutRecordsDto.Set(

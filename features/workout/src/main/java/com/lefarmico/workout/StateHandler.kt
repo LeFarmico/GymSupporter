@@ -64,6 +64,13 @@ fun DataState<Long>.reduceWorkoutId(): WorkoutState {
         is DataState.Success -> WorkoutState.EndWorkoutResult(data)
     }
 }
+fun DataState<Int>.reduceWorkoutIdInt(): WorkoutState {
+    return when (this) {
+        is DataState.Error -> WorkoutState.ExceptionResult(exception)
+        DataState.Loading -> WorkoutState.Loading
+        is DataState.Success -> WorkoutState.EndWorkoutResult(data.toLong())
+    }
+}
 fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduceWorkoutDto(): WorkoutRecordsDto.Workout {
     return when (this) {
         is DataState.Error -> throw (exception)

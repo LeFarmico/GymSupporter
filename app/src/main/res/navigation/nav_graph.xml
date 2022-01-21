@@ -92,7 +92,11 @@
     <dialog
         android:id="@+id/editWorkoutRecordFragment"
         android:name="com.lefarmico.detailed_record_workout.DetailedWorkoutRecordFragment"
-        android:label="EditWorkoutRecordFragment" />
+        android:label="EditWorkoutRecordFragment" >
+        <action
+            android:id="@+id/action_editWorkoutRecordFragment_to_workoutScreenFragment"
+            app:destination="@id/workoutScreenFragment" />
+    </dialog>
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.lefarmico.settings_screen.SettingsScreenFragment"

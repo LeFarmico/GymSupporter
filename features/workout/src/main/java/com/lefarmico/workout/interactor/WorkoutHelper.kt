@@ -28,9 +28,10 @@ class WorkoutHelper(
         title: String,
         date: LocalDate,
         time: LocalTime?,
-        exercises: List<CurrentWorkoutDto.ExerciseWithSets>
+        exercises: List<CurrentWorkoutDto.ExerciseWithSets>,
+        workoutId: Int = 0
     ): Single<WorkoutState> {
-        val workoutDto = WorkoutRecordsDto.Workout(date = date, title = title, time = time)
+        val workoutDto = WorkoutRecordsDto.Workout(id = workoutId, date = date, title = title, time = time)
         val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
             workoutDto,
             exercises.toRecordsDto()

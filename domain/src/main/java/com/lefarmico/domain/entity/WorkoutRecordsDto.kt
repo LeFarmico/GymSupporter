@@ -18,7 +18,8 @@ sealed class WorkoutRecordsDto {
     data class Exercise(
         val id: Int = 0,
         val workoutId: Int = 0,
-        val exerciseName: String
+        val exerciseName: String,
+        val libraryId: Int
     ) : WorkoutRecordsDto()
 
     data class Set(

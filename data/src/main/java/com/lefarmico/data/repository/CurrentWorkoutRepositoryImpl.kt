@@ -22,12 +22,13 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
     }
 
     override fun addExercise(exercise: CurrentWorkoutDto.Exercise): Single<DataState<Int>> {
-        val exerciseData = CurrentWorkoutData.Exercise(
-            libraryId = exercise.libraryId,
-            title = exercise.title
-        )
-        val curExData = CurrentWorkoutData.ExerciseWithSets(exerciseData)
+        val curExData = CurrentWorkoutData.ExerciseWithSets(exercise.toData())
         return dataBase.insertExercise(curExData)
+            .map { data -> dataStateResolver { data } }
+    }
+
+    override fun addExercises(exerciseList: List<CurrentWorkoutDto.ExerciseWithSets>): Single<DataState<Int>> {
+        return dataBase.insertExercises(exerciseList.toData())
             .map { data -> dataStateResolver { data } }
     }
 

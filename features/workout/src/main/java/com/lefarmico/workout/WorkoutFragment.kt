@@ -3,7 +3,6 @@ package com.lefarmico.workout
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
-import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
@@ -46,6 +45,10 @@ class WorkoutFragment :
                 val data = params as NewExercise
                 dispatchIntent(AddExercise(data.id))
             }
+            is UpdateWorkout -> {
+                val data = params as UpdateWorkout
+                dispatchIntent(LoadWorkoutRecord(data.recordWorkoutId))
+            }
             else -> {}
         }
     }
@@ -58,18 +61,13 @@ class WorkoutFragment :
         dispatchIntent(GetTime)
 
         actionModeCallback = object : EditStateActionBarCallback() {
-            override fun selectAllButtonHandler() {
-                dispatchIntent(EditState(SelectAll))
-            }
+            override fun selectAllButtonHandler() { dispatchIntent(EditState(SelectAll)) }
 
-            override fun removeButtonHandler() {
-                dispatchIntent(EditState(DeleteSelected))
-            }
+            override fun removeButtonHandler() { dispatchIntent(EditState(DeleteSelected)) }
 
-            override fun onDestroyHandler() {
-                dispatchIntent(EditState(Hide))
-            }
+            override fun onDestroyHandler() { dispatchIntent(EditState(Hide)) }
         }
+
         selectHandler = object : SelectItemsHandler<ExerciseWithSets>(adapter) {
             override fun selectedItemAction(item: ExerciseWithSets) {
                 dispatchIntent(DeleteExercise(item.exercise.id))
@@ -191,22 +189,9 @@ class WorkoutFragment :
         private const val KEY_PARAMS = "home_key"
 
         fun createBundle(data: Parcelable?): Bundle {
-            return Bundle().apply {
-                when (data) {
-                    is NewExercise -> putParcelable(KEY_PARAMS, data)
-                    is Empty -> putParcelable(KEY_PARAMS, data)
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            throw (
-                                IllegalArgumentException(
-                                    "data should be WorkoutScreenParams type." +
-                                        "But it's ${data!!.javaClass.canonicalName} type"
-                                )
-                                )
-                        }
-                    }
-                }
-            }
+            requireNotNull(data)
+            require(data is WorkoutScreenParams)
+            return Bundle().apply { putParcelable(KEY_PARAMS, data) }
         }
     }
 }

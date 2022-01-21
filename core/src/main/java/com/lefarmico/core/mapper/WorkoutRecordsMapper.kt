@@ -15,7 +15,8 @@ import java.time.format.DateTimeFormatter
 fun WorkoutRecordsDto.Exercise.toViewData() = WorkoutRecordsViewData.Exercise(
     id = id,
     exerciseName = exerciseName,
-    workoutId = workoutId
+    workoutId = workoutId,
+    libraryId = libraryId
 )
 
 /**
