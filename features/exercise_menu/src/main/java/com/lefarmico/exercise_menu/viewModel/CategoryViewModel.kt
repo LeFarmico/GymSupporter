@@ -12,7 +12,7 @@ import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
 import com.lefarmico.exercise_menu.intent.CategoryIntent
 import com.lefarmico.exercise_menu.intent.CategoryIntent.EditState.Action.*
-import com.lefarmico.exercise_menu.reduce
+import com.lefarmico.exercise_menu.reduceDto
 import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.navigation.Router
@@ -46,7 +46,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         repo.getCategories()
             .observeUi()
             .doAfterSuccess { dataState ->
-                val viewState = dataState.reduce()
+                val viewState = dataState.reduceDto()
                 mState.value = viewState
                 putToCache(viewState)
             }

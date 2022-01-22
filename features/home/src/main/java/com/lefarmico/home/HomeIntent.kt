@@ -29,4 +29,6 @@ sealed class HomeIntent : BaseIntent {
             object DeleteSelected : Action()
         }
     }
+
+    object BackToCurrentDate : HomeIntent()
 }

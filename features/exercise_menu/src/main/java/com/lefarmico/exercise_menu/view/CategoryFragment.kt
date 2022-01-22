@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.adapter.LibraryItemAdapter
@@ -65,6 +66,7 @@ class CategoryFragment :
     override fun setUpViews() {
         dispatchIntent(GetCategories)
         isAddButtonShown(false)
+        setUpToolbar(params.isFromWorkoutScreen)
 
         actionModeCallback = object : EditStateActionBarCallback() {
             override fun selectAllButtonHandler() { dispatchIntent(EditState(SelectAll)) }
@@ -83,7 +85,7 @@ class CategoryFragment :
                 require(category is LibraryViewData.Category)
                 dispatchIntent(ClickItem(category, params.isFromWorkoutScreen))
             }
-            recycler.adapter = adapter.apply {  }
+            recycler.adapter = adapter
             recycler.addItemDecoration(decorator, 0)
 
             plusButton.setOnClickListener {
@@ -175,11 +177,22 @@ class CategoryFragment :
         adapter.toggleSelectAll()
     }
 
+    private fun setUpToolbar(isFromWorkoutScreen: Boolean) {
+        requireActivity().title = getString(R.string.category_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
+            isFromWorkoutScreen
+        )
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(
+            isFromWorkoutScreen
+        )
+    }
+
     override fun receive(state: LibraryListState) {
         when (state) {
             is LibraryListState.ExceptionResult -> throw (state.exception)
             is LibraryListState.LibraryResult -> showCategories(state.libraryList)
             LibraryListState.Loading -> showLoading()
+            else -> {}
         }
     }
 

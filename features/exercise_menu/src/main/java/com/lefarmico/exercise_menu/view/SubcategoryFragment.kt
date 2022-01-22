@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.adapter.LibraryItemAdapter
@@ -64,6 +65,7 @@ class SubcategoryFragment :
 
     override fun setUpViews() {
         dispatchIntent(GetSubcategories(params.categoryId))
+        dispatchIntent(GetCategotyTitle(params.categoryId))
         isAddButtonShown(false)
 
         actionModeCallback = object : EditStateActionBarCallback() {
@@ -181,7 +183,14 @@ class SubcategoryFragment :
             is LibraryListState.ExceptionResult -> throw (state.exception)
             is LibraryListState.LibraryResult -> showSubcategories(state.libraryList)
             LibraryListState.Loading -> showLoading()
+            is LibraryListState.Title -> setTitle(state.title)
         }
+    }
+
+    private fun setTitle(title: String) {
+        requireActivity().title = title
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun receive(event: LibraryListEvent) {

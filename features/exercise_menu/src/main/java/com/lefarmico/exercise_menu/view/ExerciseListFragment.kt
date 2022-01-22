@@ -6,6 +6,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lefarmico.core.adapter.LibraryItemAdapter
 import com.lefarmico.core.base.BaseFragment
@@ -62,6 +63,7 @@ class ExerciseListFragment :
 
     override fun setUpViews() {
         dispatchIntent(GetExercises(params.subCategoryId))
+        dispatchIntent(GetSubcategoryTitle(params.subCategoryId))
 
         adapter.onClick = { exercise ->
             require(exercise is LibraryViewData.Exercise)
@@ -128,7 +130,14 @@ class ExerciseListFragment :
             is LibraryListState.ExceptionResult -> throw (state.exception)
             is LibraryListState.LibraryResult -> showExercises(state.libraryList)
             LibraryListState.Loading -> showLoading()
+            is LibraryListState.Title -> setTitle(state.title)
         }
+    }
+
+    private fun setTitle(title: String) {
+        requireActivity().title = title
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun receive(event: LibraryListEvent) {

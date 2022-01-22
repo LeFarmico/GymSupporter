@@ -3,6 +3,7 @@ package com.lefarmico.workout
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import com.lefarmico.core.adapter.CurrentExerciseAdapter
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
@@ -54,12 +55,12 @@ class WorkoutFragment :
     }
 
     override fun setUpViews() {
-
         dispatchIntent(Title.Get)
         dispatchIntent(Date.Get)
         dispatchIntent(Time.Get)
         dispatchIntent(Workout.New)
         dispatchIntent(SwitchState.Get)
+        setUpToolbar()
 
         actionModeCallback = object : EditStateActionBarCallback() {
             override fun selectAllButtonHandler() { dispatchIntent(EditState.SelectAll) }
@@ -158,6 +159,12 @@ class WorkoutFragment :
                 binding.workoutTime.visibility = View.GONE
             }
         }
+    }
+
+    private fun setUpToolbar() {
+        requireActivity().title = getString(R.string.workout_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun receive(state: WorkoutState) {

@@ -125,6 +125,16 @@ class HomeViewModel @Inject constructor(
             .doAfterSuccess { dto -> formatter(dto.formatter) }
             .subscribe()
     }
+    private fun backToCurrentDate() {
+        dateManager.selectMonth(LocalDate.now())
+            .observeUi()
+            .flatMap { dateManager.selectDate(LocalDate.now()) }
+            .doAfterSuccess {
+                getDates()
+                getMonth(HomeIntent.ChangeMonth.Change.Current)
+                getWorkoutRecords()
+            }.subscribe()
+    }
 
     override fun triggerIntent(intent: HomeIntent) {
         when (intent) {
@@ -136,6 +146,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToDetailsWorkoutScreen -> navigateToDetailsWorkout(intent.workoutId)
             HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
             is HomeIntent.EditState -> editStateAction(intent.action)
+            HomeIntent.BackToCurrentDate -> backToCurrentDate()
         }
     }
 }

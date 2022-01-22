@@ -26,7 +26,7 @@
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shape_button"
+        android:background="@drawable/ripple_button"
         app:layout_constraintStart_toEndOf="@id/edit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/background"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/details_button"
         app:layout_constraintBottom_toTopOf="@id/date"
         />
 
@@ -72,17 +71,17 @@
         app:layout_constraintBottom_toBottomOf="@id/date"
     />
 
-    <ImageView
-        android:id="@+id/details_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_outline_about_24"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/title"
-        android:contentDescription="@string/edit" />
+<!--    <ImageView-->
+<!--        android:id="@+id/details_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_outline_about_24"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/title"-->
+<!--        android:contentDescription="@string/edit" />-->
 
 
 

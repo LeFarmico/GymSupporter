@@ -9,9 +9,10 @@ import com.lefarmico.core.validator.ExistedValidator
 import com.lefarmico.core.validator.ValidateHandler
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent.*
-import com.lefarmico.exercise_menu.reduce
+import com.lefarmico.exercise_menu.reduceDto
 import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.navigation.Router
@@ -43,11 +44,19 @@ class SubcategoryViewModel @Inject constructor(
         repo.getSubCategories(categoryId)
             .observeUi()
             .doAfterSuccess { dataState ->
-                val viewState = dataState.reduce()
+                val viewState = dataState.reduceDto()
                 mState.value = viewState
                 putToCache(viewState)
             }
             .subscribe()
+    }
+
+    private fun getCategory(categoryId: Int) {
+        repo.getCategory(categoryId)
+            .observeUi()
+            .doAfterSuccess { dataState ->
+                mState.value = dataState.reduce()
+            }.subscribe()
     }
 
     private fun putToCache(state: LibraryListState) {
@@ -123,6 +132,14 @@ class SubcategoryViewModel @Inject constructor(
         router.show(Notification.TOAST, ToastBarParams(text))
     }
 
+    private fun DataState<LibraryDto.Category>.reduce(): LibraryListState {
+        return when (this) {
+            is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
+            DataState.Loading -> LibraryListState.Loading
+            is DataState.Success -> LibraryListState.Title(this.data.title)
+        }
+    }
+
     override fun triggerIntent(intent: SubcategoryIntent) {
         return when (intent) {
             is AddSubcategory -> addSubcategory(intent.title, intent.categoryId)
@@ -132,6 +149,7 @@ class SubcategoryViewModel @Inject constructor(
             is Validate -> validateSubject.onNext(intent.title)
             is DeleteSubCategory -> deleteSubcategory(intent.subcategoryId, intent.categoryId)
             is EditState -> editStateAction(intent.action)
+            is GetCategotyTitle -> getCategory(intent.categotyId)
         }
     }
 }

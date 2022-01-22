@@ -15,12 +15,21 @@ class MainActivity : BaseActivity<
     @Inject
     lateinit var router: Router
 
+    override fun setTitle(titleId: Int) {
+        super.setTitle(titleId)
+        supportActionBar?.title = title
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.appToolbar)
         supportActionBar?.elevation = 0f
         router.bind(this)
         router.bindNavigationUI(binding.bottomNavigation)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onResume() {

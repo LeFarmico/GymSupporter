@@ -9,4 +9,5 @@ sealed class LibraryListState : BaseState.State {
     data class LibraryResult(val libraryList: List<LibraryViewData>) : LibraryListState()
     object Loading : LibraryListState()
     data class ExceptionResult(val exception: Exception) : LibraryListState()
+    data class Title(val title: String) : LibraryListState()
 }

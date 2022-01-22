@@ -2,6 +2,7 @@ package com.lefarmico.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.lefarmico.core.adapter.CalendarAdapter
 import com.lefarmico.core.adapter.WorkoutRecordsAdapter
@@ -49,11 +50,29 @@ class HomeFragment :
         }
     }
 
-    override fun setUpViews() {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.edit -> {
+                dispatchIntent(EditState(Show))
+                true
+            }
+            R.id.today -> {
+                dispatchIntent(BackToCurrentDate)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun setUpViews() {
         dispatchIntent(ChangeMonth(Current))
         dispatchIntent(GetWorkoutRecordsByCurrentDate)
         dispatchIntent(GetDaysInMonth)
+        setUpToolbar()
 
         binding.apply {
             prevMonthButton.setOnClickListener { dispatchIntent(ChangeMonth(Prev)) }
@@ -87,18 +106,10 @@ class HomeFragment :
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.app_bar_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.edit -> {
-                dispatchIntent(EditState(Show))
-                true
-            }
-            else -> { false }
-        }
+    private fun setUpToolbar() {
+        requireActivity().title = getString(R.string.home_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(false)
     }
 
     private fun showLoading() {

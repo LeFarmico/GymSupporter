@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:background">@drawable/ripple_button</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+    <style name="ButtonStyle.Variant" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/ripple_button</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="ButtonStyle.Outline" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/shape_button_outline</item>
+        <item name="android:background">@drawable/ripple_button_outline</item>
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
@@ -22,8 +26,15 @@
         <item name="android:letterSpacing">0.0178571429</item>
     </style>
 
+    <style name="TextStyle.Toolbar">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
     <style name="TextStyle.Headline">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
     </style>
@@ -71,5 +82,13 @@
 
     <style name="SwitchStyle" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">?attr/colorSecondary</item>
+    </style>
+
+    <style name="ActionBarStyle" parent="Widget.AppCompat.ActionMode">
+        <item name="background">?attr/backgroundColor</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/TextStyle.Toolbar</item>
     </style>
 </resources>

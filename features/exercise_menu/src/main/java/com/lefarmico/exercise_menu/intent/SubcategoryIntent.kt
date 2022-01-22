@@ -29,4 +29,6 @@ sealed class SubcategoryIntent : BaseIntent {
     }
 
     data class DeleteSubCategory(val subcategoryId: Int, val categoryId: Int) : SubcategoryIntent()
+
+    data class GetCategotyTitle(val categotyId: Int) : SubcategoryIntent()
 }

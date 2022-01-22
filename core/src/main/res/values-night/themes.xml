@@ -19,8 +19,9 @@
         <!-- Action mode. -->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="actionModeBackground">?attr/backgroundColor</item>
 
-        <!-- App bar. -->
+        <!-- Toolbar. -->
         <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

@@ -5,7 +5,7 @@
     <item
         android:id="@+id/select_all"
         android:title="@string/select_all"
-        app:showAsAction="withText"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_select_all_24"
         />
 

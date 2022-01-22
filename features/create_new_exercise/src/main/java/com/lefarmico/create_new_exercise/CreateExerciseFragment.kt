@@ -3,6 +3,7 @@ package com.lefarmico.create_new_exercise
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
@@ -31,6 +32,7 @@ class CreateExerciseFragment : BaseFragment<
     override fun setUpViews() {
         dispatchIntent(GetExercises(params.subCategoryId))
         isAddButtonActive(false)
+        setUpToolbar()
 
         binding.apply {
             addButton.setOnClickListener {
@@ -62,6 +64,12 @@ class CreateExerciseFragment : BaseFragment<
         binding.addButton.alpha = 1f
         binding.addButton.isClickable = true
         binding.addButton.focusable = View.FOCUSABLE
+    }
+
+    private fun setUpToolbar() {
+        requireActivity().title = getString(R.string.create_new_exercise_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun receive(state: CreateExerciseState) {
