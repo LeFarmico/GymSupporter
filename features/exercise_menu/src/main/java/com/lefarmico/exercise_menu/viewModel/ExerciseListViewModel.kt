@@ -71,7 +71,7 @@ class ExerciseListViewModel @Inject constructor(
 
     override fun triggerIntent(intent: ExerciseIntent) {
         return when (intent) {
-            is ClickItem -> onExerciseClick(intent.item.subCategoryId, intent.isFromWorkoutScreen)
+            is ClickItem -> onExerciseClick(intent.item.id, intent.isFromWorkoutScreen)
             is CreateNewExercise -> createNewExercise(intent.subcategoryId, intent.isFromWorkoutScreen)
             is GetExercises -> getExercises(intent.subcategoryId)
             is ShowToast -> showToast(intent.text)

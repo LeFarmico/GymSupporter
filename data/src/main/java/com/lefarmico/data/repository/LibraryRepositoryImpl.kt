@@ -38,9 +38,8 @@ class LibraryRepositoryImpl @Inject constructor(
 
     override fun getExercise(exerciseId: Int): Single<DataState<LibraryDto.Exercise>> {
         return dao.getExercise(exerciseId)
-            .doOnSubscribe { DataState.Loading }
-            .doOnError { DataState.Error(it as Exception) }
-            .map { data -> DataState.Success(data.toDto()) }
+            .map { data ->
+                DataState.Success(data.toDto()) }
     }
 
     override fun addCategory(category: LibraryDto.Category): Single<DataState<Long>> {

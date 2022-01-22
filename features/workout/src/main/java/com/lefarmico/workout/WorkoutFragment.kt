@@ -9,9 +9,9 @@ import com.lefarmico.core.entity.CurrentWorkoutViewData.ExerciseWithSets
 import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.EditStateActionBarCallback
 import com.lefarmico.navigation.params.WorkoutScreenParams
-import com.lefarmico.navigation.params.WorkoutScreenParams.*
+import com.lefarmico.navigation.params.WorkoutScreenParams.NewExercise
+import com.lefarmico.navigation.params.WorkoutScreenParams.UpdateWorkout
 import com.lefarmico.workout.WorkoutIntent.*
-import com.lefarmico.workout.WorkoutIntent.EditState.Action.*
 import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
 
 class WorkoutFragment :
@@ -23,9 +23,9 @@ class WorkoutFragment :
     ) {
 
     private val adapter = CurrentExerciseAdapter().apply {
-        plusButtonCallback = { dispatchIntent(StartSetParameterDialog(it)) }
-        minusButtonCallback = { dispatchIntent(DeleteLastSet(it)) }
-        infoButtonCallback = { dispatchIntent(GoToExerciseInfo(it)) }
+        plusButtonCallback = { dispatchIntent(Dialog.SetParamsDialog(it)) }
+        minusButtonCallback = { dispatchIntent(ExSet.DeleteLastExSet(it)) }
+        infoButtonCallback = { dispatchIntent(Navigate.ExerciseDetails(it)) }
     }
 
     private var actionMode: ActionMode? = null
@@ -43,11 +43,11 @@ class WorkoutFragment :
         when (params) {
             is NewExercise -> {
                 val data = params as NewExercise
-                dispatchIntent(AddExercise(data.id))
+                dispatchIntent(Exercise.Add(data.id))
             }
             is UpdateWorkout -> {
                 val data = params as UpdateWorkout
-                dispatchIntent(LoadWorkoutRecord(data.recordWorkoutId))
+                dispatchIntent(Workout.Load(data.recordWorkoutId))
             }
             else -> {}
         }
@@ -55,38 +55,37 @@ class WorkoutFragment :
 
     override fun setUpViews() {
 
-        dispatchIntent(GetTitle)
-        dispatchIntent(GetExercises)
-        dispatchIntent(GetSelectedDate)
-        dispatchIntent(GetTime)
+        dispatchIntent(Title.Get)
+        dispatchIntent(Date.Get)
+        dispatchIntent(Time.Get)
+        dispatchIntent(Workout.New)
+        dispatchIntent(SwitchState.Get)
 
         actionModeCallback = object : EditStateActionBarCallback() {
-            override fun selectAllButtonHandler() { dispatchIntent(EditState(SelectAll)) }
-
-            override fun removeButtonHandler() { dispatchIntent(EditState(DeleteSelected)) }
-
-            override fun onDestroyHandler() { dispatchIntent(EditState(Hide)) }
+            override fun selectAllButtonHandler() { dispatchIntent(EditState.SelectAll) }
+            override fun removeButtonHandler() { dispatchIntent(EditState.DeleteSelected) }
+            override fun onDestroyHandler() { dispatchIntent(EditState.Hide) }
         }
 
         selectHandler = object : SelectItemsHandler<ExerciseWithSets>(adapter) {
             override fun selectedItemAction(item: ExerciseWithSets) {
-                dispatchIntent(DeleteExercise(item.exercise.id))
+                dispatchIntent(Exercise.Delete(item.exercise.id))
             }
         }
 
         binding.workoutTime.setOnClickListener {
-            dispatchIntent(StartTimePickerDialog)
+            dispatchIntent(Dialog.TimeDialog)
         }
         binding.schedulerSwitch.setOnCheckedChangeListener { _, isChecked ->
-            dispatchIntent(SwitchTimeScheduler(isChecked))
+            dispatchIntent(SwitchState.Set(isChecked))
         }
         binding.apply {
             listRecycler.adapter = adapter
 
-            addExButton.setOnClickListener { dispatchIntent(GoToCategoryScreen) }
-            finishButton.setOnClickListener { dispatchIntent(FinishWorkout) }
-            workoutTitle.setOnClickListener { dispatchIntent(StartWorkoutTitleDialog) }
-            workoutDate.setOnClickListener { dispatchIntent(StartCalendarPickerDialog) }
+            addExButton.setOnClickListener { dispatchIntent(Navigate.CategoryMenu) }
+            finishButton.setOnClickListener { dispatchIntent(Workout.Finish) }
+            workoutTitle.setOnClickListener { dispatchIntent(Dialog.TitleDialog) }
+            workoutDate.setOnClickListener { dispatchIntent(Dialog.CalendarDialog) }
         }
     }
 
@@ -97,7 +96,7 @@ class WorkoutFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit -> {
-                dispatchIntent(EditState(Show))
+                dispatchIntent(EditState.Show)
                 true
             }
             else -> false
@@ -125,29 +124,16 @@ class WorkoutFragment :
         actionMode?.finish()
     }
 
-    private fun setWorkoutTitle(title: String) {
+    private fun workoutTitle(title: String) {
         binding.workoutTitle.text = title
     }
 
-    private fun setWorkoutDate(date: String) {
+    private fun workoutDate(date: String) {
         binding.workoutDate.text = date
     }
 
-    private fun setWorkoutTime(time: String) {
-        when (time != "") {
-            true -> {
-                binding.schedulerSwitch.isChecked = true
-                binding.workoutTime.text = time
-                binding.schedulerText.alpha = 1f
-                binding.workoutTime.visibility = View.VISIBLE
-            }
-            false -> {
-                binding.schedulerSwitch.isChecked = false
-                binding.workoutTime.text = time
-                binding.schedulerText.alpha = 0.5f
-                binding.workoutTime.visibility = View.GONE
-            }
-        }
+    private fun workoutTime(time: String) {
+        binding.workoutTime.text = time
     }
 
     private fun deleteSelectedExercises() {
@@ -159,15 +145,30 @@ class WorkoutFragment :
         adapter.toggleSelectAll()
     }
 
+    private fun switchState(state: Boolean) {
+        when (state) {
+            true -> {
+                binding.schedulerSwitch.isChecked = state
+                binding.schedulerText.alpha = 1f
+                binding.workoutTime.visibility = View.VISIBLE
+            }
+            false -> {
+                binding.schedulerSwitch.isChecked = state
+                binding.schedulerText.alpha = 0.5f
+                binding.workoutTime.visibility = View.GONE
+            }
+        }
+    }
+
     override fun receive(state: WorkoutState) {
         when (state) {
             WorkoutState.Loading -> showLoading()
-            is WorkoutState.DateResult -> setWorkoutDate(state.date)
+            is WorkoutState.DateResult -> workoutDate(state.date)
             is WorkoutState.ExceptionResult -> throw (state.exception)
             is WorkoutState.ExerciseResult -> showExercises(state.exerciseList)
-            is WorkoutState.TitleResult -> setWorkoutTitle(state.title)
-            is WorkoutState.TimeResult -> setWorkoutTime(state.time)
-            is WorkoutState.SwitchState -> binding.schedulerSwitch.isChecked = state.isOn
+            is WorkoutState.TitleResult -> workoutTitle(state.title)
+            is WorkoutState.TimeResult -> workoutTime(state.time)
+            is WorkoutState.SwitchState -> switchState(state.isOn)
             is WorkoutState.EndWorkoutResult -> dispatchIntent(CloseWorkout(state.workoutId.toInt()))
         }
     }
@@ -181,7 +182,7 @@ class WorkoutFragment :
             WorkoutEvent.DeleteSelectedExercises -> deleteSelectedExercises()
             WorkoutEvent.DeselectAllExercises -> {}
             is WorkoutEvent.ExceptionEvent -> throw (event.exception)
-            is WorkoutEvent.SetParamsDialog -> dispatchIntent(StartSetParameterDialog(event.exerciseId))
+            is WorkoutEvent.SetParamsDialog -> dispatchIntent(Dialog.SetParamsDialog(event.exerciseId))
         }
     }
 

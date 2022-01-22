@@ -16,7 +16,8 @@
 
         <receiver android:name="com.lefarmico.workout_notification.RemindReceiver"/>
         <activity android:name=".view.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -1,5 +1,8 @@
 package com.lefarmico.workout.interactor
 
+import com.lefarmico.core.extensions.observeUi
+import com.lefarmico.domain.repository.LibraryRepository
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.dialog.Dialog
 import com.lefarmico.navigation.notification.Notification
@@ -7,14 +10,14 @@ import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.params.SetParameterParams
 import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalTime
 
 class NavigateHelper(
-    private val router: Router
+    private val router: Router,
+    private val libraryRepository: LibraryRepository
 ) {
-
-    private var title = "Your workout"
 
     fun startWorkoutTitleDialog(title: String, callback: (String) -> Unit) {
         val dialog = Dialog.FieldEditorDialog(title) {
@@ -46,10 +49,19 @@ class NavigateHelper(
 
     fun navigateToExerciseInfo(exerciseId: Int, action: () -> Unit) {
         action()
-        router.navigate(
-            screen = Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT,
-            data = LibraryParams.Exercise(exerciseId)
-        )
+        libraryRepository.getExercise(exerciseId)
+            .observeUi()
+            .onErrorReturn { DataState.Error(it as Exception) }
+            .doAfterSuccess {
+                if (it is DataState.Error) {
+                    showToast("Looks like this exercise is not exist")
+                } else {
+                    router.navigate(
+                        screen = Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT,
+                        data = LibraryParams.Exercise(exerciseId)
+                    )
+                }
+            }.subscribe()
     }
 
     fun navigateToCategoryScreen(action: () -> Unit) {

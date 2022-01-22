@@ -1,7 +1,6 @@
 package com.lefarmico.home
 
 import com.lefarmico.core.mapper.toViewData
-import com.lefarmico.domain.entity.CalendarItemDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.utils.DataState
 import java.time.LocalDate
@@ -16,14 +15,6 @@ fun DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>.reduce(
         is DataState.Error -> HomeState.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.WorkoutResult(this.data.toViewData(dateFormatter, timeFormatter))
-    }
-}
-@JvmName("reduceCalendarItemDto")
-fun DataState<List<CalendarItemDto>>.reduce(): HomeState {
-    return when (this) {
-        is DataState.Error -> HomeState.ExceptionResult(this.exception)
-        DataState.Loading -> HomeState.Loading
-        is DataState.Success -> HomeState.CalendarResult(this.data.toViewData())
     }
 }
 
