@@ -8,7 +8,11 @@ interface LibraryRepository : BaseRepository {
 
     fun getCategories(): Single<DataState<List<LibraryDto.Category>>>
 
+    fun getCategory(categoryId: Int): Single<DataState<LibraryDto.Category>>
+
     fun getSubCategories(categoryId: Int): Single<DataState<List<LibraryDto.SubCategory>>>
+
+    fun getSubCategory(subcategoryId: Int): Single<DataState<LibraryDto.SubCategory>>
 
     fun getExercises(subCategoryId: Int): Single<DataState<List<LibraryDto.Exercise>>>
 

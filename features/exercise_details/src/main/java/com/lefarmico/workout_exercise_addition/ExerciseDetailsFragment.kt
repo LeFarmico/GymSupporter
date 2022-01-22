@@ -2,6 +2,7 @@ package com.lefarmico.workout_exercise_addition
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.appcompat.app.AppCompatActivity
 import com.lefarmico.core.BuildConfig
 import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
@@ -21,6 +22,7 @@ class ExerciseDetailsFragment : BaseFragment<
     }
 
     override fun observeView() {
+        setUpToolbar()
         val exerciseId = params.exerciseId
         dispatchIntent(ExerciseDetailsIntent.GetExercise(exerciseId))
     }
@@ -28,6 +30,12 @@ class ExerciseDetailsFragment : BaseFragment<
     private fun showExerciseDetails(libraryExercise: LibraryViewData.Exercise) {
         binding.exerciseTitleTextView.text = libraryExercise.title
         binding.exerciseDescriptionTextView.text = libraryExercise.description
+    }
+
+    private fun setUpToolbar() {
+        requireActivity().title = getString(R.string.exercise_details_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun receive(state: ExerciseDetailsState) {

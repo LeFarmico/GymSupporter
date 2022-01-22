@@ -4,8 +4,8 @@ import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.state.LibraryListState
-
-fun DataState<List<LibraryDto>>.reduce(): LibraryListState {
+@JvmName("reduceDtoTitle")
+fun DataState<List<LibraryDto>>.reduceDto(): LibraryListState {
     return when (this) {
         is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
         DataState.Loading -> LibraryListState.Loading

@@ -37,7 +37,7 @@ class WorkoutRecordsAdapter :
         private val time = itemSocketExercisePreviewBinding.time
 
         val selectToggleButton = itemSocketExercisePreviewBinding.editButton
-        val detailsButton = itemSocketExercisePreviewBinding.detailsButton
+        val workoutItem = itemSocketExercisePreviewBinding.background
 
         fun bind(noteWorkout: WorkoutRecordsViewData.Workout) {
             val dateFormatted = noteWorkout.date
@@ -63,7 +63,7 @@ class WorkoutRecordsAdapter :
     override fun onBindViewHolder(holder: WorkoutNoteViewHolder, position: Int) {
         holder.apply {
             bind(items[position].workout)
-            detailsButton.setOnClickListener {
+            workoutItem.setOnClickListener {
                 onEditButtonAction(items[position].workout)
             }
             selectToggleButton.setOnCheckedChangeListener { _, isChecked ->

@@ -192,7 +192,7 @@ class WorkoutViewModel @Inject constructor(
 
     private fun editStateAction(action: EditState) {
         val event = when (action) {
-            EditState.DeleteSelected -> WorkoutEvent.HideEditState
+            EditState.DeleteSelected -> WorkoutEvent.DeleteSelectedExercises
             EditState.DeselectAll -> WorkoutEvent.DeselectAllExercises
             EditState.Hide -> WorkoutEvent.HideEditState
             EditState.SelectAll -> WorkoutEvent.SelectAllExercises

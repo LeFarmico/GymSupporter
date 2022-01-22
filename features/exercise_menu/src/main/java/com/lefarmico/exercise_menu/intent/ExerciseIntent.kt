@@ -30,4 +30,6 @@ sealed class ExerciseIntent : BaseIntent {
     }
 
     data class DeleteExercise(val exerciseId: Int, val subcategoryId: Int) : ExerciseIntent()
+
+    data class GetSubcategoryTitle(val subcategoryId: Int) : ExerciseIntent()
 }

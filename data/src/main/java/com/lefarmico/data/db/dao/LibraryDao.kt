@@ -10,8 +10,14 @@ interface LibraryDao {
     @Query("SELECT * FROM library_category")
     fun getCategories(): Single<List<LibraryData.Category>>
 
+    @Query("SELECT * FROM library_category WHERE id = :categoryId")
+    fun getCategory(categoryId: Int): Single<LibraryData.Category>
+
     @Query("SELECT * FROM library_sub_category WHERE category_id = :categoryId")
     fun getSubCategories(categoryId: Int): Single<List<LibraryData.SubCategory>>
+
+    @Query("SELECT * FROM library_sub_category WHERE id = :subcategoryId")
+    fun getSubcategory(subcategoryId: Int): Single<LibraryData.SubCategory>
 
     @Query("SELECT * FROM library_exercise WHERE sub_category_id = :subCategoryId")
     fun getExercises(subCategoryId: Int): Single<List<LibraryData.Exercise>>

@@ -18,11 +18,12 @@
 
         <!-- Action mode. -->
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="actionModeStyle">@style/ActionBarStyle</item>
 
         <!-- App bar. -->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="toolbarStyle">@style/ToolBarStyle</item>
 
         <!-- Date picker theme -->
         <item name="android:datePickerStyle">@style/DatePickerTheme</item>
