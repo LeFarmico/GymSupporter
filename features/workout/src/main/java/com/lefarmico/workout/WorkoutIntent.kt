@@ -2,54 +2,68 @@ package com.lefarmico.workout
 
 import com.lefarmico.core.base.BaseIntent
 import com.lefarmico.navigation.params.SetParameterParams
+import java.time.LocalDate
+import java.time.LocalTime
 
 sealed class WorkoutIntent : BaseIntent {
 
-    data class AddExercise(val id: Int) : WorkoutIntent()
-
-    data class DeleteExercise(val id: Int) : WorkoutIntent()
-
-    data class AddSetToExercise(val params: SetParameterParams) : WorkoutIntent()
-
-    data class DeleteLastSet(val exerciseId: Int) : WorkoutIntent()
-
-    object GetExercises : WorkoutIntent()
-
-    object GoToCategoryScreen : WorkoutIntent()
-
-    object FinishWorkout : WorkoutIntent()
-
-    data class GoToExerciseInfo(val libraryId: Int) : WorkoutIntent()
-
-    data class ShowToast(val text: String) : WorkoutIntent()
-
-    data class SwitchTimeScheduler(val isOn: Boolean) : WorkoutIntent()
-
-    data class StartSetParameterDialog(val exerciseId: Int) : WorkoutIntent()
-
-    object StartCalendarPickerDialog : WorkoutIntent()
-
-    object StartWorkoutTitleDialog : WorkoutIntent()
-
-    object StartTimePickerDialog : WorkoutIntent()
-
-    object GetSelectedDate : WorkoutIntent()
-
-    object GetTitle : WorkoutIntent()
-
-    object GetTime : WorkoutIntent()
+    sealed class ExSet : WorkoutIntent() {
+        data class AddExSet(val params: SetParameterParams) : ExSet()
+        data class DeleteLastExSet(val exerciseId: Int) : ExSet()
+    }
 
     data class CloseWorkout(val workoutId: Int) : WorkoutIntent()
 
-    data class EditState(val action: Action) : WorkoutIntent() {
-        sealed class Action {
-            object Show : Action()
-            object Hide : Action()
-            object SelectAll : Action()
-            object DeselectAll : Action()
-            object DeleteSelected : Action()
-        }
+    data class ShowToast(val text: String) : WorkoutIntent()
+
+    sealed class Navigate : WorkoutIntent() {
+        data class ExerciseDetails(val exLibId: Int) : Navigate()
+        object CategoryMenu : Navigate()
+        object Home : Navigate()
     }
 
-    data class LoadWorkoutRecord(val workoutRecordId: Int) : WorkoutIntent()
+    sealed class Dialog : WorkoutIntent() {
+        data class SetParamsDialog(val exerciseId: Int) : Dialog()
+        object CalendarDialog : Dialog()
+        object TitleDialog : Dialog()
+        object TimeDialog : Dialog()
+    }
+    sealed class Date : WorkoutIntent() {
+        object Get : Date()
+        data class Set(val date: LocalDate) : Date()
+    }
+
+    sealed class Title : WorkoutIntent() {
+        object Get : Title()
+        data class Set(val title: String) : Title()
+    }
+
+    sealed class Exercise : WorkoutIntent() {
+        data class Add(val id: Int) : Exercise()
+        data class Delete(val id: Int) : Exercise()
+    }
+
+    sealed class Time : WorkoutIntent() {
+        object Get : Time()
+        data class Set(val time: LocalTime) : Time()
+    }
+
+    sealed class SwitchState : WorkoutIntent() {
+        object Get : SwitchState()
+        data class Set(val state: Boolean) : SwitchState()
+    }
+
+    sealed class EditState : WorkoutIntent() {
+        object Show : EditState()
+        object Hide : EditState()
+        object SelectAll : EditState()
+        object DeselectAll : EditState()
+        object DeleteSelected : EditState()
+    }
+
+    sealed class Workout : WorkoutIntent() {
+        object New : Workout()
+        data class Load(val workoutRecordId: Int) : Workout()
+        object Finish : Workout()
+    }
 }

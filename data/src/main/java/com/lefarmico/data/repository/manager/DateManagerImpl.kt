@@ -71,4 +71,9 @@ class DateManagerImpl @Inject constructor(
         return dateCache.setClickedDate(localDate)
             .map { dataStateResolver { it } }
     }
+
+    override fun selectMonth(localDate: LocalDate): Single<DataState<LocalDate>> {
+        return dateCache.selectMonth(localDate)
+            .map { dataStateResolver { it } }
+    }
 }

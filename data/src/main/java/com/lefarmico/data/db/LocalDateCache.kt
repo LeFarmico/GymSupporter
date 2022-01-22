@@ -35,6 +35,15 @@ class LocalDateCache {
         }
     }
 
+    fun selectMonth(localDate: LocalDate): Single<LocalDate> {
+        return Single.create {
+            synchronized(lock) {
+                clickedMonth = localDate
+                it.onSuccess(clickedDate)
+            }
+        }
+    }
+
     fun getClickedDate(): Single<LocalDate> {
         return Single.create {
             synchronized(lock) {

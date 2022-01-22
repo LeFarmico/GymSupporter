@@ -23,4 +23,6 @@ interface DateManager {
     fun setAndGetFormattedDate(localDate: LocalDate, formatter: DateTimeFormatter): Single<DataState<String>>
 
     fun selectDate(localDate: LocalDate): Single<DataState<LocalDate>>
+
+    fun selectMonth(localDate: LocalDate): Single<DataState<LocalDate>>
 }

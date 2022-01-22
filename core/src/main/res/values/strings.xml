@@ -28,6 +28,7 @@
     <!-- Button description   -->
     <string name="dropdown_sets_list">Dropdown sets list</string>
     <string name="edit">Edit</string>
+    <string name="finish">Finish</string>
     <string name="about">About</string>
     <string name="save_changes">Save changes</string>
     <string name="drag_and_drop">Drag and drop</string>

@@ -32,10 +32,8 @@ class WorkoutHelper(
         workoutId: Int = 0
     ): Single<WorkoutState> {
         val workoutDto = WorkoutRecordsDto.Workout(id = workoutId, date = date, title = title, time = time)
-        val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(
-            workoutDto,
-            exercises.toRecordsDto()
-        )
+        val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(workoutDto, exercises.toRecordsDto())
+
         return recordsRepository.addWorkoutWithExAndSets(workAndExDto)
             .map { dataState -> dataState.reduceWorkoutId() }
     }

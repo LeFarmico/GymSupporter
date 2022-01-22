@@ -2,11 +2,13 @@ package com.lefarmico.home
 
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
+import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.repository.manager.DateManager
 import com.lefarmico.domain.repository.manager.FormatterManager
 import com.lefarmico.domain.repository.manager.FormatterMonthManager
 import com.lefarmico.domain.repository.manager.FormatterTimeManager
+import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
 import com.lefarmico.home.HomeIntent.EditState.Action.*
 import com.lefarmico.navigation.Router
@@ -20,12 +22,67 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repo: WorkoutRecordsRepository,
     private val router: Router,
-    private val dateRepo: DateManager,
+    private val dateManager: DateManager,
     private val formatterMonthManager: FormatterMonthManager,
     private val formatterManager: FormatterManager,
     private val formatterTimeManager: FormatterTimeManager
 ) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
+
+    private fun getDates() {
+        dateManager.getCurrentDaysInMonth()
+            .observeUi()
+            .zipWith(dateManager.getSelectedDate()) { dates, selDate ->
+                require(dates is DataState.Success)
+                require(selDate is DataState.Success)
+                Pair(dates.data, selDate.data)
+            }.doAfterSuccess { pairDates ->
+                mState.value = HomeState.CalendarResult(pairDates.first.toViewData(), pairDates.second)
+            }.subscribe()
+    }
+
+    private fun getWorkoutRecordsByDate(localDate: LocalDate) {
+        dateManager.selectDate(localDate)
+            .observeUi()
+            .doAfterSuccess { getWorkoutRecords() }
+            .subscribe()
+    }
+
+    private fun getWorkoutRecords() {
+        dateManager.getSelectedDate()
+            .observeUi()
+            .flatMap { dataState ->
+                repo.getWorkoutWithExerciseAndSetsByDate(dataState.resolve()).observeUi()
+            }.doAfterSuccess { dataState ->
+                getSelectedFormatterListener { dateF, timeF -> mState.value = dataState.reduce(dateF, timeF) }
+            }.subscribe()
+    }
+
+    private fun getMonth(month: HomeIntent.ChangeMonth.Change) {
+        val dateObservable = when (month) {
+            HomeIntent.ChangeMonth.Change.Current -> dateManager.currentMonth()
+            HomeIntent.ChangeMonth.Change.Next -> dateManager.nextMonth()
+            HomeIntent.ChangeMonth.Change.Prev -> dateManager.prevMonth()
+        }
+        currentMonthFormatterListener { formatter ->
+            dateObservable
+                .observeUi()
+                .doAfterSuccess { dataState ->
+                    mState.value = dataState.map { it.format(formatter) }.reduce()
+                    getDates()
+                }.subscribe()
+        }
+    }
+
+    private fun removeWorkout(workoutId: Int) {
+        repo.deleteWorkoutWithExAndSets(workoutId)
+            .observeUi()
+            .doAfterSuccess {
+                getWorkoutRecords()
+                getDates()
+            }
+            .subscribe()
+    }
 
     private fun navigateToWorkout() {
         dispatchIntent(HomeIntent.EditState(Hide))
@@ -43,49 +100,6 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun removeWorkout(workoutId: Int) {
-        repo.deleteWorkoutWithExAndSets(workoutId)
-            .observeUi()
-            .doAfterSuccess {
-                getWorkoutRecordsByDate()
-                getMonthDates()
-            }
-            .subscribe()
-    }
-
-    private fun getMonthDates() {
-        dateRepo.getCurrentDaysInMonth()
-            .observeUi()
-            .doAfterSuccess { dataState -> mState.value = dataState.reduce() }
-            .subscribe()
-    }
-
-    private fun getWorkoutRecordsByDate() {
-        dateRepo.getSelectedDate()
-            .observeUi()
-            .flatMap { dataState ->
-                repo.getWorkoutWithExerciseAndSetsByDate(dataState.resolve()).observeUi()
-            }.doAfterSuccess { dataState ->
-                getSelectedFormatters { dateF, timeF -> mState.value = dataState.reduce(dateF, timeF) }
-            }.subscribe()
-    }
-
-    private fun changeMonth(month: HomeIntent.ChangeMonth.Change) {
-        val dateObservable = when (month) {
-            HomeIntent.ChangeMonth.Change.Current -> dateRepo.currentMonth()
-            HomeIntent.ChangeMonth.Change.Next -> dateRepo.nextMonth()
-            HomeIntent.ChangeMonth.Change.Prev -> dateRepo.prevMonth()
-        }
-        currentMonthFormatterListener { formatter ->
-            dateObservable
-                .observeUi()
-                .doAfterSuccess { dataState ->
-                    mState.value = dataState.map { it.format(formatter) }.reduce()
-                    getMonthDates()
-                }.subscribe()
-        }
-    }
-
     private fun editStateAction(action: HomeIntent.EditState.Action) {
         val event = when (action) {
             DeselectAll -> HomeEvent.DeselectAllWorkouts
@@ -97,14 +111,7 @@ class HomeViewModel @Inject constructor(
         mEvent.postValue(event)
     }
 
-    private fun setWorkoutRecordsByDate(localDate: LocalDate) {
-        dateRepo.selectDate(localDate)
-            .observeUi()
-            .doAfterSuccess { getWorkoutRecordsByDate() }
-            .subscribe()
-    }
-
-    private fun getSelectedFormatters(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
+    private fun getSelectedFormatterListener(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
         formatterManager.getSelectedFormatter()
             .observeUi()
             .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF -> Pair(dateF, timeF) }
@@ -121,11 +128,11 @@ class HomeViewModel @Inject constructor(
 
     override fun triggerIntent(intent: HomeIntent) {
         when (intent) {
-            is HomeIntent.ClickDate -> setWorkoutRecordsByDate(intent.localDate)
+            is HomeIntent.ClickDate -> getWorkoutRecordsByDate(intent.localDate)
             is HomeIntent.DeleteWorkout -> removeWorkout(intent.workoutId)
-            is HomeIntent.ChangeMonth -> changeMonth(intent.change)
-            HomeIntent.GetDaysInMonth -> getMonthDates()
-            HomeIntent.GetWorkoutRecordsByCurrentDate -> getWorkoutRecordsByDate()
+            is HomeIntent.ChangeMonth -> getMonth(intent.change)
+            HomeIntent.GetDaysInMonth -> getDates()
+            HomeIntent.GetWorkoutRecordsByCurrentDate -> getWorkoutRecords()
             is HomeIntent.NavigateToDetailsWorkoutScreen -> navigateToDetailsWorkout(intent.workoutId)
             HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
             is HomeIntent.EditState -> editStateAction(intent.action)

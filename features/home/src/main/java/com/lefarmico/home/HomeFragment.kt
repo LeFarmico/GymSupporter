@@ -34,7 +34,7 @@ class HomeFragment :
     private var actionModeCallback: EditStateActionBarCallback? = null
 
     private val noteAdapter = WorkoutRecordsAdapter()
-    private val calendarAdapter = CalendarAdapter(LocalDate.now())
+    private lateinit var calendarAdapter: CalendarAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +65,8 @@ class HomeFragment :
 
             val decoratorHr = ItemSpaceDecoration(1, ItemSpaceDecoration.HORIZONTAL)
             val decoratorVert = ItemSpaceDecoration(4, ItemSpaceDecoration.VERTICAL)
+            bindAdapter(LocalDate.now())
             calendar.addItemDecoration(decoratorHr, 0)
-            calendar.adapter = calendarAdapter.apply {
-                clickListener = { localDate -> dispatchIntent(ClickDate(localDate)) }
-            }
             workoutNotes.addItemDecoration(decoratorVert, 0)
             workoutNotes.adapter = noteAdapter.apply {
                 onEditButtonAction = { workoutRecordsVD ->
@@ -78,15 +76,9 @@ class HomeFragment :
         }
 
         actionModeCallback = object : EditStateActionBarCallback() {
-            override fun selectAllButtonHandler() {
-                dispatchIntent(EditState(SelectAll))
-            }
-            override fun removeButtonHandler() {
-                dispatchIntent(EditState(DeleteSelected))
-            }
-            override fun onDestroyHandler() {
-                dispatchIntent(EditState(Hide))
-            }
+            override fun selectAllButtonHandler() { dispatchIntent(EditState(SelectAll)) }
+            override fun removeButtonHandler() { dispatchIntent(EditState(DeleteSelected)) }
+            override fun onDestroyHandler() { dispatchIntent(EditState(Hide)) }
         }
         selectHandler = object : SelectItemsHandler<WorkoutWithExercisesAndSets>(noteAdapter) {
             override fun selectedItemAction(item: WorkoutWithExercisesAndSets) {
@@ -130,9 +122,11 @@ class HomeFragment :
         noteAdapter.items = items
     }
 
-    private fun showCalendar(items: List<CalendarItemViewData>) {
+    private fun showCalendar(items: List<CalendarItemViewData>, selectedDate: LocalDate) {
+        bindAdapter(selectedDate)
+        binding.calendar.adapter = calendarAdapter
         calendarAdapter.items = items.toMutableList()
-        recyclerScrollToPos(items, LocalDate.now())
+        recyclerScrollToPos(items, selectedDate)
     }
 
     private fun showCurrentMonthAndYear(month: MonthAndYearText) {
@@ -171,6 +165,14 @@ class HomeFragment :
         binding.calendar.scrollToPosition(pos - 1)
     }
 
+    private fun bindAdapter(clickedDate: LocalDate) {
+        calendarAdapter = CalendarAdapter(clickedDate).apply {
+            clickListener = { localDate ->
+                dispatchIntent(ClickDate(localDate))
+            }
+        }
+    }
+
     override fun receive(event: HomeEvent) {
         when (event) {
             HomeEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
@@ -183,7 +185,7 @@ class HomeFragment :
 
     override fun receive(state: HomeState) {
         when (state) {
-            is HomeState.CalendarResult -> showCalendar(state.calendarItemList)
+            is HomeState.CalendarResult -> showCalendar(state.calendarItemList, state.selectedDate)
             is HomeState.ExceptionResult -> throw (state.exception)
             HomeState.Loading -> showLoading()
             is HomeState.MonthAndYearResult -> showCurrentMonthAndYear(state.monthAndYearText)
