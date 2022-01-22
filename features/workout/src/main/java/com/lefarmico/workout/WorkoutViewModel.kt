@@ -37,7 +37,7 @@ class WorkoutViewModel @Inject constructor(
     >() {
 
     private val exerciseHelper = ExerciseHelper(workoutRepository, libraryRepository)
-    private val navigateHelper = NavigateHelper(router)
+    private val navigateHelper = NavigateHelper(router, libraryRepository)
     private val dateTimeHelper = DateTimeHelper(
         dateManager, timeScheduleManager, formatterManager, formatterTimeManager
     )
