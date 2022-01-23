@@ -19,7 +19,7 @@ Android app for diary your workout routines.
 
 ## Architecture
 ### MVI
-![architecture scheme](80dfe2a7-28a1-4535-98b4-b90c38ba43ea.png)
+![architecture scheme](resources/80dfe2a7-28a1-4535-98b4-b90c38ba43ea.png)
 
 # Features
 ## Schedule routines
