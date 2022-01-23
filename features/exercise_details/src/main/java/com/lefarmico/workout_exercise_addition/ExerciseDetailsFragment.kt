@@ -21,6 +21,10 @@ class ExerciseDetailsFragment : BaseFragment<
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+    }
     override fun observeView() {
         setUpToolbar()
         val exerciseId = params.exerciseId
@@ -28,8 +32,8 @@ class ExerciseDetailsFragment : BaseFragment<
     }
 
     private fun showExerciseDetails(libraryExercise: LibraryViewData.Exercise) {
-        binding.exerciseTitleTextView.text = libraryExercise.title
-        binding.exerciseDescriptionTextView.text = libraryExercise.description
+//        binding.exerciseTitleTextView.text = libraryExercise.title
+//        binding.exerciseDescriptionTextView.text = libraryExercise.description
     }
 
     private fun setUpToolbar() {
