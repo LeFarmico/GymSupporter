@@ -1,58 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/backgroundColor">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_menu_item_single">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <com.lefarmico.core.customView.menuView.MenuItemSummaryView
+            android:id="@+id/date_format_full"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <com.lefarmico.core.customView.menuView.MenuItemSummaryView
-                android:id="@+id/date_format_full"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.5"
-                android:background="@drawable/divider"
-                android:layout_marginHorizontal="8dp"
-                />
-            <com.lefarmico.core.customView.menuView.MenuItemSummaryView
-                android:id="@+id/date_format_month_year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.5"
-                android:background="@drawable/divider"
-                android:layout_marginHorizontal="8dp"
-                />
-            <com.lefarmico.core.customView.menuView.MenuItemSummaryView
-                android:id="@+id/remind_before_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.5"
-                android:background="@drawable/divider"
-                android:layout_marginHorizontal="8dp"
-                />
-        </LinearLayout>
-    </ScrollView>
-
-
-</FrameLayout>
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:background="@drawable/divider"
+            android:layout_marginHorizontal="8dp"
+            />
+        <com.lefarmico.core.customView.menuView.MenuItemSummaryView
+            android:id="@+id/date_format_month_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:background="@drawable/divider"
+            android:layout_marginHorizontal="8dp"
+            />
+        <com.lefarmico.core.customView.menuView.MenuItemSummaryView
+            android:id="@+id/remind_before_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:background="@drawable/divider"
+            android:layout_marginHorizontal="8dp"
+            />
+    </LinearLayout>
+</ScrollView>
