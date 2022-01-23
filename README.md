@@ -1,5 +1,5 @@
 # DoneTime
-Android app for diary your workout routines.
+Android app for diary your workout routines. And planing future workouts.
 
 ## Tech stack
 - kotlin
