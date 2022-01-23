@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="horizontal"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@drawable/ripple_background_button">
 
     <ToggleButton
         android:id="@+id/edit_button"

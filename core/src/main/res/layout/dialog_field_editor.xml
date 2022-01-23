@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:hint="@string/default_workout_title"
     android:layout_margin="16dp"
+    style="@style/EditTextLayout"
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
