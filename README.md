@@ -22,7 +22,7 @@ Android app for diary your workout routines. And planing future workouts.
 ![architecture scheme](resources/80dfe2a7-28a1-4535-98b4-b90c38ba43ea.png)
 
 ### Module dependencies
-![architecture scheme](resources/untitled.png)
+![architecture scheme](resources/untitled1.png)
 
 # Features
 ## Schedule routines
