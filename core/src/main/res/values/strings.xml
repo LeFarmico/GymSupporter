@@ -18,10 +18,10 @@
     <string name="settings">Settings</string>
 
     <!-- Buttons   -->
-    <string name="add_new_category">Add new category</string>
-    <string name="add_new_subcategory">Add New Subcategory</string>
-    <string name="add_new_exercise">Add New Exercise</string>
-    <string name="start_new_workout">Start new workout</string>
+    <string name="add_new_category">New category</string>
+    <string name="add_new_subcategory">New subcategory</string>
+    <string name="add_new_exercise">New exercise</string>
+    <string name="start_new_workout">Schedule routine</string>
     <string name="add_exercise">Add exercise +</string>
     <string name="done">Done</string>
 

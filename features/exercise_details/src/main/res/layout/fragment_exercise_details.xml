@@ -55,14 +55,32 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/text_description"
-            style="@style/TextStyle.Body"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="16dp"
-            tools:text="@tools:sample/lorem/random" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextStyle.Headline"
+                android:textStyle="bold"
+                android:gravity="center"
+                tools:text="Exercise"
+                android:layout_marginTop="16dp"
+                />
+
+            <TextView
+                android:id="@+id/text_description"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                tools:text="@tools:sample/lorem/random" />
+        </LinearLayout>
+
+
 
     </androidx.core.widget.NestedScrollView>
 

@@ -25,6 +25,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textField"
+        style="@style/EditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/new_category"
@@ -45,7 +46,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/plus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
         android:text="@string/add_new_category"
-        android:background="@drawable/shape_button"
+        style="@style/ButtonStyle"
         />
 
     <com.lefarmico.core.customView.StateView

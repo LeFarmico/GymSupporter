@@ -48,7 +48,7 @@
         app:layout_constraintStart_toEndOf="@id/reps_picker"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

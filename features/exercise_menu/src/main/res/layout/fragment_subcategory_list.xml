@@ -12,6 +12,7 @@
         android:id="@+id/textField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/EditTextLayout"
         android:hint="@string/new_subcategory"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toTopOf="@+id/plus_button"
@@ -44,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/textField"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/plus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
         android:text="@string/add_new_subcategory"
-        android:background="@drawable/shape_button"
+        style="@style/ButtonStyle"
         />
 
     <com.lefarmico.core.customView.StateView

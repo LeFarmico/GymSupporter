@@ -32,8 +32,8 @@ class ExerciseDetailsFragment : BaseFragment<
     }
 
     private fun showExerciseDetails(libraryExercise: LibraryViewData.Exercise) {
-//        binding.exerciseTitleTextView.text = libraryExercise.title
-//        binding.exerciseDescriptionTextView.text = libraryExercise.description
+        binding.textTitle.text = libraryExercise.title
+        binding.textDescription.text = libraryExercise.description
     }
 
     private fun setUpToolbar() {

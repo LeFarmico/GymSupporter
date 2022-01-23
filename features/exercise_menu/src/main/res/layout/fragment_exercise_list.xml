@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@id/plus_button"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/plus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
         android:text="@string/add_new_exercise"
-        android:background="@drawable/shape_button"
+        style="@style/ButtonStyle"
         />
 
     <com.lefarmico.core.customView.StateView

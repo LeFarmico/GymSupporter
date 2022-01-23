@@ -47,7 +47,7 @@
     </style>
 
     <style name="TextStyle.Caption">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.0178571429</item>
     </style>
 
@@ -90,5 +90,10 @@
 
     <style name="ToolBarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextAppearance">@style/TextStyle.Toolbar</item>
+    </style>
+
+    <style name="EditTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?attr/colorSecondary</item>
+        <item name="hintTextColor">?attr/colorOnSurface</item>
     </style>
 </resources>
