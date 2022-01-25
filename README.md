@@ -1,6 +1,8 @@
 # DoneTime
 Android app for diary your workout routines. And planing future workouts.
 
+Last version: [Gym supporter](https://drive.google.com/file/d/1Cad4L5fsrcxBl0hJb58z2lBlTClnBI1o/view?usp=sharing)
+
 ## Tech stack
 - kotlin
 - RxJava
