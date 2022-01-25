@@ -8,7 +8,7 @@ import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.repository.manager.DateManager
 import com.lefarmico.domain.repository.manager.TimeScheduleManager
 import com.lefarmico.domain.repository.manager.WorkoutTitleManager
-import com.lefarmico.workout.WorkoutState
+import com.lefarmico.workout.WorkoutEvent
 import com.lefarmico.workout.extensions.toRecordsDto
 import com.lefarmico.workout.reduce
 import com.lefarmico.workout.reduceWorkoutId
@@ -30,7 +30,7 @@ class WorkoutHelper(
         time: LocalTime?,
         exercises: List<CurrentWorkoutDto.ExerciseWithSets>,
         workoutId: Int = 0
-    ): Single<WorkoutState> {
+    ): Single<WorkoutEvent> {
         val workoutDto = WorkoutRecordsDto.Workout(id = workoutId, date = date, title = title, time = time)
         val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(workoutDto, exercises.toRecordsDto())
 

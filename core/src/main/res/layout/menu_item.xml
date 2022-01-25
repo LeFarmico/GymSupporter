@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="56dp"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
     android:background="@drawable/ripple_background_button">
@@ -24,7 +24,7 @@
         android:id="@+id/text"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         style="@style/TextStyle.Body"
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"

@@ -57,11 +57,11 @@ fun DataState<String>.reduceTime(): WorkoutState {
         is DataState.Success -> WorkoutState.TimeResult(data)
     }
 }
-fun DataState<Long>.reduceWorkoutId(): WorkoutState {
+fun DataState<Long>.reduceWorkoutId(): WorkoutEvent {
     return when (this) {
-        is DataState.Error -> WorkoutState.ExceptionResult(exception)
-        DataState.Loading -> WorkoutState.Loading
-        is DataState.Success -> WorkoutState.EndWorkoutResult(data)
+        is DataState.Error -> WorkoutEvent.ExceptionEvent(exception)
+        DataState.Loading -> WorkoutEvent.Loading
+        is DataState.Success -> WorkoutEvent.EndWorkoutResult(data)
     }
 }
 fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduceWorkoutDto(): WorkoutRecordsDto.Workout {

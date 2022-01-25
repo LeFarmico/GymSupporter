@@ -68,16 +68,32 @@
         <item name="itemTextColor">@drawable/selector_menu</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:background">?attr/backgroundColor</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
     <style name="DatePickerTheme" parent="android:Widget.Material.Light.DatePicker">
         <item name="android:datePickerMode">calendar</item>
-        <item name="colorAccent">?attr/colorSecondary</item>
         <item name="android:windowIsFloating">true</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorPrimary">?attr/colorOnBackground</item>
     </style>
 
     <style name="TimePickerTheme" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
-        <item name="colorAccent">?attr/colorSecondary</item>
         <item name="android:windowIsFloating">true</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorPrimary">?attr/colorOnBackground</item>
     </style>
 
     <style name="SwitchStyle" parent="Theme.AppCompat.Light">
@@ -92,8 +108,13 @@
         <item name="titleTextAppearance">@style/TextStyle.Toolbar</item>
     </style>
 
-    <style name="EditTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">?attr/colorSecondary</item>
+    <style name="InputEditTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_color</item>
         <item name="hintTextColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Divider">
+        <item name="alpha">0.5</item>
+        <item name="background">?attr/colorOnBackground</item>
     </style>
 </resources>
