@@ -91,6 +91,10 @@ class WorkoutViewModel @Inject constructor(
             .subscribe()
     }
 
+    private fun loadingAction() {
+        mState.value = WorkoutState.Loading
+    }
+
     private fun exerciseAction(action: Exercise) {
         when (action) {
             is Exercise.Add -> exerciseHelper.addExercise(action.id) { event -> mEvent.postValue(event) }
@@ -233,6 +237,7 @@ class WorkoutViewModel @Inject constructor(
             .doAfterSuccess { quad ->
                 if (quad.fourth.isEmpty()) {
                     clearCache()
+                    navigateAction(Navigate.Home)
                     return@doAfterSuccess
                 }
                 val time = if (switchState) { quad.second } else { null }
@@ -251,7 +256,7 @@ class WorkoutViewModel @Inject constructor(
         workoutHelper.saveWorkout(title, date, time, exercises, workoutRecordId)
             .observeUi()
             .flatMap { state ->
-                mState.value = state
+                mEvent.postValue(state)
                 dateManager.selectDate(date)
             }.flatMap {
                 dateManager.selectMonth(date)
@@ -297,6 +302,7 @@ class WorkoutViewModel @Inject constructor(
             is Workout -> workoutAction(intent)
             is ShowToast -> toast(intent.text)
             is ExSet -> setAction(intent)
+            ShowLoading -> loadingAction()
         }
     }
 }

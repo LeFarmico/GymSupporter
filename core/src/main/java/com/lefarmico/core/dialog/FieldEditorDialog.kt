@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import com.lefarmico.core.R
 import com.lefarmico.core.databinding.DialogFieldEditorBinding
 import com.lefarmico.core.extensions.hideSoftKeyboard
 
@@ -21,7 +22,7 @@ class FieldEditorDialog(
     private val textField get() = binding.editText.text.toString()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         inflate(builder)
 
         binding.textField.hint = hint

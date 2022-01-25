@@ -16,6 +16,8 @@ sealed class WorkoutIntent : BaseIntent {
 
     data class ShowToast(val text: String) : WorkoutIntent()
 
+    object ShowLoading : WorkoutIntent()
+
     sealed class Navigate : WorkoutIntent() {
         data class ExerciseDetails(val exLibId: Int) : Navigate()
         object CategoryMenu : Navigate()

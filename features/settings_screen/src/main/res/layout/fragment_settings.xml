@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:overScrollMode="always"
     android:background="?attr/backgroundColor">
 
     <LinearLayout
@@ -18,9 +19,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha="0.5"
-            android:background="@drawable/divider"
-            android:layout_marginHorizontal="8dp"
+            style="@style/Divider"
+            android:background="?attr/colorOnBackground"
+            android:alpha="0.1"
             />
         <com.lefarmico.core.customView.menuView.MenuItemSummaryView
             android:id="@+id/date_format_month_year"
@@ -30,9 +31,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha="0.5"
-            android:background="@drawable/divider"
-            android:layout_marginHorizontal="8dp"
+            style="@style/Divider"
+            android:background="?attr/colorOnBackground"
+            android:alpha="0.1"
             />
         <com.lefarmico.core.customView.menuView.MenuItemSummaryView
             android:id="@+id/remind_before_time"
@@ -42,9 +43,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:alpha="0.5"
-            android:background="@drawable/divider"
-            android:layout_marginHorizontal="8dp"
+            style="@style/Divider"
+            android:background="?attr/colorOnBackground"
+            android:alpha="0.1"
             />
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

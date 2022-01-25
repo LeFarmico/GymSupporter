@@ -27,6 +27,7 @@
 
         <!-- Date picker theme -->
         <item name="android:datePickerStyle">@style/DatePickerTheme</item>
+
     </style>
 
 </resources>

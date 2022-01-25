@@ -167,6 +167,11 @@ class WorkoutFragment :
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
+    private fun closeScreen(workoutId: Int) {
+        adapter.items = listOf()
+        dispatchIntent(CloseWorkout(workoutId))
+    }
+
     override fun receive(state: WorkoutState) {
         when (state) {
             WorkoutState.Loading -> showLoading()
@@ -176,13 +181,12 @@ class WorkoutFragment :
             is WorkoutState.TitleResult -> workoutTitle(state.title)
             is WorkoutState.TimeResult -> workoutTime(state.time)
             is WorkoutState.SwitchState -> switchState(state.isOn)
-            is WorkoutState.EndWorkoutResult -> dispatchIntent(CloseWorkout(state.workoutId.toInt()))
         }
     }
 
     override fun receive(event: WorkoutEvent) {
         when (event) {
-            WorkoutEvent.Loading -> {}
+            WorkoutEvent.Loading -> dispatchIntent(ShowLoading)
             WorkoutEvent.ShowEditState -> showEditState()
             WorkoutEvent.SelectAllExercises -> selectAllExercises()
             WorkoutEvent.HideEditState -> hideEditState()
@@ -190,6 +194,7 @@ class WorkoutFragment :
             WorkoutEvent.DeselectAllExercises -> {}
             is WorkoutEvent.ExceptionEvent -> throw (event.exception)
             is WorkoutEvent.SetParamsDialog -> dispatchIntent(Dialog.SetParamsDialog(event.exerciseId))
+            is WorkoutEvent.EndWorkoutResult -> closeScreen(event.workoutId.toInt())
         }
     }
 
