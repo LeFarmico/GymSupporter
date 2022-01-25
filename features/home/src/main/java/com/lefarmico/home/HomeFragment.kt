@@ -130,6 +130,7 @@ class HomeFragment :
         } else {
             showEmptyState()
         }
+        binding.workoutNotes.invalidateItemDecorations()
         noteAdapter.items = items
     }
 
