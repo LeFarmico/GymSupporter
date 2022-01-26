@@ -20,7 +20,8 @@ object Versions {
     const val viewpager2 = "1.0.0"
     const val flexBox = "2.0.1"
     const val cardView = "1.0.0"
-    const val material = "1.4.0"
+    const val material = "1.5.0"
+    const val preferences = "1.1.1"
     const val adapterDelegates = "4.3.0"
 
     const val fragmentKtx = "1.3.6"
@@ -30,6 +31,7 @@ object Versions {
     const val viewModelKtx = "2.2.0"
     const val roomKtx = "2.2.5"
     const val navigationKtx = "2.3.5"
+    const val navigationRuntime = "2.3.5"
     const val legacySup = "1.0.0"
 
     const val junit = "4.13.2"
@@ -38,6 +40,8 @@ object Versions {
     const val espresso = "3.2.0"
 
     const val firebase = "29.0.0"
-
-    const val singleRowCal = "1.0.0"
+    const val analytics = "20.0.2"
+    const val crashlytics = "18.2.7"
+    const val crashlyticsGradle = "2.8.1"
+    const val googleServices = "4.3.10"
 }

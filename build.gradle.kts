@@ -9,11 +9,8 @@ buildscript {
         classpath(com.lefarmico.buildsrc.BuildPlugins.kotlin)
         classpath(com.lefarmico.buildsrc.BuildPlugins.ktlint)
         classpath(com.lefarmico.buildsrc.BuildPlugins.extensions)
-
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
-        classpath("com.google.gms:google-services:4.3.10")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.8.0")
-        classpath("com.autonomousapps:dependency-analysis-gradle-plugin:0.78.0")
+        classpath(com.lefarmico.buildsrc.BuildPlugins.crashlyticsGradle)
+        classpath(com.lefarmico.buildsrc.BuildPlugins.googleServices)
     }
 }
 
@@ -26,7 +23,6 @@ allprojects {
 
     apply {
         plugin("org.jlleitschuh.gradle.ktlint")
-        plugin("com.autonomousapps.dependency-analysis")
     }
 }
 

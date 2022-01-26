@@ -35,7 +35,7 @@ dependencies {
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
-    implementation("androidx.navigation:navigation-runtime-ktx:2.3.5")
+    implementation(Deps.Androidx.navigationRuntime)
     annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
 
     // RXJava
