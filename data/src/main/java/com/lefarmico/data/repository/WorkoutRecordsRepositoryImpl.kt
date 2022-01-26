@@ -20,16 +20,12 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
     override fun getWorkoutWithExerciseAnsSets(workoutId: Int):
         Single<DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .doOnSubscribe { DataState.Loading }
-            .doOnError { DataState.Error(it as Exception) }
             .map { data -> DataState.Success(data.toDto()) }
     }
 
     override fun getWorkoutsWithExerciseAnsSets():
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSets()
-            .doOnSubscribe { DataState.Loading }
-            .doOnError { DataState.Error(it as Exception) }
             .map { data -> dataStateResolver { data.toDto() } }
     }
 
@@ -39,28 +35,27 @@ class WorkoutRecordsRepositoryImpl @Inject constructor(
         return dao.insertWorkout(workoutWithExercisesAndSets.workout.toData())
             .map { workoutId ->
                 dao.deleteExercises(workoutId.toInt())
+
                 val exercises = workoutWithExercisesAndSets.exerciseWithSetsList.map { it.exercise.copy(workoutId = workoutId.toInt()) }
                 val exIds = dao.insertExercises(exercises.toData())
                 val setList = workoutWithExercisesAndSets.exerciseWithSetsList.map { it.setList }
+
                 for (i in exIds.indices) {
                     val sets = setList[i].map { it.copy(exerciseId = exIds[i].toInt()) }
                     dao.insertSets(sets.toData())
                 }
                 dataStateResolver { workoutId }
-            }.doOnError { DataState.Error(it as Exception) }
+            }
     }
 
     override fun deleteWorkoutWithExAndSets(workoutId: Int): Single<DataState<Int>> {
         return dao.getWorkoutWithExerciseAnsSets(workoutId)
-            .doOnError { e -> DataState.Error(e as Exception) }
             .map { data -> dataStateResolver { dao.deleteWorkout(data.workout) } }
     }
 
     override fun getWorkoutWithExerciseAndSetsByDate(date: LocalDate):
         Single<DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>> {
         return dao.getWorkoutsWithExerciseAnsSetsByDate(date)
-            .doOnSubscribe { DataState.Loading }
-            .doOnError { DataState.Error(it as Exception) }
             .map { data -> dataStateResolver { data.toDto() } }
     }
 }

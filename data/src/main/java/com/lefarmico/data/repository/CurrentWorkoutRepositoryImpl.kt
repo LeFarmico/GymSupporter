@@ -17,7 +17,6 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
 
     override fun getExercisesWithSets(): Single<DataState<List<CurrentWorkoutDto.ExerciseWithSets>>> {
         return dataBase.getExercises()
-            .doOnSubscribe { DataState.Loading }
             .map { data -> dataStateResolver { data.toDto() } }
     }
 
