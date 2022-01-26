@@ -97,11 +97,11 @@ class CreateExerciseFragment : BaseFragment<
     override fun receive(event: CreateExerciseEvent) {
         when (event) {
             CreateExerciseEvent.ValidationAlreadyExist -> {
-                setEditTextError("that exercise ia already exist.")
+                setEditTextError(getString(R.string.ex_exist))
                 isAddButtonActive(false)
             }
             CreateExerciseEvent.ValidationEmpty -> {
-                setEditTextError("that field is empty.")
+                setEditTextError(getString(R.string.empty_field))
                 isAddButtonActive(false)
             }
             CreateExerciseEvent.ValidationSuccess -> {
