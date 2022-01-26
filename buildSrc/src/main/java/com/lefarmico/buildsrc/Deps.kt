@@ -31,6 +31,10 @@ object Deps {
             "androidx.cardview:cardview:${Versions.cardView}"
         const val material =
             "com.google.android.material:material:${Versions.material}"
+        const val preferences =
+            "androidx.preference:preference-ktx:${Versions.preferences}"
+        const val navigationRuntime =
+            "androidx.navigation:navigation-runtime-ktx:${Versions.navigationRuntime}"
     }
 
     object Dagger {
@@ -99,9 +103,7 @@ object Deps {
 
     object Firebase {
         const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
-    }
-
-    object CustomUi {
-        const val singleRowCalendar = "com.michalsvec:single-row-calendar:${Versions.singleRowCal}"
+        const val analytics = "com.google.firebase:firebase-analytics-ktx:${Versions.analytics}"
+        const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}"
     }
 }

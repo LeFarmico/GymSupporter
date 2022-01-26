@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/workout_date"
-            style="@style/TextStyle.Caption"
+            style="@style/TextStyle.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -44,7 +44,7 @@
             />
         <TextView
             android:id="@+id/workout_time"
-            style="@style/TextStyle.Caption"
+            style="@style/TextStyle.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -61,6 +61,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         tools:listitem="@layout/item_exercise"
+        android:layout_marginHorizontal="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description_field"

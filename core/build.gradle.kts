@@ -61,8 +61,8 @@ dependencies {
     // Dagger
     implementation(Deps.Dagger.dagger)
     implementation(Deps.Dagger.daggerAndroid)
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation(Deps.Androidx.material)
+    implementation(Deps.Androidx.preferences)
     annotationProcessor(Deps.Dagger.daggerAndroidProcessor)
 
     testImplementation(Deps.UiTest.espressoIdling)
