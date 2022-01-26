@@ -57,12 +57,13 @@
     <!-- Settings -->
     <string name="full_date_format">Full date format</string>
     <string name="month_year_date_format">Month and Year format</string>
-    <string name="remind_workout_before">Before %1$d</string>
-    <string name="workout_remind">Workout remind</string>
+    <string name="remind_workout_before">Remind before %1$d hours</string>
+    <string name="workout_remind">Workout reminder</string>
 
     <!-- Notifications   -->
     <string name="next_workout_notification_title">Next workout soon!</string>
     <string name="next_workout_notification">"Your next workout starts in %1$d hours"</string>
+    <string name="ex_success_added">Exercise successfully added!</string>
 
     <!-- Screen titles   -->
     <string name="home_screen">Home</string>
@@ -71,4 +72,7 @@
     <string name="create_new_exercise_screen">Create exercise</string>
     <string name="exercise_details_screen">Exercise</string>
     <string name="settings_screen">Settings</string>
+
+    <!-- Errors -->
+    <string name="smth_went_wrong">Something went wrong. Please try again.</string>
 </resources>

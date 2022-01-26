@@ -16,7 +16,7 @@ sealed class CreateExerciseIntent : BaseIntent {
         val subcategoryId: Int
     ) : CreateExerciseIntent()
 
-    object Back : CreateExerciseIntent()
+    data class CloseScreenWithToast(val text: String) : CreateExerciseIntent()
 
     data class ShowToast(val text: String) : CreateExerciseIntent()
 }
