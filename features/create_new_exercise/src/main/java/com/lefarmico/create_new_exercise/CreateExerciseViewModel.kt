@@ -14,7 +14,9 @@ import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.ToastBarParams
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -34,20 +36,8 @@ class CreateExerciseViewModel @Inject constructor(
     private fun getExistedExercises(subcategoryId: Int) {
         repo.getExercises(subcategoryId)
             .observeUi()
+            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
             .doOnSuccess { dataState -> putToCache(dataState.reduce()) }
-            .subscribe()
-    }
-
-    private fun addExercise(title: String, description: String, imageRes: String, subcategoryId: Int) {
-        val exercise = LibraryDto.Exercise(
-            title = title,
-            description = description,
-            imageRes = imageRes,
-            subCategoryId = subcategoryId
-        )
-        repo.addExercise(exercise)
-            .observeUi()
-            .doAfterSuccess { router.back() }
             .subscribe()
     }
 
@@ -60,6 +50,7 @@ class CreateExerciseViewModel @Inject constructor(
             .debounceImmediate(1, TimeUnit.SECONDS)
             .distinctUntilChanged()
             .observeUi()
+            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
@@ -77,8 +68,31 @@ class CreateExerciseViewModel @Inject constructor(
         mEvent.postValue(event)
     }
 
+    private fun addExercise(title: String, description: String, imageRes: String, subcategoryId: Int) {
+        val exercise = LibraryDto.Exercise(
+            title = title,
+            description = description,
+            imageRes = imageRes,
+            subCategoryId = subcategoryId
+        )
+        repo.addExercise(exercise)
+            .observeUi()
+            .doOnError { mState.value = CreateExerciseState.ExerciseActionResult.Failure }
+            .doAfterSuccess { mState.value = CreateExerciseState.ExerciseActionResult.Success }
+            .subscribe()
+    }
+
     private fun showToast(text: String) {
         router.show(Notification.TOAST, ToastBarParams(text))
+    }
+
+    private fun closeScreen(text: String) {
+        Single.create<String> {
+            showToast(text)
+            it.onSuccess(text)
+        }
+            .doAfterSuccess { back() }
+            .subscribe()
     }
 
     private fun back() {
@@ -87,13 +101,13 @@ class CreateExerciseViewModel @Inject constructor(
 
     override fun triggerIntent(intent: CreateExerciseIntent) {
         when (intent) {
-            Back -> back()
             is ShowToast -> showToast(intent.text)
             is ValidateExercise -> validateSubject.onNext(intent.title)
+            is GetExercises -> getExistedExercises(intent.subcategoryId)
             is AddExercise -> {
                 intent.apply { addExercise(title, description, imageRes, subcategoryId) }
             }
-            is GetExercises -> getExistedExercises(intent.subcategoryId)
+            is CloseScreenWithToast -> closeScreen(intent.text)
         }
     }
 }

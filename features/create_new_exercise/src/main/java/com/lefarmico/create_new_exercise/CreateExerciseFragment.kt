@@ -72,10 +72,25 @@ class CreateExerciseFragment : BaseFragment<
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
+    private fun showError(errorText: String) {
+        // TODO Send crashlytics log here
+        dispatchIntent(ShowToast(errorText))
+    }
+
+    private fun closeScreenWithToast(successText: String) {
+        dispatchIntent(CloseScreenWithToast(successText))
+    }
+
+    private fun closeScreenWithError(errorText: String) {
+        // TODO Send crashlytics log here
+        dispatchIntent(CloseScreenWithToast(errorText))
+    }
+
     override fun receive(state: CreateExerciseState) {
         when (state) {
-            is CreateExerciseState.ExceptionResult -> throw (state.exception)
-            CreateExerciseState.Loading -> {}
+            is CreateExerciseState.ExceptionResult -> closeScreenWithError(getString(R.string.smth_went_wrong))
+            CreateExerciseState.ExerciseActionResult.Failure -> showError(getString(R.string.smth_went_wrong))
+            CreateExerciseState.ExerciseActionResult.Success -> closeScreenWithToast(getString(R.string.ex_success_added))
         }
     }
 

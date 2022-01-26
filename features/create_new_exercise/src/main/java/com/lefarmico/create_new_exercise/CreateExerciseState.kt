@@ -4,6 +4,9 @@ import com.lefarmico.core.base.BaseState
 import java.lang.Exception
 
 sealed class CreateExerciseState : BaseState.State {
-    object Loading : CreateExerciseState()
     data class ExceptionResult(val exception: Exception) : CreateExerciseState()
+    sealed class ExerciseActionResult() : CreateExerciseState() {
+        object Success : ExerciseActionResult()
+        object Failure : ExerciseActionResult()
+    }
 }
