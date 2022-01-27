@@ -63,7 +63,7 @@
     <!-- Notifications   -->
     <string name="next_workout_notification_title">Next workout soon!</string>
     <string name="next_workout_notification">"Your next workout starts in %1$d hours"</string>
-    <string name="ex_success_added">Exercise successfully added!</string>
+    <string name="ex_success_added">Exercise successfully created!</string>
 
     <!-- Screen titles   -->
     <string name="home_screen">Home</string>
