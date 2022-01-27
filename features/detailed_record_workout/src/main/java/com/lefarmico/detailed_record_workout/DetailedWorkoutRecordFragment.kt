@@ -8,6 +8,7 @@ import com.lefarmico.core.base.BaseBottomSheetDialogFragment
 import com.lefarmico.core.entity.WorkoutRecordsViewData
 import com.lefarmico.detailed_record_workout.databinding.DetailedRecordFragmentBinding
 import com.lefarmico.navigation.params.RecordMenuParams
+import java.lang.Exception
 
 class DetailedWorkoutRecordFragment :
     BaseBottomSheetDialogFragment< DetailedIntent, DetailedState, DetailedEvent,
@@ -66,14 +67,21 @@ class DetailedWorkoutRecordFragment :
         }
     }
 
+    private fun closeWithError(text: String) {
+        dispatchIntent(DetailedIntent.CloseWithToast(text))
+    }
+
+    private fun logException(exception: Exception) {
+        // TODO send log to crashlytics
+    }
+
     private fun showExercises(items: MutableList<WorkoutRecordsViewData.ViewDataItemType>) {
         adapter.items = items
     }
 
     override fun receive(state: DetailedState) {
         when (state) {
-            is DetailedState.ExceptionResult -> throw (state.exception)
-            DetailedState.Loading -> {}
+            is DetailedState.ExceptionResult -> logException(state.exception)
             is DetailedState.WorkoutResult -> showWorkout(state.workout)
             is DetailedState.DateResult -> showDate(state.dateText)
             is DetailedState.TitleResult -> showWorkoutTitle(state.title)
@@ -82,7 +90,7 @@ class DetailedWorkoutRecordFragment :
 
     override fun receive(event: DetailedEvent) {
         when (event) {
-            is DetailedEvent.ShowToast -> TODO()
+            DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.error_state))
         }
     }
 

@@ -77,8 +77,8 @@ class CreateExerciseViewModel @Inject constructor(
         )
         repo.addExercise(exercise)
             .observeUi()
-            .doOnError { mState.value = CreateExerciseState.ExerciseActionResult.Failure }
-            .doAfterSuccess { mState.value = CreateExerciseState.ExerciseActionResult.Success }
+            .doOnError { mEvent.postValue(CreateExerciseEvent.ExerciseActionResult.Failure) }
+            .doAfterSuccess { mEvent.postValue(CreateExerciseEvent.ExerciseActionResult.Success) }
             .subscribe()
     }
 

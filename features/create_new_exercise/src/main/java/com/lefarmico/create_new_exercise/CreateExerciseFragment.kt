@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.lefarmico.core.base.BaseFragment
-import com.lefarmico.core.exceptions.IllegalBundleDataTypeException
 import com.lefarmico.create_new_exercise.CreateExerciseIntent.*
 import com.lefarmico.create_new_exercise.databinding.FragmentCreateNewExerciseBinding
 import com.lefarmico.navigation.params.LibraryParams
@@ -89,47 +88,33 @@ class CreateExerciseFragment : BaseFragment<
     override fun receive(state: CreateExerciseState) {
         when (state) {
             is CreateExerciseState.ExceptionResult -> closeScreenWithError(getString(R.string.smth_went_wrong))
-            CreateExerciseState.ExerciseActionResult.Failure -> showError(getString(R.string.smth_went_wrong))
-            CreateExerciseState.ExerciseActionResult.Success -> closeScreenWithToast(getString(R.string.ex_success_added))
         }
     }
 
     override fun receive(event: CreateExerciseEvent) {
         when (event) {
             CreateExerciseEvent.ValidationAlreadyExist -> {
-                setEditTextError("that exercise ia already exist.")
+                setEditTextError(getString(R.string.ex_exist))
                 isAddButtonActive(false)
             }
             CreateExerciseEvent.ValidationEmpty -> {
-                setEditTextError("that field is empty.")
+                setEditTextError(getString(R.string.empty_field))
                 isAddButtonActive(false)
             }
             CreateExerciseEvent.ValidationSuccess -> {
                 setEditTextError("")
                 isAddButtonActive(true)
             }
+            CreateExerciseEvent.ExerciseActionResult.Failure -> showError(getString(R.string.smth_went_wrong))
+            CreateExerciseEvent.ExerciseActionResult.Success -> closeScreenWithToast(getString(R.string.ex_success_added))
         }
     }
     companion object {
-
         private const val KEY_PARAMS = "new_exercise_params"
-
         fun createBundle(data: Parcelable?): Bundle {
-            return Bundle().apply {
-                when (data) {
-                    is LibraryParams.NewExercise -> putParcelable(KEY_PARAMS, data)
-                    else -> {
-                        if (BuildConfig.DEBUG) {
-                            throw (
-                                IllegalBundleDataTypeException(
-                                    "data should be LibraryParams.NewExercise type." +
-                                        "but it's ${data!!.javaClass.simpleName}"
-                                )
-                                )
-                        }
-                    }
-                }
-            }
+            requireNotNull(data)
+            require(data is LibraryParams.NewExercise)
+            return Bundle().apply { putParcelable(KEY_PARAMS, data) }
         }
     }
 }

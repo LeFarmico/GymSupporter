@@ -63,7 +63,7 @@
     <!-- Notifications   -->
     <string name="next_workout_notification_title">Next workout soon!</string>
     <string name="next_workout_notification">"Your next workout starts in %1$d hours"</string>
-    <string name="ex_success_added">Exercise successfully added!</string>
+    <string name="ex_success_added">Exercise successfully created!</string>
 
     <!-- Screen titles   -->
     <string name="home_screen">Home</string>
@@ -75,4 +75,8 @@
 
     <!-- Errors -->
     <string name="smth_went_wrong">Something went wrong. Please try again.</string>
+
+    <!-- Validations -->
+    <string name="ex_exist">that exercise ia already exist.</string>
+    <string name="empty_field">that field is empty.</string>
 </resources>
