@@ -25,13 +25,16 @@ interface LibraryDao {
     @Query("SELECT * FROM library_exercise WHERE id = :exerciseId")
     fun getExercise(exerciseId: Int): Single<LibraryData.Exercise>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCategory(category: LibraryData.Category): Single<Long>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSubCategory(subCategory: LibraryData.SubCategory): Single<Long>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSubCategories(subCategoryList: List<LibraryData.SubCategory>): Single<List<Long>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExercise(exercise: LibraryData.Exercise): Single<Long>
 
     @Query("DELETE FROM library_category WHERE id = :categoryId")

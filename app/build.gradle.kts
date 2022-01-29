@@ -76,6 +76,10 @@ dependencies {
     implementation(project(":features:settings_screen"))
     implementation(project(":features:workout_notification"))
 
+    implementation("com.google.firebase:firebase-analytics:20.0.2")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.7")
+    implementation("com.google.firebase:firebase-analytics-ktx:20.0.2")
+
     // Tests
     androidTestImplementation(Deps.UiTest.junit)
     androidTestImplementation(Deps.UiTest.espresso)
@@ -102,6 +106,4 @@ dependencies {
 
     // Firebase
     implementation(Deps.Firebase.firebaseBom)
-    implementation(Deps.Firebase.analytics)
-    implementation(Deps.Firebase.crashlytics)
 }

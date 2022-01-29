@@ -3,6 +3,8 @@ package com.lefarmico.home
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewData
+import com.lefarmico.domain.loaders.MuscleCategoryLoader
+import com.lefarmico.domain.preferences.FirstLaunchPreferenceHelper
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
 import com.lefarmico.domain.repository.manager.DateManager
 import com.lefarmico.domain.repository.manager.FormatterManager
@@ -25,10 +27,22 @@ class HomeViewModel @Inject constructor(
     private val dateManager: DateManager,
     private val formatterMonthManager: FormatterMonthManager,
     private val formatterManager: FormatterManager,
-    private val formatterTimeManager: FormatterTimeManager
+    private val formatterTimeManager: FormatterTimeManager,
+    private val firstLaunchPreferenceHelper: FirstLaunchPreferenceHelper,
+    private val muscleCategoryLoader: MuscleCategoryLoader
 ) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
 
+    private fun loadDefaultData() {
+        val isFirst = firstLaunchPreferenceHelper.getState()
+        if (isFirst) {
+            muscleCategoryLoader.loadMuscleCategory()
+                .observeUi()
+                .subscribe()
+            firstLaunchPreferenceHelper.setState(false)
+            mEvent.postValue(HomeEvent.DataLoaded)
+        }
+    }
     private fun getDates() {
         dateManager.getCurrentDaysInMonth()
             .observeUi()
@@ -147,6 +161,7 @@ class HomeViewModel @Inject constructor(
             HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
             is HomeIntent.EditState -> editStateAction(intent.action)
             HomeIntent.BackToCurrentDate -> backToCurrentDate()
+            HomeIntent.TryLoadDefaultData -> loadDefaultData()
         }
     }
 }

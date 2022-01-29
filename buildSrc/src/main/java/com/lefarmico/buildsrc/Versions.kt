@@ -11,7 +11,7 @@ object Versions {
 
     const val appcompat = "1.2.0"
     const val constraintLayout = "1.1.3"
-    const val gson = "2.8.6"
+    const val gson = "2.8.9"
     const val recyclerView = "1.2.1"
     const val lifecycleExtensions = "2.2.0"
     const val room = "2.3.0-rc01"

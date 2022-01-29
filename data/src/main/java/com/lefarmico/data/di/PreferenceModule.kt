@@ -1,13 +1,7 @@
 package com.lefarmico.data.di
 
-import com.lefarmico.data.preference.FormatterMonthPreferenceHelperImpl
-import com.lefarmico.data.preference.FormatterPreferenceHelperImpl
-import com.lefarmico.data.preference.FormatterTimePreferenceHelperImpl
-import com.lefarmico.data.preference.RemindPreferenceHelperImpl
-import com.lefarmico.domain.preferences.FormatterMonthPreferenceHelper
-import com.lefarmico.domain.preferences.FormatterPreferenceHelper
-import com.lefarmico.domain.preferences.FormatterTimePreferenceHelper
-import com.lefarmico.domain.preferences.RemindPreferenceHelper
+import com.lefarmico.data.preference.*
+import com.lefarmico.domain.preferences.*
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -38,4 +32,10 @@ abstract class PreferenceModule {
     abstract fun provideRemindTimePreferenceHelper(
         helperImpl: RemindPreferenceHelperImpl
     ): RemindPreferenceHelper
+
+    @Binds
+    @Singleton
+    abstract fun provideFirstTimePreferenceHelper(
+        helperImpl: FirstLaunchPreferenceHelperImpl
+    ): FirstLaunchPreferenceHelper
 }

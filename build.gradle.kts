@@ -9,6 +9,7 @@ buildscript {
         classpath(com.lefarmico.buildsrc.BuildPlugins.kotlin)
         classpath(com.lefarmico.buildsrc.BuildPlugins.ktlint)
         classpath(com.lefarmico.buildsrc.BuildPlugins.extensions)
+
         classpath(com.lefarmico.buildsrc.BuildPlugins.crashlyticsGradle)
         classpath(com.lefarmico.buildsrc.BuildPlugins.googleServices)
     }
@@ -23,11 +24,5 @@ allprojects {
 
     apply {
         plugin("org.jlleitschuh.gradle.ktlint")
-    }
-}
-
-tasks {
-    val clean by registering(Delete::class) {
-        delete(buildDir)
     }
 }

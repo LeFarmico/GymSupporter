@@ -31,4 +31,5 @@ sealed class HomeIntent : BaseIntent {
     }
 
     object BackToCurrentDate : HomeIntent()
+    object TryLoadDefaultData : HomeIntent()
 }
