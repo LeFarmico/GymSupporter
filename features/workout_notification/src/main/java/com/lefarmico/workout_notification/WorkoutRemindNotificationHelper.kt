@@ -80,7 +80,7 @@ class WorkoutRemindNotificationHelper @Inject private constructor(
                     putParcelable(DATA_KEY, workout)
                 }
                 intent.putExtra(BUNDLE_KEY, bundle)
-                val pendingIntent = PendingIntent.getBroadcast(context, workout.id, intent, PendingIntent.FLAG_ONE_SHOT)
+                val pendingIntent = PendingIntent.getBroadcast(context, workout.id, intent, PendingIntent.FLAG_IMMUTABLE)
                 val remindTimeInMillis = workout.date
                     .atTime(workout.time)
                     .minusHours(dto.hoursBefore.toLong())

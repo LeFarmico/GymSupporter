@@ -16,6 +16,7 @@ class MuscleCategoryLoaderImpl @Inject constructor(
     private val libraryDao: LibraryDao
 ) : MuscleCategoryLoader {
 
+    // TODO обработать ошибки
     override fun loadMuscleCategory(): Single<DataState<Boolean>> {
         val muscleCat = dataStore.getMuscleCategory()
         return libraryDao.getCategories()

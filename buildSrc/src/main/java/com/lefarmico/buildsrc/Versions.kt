@@ -30,7 +30,7 @@ object Versions {
     const val liveDataKtx = "2.2.0"
     const val viewModelKtx = "2.2.0"
     const val roomKtx = "2.2.5"
-    const val navigationKtx = "2.3.5"
+    const val navigationKtx = "2.4.0"
     const val navigationRuntime = "2.3.5"
     const val legacySup = "1.0.0"
 
