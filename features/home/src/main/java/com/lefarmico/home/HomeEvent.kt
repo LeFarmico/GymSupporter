@@ -9,4 +9,6 @@ sealed class HomeEvent : BaseState.Event {
     object SelectAllWorkouts : HomeEvent()
     object DeselectAllWorkouts : HomeEvent()
     object DeleteSelectedWorkouts : HomeEvent()
+
+    object DataLoaded : HomeEvent()
 }

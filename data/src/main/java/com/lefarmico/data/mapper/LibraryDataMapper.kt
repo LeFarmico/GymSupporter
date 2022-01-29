@@ -14,6 +14,8 @@ fun LibraryDto.SubCategory.toData() = LibraryData.SubCategory(
     categoryId = categoryId
 )
 
+fun List<LibraryDto.SubCategory>.toData() = this.map { it.toData() }
+
 fun LibraryDto.Exercise.toData() = LibraryData.Exercise(
     id = id,
     title = title,

@@ -46,6 +46,11 @@ class LibraryRepositoryImpl @Inject constructor(
         return dao.insertSubCategory(subCategory.toData()).map { dataStateResolver { it } }
     }
 
+    override fun addSubCategories(subcategoryList: List<LibraryDto.SubCategory>): Single<DataState<List<Long>>> {
+        return dao.insertSubCategories(subcategoryList.toData())
+            .map { dataStateResolver { it } }
+    }
+
     override fun addExercise(exercise: LibraryDto.Exercise): Single<DataState<Long>> {
         return dao.insertExercise(exercise.toData()).map { dataStateResolver { it } }
     }

@@ -29,7 +29,9 @@ import javax.inject.Singleton
         ManagerModule::class,
         LocalCacheModule::class,
         NotificationModule::class,
-        BroadcastReceiverModule::class
+        BroadcastReceiverModule::class,
+        LoaderModule::class,
+        DataStoreModule::class
     ]
 )
 @Singleton

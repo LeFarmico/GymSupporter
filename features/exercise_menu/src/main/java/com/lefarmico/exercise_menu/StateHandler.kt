@@ -4,6 +4,7 @@ import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
 import com.lefarmico.exercise_menu.state.LibraryListState
+
 @JvmName("reduceDtoTitle")
 fun DataState<List<LibraryDto>>.reduceDto(): LibraryListState {
     return when (this) {

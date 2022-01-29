@@ -1,5 +1,6 @@
 package com.lefarmico.detailed_record_workout
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.repository.WorkoutRecordsRepository
@@ -26,7 +27,7 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
             .observeUi()
             .doOnError { mEvent.postValue(DetailedEvent.DataLoadFailure) }
             .doAfterSuccess { dataState ->
-                getSelectedFormatters { dateF, timeF -> mState.value = dataState.reduce(dateF, timeF) }
+                getSelectedFormatters { dateF, timeF -> postStateEvent(dataState.reduce(dateF, timeF)) }
             }.subscribe()
     }
 
@@ -65,6 +66,12 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
             }.subscribe()
     }
 
+    private fun postStateEvent(value: BaseState) {
+        when (value) {
+            is BaseState.Event -> mEvent.postValue(value as DetailedEvent)
+            is BaseState.State -> mState.value = value as DetailedState
+        }
+    }
     override fun triggerIntent(intent: DetailedIntent) {
         return when (intent) {
             is DetailedIntent.GetWorkout -> getRecordWorkout(intent.workoutId)

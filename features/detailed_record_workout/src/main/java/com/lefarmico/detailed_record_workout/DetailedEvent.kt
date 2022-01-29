@@ -4,4 +4,5 @@ import com.lefarmico.core.base.BaseState
 
 sealed class DetailedEvent : BaseState.Event {
     object DataLoadFailure : DetailedEvent()
+    object Loading : DetailedEvent()
 }

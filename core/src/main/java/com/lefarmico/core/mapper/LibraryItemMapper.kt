@@ -2,9 +2,10 @@ package com.lefarmico.core.mapper
 
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.entity.LibraryDto
+import com.lefarmico.domain.entity.MuscleDto
 
 /**
- *  Converts the [LibraryDto.Category] to the [LibraryViewData.Category]
+ *  Converts the [MuscleDto.Category] to the [LibraryViewData.Category]
  *   as a new instance.
  *
  *  Used as ViewData entity
@@ -15,7 +16,7 @@ fun LibraryDto.Category.toViewData() = LibraryViewData.Category(
 )
 
 /**
- *  Converts the [LibraryDto.SubCategory] to the [LibraryViewData.SubCategory]
+ *  Converts the [MuscleDto.SubCategory] to the [LibraryViewData.SubCategory]
  *   as a new instance.
  *
  *  Used as ViewData entity
@@ -27,7 +28,7 @@ fun LibraryDto.SubCategory.toViewData() = LibraryViewData.SubCategory(
 )
 
 /**
- *  Converts the [LibraryDto.Exercise] to the [LibraryViewData.Exercise]
+ *  Converts the [MuscleDto.Exercise] to the [LibraryViewData.Exercise]
  *   as a new instance.
  *
  *  Used as ViewData entity
@@ -39,17 +40,7 @@ fun LibraryDto.Exercise.toViewData() = LibraryViewData.Exercise(
     imageRes = imageRes,
     subCategoryId = subCategoryId
 )
-
-// TODO чекнуть
-// /**
-// *  Converts a [List] of the [LibraryViewData.Exercise] to a [List] of the [CurrentWorkoutViewData.Set]
-// *   as a new instance.
-// *
-// *  Used as ViewData entity
-// */
-// fun List<LibraryViewData.Exercise>.toViewData() = this.map { it.toDto() }
-
-/**  Converts a [List] of the [LibraryDto.Exercise] to a [List] of the [LibraryViewData.Exercise]
+/**  Converts a [List] of the [MuscleDto.Exercise] to a [List] of the [LibraryViewData.Exercise]
  *   as a new instance.
  *
  *  Used as ViewData entity
