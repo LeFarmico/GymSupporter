@@ -27,7 +27,8 @@ class DetailedWorkoutRecordFragment :
     override fun setUpViews() {
         dispatchIntent(DetailedIntent.GetWorkout(params.workoutId))
         binding.exerciseRecycler.adapter = adapter
-        binding.acceptButton.setOnClickListener {
+
+        binding.editButton.setOnClickListener {
             dispatchIntent(DetailedIntent.EditWorkout(params.workoutId))
         }
         binding.cancelButton.setOnClickListener {
@@ -35,7 +36,24 @@ class DetailedWorkoutRecordFragment :
         }
     }
 
+    override fun receive(state: DetailedState) {
+        when (state) {
+            is DetailedState.ExceptionResult -> logException(state.exception)
+            is DetailedState.WorkoutResult -> showWorkout(state.workout)
+            is DetailedState.DateResult -> showDate(state.dateText)
+            is DetailedState.TitleResult -> showWorkoutTitle(state.title)
+        }
+    }
+
+    override fun receive(event: DetailedEvent) {
+        when (event) {
+            DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.error_state))
+            DetailedEvent.Loading -> loading(true)
+        }
+    }
+
     private fun showWorkout(workout: WorkoutRecordsViewData.WorkoutWithExercisesAndSets) {
+        loading(false)
 
         val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
         // TODO : Избавиться от логики
@@ -79,18 +97,10 @@ class DetailedWorkoutRecordFragment :
         adapter.items = items
     }
 
-    override fun receive(state: DetailedState) {
-        when (state) {
-            is DetailedState.ExceptionResult -> logException(state.exception)
-            is DetailedState.WorkoutResult -> showWorkout(state.workout)
-            is DetailedState.DateResult -> showDate(state.dateText)
-            is DetailedState.TitleResult -> showWorkoutTitle(state.title)
-        }
-    }
-
-    override fun receive(event: DetailedEvent) {
-        when (event) {
-            DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.error_state))
+    private fun loading(show: Boolean) {
+        when (show) {
+            true -> binding.progressBar.visibility = View.VISIBLE
+            false -> binding.progressBar.visibility = View.GONE
         }
     }
 

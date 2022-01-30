@@ -33,6 +33,18 @@ class CreateExerciseViewModel @Inject constructor(
         validator()
     }
 
+    override fun triggerIntent(intent: CreateExerciseIntent) {
+        when (intent) {
+            is ShowToast -> showToast(intent.text)
+            is ValidateExercise -> validateSubject.onNext(intent.title)
+            is GetExercises -> getExistedExercises(intent.subcategoryId)
+            is AddExercise -> {
+                intent.apply { addExercise(title, description, imageRes, subcategoryId) }
+            }
+            is CloseScreenWithToast -> closeScreen(intent.text)
+        }
+    }
+
     private fun getExistedExercises(subcategoryId: Int) {
         repo.getExercises(subcategoryId)
             .observeUi()
@@ -97,17 +109,5 @@ class CreateExerciseViewModel @Inject constructor(
 
     private fun back() {
         router.back()
-    }
-
-    override fun triggerIntent(intent: CreateExerciseIntent) {
-        when (intent) {
-            is ShowToast -> showToast(intent.text)
-            is ValidateExercise -> validateSubject.onNext(intent.title)
-            is GetExercises -> getExistedExercises(intent.subcategoryId)
-            is AddExercise -> {
-                intent.apply { addExercise(title, description, imageRes, subcategoryId) }
-            }
-            is CloseScreenWithToast -> closeScreen(intent.text)
-        }
     }
 }
