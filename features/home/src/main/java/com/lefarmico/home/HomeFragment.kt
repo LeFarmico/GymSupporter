@@ -40,7 +40,6 @@ class HomeFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        dispatchIntent(TryLoadDefaultData)
     }
 
     override fun onResume() {

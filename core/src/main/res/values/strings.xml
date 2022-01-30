@@ -75,6 +75,7 @@
 
     <!-- Errors -->
     <string name="smth_went_wrong">Something went wrong. Please try again.</string>
+    <string name="load_data_failure">Load data error.</string>
 
     <!-- Validations -->
     <string name="ex_exist">that exercise ia already exist.</string>

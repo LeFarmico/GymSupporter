@@ -12,7 +12,7 @@ abstract class BaseActivity<I : BaseIntent, S : BaseState.State, E : BaseState.E
     VM : BaseViewModel<I, S, E>>(
     private val inflate: LayoutInflate<VB>,
     private val provideViewModel: Class<VM>
-) : DaggerAppCompatActivity() {
+) : DaggerAppCompatActivity(), IViewStateReceiver<S, E> {
 
     private lateinit var viewModel: VM
 
@@ -28,7 +28,7 @@ abstract class BaseActivity<I : BaseIntent, S : BaseState.State, E : BaseState.E
         viewModel = ViewModelProvider(this, viewModelFactory).get(provideViewModel)
     }
 
-    override fun setContentView(layoutResID: Int) {
-        super.setContentView(layoutResID)
+    fun dispatchIntent(intent: I) {
+        viewModel.dispatchIntent(intent)
     }
 }

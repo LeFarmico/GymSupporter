@@ -1,7 +1,8 @@
 package com.lefarmico.domain.preferences
 
 interface FirstLaunchPreferenceHelper {
-    fun getState(): Boolean
 
-    fun setState(isFirst: Boolean)
+    fun onOnFirstLaunchListener(action: () -> Unit): Boolean
+
+    fun reset(): Boolean
 }

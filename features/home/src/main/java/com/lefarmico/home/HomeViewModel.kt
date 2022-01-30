@@ -28,21 +28,9 @@ class HomeViewModel @Inject constructor(
     private val formatterMonthManager: FormatterMonthManager,
     private val formatterManager: FormatterManager,
     private val formatterTimeManager: FormatterTimeManager,
-    private val firstLaunchPreferenceHelper: FirstLaunchPreferenceHelper,
-    private val muscleCategoryLoader: MuscleCategoryLoader
 ) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
 
-    private fun loadDefaultData() {
-        val isFirst = firstLaunchPreferenceHelper.getState()
-        if (isFirst) {
-            muscleCategoryLoader.loadMuscleCategory()
-                .observeUi()
-                .subscribe()
-            firstLaunchPreferenceHelper.setState(false)
-            mEvent.postValue(HomeEvent.DataLoaded)
-        }
-    }
     private fun getDates() {
         dateManager.getCurrentDaysInMonth()
             .observeUi()
@@ -161,7 +149,6 @@ class HomeViewModel @Inject constructor(
             HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
             is HomeIntent.EditState -> editStateAction(intent.action)
             HomeIntent.BackToCurrentDate -> backToCurrentDate()
-            HomeIntent.TryLoadDefaultData -> loadDefaultData()
         }
     }
 }

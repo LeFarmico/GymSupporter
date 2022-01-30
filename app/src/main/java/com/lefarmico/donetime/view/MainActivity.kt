@@ -1,6 +1,7 @@
 package com.lefarmico.donetime.view
 import android.os.Bundle
 import com.lefarmico.core.base.BaseActivity
+import com.lefarmico.donetime.R
 import com.lefarmico.donetime.databinding.ActivityMainBinding
 import com.lefarmico.navigation.Router
 import javax.inject.Inject
@@ -25,6 +26,8 @@ class MainActivity : BaseActivity<
         supportActionBar?.elevation = 0f
         router.bind(this)
         router.bindNavigationUI(binding.bottomNavigation)
+
+        dispatchIntent(MainIntent.LoadPreloadedData)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -35,5 +38,22 @@ class MainActivity : BaseActivity<
     override fun onResume() {
         super.onResume()
         router.bind(this)
+    }
+
+    override fun receive(state: MainState) {}
+
+    override fun receive(event: MainEvent) {
+        when (event) {
+            MainEvent.LoadDataResult.Failure -> onFailureEvent()
+            MainEvent.LoadDataResult.Success -> onLoadSuccess()
+        }
+    }
+
+    private fun onFailureEvent() {
+        dispatchIntent(MainIntent.ShowToast(getString(R.string.load_data_failure)))
+    }
+
+    private fun onLoadSuccess() {
+        // TODO send analytics
     }
 }
