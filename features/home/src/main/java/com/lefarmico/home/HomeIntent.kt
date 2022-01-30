@@ -31,4 +31,6 @@ sealed class HomeIntent : BaseIntent {
     }
 
     object BackToCurrentDate : HomeIntent()
+
+    data class ShowToast(val text: String) : HomeIntent()
 }

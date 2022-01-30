@@ -1,5 +1,6 @@
 package com.lefarmico.workout
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toCurrent
@@ -17,6 +18,7 @@ import com.lefarmico.workout.interactor.ExerciseHelper
 import com.lefarmico.workout.interactor.NavigateHelper
 import com.lefarmico.workout.interactor.WorkoutHelper
 import com.lefarmico.workout_notification.WorkoutRemindNotificationHelper
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -54,12 +56,31 @@ class WorkoutViewModel @Inject constructor(
         mState.value = WorkoutState.SwitchState(false)
     }
 
+    override fun triggerIntent(intent: WorkoutIntent) {
+        when (intent) {
+            is CloseWorkout -> close(intent.workoutId)
+            is EditState -> editStateAction(intent)
+            is Navigate -> navigateAction(intent)
+            is Title -> titleAction(intent)
+            is Date -> dateAction(intent)
+            is Exercise -> exerciseAction(intent)
+            is Dialog -> dialogAction(intent)
+            is Time -> timeAction(intent)
+            is SwitchState -> switchAction(intent)
+            is Workout -> workoutAction(intent)
+            is ShowToast -> toast(intent.text)
+            is ExSet -> setAction(intent)
+        }
+    }
+
     private fun workoutAction(action: Workout) {
         when (action) {
             Workout.New -> {
                 exerciseHelper.getAllExercises()
                     .observeUi()
-                    .doAfterSuccess { state -> mState.value = state }
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
                     .subscribe()
             }
             is Workout.Load -> {
@@ -70,10 +91,19 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
+    private fun postEventState(state: BaseState) {
+        when (state) {
+            is BaseState.Event -> mEvent.postValue(state as WorkoutEvent)
+            is BaseState.State -> mState.value = state as WorkoutState
+        }
+    }
+
     private fun loadWorkoutRecord(workoutRecordId: Int) {
         this.workoutRecordId = workoutRecordId
         recordsRepository.getWorkoutWithExerciseAnsSets(workoutRecordId)
             .observeUi()
+            .doOnSubscribe { postEventState(WorkoutState.Loading) }
+            .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .flatMap { dataState ->
                 require(dataState is DataState.Success)
                 val exercises = dataState.data.exerciseWithSetsList.toCurrent()
@@ -91,19 +121,19 @@ class WorkoutViewModel @Inject constructor(
             .subscribe()
     }
 
-    private fun loadingAction() {
-        mState.value = WorkoutState.Loading
-    }
-
     private fun exerciseAction(action: Exercise) {
         when (action) {
-            is Exercise.Add -> exerciseHelper.addExercise(action.id) { event -> mEvent.postValue(event) }
+            is Exercise.Add -> exerciseHelper.addExercise(action.id) { event -> postEventState(event) }
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
             is Exercise.Delete -> exerciseHelper.deleteExercise(action.id)
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
         }
     }
@@ -113,13 +143,17 @@ class WorkoutViewModel @Inject constructor(
             is ExSet.AddExSet -> {
                 exerciseHelper.addSetToExercise(action.params)
                     .observeUi()
-                    .doAfterSuccess { state -> mState.value = state }
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
                     .subscribe()
             }
             is ExSet.DeleteLastExSet -> {
                 exerciseHelper.deleteLastSet(action.exerciseId)
                     .observeUi()
-                    .doAfterSuccess { state -> mState.value = state }
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
                     .subscribe()
             }
         }
@@ -143,6 +177,7 @@ class WorkoutViewModel @Inject constructor(
             Dialog.CalendarDialog -> {
                 dateManager.getSelectedDate()
                     .observeUi()
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
                     .doAfterSuccess { dataState ->
                         val data = (dataState as DataState.Success).data
                         navigateHelper.startCalendarPickerDialog(data) { date -> dateAction(Date.Set(date)) }
@@ -151,6 +186,7 @@ class WorkoutViewModel @Inject constructor(
             Dialog.TimeDialog -> {
                 timeScheduleManager.getTime()
                     .observeUi()
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
                     .doAfterSuccess { time ->
                         require(time is DataState.Success)
                         navigateHelper.startTimePickerDialog(time.data) { newTime -> timeAction(Time.Set(newTime)) }
@@ -159,6 +195,7 @@ class WorkoutViewModel @Inject constructor(
             Dialog.TitleDialog -> {
                 workoutTitleManager.getTitle()
                     .observeUi()
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
                     .doAfterSuccess { title ->
                         navigateHelper.startWorkoutTitleDialog(title) { newTitle ->
                             titleAction(Title.Set(newTitle))
@@ -172,11 +209,13 @@ class WorkoutViewModel @Inject constructor(
         when (action) {
             Date.Get -> dateTimeHelper.getDate()
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
             is Date.Set -> dateTimeHelper.setDate(action.date)
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
         }
     }
@@ -185,11 +224,13 @@ class WorkoutViewModel @Inject constructor(
         when (action) {
             Time.Get -> dateTimeHelper.getTime()
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
             is Time.Set -> dateTimeHelper.setTime(action.time)
                 .observeUi()
-                .doAfterSuccess { state -> mState.value = state }
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                .doAfterSuccess { state -> postEventState(state) }
                 .subscribe()
         }
     }
@@ -209,10 +250,12 @@ class WorkoutViewModel @Inject constructor(
         when (action) {
             Title.Get -> workoutTitleManager.getTitle()
                 .observeUi()
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
                 .doAfterSuccess { title -> mState.postValue(WorkoutState.TitleResult(title)) }
                 .subscribe()
             is Title.Set -> workoutTitleManager.setTitle(action.title)
                 .observeUi()
+                .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
                 .doAfterSuccess { newTitle -> mState.postValue(WorkoutState.TitleResult(newTitle)) }
                 .subscribe()
         }
@@ -234,6 +277,7 @@ class WorkoutViewModel @Inject constructor(
         editStateAction(EditState.Hide)
         workoutHelper.finishWorkout()
             .observeUi()
+            .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { quad ->
                 if (quad.fourth.isEmpty()) {
                     clearCache()
@@ -255,8 +299,9 @@ class WorkoutViewModel @Inject constructor(
     ) {
         workoutHelper.saveWorkout(title, date, time, exercises, workoutRecordId)
             .observeUi()
+            .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .flatMap { state ->
-                mEvent.postValue(state)
+                postEventState(state)
                 dateManager.selectDate(date)
             }.flatMap {
                 dateManager.selectMonth(date)
@@ -266,6 +311,7 @@ class WorkoutViewModel @Inject constructor(
     private fun close(workoutId: Int) {
         recordsRepository.getWorkoutWithExerciseAnsSets(workoutId)
             .observeUi()
+            .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { dataState ->
                 if (dataState is DataState.Success &&
                     dataState.data.workout.time != null
@@ -286,23 +332,5 @@ class WorkoutViewModel @Inject constructor(
 
     private fun toast(text: String) {
         navigateHelper.showToast(text)
-    }
-
-    override fun triggerIntent(intent: WorkoutIntent) {
-        when (intent) {
-            is CloseWorkout -> close(intent.workoutId)
-            is EditState -> editStateAction(intent)
-            is Navigate -> navigateAction(intent)
-            is Title -> titleAction(intent)
-            is Date -> dateAction(intent)
-            is Exercise -> exerciseAction(intent)
-            is Dialog -> dialogAction(intent)
-            is Time -> timeAction(intent)
-            is SwitchState -> switchAction(intent)
-            is Workout -> workoutAction(intent)
-            is ShowToast -> toast(intent.text)
-            is ExSet -> setAction(intent)
-            ShowLoading -> loadingAction()
-        }
     }
 }

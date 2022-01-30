@@ -23,6 +23,7 @@ import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -64,14 +65,15 @@ class SubcategoryViewModel @Inject constructor(
     private fun getCategory(categoryId: Int) {
         repo.getCategory(categoryId)
             .observeUi()
-            .doAfterSuccess { dataState ->
-                mState.value = dataState.reduce()
-            }.subscribe()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doAfterSuccess { dataState -> postStateEvent(dataState.reduce()) }
+            .subscribe()
     }
 
     private fun getSubCategories(categoryId: Int) {
         repo.getSubCategories(categoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { dataState ->
                 val viewState = dataState.reduceDto()
@@ -85,7 +87,7 @@ class SubcategoryViewModel @Inject constructor(
             try {
                 validateCache = state.libraryList.map { (it as LibraryViewData.SubCategory).title }
             } catch (e: java.lang.IllegalArgumentException) {
-                postStateEvent(LibraryListEvent.ExceptionEvent(e))
+                postStateEvent(LibraryListEvent.ExceptionResult(e))
             }
     }
 
@@ -94,6 +96,7 @@ class SubcategoryViewModel @Inject constructor(
             .debounceImmediate(500, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
@@ -115,6 +118,7 @@ class SubcategoryViewModel @Inject constructor(
         val subCategory = LibraryDto.SubCategory(0, subcategoryTitle, categoryId)
         repo.addSubCategory(subCategory)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getSubCategories(subCategory.categoryId) }
             .subscribe()
@@ -123,6 +127,7 @@ class SubcategoryViewModel @Inject constructor(
     private fun deleteSubcategory(subcategoryId: Int, categoryId: Int) {
         repo.deleteSubcategory(subcategoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getSubCategories(categoryId) }
             .subscribe()

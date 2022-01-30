@@ -9,7 +9,7 @@ sealed class LibraryListEvent : BaseState.Event {
         object AlreadyExist : ValidationResult()
         object Success : ValidationResult()
     }
-    data class ExceptionEvent(val exception: Exception) : LibraryListEvent()
+    data class ExceptionResult(val exception: Exception) : LibraryListEvent()
 
     object ShowEditState : LibraryListEvent()
     object HideEditState : LibraryListEvent()

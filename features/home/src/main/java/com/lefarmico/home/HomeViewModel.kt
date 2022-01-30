@@ -1,5 +1,6 @@
 package com.lefarmico.home
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toViewData
@@ -14,9 +15,12 @@ import com.lefarmico.domain.utils.DataState
 import com.lefarmico.domain.utils.map
 import com.lefarmico.home.HomeIntent.EditState.Action.*
 import com.lefarmico.navigation.Router
+import com.lefarmico.navigation.notification.Notification
 import com.lefarmico.navigation.params.RecordMenuParams
+import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -30,6 +34,28 @@ class HomeViewModel @Inject constructor(
     private val formatterTimeManager: FormatterTimeManager,
 ) :
     BaseViewModel<HomeIntent, HomeState, HomeEvent>() {
+
+    override fun triggerIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ClickDate -> getWorkoutRecordsByDate(intent.localDate)
+            is HomeIntent.DeleteWorkout -> removeWorkout(intent.workoutId)
+            is HomeIntent.ChangeMonth -> getMonth(intent.change)
+            HomeIntent.GetDaysInMonth -> getDates()
+            HomeIntent.GetWorkoutRecordsByCurrentDate -> getWorkoutRecords()
+            is HomeIntent.NavigateToDetailsWorkoutScreen -> navigateToDetailsWorkout(intent.workoutId)
+            HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
+            is HomeIntent.EditState -> editStateAction(intent.action)
+            HomeIntent.BackToCurrentDate -> backToCurrentDate()
+            is HomeIntent.ShowToast -> showToast(intent.text)
+        }
+    }
+
+    private fun postStateEvent(value: BaseState) {
+        when (value) {
+            is BaseState.Event -> mEvent.postValue(value as HomeEvent)
+            is BaseState.State -> mState.value = value as HomeState
+        }
+    }
 
     private fun getDates() {
         dateManager.getCurrentDaysInMonth()
@@ -46,6 +72,8 @@ class HomeViewModel @Inject constructor(
     private fun getWorkoutRecordsByDate(localDate: LocalDate) {
         dateManager.selectDate(localDate)
             .observeUi()
+            .doOnSubscribe { postStateEvent(HomeState.Loading) }
+            .doOnError { postStateEvent(HomeEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { getWorkoutRecords() }
             .subscribe()
     }
@@ -53,10 +81,12 @@ class HomeViewModel @Inject constructor(
     private fun getWorkoutRecords() {
         dateManager.getSelectedDate()
             .observeUi()
+            .doOnSubscribe { postStateEvent(HomeState.Loading) }
+            .doOnError { postStateEvent(HomeEvent.ExceptionResult(it as Exception)) }
             .flatMap { dataState ->
                 repo.getWorkoutWithExerciseAndSetsByDate(dataState.resolve()).observeUi()
             }.doAfterSuccess { dataState ->
-                getSelectedFormatterListener { dateF, timeF -> mState.value = dataState.reduce(dateF, timeF) }
+                getSelectedFormatterListener { dateF, timeF -> postStateEvent(dataState.reduce(dateF, timeF)) }
             }.subscribe()
     }
 
@@ -70,7 +100,7 @@ class HomeViewModel @Inject constructor(
             dateObservable
                 .observeUi()
                 .doAfterSuccess { dataState ->
-                    mState.value = dataState.map { it.format(formatter) }.reduce()
+                    postStateEvent(dataState.map { it.format(formatter) }.reduce())
                     getDates()
                 }.subscribe()
         }
@@ -79,6 +109,8 @@ class HomeViewModel @Inject constructor(
     private fun removeWorkout(workoutId: Int) {
         repo.deleteWorkoutWithExAndSets(workoutId)
             .observeUi()
+            .doOnSubscribe { postStateEvent(HomeState.Loading) }
+            .doOnError { postStateEvent(HomeEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess {
                 getWorkoutRecords()
                 getDates()
@@ -116,6 +148,7 @@ class HomeViewModel @Inject constructor(
     private fun getSelectedFormatterListener(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
         formatterManager.getSelectedFormatter()
             .observeUi()
+            .doOnError { postStateEvent(HomeEvent.ExceptionResult(it as Exception)) }
             .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF -> Pair(dateF, timeF) }
             .doAfterSuccess { pair -> formatter(pair.first.formatter, pair.second.formatter) }
             .subscribe()
@@ -124,6 +157,7 @@ class HomeViewModel @Inject constructor(
     private fun currentMonthFormatterListener(formatter: (DateTimeFormatter) -> Unit) {
         formatterMonthManager.getSelectedMonthFormatter()
             .observeUi()
+            .doOnError { postStateEvent(HomeEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { dto -> formatter(dto.formatter) }
             .subscribe()
     }
@@ -138,17 +172,7 @@ class HomeViewModel @Inject constructor(
             }.subscribe()
     }
 
-    override fun triggerIntent(intent: HomeIntent) {
-        when (intent) {
-            is HomeIntent.ClickDate -> getWorkoutRecordsByDate(intent.localDate)
-            is HomeIntent.DeleteWorkout -> removeWorkout(intent.workoutId)
-            is HomeIntent.ChangeMonth -> getMonth(intent.change)
-            HomeIntent.GetDaysInMonth -> getDates()
-            HomeIntent.GetWorkoutRecordsByCurrentDate -> getWorkoutRecords()
-            is HomeIntent.NavigateToDetailsWorkoutScreen -> navigateToDetailsWorkout(intent.workoutId)
-            HomeIntent.NavigateToWorkoutScreen -> navigateToWorkout()
-            is HomeIntent.EditState -> editStateAction(intent.action)
-            HomeIntent.BackToCurrentDate -> backToCurrentDate()
-        }
+    private fun showToast(text: String) {
+        router.show(Notification.TOAST, ToastBarParams(text))
     }
 }

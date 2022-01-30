@@ -5,4 +5,5 @@ import com.lefarmico.core.base.BaseIntent
 sealed class ExerciseDetailsIntent : BaseIntent {
 
     data class GetExercise(val exerciseId: Int) : ExerciseDetailsIntent()
+    data class ShowToast(val text: String) : ExerciseDetailsIntent()
 }

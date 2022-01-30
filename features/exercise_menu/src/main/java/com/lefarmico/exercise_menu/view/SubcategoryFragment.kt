@@ -16,7 +16,6 @@ import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.EditStateActionBarCallback
 import com.lefarmico.exercise_menu.R
 import com.lefarmico.exercise_menu.databinding.FragmentSubcategoryListBinding
-import com.lefarmico.exercise_menu.intent.CategoryIntent
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent.*
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent.EditState.Action.*
@@ -24,6 +23,7 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.SubcategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
+import java.lang.Exception
 
 class SubcategoryFragment :
     BaseFragment<SubcategoryIntent, LibraryListState, LibraryListEvent,
@@ -121,7 +121,6 @@ class SubcategoryFragment :
 
     override fun receive(state: LibraryListState) {
         when (state) {
-            is LibraryListState.ExceptionResult -> onExceptionResult()
             is LibraryListState.LibraryResult -> showSubcategories(state.libraryList)
             LibraryListState.Loading -> showLoading()
             is LibraryListState.Title -> setTitle(state.title)
@@ -147,7 +146,7 @@ class SubcategoryFragment :
             LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
             LibraryListEvent.ShowEditState -> showEditState()
             LibraryListEvent.DeselectAllWorkouts -> TODO()
-            is LibraryListEvent.ExceptionEvent -> onExceptionResult()
+            is LibraryListEvent.ExceptionResult -> onExceptionResult(event.exception)
         }
     }
 
@@ -223,7 +222,7 @@ class SubcategoryFragment :
         adapter.toggleSelectAll()
     }
 
-    private fun onExceptionResult() {
+    private fun onExceptionResult(exception: Exception) {
         // TODO send log to crashlytics
         dispatchIntent(ShowToast(getString(R.string.state_error)))
     }

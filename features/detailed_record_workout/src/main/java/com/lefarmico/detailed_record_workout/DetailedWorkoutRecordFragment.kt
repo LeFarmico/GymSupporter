@@ -38,7 +38,6 @@ class DetailedWorkoutRecordFragment :
 
     override fun receive(state: DetailedState) {
         when (state) {
-            is DetailedState.ExceptionResult -> logException(state.exception)
             is DetailedState.WorkoutResult -> showWorkout(state.workout)
             is DetailedState.DateResult -> showDate(state.dateText)
             is DetailedState.TitleResult -> showWorkoutTitle(state.title)
@@ -49,6 +48,7 @@ class DetailedWorkoutRecordFragment :
         when (event) {
             DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.state_error))
             DetailedEvent.Loading -> loading(true)
+            is DetailedEvent.ExceptionResult -> onExceptionResult(event.exception)
         }
     }
 
@@ -89,7 +89,7 @@ class DetailedWorkoutRecordFragment :
         dispatchIntent(DetailedIntent.CloseWithToast(text))
     }
 
-    private fun logException(exception: Exception) {
+    private fun onExceptionResult(exception: Exception) {
         // TODO send log to crashlytics
     }
 

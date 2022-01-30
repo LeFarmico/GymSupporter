@@ -1,5 +1,6 @@
 package com.lefarmico.workout.interactor
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.domain.repository.manager.DateManager
 import com.lefarmico.domain.repository.manager.FormatterManager
 import com.lefarmico.domain.repository.manager.FormatterTimeManager
@@ -18,26 +19,26 @@ class DateTimeHelper(
     private val formatterTimeManager: FormatterTimeManager
 ) {
 
-    fun getDate(): Single<WorkoutState> {
+    fun getDate(): Single<BaseState> {
         return formatterManager.getSelectedFormatter()
             .flatMap { dto ->
                 dateManager.getSelectedDateFormatted(dto.formatter)
             }.map { date -> date.reduceDate() }
     }
 
-    fun setDate(localDate: LocalDate): Single<WorkoutState> {
+    fun setDate(localDate: LocalDate): Single<BaseState> {
         return formatterManager.getSelectedFormatter()
             .flatMap { dto -> dateManager.setAndGetFormattedDate(localDate, dto.formatter) }
             .map { dataState -> dataState.reduceDate() }
     }
 
-    fun getTime(): Single<WorkoutState> {
+    fun getTime(): Single<BaseState> {
         return formatterTimeManager.getSelectedTimeFormatter()
             .flatMap { dto -> timeManager.getFormattedTime(dto.formatter) }
             .map { time -> time.reduceTime() }
     }
 
-    fun setTime(localTime: LocalTime): Single<WorkoutState> {
+    fun setTime(localTime: LocalTime): Single<BaseState> {
         return formatterTimeManager.getSelectedTimeFormatter()
             .flatMap { dto -> timeManager.setAndGetFormattedTime(localTime, dto.formatter) }
             .map { time -> time.reduceTime() }

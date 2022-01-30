@@ -23,6 +23,7 @@ import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -65,6 +66,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
     private fun getCategories() {
         repo.getCategories()
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { dataState ->
                 val viewState = dataState.reduceDto()
@@ -79,7 +81,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
             try {
                 validateCache = state.libraryList.map { (it as LibraryViewData.Category).title }
             } catch (e: IllegalArgumentException) {
-                postStateEvent(LibraryListEvent.ExceptionEvent(e))
+                postStateEvent(LibraryListEvent.ExceptionResult(e))
             }
     }
 
@@ -88,6 +90,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
             .debounceImmediate(500, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
@@ -109,6 +112,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         val category = LibraryDto.Category(title = categoryTitle)
         repo.addCategory(category)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getCategories() }
             .subscribe()
@@ -117,6 +121,7 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
     private fun deleteCategory(categoryId: Int) {
         repo.deleteCategory(categoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getCategories() }
             .subscribe()

@@ -1,5 +1,6 @@
 package com.lefarmico.home
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.utils.DataState
@@ -10,18 +11,18 @@ import java.time.format.DateTimeFormatter
 fun DataState<List<WorkoutRecordsDto.WorkoutWithExercisesAndSets>>.reduce(
     dateFormatter: DateTimeFormatter,
     timeFormatter: DateTimeFormatter
-): HomeState {
+): BaseState {
     return when (this) {
-        is DataState.Error -> HomeState.ExceptionResult(this.exception)
+        is DataState.Error -> HomeEvent.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.WorkoutResult(this.data.toViewData(dateFormatter, timeFormatter))
     }
 }
 
 @JvmName("reduceMonthAndYearText")
-fun DataState<String>.reduce(): HomeState {
+fun DataState<String>.reduce(): BaseState {
     return when (this) {
-        is DataState.Error -> HomeState.ExceptionResult(this.exception)
+        is DataState.Error -> HomeEvent.ExceptionResult(this.exception)
         DataState.Loading -> HomeState.Loading
         is DataState.Success -> HomeState.MonthAndYearResult(MonthAndYearText(this.data))
     }

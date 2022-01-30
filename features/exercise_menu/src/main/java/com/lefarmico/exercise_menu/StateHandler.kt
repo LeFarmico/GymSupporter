@@ -4,12 +4,13 @@ import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.utils.DataState
+import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 
 @JvmName("reduceDtoTitle")
 fun DataState<List<LibraryDto>>.reduceDto(): BaseState {
     return when (this) {
-        is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
+        is DataState.Error -> LibraryListEvent.ExceptionResult(this.exception)
         DataState.Loading -> LibraryListState.Loading
         is DataState.Success -> LibraryListState.LibraryResult(data.map { it.toViewData() })
     }
@@ -24,18 +25,18 @@ private fun LibraryDto.toViewData(): LibraryViewData {
 }
 
 @JvmName("reduceCategoryTitle")
-fun DataState<LibraryDto.Category>.reduce(): LibraryListState {
+fun DataState<LibraryDto.Category>.reduce(): BaseState {
     return when (this) {
-        is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
+        is DataState.Error -> LibraryListEvent.ExceptionResult(this.exception)
         DataState.Loading -> LibraryListState.Loading
         is DataState.Success -> LibraryListState.Title(this.data.title)
     }
 }
 
 @JvmName("reduceSubcategoryTitle")
-fun DataState<LibraryDto.SubCategory>.reduce(): LibraryListState {
+fun DataState<LibraryDto.SubCategory>.reduce(): BaseState {
     return when (this) {
-        is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
+        is DataState.Error -> LibraryListEvent.ExceptionResult(this.exception)
         DataState.Loading -> LibraryListState.Loading
         is DataState.Success -> LibraryListState.Title(this.data.title)
     }

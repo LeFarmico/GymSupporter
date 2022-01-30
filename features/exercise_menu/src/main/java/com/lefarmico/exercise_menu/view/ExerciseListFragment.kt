@@ -23,6 +23,7 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.ExerciseListViewModel
 import com.lefarmico.navigation.params.LibraryParams
+import java.lang.Exception
 
 class ExerciseListFragment :
     BaseFragment<
@@ -95,7 +96,6 @@ class ExerciseListFragment :
 
     override fun receive(state: LibraryListState) {
         when (state) {
-            is LibraryListState.ExceptionResult -> onExceptionResult()
             is LibraryListState.LibraryResult -> showExercises(state.libraryList)
             LibraryListState.Loading -> showLoading()
             is LibraryListState.Title -> setTitle(state.title)
@@ -109,7 +109,7 @@ class ExerciseListFragment :
             LibraryListEvent.HideEditState -> hideEditState()
             LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
             LibraryListEvent.ShowEditState -> showEditState()
-            else -> onExceptionResult()
+            else -> onExceptionResult(IllegalArgumentException())
         }
     }
 
@@ -152,7 +152,7 @@ class ExerciseListFragment :
         adapter.toggleSelectAll()
     }
 
-    private fun onExceptionResult() {
+    private fun onExceptionResult(exception: Exception) {
         // TODO send log to crashlytics
         dispatchIntent(ShowToast(getString(R.string.state_error)))
     }

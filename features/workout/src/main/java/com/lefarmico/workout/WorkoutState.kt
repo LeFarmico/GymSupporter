@@ -10,7 +10,6 @@ sealed class WorkoutState : BaseState.State {
     ) : WorkoutState()
     data class DateResult(val date: String) : WorkoutState()
     data class TitleResult(val title: String) : WorkoutState()
-    data class ExceptionResult(val exception: Exception) : WorkoutState()
     data class TimeResult(val time: String) : WorkoutState()
     data class SwitchState(val isOn: Boolean) : WorkoutState()
     object Loading : WorkoutState()

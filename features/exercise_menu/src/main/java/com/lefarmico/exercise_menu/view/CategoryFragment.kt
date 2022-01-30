@@ -23,6 +23,7 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.CategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
+import java.lang.Exception
 
 class CategoryFragment :
     BaseFragment<CategoryIntent, LibraryListState, LibraryListEvent,
@@ -119,7 +120,6 @@ class CategoryFragment :
 
     override fun receive(state: LibraryListState) {
         when (state) {
-            is LibraryListState.ExceptionResult -> onExceptionResult()
             is LibraryListState.LibraryResult -> showCategories(state.libraryList)
             LibraryListState.Loading -> showLoading()
             else -> {}
@@ -147,7 +147,7 @@ class CategoryFragment :
             LibraryListEvent.HideEditState -> hideEditState()
             LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
             LibraryListEvent.ShowEditState -> showEditState()
-            is LibraryListEvent.ExceptionEvent -> onExceptionResult()
+            is LibraryListEvent.ExceptionResult -> onExceptionResult(event.exception)
         }
     }
 
@@ -227,7 +227,7 @@ class CategoryFragment :
         )
     }
 
-    private fun onExceptionResult() {
+    private fun onExceptionResult(exception: Exception) {
         // TODO send log to crashlytics
         dispatchIntent(ShowToast(getString(R.string.state_error)))
     }

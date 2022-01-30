@@ -16,6 +16,7 @@ import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.params.WorkoutScreenParams
 import com.lefarmico.navigation.screen.Screen
+import java.lang.Exception
 import javax.inject.Inject
 
 class ExerciseListViewModel @Inject constructor(
@@ -45,13 +46,15 @@ class ExerciseListViewModel @Inject constructor(
     private fun getSubcategoryTitle(subcategoryId: Int) {
         repo.getSubCategory(subcategoryId)
             .observeUi()
-            .doAfterSuccess { dataState -> mState.value = dataState.reduce() }
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doAfterSuccess { dataState -> postStateEvent(dataState.reduce()) }
             .subscribe()
     }
 
     private fun getExercises(subCategoryId: Int) {
         repo.getExercises(subCategoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doOnSuccess { dataState -> postStateEvent(dataState.reduceDto()) }
             .subscribe()
@@ -80,6 +83,7 @@ class ExerciseListViewModel @Inject constructor(
     private fun deleteExercise(exerciseId: Int, subcategoryId: Int) {
         repo.deleteExercise(exerciseId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getExercises(subcategoryId) }
             .subscribe()

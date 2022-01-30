@@ -1,5 +1,6 @@
 package com.lefarmico.workout.interactor
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
@@ -17,7 +18,7 @@ class ExerciseHelper(
 
     private var setId = 1
 
-    fun addExercise(id: Int, idCallback: (WorkoutEvent) -> Unit): Single<WorkoutState> {
+    fun addExercise(id: Int, idCallback: (BaseState) -> Unit): Single<BaseState> {
         return libraryRepository.getExercise(id)
             .flatMap {
                 val data = (it as DataState.Success).data
@@ -27,12 +28,12 @@ class ExerciseHelper(
             }.flatMap { getAllExercises() }
     }
 
-    fun deleteExercise(id: Int): Single<WorkoutState> {
+    fun deleteExercise(id: Int): Single<BaseState> {
         return workoutRepository.deleteExercise(id)
             .flatMap { getAllExercises() }
     }
 
-    fun addSetToExercise(params: SetParameterParams): Single<WorkoutState> {
+    fun addSetToExercise(params: SetParameterParams): Single<BaseState> {
         return workoutRepository.getSets(params.exerciseId)
             .flatMap {
                 var setNumber = 1
@@ -44,12 +45,12 @@ class ExerciseHelper(
             }.flatMap { getAllExercises() }
     }
 
-    fun deleteLastSet(exerciseId: Int): Single<WorkoutState> {
+    fun deleteLastSet(exerciseId: Int): Single<BaseState> {
         return workoutRepository.deleteLastSet(exerciseId)
             .flatMap { getAllExercises() }
     }
 
-    fun getAllExercises(): Single<WorkoutState> {
+    fun getAllExercises(): Single<BaseState> {
         return workoutRepository.getExercisesWithSets()
             .map { dataState -> dataState.reduce() }
     }

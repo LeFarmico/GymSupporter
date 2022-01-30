@@ -7,5 +7,4 @@ import java.lang.Exception
 sealed class ExerciseDetailsState : BaseState.State {
     data class ExerciseResult(val exercise: LibraryViewData.Exercise) : ExerciseDetailsState()
     object Loading : ExerciseDetailsState()
-    data class ExceptionResult(val exception: Exception) : ExerciseDetailsState()
 }
