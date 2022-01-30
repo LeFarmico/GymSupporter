@@ -25,6 +25,7 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
     private fun getRecordWorkout(workoutId: Int) {
         repo.getWorkoutWithExerciseAnsSets(workoutId)
             .observeUi()
+            .doOnSubscribe { mEvent.postValue(DetailedEvent.Loading) }
             .doOnError { mEvent.postValue(DetailedEvent.DataLoadFailure) }
             .doAfterSuccess { dataState ->
                 getSelectedFormatters { dateF, timeF -> postStateEvent(dataState.reduce(dateF, timeF)) }

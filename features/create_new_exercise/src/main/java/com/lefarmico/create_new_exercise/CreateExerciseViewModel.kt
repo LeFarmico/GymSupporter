@@ -48,7 +48,7 @@ class CreateExerciseViewModel @Inject constructor(
     private fun getExistedExercises(subcategoryId: Int) {
         repo.getExercises(subcategoryId)
             .observeUi()
-            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
+            .doOnError { mEvent.postValue(CreateExerciseEvent.HardException(it as Exception)) }
             .doOnSuccess { dataState -> putToCache(dataState.reduce()) }
             .subscribe()
     }
@@ -62,7 +62,7 @@ class CreateExerciseViewModel @Inject constructor(
             .debounceImmediate(1, TimeUnit.SECONDS)
             .distinctUntilChanged()
             .observeUi()
-            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
+            .doOnError { mEvent.postValue(CreateExerciseEvent.HardException(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
