@@ -15,6 +15,7 @@ import com.lefarmico.core.selector.SelectItemsHandler
 import com.lefarmico.core.toolbar.EditStateActionBarCallback
 import com.lefarmico.exercise_menu.R
 import com.lefarmico.exercise_menu.databinding.FragmentExerciseListBinding
+import com.lefarmico.exercise_menu.intent.CategoryIntent
 import com.lefarmico.exercise_menu.intent.ExerciseIntent
 import com.lefarmico.exercise_menu.intent.ExerciseIntent.*
 import com.lefarmico.exercise_menu.intent.ExerciseIntent.EditState.Action.*
@@ -92,6 +93,32 @@ class ExerciseListFragment :
         }
     }
 
+    override fun receive(state: LibraryListState) {
+        when (state) {
+            is LibraryListState.ExceptionResult -> onExceptionResult()
+            is LibraryListState.LibraryResult -> showExercises(state.libraryList)
+            LibraryListState.Loading -> showLoading()
+            is LibraryListState.Title -> setTitle(state.title)
+        }
+    }
+
+    override fun receive(event: LibraryListEvent) {
+        when (event) {
+            LibraryListEvent.DeselectAllWorkouts -> {}
+            LibraryListEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
+            LibraryListEvent.HideEditState -> hideEditState()
+            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
+            LibraryListEvent.ShowEditState -> showEditState()
+            else -> onExceptionResult()
+        }
+    }
+
+    private fun setTitle(title: String) {
+        requireActivity().title = title
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
     private fun showExercises(items: List<LibraryViewData>) {
         adapter.items = items
         if (items.isEmpty()) {
@@ -125,31 +152,9 @@ class ExerciseListFragment :
         adapter.toggleSelectAll()
     }
 
-    override fun receive(state: LibraryListState) {
-        when (state) {
-            is LibraryListState.ExceptionResult -> throw (state.exception)
-            is LibraryListState.LibraryResult -> showExercises(state.libraryList)
-            LibraryListState.Loading -> showLoading()
-            is LibraryListState.Title -> setTitle(state.title)
-        }
-    }
-
-    private fun setTitle(title: String) {
-        requireActivity().title = title
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
-
-    override fun receive(event: LibraryListEvent) {
-        when (event) {
-            is LibraryListEvent.ShowToast -> {}
-            LibraryListEvent.DeselectAllWorkouts -> {}
-            LibraryListEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
-            LibraryListEvent.HideEditState -> hideEditState()
-            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
-            LibraryListEvent.ShowEditState -> showEditState()
-            else -> throw IllegalStateException()
-        }
+    private fun onExceptionResult() {
+        // TODO send log to crashlytics
+        dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 
     companion object {

@@ -39,7 +39,7 @@
     <string name="next_month_button">Next month</string>
     <string name="last_month_button">Last month</string>
 
-    <!-- Edit text fields   -->
+    <!-- Text fields   -->
     <string name="new_category">New category</string>
     <string name="new_subcategory">New Subcategory</string>
     <string name="exercise_title">Exercise title</string>
@@ -50,9 +50,14 @@
     <string name="dialog_weight_pounds">lb.</string>
     <string name="default_workout_title">Your workout</string>
 
+    <!-- Input text fields -->
+    <string name="input_field_exist">That field already exist</string>
+    <string name="input_field_empty">That field is empty</string>
+    <string name="input_field_success"> </string>
+
     <!-- State -->
-    <string name="empty_state">Now that screen is empty, try to fill it up!</string>
-    <string name="error_state">Something went wrong. Try again.</string>
+    <string name="state_empty">Now that screen is empty, try to fill it up!</string>
+    <string name="state_error">Something went wrong. Try again.</string>
 
     <!-- Settings -->
     <string name="full_date_format">Full date format</string>

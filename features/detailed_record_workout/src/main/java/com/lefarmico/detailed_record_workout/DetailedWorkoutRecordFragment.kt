@@ -47,7 +47,7 @@ class DetailedWorkoutRecordFragment :
 
     override fun receive(event: DetailedEvent) {
         when (event) {
-            DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.error_state))
+            DetailedEvent.DataLoadFailure -> closeWithError(getString(R.string.state_error))
             DetailedEvent.Loading -> loading(true)
         }
     }

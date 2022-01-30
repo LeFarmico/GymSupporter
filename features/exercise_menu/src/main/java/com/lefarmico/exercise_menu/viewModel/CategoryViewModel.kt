@@ -1,5 +1,6 @@
 package com.lefarmico.exercise_menu.viewModel
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.core.extensions.debounceImmediate
@@ -42,23 +43,43 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         validator()
     }
 
+    override fun triggerIntent(intent: CategoryIntent) {
+        return when (intent) {
+            is CategoryIntent.AddCategory -> addCategory(intent.title)
+            is CategoryIntent.ClickItem -> goToSubcategoryScreen(intent.item.id, intent.isFromWorkoutScreen)
+            CategoryIntent.GetCategories -> getCategories()
+            is CategoryIntent.ShowToast -> showToast(intent.text)
+            is CategoryIntent.Validate -> validateSubject.onNext(intent.text)
+            is CategoryIntent.DeleteCategory -> deleteCategory(intent.categoryId)
+            is CategoryIntent.EditState -> editStateAction(intent.action)
+        }
+    }
+
+    private fun postStateEvent(baseState: BaseState) {
+        when (baseState) {
+            is BaseState.Event -> mEvent.postValue(baseState as LibraryListEvent)
+            is BaseState.State -> mState.value = baseState as LibraryListState
+        }
+    }
+
     private fun getCategories() {
         repo.getCategories()
             .observeUi()
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { dataState ->
                 val viewState = dataState.reduceDto()
-                mState.value = viewState
+                postStateEvent(viewState)
                 putToCache(viewState)
             }
             .subscribe()
     }
 
-    private fun putToCache(state: LibraryListState) {
+    private fun putToCache(state: BaseState) {
         if (state is LibraryListState.LibraryResult)
             try {
                 validateCache = state.libraryList.map { (it as LibraryViewData.Category).title }
             } catch (e: IllegalArgumentException) {
-                throw (e)
+                postStateEvent(LibraryListEvent.ExceptionEvent(e))
             }
     }
 
@@ -88,6 +109,15 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
         val category = LibraryDto.Category(title = categoryTitle)
         repo.addCategory(category)
             .observeUi()
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
+            .doAfterSuccess { getCategories() }
+            .subscribe()
+    }
+
+    private fun deleteCategory(categoryId: Int) {
+        repo.deleteCategory(categoryId)
+            .observeUi()
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getCategories() }
             .subscribe()
     }
@@ -112,24 +142,5 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
             DeleteSelected -> LibraryListEvent.DeleteSelectedWorkouts
         }
         mEvent.postValue(event)
-    }
-
-    private fun deleteCategory(categoryId: Int) {
-        repo.deleteCategory(categoryId)
-            .observeUi()
-            .doAfterSuccess { getCategories() }
-            .subscribe()
-    }
-
-    override fun triggerIntent(intent: CategoryIntent) {
-        return when (intent) {
-            is CategoryIntent.AddCategory -> addCategory(intent.title)
-            is CategoryIntent.ClickItem -> goToSubcategoryScreen(intent.item.id, intent.isFromWorkoutScreen)
-            CategoryIntent.GetCategories -> getCategories()
-            is CategoryIntent.ShowToast -> showToast(intent.text)
-            is CategoryIntent.Validate -> validateSubject.onNext(intent.text)
-            is CategoryIntent.DeleteCategory -> deleteCategory(intent.categoryId)
-            is CategoryIntent.EditState -> editStateAction(intent.action)
-        }
     }
 }
