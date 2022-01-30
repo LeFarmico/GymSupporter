@@ -14,6 +14,7 @@ import com.lefarmico.navigation.params.WorkoutScreenParams.NewExercise
 import com.lefarmico.navigation.params.WorkoutScreenParams.UpdateWorkout
 import com.lefarmico.workout.WorkoutIntent.*
 import com.lefarmico.workout.databinding.FragmentWorkoutScreenBinding
+import java.lang.Exception
 
 class WorkoutFragment :
     BaseFragment<
@@ -104,6 +105,36 @@ class WorkoutFragment :
         }
     }
 
+    override fun receive(state: WorkoutState) {
+        when (state) {
+            WorkoutState.Loading -> showLoading()
+            is WorkoutState.DateResult -> workoutDate(state.date)
+            is WorkoutState.ExerciseResult -> showExercises(state.exerciseList)
+            is WorkoutState.TitleResult -> workoutTitle(state.title)
+            is WorkoutState.TimeResult -> workoutTime(state.time)
+            is WorkoutState.SwitchState -> switchState(state.isOn)
+        }
+    }
+
+    override fun receive(event: WorkoutEvent) {
+        when (event) {
+            WorkoutEvent.ShowEditState -> showEditState()
+            WorkoutEvent.SelectAllExercises -> selectAllExercises()
+            WorkoutEvent.HideEditState -> hideEditState()
+            WorkoutEvent.DeleteSelectedExercises -> deleteSelectedExercises()
+            WorkoutEvent.DeselectAllExercises -> {}
+            is WorkoutEvent.ExceptionResult -> onExceptionResult(event.exception)
+            is WorkoutEvent.SetParamsDialog -> dispatchIntent(Dialog.SetParamsDialog(event.exerciseId))
+            is WorkoutEvent.EndWorkoutResult -> closeScreen(event.workoutId.toInt())
+        }
+    }
+
+    private fun setUpToolbar() {
+        requireActivity().title = getString(R.string.workout_screen)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
     private fun showLoading() = binding.state.showLoadingState()
 
     private fun showExercises(items: List<ExerciseWithSets>) {
@@ -125,6 +156,11 @@ class WorkoutFragment :
         actionMode?.finish()
     }
 
+    private fun deleteSelectedExercises() {
+        selectHandler?.onEachSelectedItemsAction()
+        actionMode?.finish()
+    }
+
     private fun workoutTitle(title: String) {
         binding.workoutTitle.text = title
     }
@@ -135,11 +171,6 @@ class WorkoutFragment :
 
     private fun workoutTime(time: String) {
         binding.workoutTime.text = time
-    }
-
-    private fun deleteSelectedExercises() {
-        selectHandler?.onEachSelectedItemsAction()
-        actionMode?.finish()
     }
 
     private fun selectAllExercises() {
@@ -161,41 +192,14 @@ class WorkoutFragment :
         }
     }
 
-    private fun setUpToolbar() {
-        requireActivity().title = getString(R.string.workout_screen)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
-
     private fun closeScreen(workoutId: Int) {
         adapter.items = listOf()
         dispatchIntent(CloseWorkout(workoutId))
     }
 
-    override fun receive(state: WorkoutState) {
-        when (state) {
-            WorkoutState.Loading -> showLoading()
-            is WorkoutState.DateResult -> workoutDate(state.date)
-            is WorkoutState.ExceptionResult -> throw (state.exception)
-            is WorkoutState.ExerciseResult -> showExercises(state.exerciseList)
-            is WorkoutState.TitleResult -> workoutTitle(state.title)
-            is WorkoutState.TimeResult -> workoutTime(state.time)
-            is WorkoutState.SwitchState -> switchState(state.isOn)
-        }
-    }
-
-    override fun receive(event: WorkoutEvent) {
-        when (event) {
-            WorkoutEvent.Loading -> dispatchIntent(ShowLoading)
-            WorkoutEvent.ShowEditState -> showEditState()
-            WorkoutEvent.SelectAllExercises -> selectAllExercises()
-            WorkoutEvent.HideEditState -> hideEditState()
-            WorkoutEvent.DeleteSelectedExercises -> deleteSelectedExercises()
-            WorkoutEvent.DeselectAllExercises -> {}
-            is WorkoutEvent.ExceptionEvent -> throw (event.exception)
-            is WorkoutEvent.SetParamsDialog -> dispatchIntent(Dialog.SetParamsDialog(event.exerciseId))
-            is WorkoutEvent.EndWorkoutResult -> closeScreen(event.workoutId.toInt())
-        }
+    private fun onExceptionResult(exception: Exception) {
+        // TODO Log to crashlytics
+        dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 
     companion object {

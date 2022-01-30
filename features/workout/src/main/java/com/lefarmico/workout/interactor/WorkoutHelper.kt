@@ -1,5 +1,6 @@
 package com.lefarmico.workout.interactor
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.utils.Quad
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
@@ -30,7 +31,7 @@ class WorkoutHelper(
         time: LocalTime?,
         exercises: List<CurrentWorkoutDto.ExerciseWithSets>,
         workoutId: Int = 0
-    ): Single<WorkoutEvent> {
+    ): Single<BaseState> {
         val workoutDto = WorkoutRecordsDto.Workout(id = workoutId, date = date, title = title, time = time)
         val workAndExDto = WorkoutRecordsDto.WorkoutWithExercisesAndSets(workoutDto, exercises.toRecordsDto())
 

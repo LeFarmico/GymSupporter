@@ -11,7 +11,7 @@ fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduce(
     timeFormatter: DateTimeFormatter
 ): BaseState {
     return when (this) {
-        is DataState.Error -> DetailedState.ExceptionResult(exception)
+        is DataState.Error -> DetailedEvent.ExceptionResult(exception)
         DataState.Loading -> DetailedEvent.Loading
         is DataState.Success -> DetailedState.WorkoutResult(data.toViewData(dateFormatter, timeFormatter))
     }

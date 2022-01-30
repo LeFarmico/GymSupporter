@@ -8,6 +8,7 @@ import com.lefarmico.core.base.BaseFragment
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.navigation.params.LibraryParams
 import com.lefarmico.workout_exercise_addition.databinding.FragmentExerciseDetailsBinding
+import java.lang.Exception
 
 class ExerciseDetailsFragment : BaseFragment<
     ExerciseDetailsIntent, ExerciseDetailsState, ExerciseDetailsEvent,
@@ -31,6 +32,19 @@ class ExerciseDetailsFragment : BaseFragment<
         dispatchIntent(ExerciseDetailsIntent.GetExercise(exerciseId))
     }
 
+    override fun receive(state: ExerciseDetailsState) {
+        when (state) {
+            is ExerciseDetailsState.ExerciseResult -> showExerciseDetails(state.exercise)
+            ExerciseDetailsState.Loading -> {}
+        }
+    }
+
+    override fun receive(event: ExerciseDetailsEvent) {
+        when (event) {
+            is ExerciseDetailsEvent.ExceptionResult -> onExceptionResult(event.exception)
+        }
+    }
+
     private fun showExerciseDetails(libraryExercise: LibraryViewData.Exercise) {
         binding.textTitle.text = libraryExercise.title
         binding.textDescription.text = libraryExercise.description
@@ -42,16 +56,10 @@ class ExerciseDetailsFragment : BaseFragment<
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
-    override fun receive(state: ExerciseDetailsState) {
-        when (state) {
-            is ExerciseDetailsState.ExceptionResult -> throw (state.exception)
-            is ExerciseDetailsState.ExerciseResult -> showExerciseDetails(state.exercise)
-            ExerciseDetailsState.Loading -> {}
-        }
+    private fun onExceptionResult(exception: Exception) {
+        // TODO Log to crashlytics
+        dispatchIntent(ExerciseDetailsIntent.ShowToast(getString(R.string.state_error)))
     }
-
-    override fun receive(event: ExerciseDetailsEvent) {}
-
     companion object {
         private const val KEY_PARAMS = "exercise_details_key"
 

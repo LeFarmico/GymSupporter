@@ -18,6 +18,7 @@ import com.lefarmico.home.HomeIntent.ChangeMonth.Change.*
 import com.lefarmico.home.HomeIntent.EditState.Action.*
 import com.lefarmico.home.databinding.FragmentHomeBinding
 import com.lefarmico.workout_notification.WorkoutRemindNotificationHelper
+import java.lang.Exception
 import java.time.LocalDate
 
 class HomeFragment :
@@ -40,7 +41,6 @@ class HomeFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        dispatchIntent(TryLoadDefaultData)
     }
 
     override fun onResume() {
@@ -104,6 +104,27 @@ class HomeFragment :
             override fun selectedItemAction(item: WorkoutWithExercisesAndSets) {
                 dispatchIntent(DeleteWorkout(item.workout.id))
             }
+        }
+    }
+
+    override fun receive(event: HomeEvent) {
+        when (event) {
+            HomeEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
+            HomeEvent.SelectAllWorkouts -> selectAllWorkouts()
+            HomeEvent.DeselectAllWorkouts -> TODO()
+            HomeEvent.HideEditState -> switchEditState(false)
+            HomeEvent.ShowEditState -> switchEditState(true)
+
+            is HomeEvent.ExceptionResult -> onExceptionResult(event.exception)
+        }
+    }
+
+    override fun receive(state: HomeState) {
+        when (state) {
+            is HomeState.CalendarResult -> showCalendar(state.calendarItemList, state.selectedDate)
+            HomeState.Loading -> showLoading()
+            is HomeState.MonthAndYearResult -> showCurrentMonthAndYear(state.monthAndYearText)
+            is HomeState.WorkoutResult -> showWorkouts(state.workoutList)
         }
     }
 
@@ -186,24 +207,8 @@ class HomeFragment :
         }
     }
 
-    override fun receive(event: HomeEvent) {
-        when (event) {
-            HomeEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
-            HomeEvent.SelectAllWorkouts -> selectAllWorkouts()
-            HomeEvent.DeselectAllWorkouts -> TODO()
-            HomeEvent.HideEditState -> switchEditState(false)
-            HomeEvent.ShowEditState -> switchEditState(true)
-            HomeEvent.DataLoaded -> {}
-        }
-    }
-
-    override fun receive(state: HomeState) {
-        when (state) {
-            is HomeState.CalendarResult -> showCalendar(state.calendarItemList, state.selectedDate)
-            is HomeState.ExceptionResult -> throw (state.exception)
-            HomeState.Loading -> showLoading()
-            is HomeState.MonthAndYearResult -> showCurrentMonthAndYear(state.monthAndYearText)
-            is HomeState.WorkoutResult -> showWorkouts(state.workoutList)
-        }
+    private fun onExceptionResult(exception: Exception) {
+        // TODO Log to crashlytics
+        dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 }

@@ -11,5 +11,4 @@ sealed class HomeState : BaseState.State {
     data class CalendarResult(val calendarItemList: List<CalendarItemViewData>, val selectedDate: LocalDate) : HomeState()
     data class MonthAndYearResult(val monthAndYearText: MonthAndYearText) : HomeState()
     object Loading : HomeState()
-    data class ExceptionResult(val exception: Exception) : HomeState()
 }

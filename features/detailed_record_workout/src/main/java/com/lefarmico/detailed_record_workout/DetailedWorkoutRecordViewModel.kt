@@ -22,9 +22,25 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
     private val formatterTimeManager: FormatterTimeManager
 ) : BaseViewModel<DetailedIntent, DetailedState, DetailedEvent>() {
 
+    private fun postStateEvent(value: BaseState) {
+        when (value) {
+            is BaseState.Event -> mEvent.postValue(value as DetailedEvent)
+            is BaseState.State -> mState.value = value as DetailedState
+        }
+    }
+    override fun triggerIntent(intent: DetailedIntent) {
+        return when (intent) {
+            is DetailedIntent.GetWorkout -> getRecordWorkout(intent.workoutId)
+            is DetailedIntent.ShowToast -> showToast(intent.text)
+            is DetailedIntent.EditWorkout -> navigateToWorkout(intent.workoutId)
+            is DetailedIntent.CloseWithToast -> closeWithToast(intent.errorText)
+        }
+    }
+
     private fun getRecordWorkout(workoutId: Int) {
         repo.getWorkoutWithExerciseAnsSets(workoutId)
             .observeUi()
+            .doOnSubscribe { mEvent.postValue(DetailedEvent.Loading) }
             .doOnError { mEvent.postValue(DetailedEvent.DataLoadFailure) }
             .doAfterSuccess { dataState ->
                 getSelectedFormatters { dateF, timeF -> postStateEvent(dataState.reduce(dateF, timeF)) }
@@ -38,10 +54,10 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
     private fun getSelectedFormatters(formatter: (DateTimeFormatter, DateTimeFormatter) -> Unit) {
         formatterManager.getSelectedFormatter()
             .observeUi()
+            .doOnError { mEvent.postValue(DetailedEvent.DataLoadFailure) }
             .zipWith(formatterTimeManager.getSelectedTimeFormatter()) { dateF, timeF ->
                 Pair(dateF, timeF)
             }
-            .doOnError { mEvent.postValue(DetailedEvent.DataLoadFailure) }
             .doAfterSuccess { pair ->
                 formatter(pair.first.formatter, pair.second.formatter)
             }
@@ -64,20 +80,5 @@ class DetailedWorkoutRecordViewModel @Inject constructor(
             .doAfterSuccess {
                 router.back()
             }.subscribe()
-    }
-
-    private fun postStateEvent(value: BaseState) {
-        when (value) {
-            is BaseState.Event -> mEvent.postValue(value as DetailedEvent)
-            is BaseState.State -> mState.value = value as DetailedState
-        }
-    }
-    override fun triggerIntent(intent: DetailedIntent) {
-        return when (intent) {
-            is DetailedIntent.GetWorkout -> getRecordWorkout(intent.workoutId)
-            is DetailedIntent.ShowToast -> showToast(intent.text)
-            is DetailedIntent.EditWorkout -> navigateToWorkout(intent.workoutId)
-            is DetailedIntent.CloseWithToast -> closeWithToast(intent.errorText)
-        }
     }
 }

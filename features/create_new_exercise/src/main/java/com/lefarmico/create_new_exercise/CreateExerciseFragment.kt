@@ -39,13 +39,33 @@ class CreateExerciseFragment : BaseFragment<
             }
         }
         binding.exerciseEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                dispatchIntent(ValidateExercise(textField))
-            }
+            takeIf { hasFocus }.run { dispatchIntent(ValidateExercise(textField)) }
         }
         binding.exerciseEditText.doOnTextChanged { text, _, _, _ ->
             dispatchIntent(ValidateExercise(text.toString()))
             isAddButtonActive(false)
+        }
+    }
+
+    override fun receive(state: CreateExerciseState) {}
+
+    override fun receive(event: CreateExerciseEvent) {
+        when (event) {
+            CreateExerciseEvent.ValidationAlreadyExist -> {
+                setEditTextError(getString(R.string.ex_exist))
+                isAddButtonActive(false)
+            }
+            CreateExerciseEvent.ValidationEmpty -> {
+                setEditTextError(getString(R.string.empty_field))
+                isAddButtonActive(false)
+            }
+            CreateExerciseEvent.ValidationSuccess -> {
+                setEditTextError("")
+                isAddButtonActive(true)
+            }
+            CreateExerciseEvent.ExerciseActionResult.Failure -> showError(getString(R.string.smth_went_wrong))
+            CreateExerciseEvent.ExerciseActionResult.Success -> closeScreenWithToast(getString(R.string.ex_success_added))
+            is CreateExerciseEvent.HardException -> closeScreenWithError(getString(R.string.smth_went_wrong))
         }
     }
 
@@ -85,30 +105,6 @@ class CreateExerciseFragment : BaseFragment<
         dispatchIntent(CloseScreenWithToast(errorText))
     }
 
-    override fun receive(state: CreateExerciseState) {
-        when (state) {
-            is CreateExerciseState.ExceptionResult -> closeScreenWithError(getString(R.string.smth_went_wrong))
-        }
-    }
-
-    override fun receive(event: CreateExerciseEvent) {
-        when (event) {
-            CreateExerciseEvent.ValidationAlreadyExist -> {
-                setEditTextError(getString(R.string.ex_exist))
-                isAddButtonActive(false)
-            }
-            CreateExerciseEvent.ValidationEmpty -> {
-                setEditTextError(getString(R.string.empty_field))
-                isAddButtonActive(false)
-            }
-            CreateExerciseEvent.ValidationSuccess -> {
-                setEditTextError("")
-                isAddButtonActive(true)
-            }
-            CreateExerciseEvent.ExerciseActionResult.Failure -> showError(getString(R.string.smth_went_wrong))
-            CreateExerciseEvent.ExerciseActionResult.Success -> closeScreenWithToast(getString(R.string.ex_success_added))
-        }
-    }
     companion object {
         private const val KEY_PARAMS = "new_exercise_params"
         fun createBundle(data: Parcelable?): Bundle {

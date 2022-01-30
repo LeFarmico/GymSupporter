@@ -1,5 +1,6 @@
 package com.lefarmico.exercise_menu.viewModel
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.entity.LibraryViewData
 import com.lefarmico.core.extensions.debounceImmediate
@@ -9,7 +10,7 @@ import com.lefarmico.core.validator.ExistedValidator
 import com.lefarmico.core.validator.ValidateHandler
 import com.lefarmico.domain.entity.LibraryDto
 import com.lefarmico.domain.repository.LibraryRepository
-import com.lefarmico.domain.utils.DataState
+import com.lefarmico.exercise_menu.*
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent
 import com.lefarmico.exercise_menu.intent.SubcategoryIntent.*
 import com.lefarmico.exercise_menu.reduceDto
@@ -22,6 +23,7 @@ import com.lefarmico.navigation.params.ToastBarParams
 import com.lefarmico.navigation.screen.Screen
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,31 +42,52 @@ class SubcategoryViewModel @Inject constructor(
         validator()
     }
 
-    private fun getSubCategories(categoryId: Int) {
-        repo.getSubCategories(categoryId)
-            .observeUi()
-            .doAfterSuccess { dataState ->
-                val viewState = dataState.reduceDto()
-                mState.value = viewState
-                putToCache(viewState)
-            }
-            .subscribe()
+    override fun triggerIntent(intent: SubcategoryIntent) {
+        return when (intent) {
+            is AddSubcategory -> addSubcategory(intent.title, intent.categoryId)
+            is ClickItem -> goToExerciseListScreen(intent.item, intent.isFromWorkoutScreen)
+            is GetSubcategories -> getSubCategories(intent.categoryId)
+            is ShowToast -> showToast(intent.text)
+            is Validate -> validateSubject.onNext(intent.title)
+            is DeleteSubCategory -> deleteSubcategory(intent.subcategoryId, intent.categoryId)
+            is EditState -> editStateAction(intent.action)
+            is GetCategotyTitle -> getCategory(intent.categotyId)
+        }
+    }
+
+    private fun postStateEvent(baseState: BaseState) {
+        when (baseState) {
+            is BaseState.Event -> mEvent.postValue(baseState as LibraryListEvent)
+            is BaseState.State -> mState.value = baseState as LibraryListState
+        }
     }
 
     private fun getCategory(categoryId: Int) {
         repo.getCategory(categoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doAfterSuccess { dataState -> postStateEvent(dataState.reduce()) }
+            .subscribe()
+    }
+
+    private fun getSubCategories(categoryId: Int) {
+        repo.getSubCategories(categoryId)
+            .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { dataState ->
-                mState.value = dataState.reduce()
+                val viewState = dataState.reduceDto()
+                postStateEvent(viewState)
+                putToCache(viewState)
             }.subscribe()
     }
 
-    private fun putToCache(state: LibraryListState) {
+    private fun putToCache(state: BaseState) {
         if (state is LibraryListState.LibraryResult)
             try {
                 validateCache = state.libraryList.map { (it as LibraryViewData.SubCategory).title }
             } catch (e: java.lang.IllegalArgumentException) {
-                throw (e)
+                postStateEvent(LibraryListEvent.ExceptionResult(e))
             }
     }
 
@@ -73,6 +96,7 @@ class SubcategoryViewModel @Inject constructor(
             .debounceImmediate(500, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
@@ -94,6 +118,8 @@ class SubcategoryViewModel @Inject constructor(
         val subCategory = LibraryDto.SubCategory(0, subcategoryTitle, categoryId)
         repo.addSubCategory(subCategory)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getSubCategories(subCategory.categoryId) }
             .subscribe()
     }
@@ -101,6 +127,8 @@ class SubcategoryViewModel @Inject constructor(
     private fun deleteSubcategory(subcategoryId: Int, categoryId: Int) {
         repo.deleteSubcategory(subcategoryId)
             .observeUi()
+            .doOnError { postStateEvent(LibraryListEvent.ExceptionResult(it as Exception)) }
+            .doOnSubscribe { postStateEvent(LibraryListState.Loading) }
             .doAfterSuccess { getSubCategories(categoryId) }
             .subscribe()
     }
@@ -130,26 +158,5 @@ class SubcategoryViewModel @Inject constructor(
 
     private fun showToast(text: String) {
         router.show(Notification.TOAST, ToastBarParams(text))
-    }
-
-    private fun DataState<LibraryDto.Category>.reduce(): LibraryListState {
-        return when (this) {
-            is DataState.Error -> LibraryListState.ExceptionResult(this.exception)
-            DataState.Loading -> LibraryListState.Loading
-            is DataState.Success -> LibraryListState.Title(this.data.title)
-        }
-    }
-
-    override fun triggerIntent(intent: SubcategoryIntent) {
-        return when (intent) {
-            is AddSubcategory -> addSubcategory(intent.title, intent.categoryId)
-            is ClickItem -> goToExerciseListScreen(intent.item, intent.isFromWorkoutScreen)
-            is GetSubcategories -> getSubCategories(intent.categoryId)
-            is ShowToast -> showToast(intent.text)
-            is Validate -> validateSubject.onNext(intent.title)
-            is DeleteSubCategory -> deleteSubcategory(intent.subcategoryId, intent.categoryId)
-            is EditState -> editStateAction(intent.action)
-            is GetCategotyTitle -> getCategory(intent.categotyId)
-        }
     }
 }

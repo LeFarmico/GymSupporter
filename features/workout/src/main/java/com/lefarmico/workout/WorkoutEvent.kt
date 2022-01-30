@@ -13,6 +13,5 @@ sealed class WorkoutEvent : BaseState.Event {
 
     data class EndWorkoutResult(val workoutId: Long) : WorkoutEvent()
     data class SetParamsDialog(val exerciseId: Int) : WorkoutEvent()
-    data class ExceptionEvent(val exception: Exception) : WorkoutEvent()
-    object Loading : WorkoutEvent()
+    data class ExceptionResult(val exception: Exception) : WorkoutEvent()
 }

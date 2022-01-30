@@ -23,6 +23,7 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.SubcategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
+import java.lang.Exception
 
 class SubcategoryFragment :
     BaseFragment<SubcategoryIntent, LibraryListState, LibraryListEvent,
@@ -88,6 +89,7 @@ class SubcategoryFragment :
             plusButton.setOnClickListener {
                 dispatchIntent(AddSubcategory(textFieldString, params.categoryId))
                 defaultStateEditText(editText)
+                clearEditTextField(editText)
             }
             editText.doOnTextChanged { text, _, _, _ ->
                 dispatchIntent(Validate(text.toString()))
@@ -117,23 +119,65 @@ class SubcategoryFragment :
         }
     }
 
+    override fun receive(state: LibraryListState) {
+        when (state) {
+            is LibraryListState.LibraryResult -> showSubcategories(state.libraryList)
+            LibraryListState.Loading -> showLoading()
+            is LibraryListState.Title -> setTitle(state.title)
+        }
+    }
+
+    override fun receive(event: LibraryListEvent) {
+        when (event) {
+            LibraryListEvent.ValidationResult.AlreadyExist -> {
+                setEditTextError { "That field already exist" }
+                isAddButtonActive(false)
+            }
+            LibraryListEvent.ValidationResult.Empty -> {
+                setEditTextError { "That field is empty" }
+                isAddButtonActive(false)
+            }
+            LibraryListEvent.ValidationResult.Success -> {
+                setEditTextError { "" }
+                isAddButtonActive(true)
+            }
+            LibraryListEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
+            LibraryListEvent.HideEditState -> hideEditState()
+            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
+            LibraryListEvent.ShowEditState -> showEditState()
+            LibraryListEvent.DeselectAllWorkouts -> TODO()
+            is LibraryListEvent.ExceptionResult -> onExceptionResult(event.exception)
+        }
+    }
+
+    private fun setTitle(title: String) {
+        requireActivity().title = title
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
     private fun showSubcategories(items: List<LibraryViewData>) {
         adapter.items = items
-        if (items.isEmpty()) {
-            binding.state.showEmptyState()
-            return
+        when (items.isEmpty()) {
+            true -> binding.state.showEmptyState()
+            false -> binding.state.showSuccessState()
         }
-        binding.state.showSuccessState()
     }
 
     private fun showLoading() {
         binding.state.showLoadingState()
     }
 
+    private fun clearEditTextField(editText: EditText) {
+        editText.text.clear()
+    }
+
     private fun defaultStateEditText(editText: EditText) {
         hideSoftKeyboard()
         editText.clearFocus()
         editText.isCursorVisible = false
+        editText.error = getString(R.string.input_field_success)
+        editText.text.clear()
     }
 
     private inline fun setEditTextError(errorText: () -> String) {
@@ -178,42 +222,9 @@ class SubcategoryFragment :
         adapter.toggleSelectAll()
     }
 
-    override fun receive(state: LibraryListState) {
-        when (state) {
-            is LibraryListState.ExceptionResult -> throw (state.exception)
-            is LibraryListState.LibraryResult -> showSubcategories(state.libraryList)
-            LibraryListState.Loading -> showLoading()
-            is LibraryListState.Title -> setTitle(state.title)
-        }
-    }
-
-    private fun setTitle(title: String) {
-        requireActivity().title = title
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
-
-    override fun receive(event: LibraryListEvent) {
-        when (event) {
-            is LibraryListEvent.ShowToast -> {}
-            LibraryListEvent.ValidationResult.AlreadyExist -> {
-                setEditTextError { "That field already exist" }
-                isAddButtonActive(false)
-            }
-            LibraryListEvent.ValidationResult.Empty -> {
-                setEditTextError { "That field is empty" }
-                isAddButtonActive(false)
-            }
-            LibraryListEvent.ValidationResult.Success -> {
-                setEditTextError { "" }
-                isAddButtonActive(true)
-            }
-            LibraryListEvent.DeleteSelectedWorkouts -> deleteSelectedWorkouts()
-            LibraryListEvent.HideEditState -> hideEditState()
-            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
-            LibraryListEvent.ShowEditState -> showEditState()
-            LibraryListEvent.DeselectAllWorkouts -> TODO()
-        }
+    private fun onExceptionResult(exception: Exception) {
+        // TODO send log to crashlytics
+        dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 
     companion object {

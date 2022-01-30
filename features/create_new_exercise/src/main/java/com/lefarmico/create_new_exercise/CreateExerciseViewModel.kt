@@ -33,10 +33,22 @@ class CreateExerciseViewModel @Inject constructor(
         validator()
     }
 
+    override fun triggerIntent(intent: CreateExerciseIntent) {
+        when (intent) {
+            is ShowToast -> showToast(intent.text)
+            is ValidateExercise -> validateSubject.onNext(intent.title)
+            is GetExercises -> getExistedExercises(intent.subcategoryId)
+            is AddExercise -> {
+                intent.apply { addExercise(title, description, imageRes, subcategoryId) }
+            }
+            is CloseScreenWithToast -> closeScreen(intent.text)
+        }
+    }
+
     private fun getExistedExercises(subcategoryId: Int) {
         repo.getExercises(subcategoryId)
             .observeUi()
-            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
+            .doOnError { mEvent.postValue(CreateExerciseEvent.HardException(it as Exception)) }
             .doOnSuccess { dataState -> putToCache(dataState.reduce()) }
             .subscribe()
     }
@@ -50,7 +62,7 @@ class CreateExerciseViewModel @Inject constructor(
             .debounceImmediate(1, TimeUnit.SECONDS)
             .distinctUntilChanged()
             .observeUi()
-            .doOnError { mState.postValue(CreateExerciseState.ExceptionResult(it as Exception)) }
+            .doOnError { mEvent.postValue(CreateExerciseEvent.HardException(it as Exception)) }
             .doOnNext { validateField -> validate(validateField, validateCache) }
             .subscribe()
     }
@@ -97,17 +109,5 @@ class CreateExerciseViewModel @Inject constructor(
 
     private fun back() {
         router.back()
-    }
-
-    override fun triggerIntent(intent: CreateExerciseIntent) {
-        when (intent) {
-            is ShowToast -> showToast(intent.text)
-            is ValidateExercise -> validateSubject.onNext(intent.title)
-            is GetExercises -> getExistedExercises(intent.subcategoryId)
-            is AddExercise -> {
-                intent.apply { addExercise(title, description, imageRes, subcategoryId) }
-            }
-            is CloseScreenWithToast -> closeScreen(intent.text)
-        }
     }
 }

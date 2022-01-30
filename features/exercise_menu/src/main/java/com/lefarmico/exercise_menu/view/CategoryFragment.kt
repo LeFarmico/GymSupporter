@@ -23,6 +23,7 @@ import com.lefarmico.exercise_menu.state.LibraryListEvent
 import com.lefarmico.exercise_menu.state.LibraryListState
 import com.lefarmico.exercise_menu.viewModel.CategoryViewModel
 import com.lefarmico.navigation.params.LibraryParams
+import java.lang.Exception
 
 class CategoryFragment :
     BaseFragment<CategoryIntent, LibraryListState, LibraryListEvent,
@@ -91,6 +92,7 @@ class CategoryFragment :
             plusButton.setOnClickListener {
                 dispatchIntent(AddCategory(textFieldString))
                 defaultStateEditText(editText)
+                clearEditTextField(editText)
             }
             editText.doOnTextChanged { text, _, _, _ ->
                 dispatchIntent(Validate(text.toString()))
@@ -116,19 +118,54 @@ class CategoryFragment :
         }
     }
 
+    override fun receive(state: LibraryListState) {
+        when (state) {
+            is LibraryListState.LibraryResult -> showCategories(state.libraryList)
+            LibraryListState.Loading -> showLoading()
+            else -> {}
+        }
+    }
+
+    override fun receive(event: LibraryListEvent) {
+        when (event) {
+            LibraryListEvent.ValidationResult.AlreadyExist -> {
+                setEditTextError(getString(R.string.input_field_exist))
+                isAddButtonActive(false)
+            }
+            LibraryListEvent.ValidationResult.Empty -> {
+                setEditTextError(getString(R.string.input_field_empty))
+                isAddButtonActive(false)
+            }
+            LibraryListEvent.ValidationResult.Success -> {
+                setEditTextError(getString(R.string.input_field_success))
+                isAddButtonActive(true)
+            }
+            LibraryListEvent.DeleteSelectedWorkouts -> {
+                deleteSelectedWorkouts()
+            }
+            LibraryListEvent.DeselectAllWorkouts -> TODO()
+            LibraryListEvent.HideEditState -> hideEditState()
+            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
+            LibraryListEvent.ShowEditState -> showEditState()
+            is LibraryListEvent.ExceptionResult -> onExceptionResult(event.exception)
+        }
+    }
+
     private fun showCategories(items: List<LibraryViewData>) {
         adapter.items = items
-        if (items.isEmpty()) {
-            binding.state.showEmptyState()
-            return
+        when (items.isEmpty()) {
+            true -> binding.state.showEmptyState()
+            false -> binding.state.showSuccessState()
         }
-        binding.state.showSuccessState()
     }
 
     private fun showLoading() {
         binding.state.showLoadingState()
     }
 
+    private fun clearEditTextField(editText: EditText) {
+        editText.text.clear()
+    }
     private fun defaultStateEditText(editText: EditText) {
         hideSoftKeyboard()
         editText.clearFocus()
@@ -136,15 +173,18 @@ class CategoryFragment :
     }
 
     private fun isAddButtonActive(isActive: Boolean) {
-        if (!isActive) {
-            binding.plusButton.alpha = 0.5f
-            binding.plusButton.isClickable = false
-            binding.plusButton.focusable = View.NOT_FOCUSABLE
-            return
+        when (isActive) {
+            true -> {
+                binding.plusButton.alpha = 1f
+                binding.plusButton.isClickable = true
+                binding.plusButton.focusable = View.FOCUSABLE
+            }
+            false -> {
+                binding.plusButton.alpha = 0.5f
+                binding.plusButton.isClickable = false
+                binding.plusButton.focusable = View.NOT_FOCUSABLE
+            }
         }
-        binding.plusButton.alpha = 1f
-        binding.plusButton.isClickable = true
-        binding.plusButton.focusable = View.FOCUSABLE
     }
 
     private fun isAddButtonShown(isShown: Boolean) {
@@ -187,38 +227,9 @@ class CategoryFragment :
         )
     }
 
-    override fun receive(state: LibraryListState) {
-        when (state) {
-            is LibraryListState.ExceptionResult -> throw (state.exception)
-            is LibraryListState.LibraryResult -> showCategories(state.libraryList)
-            LibraryListState.Loading -> showLoading()
-            else -> {}
-        }
-    }
-
-    override fun receive(event: LibraryListEvent) {
-        when (event) {
-            is LibraryListEvent.ShowToast -> {}
-            LibraryListEvent.ValidationResult.AlreadyExist -> {
-                setEditTextError("That field already exist")
-                isAddButtonActive(false)
-            }
-            LibraryListEvent.ValidationResult.Empty -> {
-                setEditTextError("That field is empty")
-                isAddButtonActive(false)
-            }
-            LibraryListEvent.ValidationResult.Success -> {
-                setEditTextError("")
-                isAddButtonActive(true)
-            }
-            LibraryListEvent.DeleteSelectedWorkouts -> {
-                deleteSelectedWorkouts()
-            }
-            LibraryListEvent.DeselectAllWorkouts -> TODO()
-            LibraryListEvent.HideEditState -> hideEditState()
-            LibraryListEvent.SelectAllWorkouts -> selectAllWorkouts()
-            LibraryListEvent.ShowEditState -> showEditState()
-        }
+    private fun onExceptionResult(exception: Exception) {
+        // TODO send log to crashlytics
+        dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 
     companion object {

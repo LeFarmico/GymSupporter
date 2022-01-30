@@ -8,7 +8,6 @@ sealed class DetailedState : BaseState.State {
     data class WorkoutResult(
         val workout: WorkoutRecordsViewData.WorkoutWithExercisesAndSets
     ) : DetailedState()
-    data class ExceptionResult(val exception: Exception) : DetailedState()
     data class DateResult(val dateText: String) : DetailedState()
     data class TitleResult(val title: String) : DetailedState()
 }

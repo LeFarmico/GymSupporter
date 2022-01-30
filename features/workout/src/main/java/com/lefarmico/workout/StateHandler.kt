@@ -1,5 +1,6 @@
 package com.lefarmico.workout
 
+import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.core.utils.Quad
 import com.lefarmico.domain.entity.CurrentWorkoutDto
@@ -9,33 +10,33 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-fun DataState<Int>.reduce(): WorkoutEvent {
+fun DataState<Int>.reduce(): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutEvent.ExceptionEvent(exception)
-        DataState.Loading -> WorkoutEvent.Loading
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
+        DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutEvent.SetParamsDialog(data)
     }
 }
 
 @JvmName("reduceExerciseWithSets")
-fun DataState<List<CurrentWorkoutDto.ExerciseWithSets>>.reduce(): WorkoutState {
+fun DataState<List<CurrentWorkoutDto.ExerciseWithSets>>.reduce(): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutState.ExceptionResult(exception)
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
         DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutState.ExerciseResult(data.toViewData())
     }
 }
 
 @JvmName("reduceLocalDate")
-fun DataState<LocalDate>.reduce(formatter: DateTimeFormatter): WorkoutState {
+fun DataState<LocalDate>.reduce(formatter: DateTimeFormatter): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutState.ExceptionResult(exception)
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
         DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutState.DateResult(data.format(formatter))
     }
 }
 
-fun DataState<LocalTime>.reduce(formatter: DateTimeFormatter): WorkoutState {
+fun DataState<LocalTime>.reduce(formatter: DateTimeFormatter): BaseState {
     return when (this) {
         is DataState.Error -> throw (exception)
         DataState.Loading -> WorkoutState.Loading
@@ -43,24 +44,24 @@ fun DataState<LocalTime>.reduce(formatter: DateTimeFormatter): WorkoutState {
     }
 }
 
-fun DataState<String>.reduceDate(): WorkoutState {
+fun DataState<String>.reduceDate(): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutState.ExceptionResult(exception)
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
         DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutState.DateResult(data)
     }
 }
-fun DataState<String>.reduceTime(): WorkoutState {
+fun DataState<String>.reduceTime(): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutState.ExceptionResult(exception)
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
         DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutState.TimeResult(data)
     }
 }
-fun DataState<Long>.reduceWorkoutId(): WorkoutEvent {
+fun DataState<Long>.reduceWorkoutId(): BaseState {
     return when (this) {
-        is DataState.Error -> WorkoutEvent.ExceptionEvent(exception)
-        DataState.Loading -> WorkoutEvent.Loading
+        is DataState.Error -> WorkoutEvent.ExceptionResult(exception)
+        DataState.Loading -> WorkoutState.Loading
         is DataState.Success -> WorkoutEvent.EndWorkoutResult(data)
     }
 }

@@ -1,6 +1,7 @@
 package com.lefarmico.home
 
 import com.lefarmico.core.base.BaseState
+import java.lang.Exception
 
 sealed class HomeEvent : BaseState.Event {
 
@@ -10,5 +11,5 @@ sealed class HomeEvent : BaseState.Event {
     object DeselectAllWorkouts : HomeEvent()
     object DeleteSelectedWorkouts : HomeEvent()
 
-    object DataLoaded : HomeEvent()
+    data class ExceptionResult(val exception: Exception) : HomeEvent()
 }
