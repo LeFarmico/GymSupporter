@@ -18,7 +18,7 @@ fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduce(
             val dto = this.data
             val workout = dto.workout.toViewData(dateFormatter, timeFormatter)
             val exercises = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
-            // TODO : Избавиться от логики
+
             val exerciseListViewData = dto.exerciseWithSetsList.toViewData()
             for (i in exerciseListViewData.indices) {
                 exercises.add(exerciseListViewData[i].exercise)
