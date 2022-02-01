@@ -42,6 +42,7 @@
             android:inputType="text"
             android:maxLines="1"
             app:endIconMode="clear_text"
+            style="@style/EditTextStyle"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

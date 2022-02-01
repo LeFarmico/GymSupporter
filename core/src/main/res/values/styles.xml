@@ -113,6 +113,10 @@
         <item name="hintTextColor">?attr/colorOnSurface</item>
     </style>
 
+    <style name="EditTextStyle" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:textCursorDrawable">@drawable/shape_text_cursor</item>
+    </style>
+
     <style name="Divider">
         <item name="alpha">0.5</item>
         <item name="background">?attr/colorOnBackground</item>

@@ -6,17 +6,15 @@ import android.view.View
 import com.lefarmico.core.adapter.EditRecordAdapter
 import com.lefarmico.core.base.BaseBottomSheetDialogFragment
 import com.lefarmico.core.entity.WorkoutRecordsViewData
-import com.lefarmico.detailed_record_workout.databinding.DetailedRecordFragmentBinding
+import com.lefarmico.detailed_record_workout.databinding.DetailedRecordsFragmentBinding
 import com.lefarmico.navigation.params.RecordMenuParams
-import java.lang.Exception
 
 class DetailedWorkoutRecordFragment :
     BaseBottomSheetDialogFragment< DetailedIntent, DetailedState, DetailedEvent,
-        DetailedRecordFragmentBinding, DetailedWorkoutRecordViewModel>(
-        DetailedRecordFragmentBinding::inflate,
+        DetailedRecordsFragmentBinding, DetailedWorkoutRecordViewModel>(
+        DetailedRecordsFragmentBinding::inflate,
         DetailedWorkoutRecordViewModel::class.java
     ) {
-
     private val params: RecordMenuParams.WorkoutRecord by lazy {
         arguments?.getParcelable<RecordMenuParams.WorkoutRecord>(KEY_PARAMS)
             ?: throw (IllegalArgumentException("Arguments params must be not null"))
@@ -24,8 +22,12 @@ class DetailedWorkoutRecordFragment :
 
     private val adapter = EditRecordAdapter()
 
-    override fun setUpViews() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         dispatchIntent(DetailedIntent.GetWorkout(params.workoutId))
+    }
+
+    override fun setUpViews() {
         binding.exerciseRecycler.adapter = adapter
 
         binding.editButton.setOnClickListener {
@@ -34,6 +36,11 @@ class DetailedWorkoutRecordFragment :
         binding.cancelButton.setOnClickListener {
             dismiss()
         }
+    }
+
+    private fun unbindView() {
+        binding.exerciseRecycler.adapter = null
+        System.gc()
     }
 
     override fun receive(state: DetailedState) {
