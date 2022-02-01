@@ -38,14 +38,9 @@ class DetailedWorkoutRecordFragment :
         }
     }
 
-    private fun unbindView() {
-        binding.exerciseRecycler.adapter = null
-        System.gc()
-    }
-
     override fun receive(state: DetailedState) {
         when (state) {
-            is DetailedState.WorkoutResult -> showWorkout(state.workout)
+            is DetailedState.WorkoutResult -> showWorkout(state.workout, state.exercises)
             is DetailedState.DateResult -> showDate(state.dateText)
             is DetailedState.TitleResult -> showWorkoutTitle(state.title)
         }
@@ -59,20 +54,16 @@ class DetailedWorkoutRecordFragment :
         }
     }
 
-    private fun showWorkout(workout: WorkoutRecordsViewData.WorkoutWithExercisesAndSets) {
+    private fun showWorkout(
+        workout: WorkoutRecordsViewData.Workout,
+        exercises: List<WorkoutRecordsViewData.ViewDataItemType>
+    ) {
         loading(false)
 
-        val itemList = mutableListOf<WorkoutRecordsViewData.ViewDataItemType>()
-        // TODO : Избавиться от логики
-        val exerciseList = workout.exerciseWithSetsList
-        for (i in exerciseList.indices) {
-            itemList.add(exerciseList[i].exercise)
-            itemList.addAll(exerciseList[i].setList)
-        }
-        showExercises(itemList)
-        showDate(workout.workout.date)
-        showWorkoutTitle(workout.workout.title)
-        showTime(workout.workout.time)
+        showExercises(exercises)
+        showDate(workout.date)
+        showWorkoutTitle(workout.title)
+        showTime(workout.time)
     }
 
     private fun showDate(date: String) {
@@ -100,7 +91,7 @@ class DetailedWorkoutRecordFragment :
         // TODO send log to crashlytics
     }
 
-    private fun showExercises(items: MutableList<WorkoutRecordsViewData.ViewDataItemType>) {
+    private fun showExercises(items: List<WorkoutRecordsViewData.ViewDataItemType>) {
         adapter.items = items
     }
 
