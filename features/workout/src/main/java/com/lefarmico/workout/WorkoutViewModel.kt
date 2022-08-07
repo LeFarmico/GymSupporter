@@ -123,11 +123,36 @@ class WorkoutViewModel @Inject constructor(
 
     private fun exerciseAction(action: Exercise) {
         when (action) {
-            is Exercise.Add -> exerciseHelper.addExercise(action.id) { event -> postEventState(event) }
+            is Exercise.Add -> libraryRepository.getExercise(action.id)
                 .observeUi()
                 .doOnSubscribe { postEventState(WorkoutState.Loading) }
                 .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
-                .doAfterSuccess { state -> postEventState(state) }
+                .doAfterSuccess { state ->
+                    state as DataState.Success
+                    val data = state.data
+                    navigateHelper.startSetParameterDialog(data.id) { params ->
+                        val exerciseDto = CurrentWorkoutDto.Exercise(
+                            id = 0,
+                            libraryId = action.id,
+                            title = data.title
+                        )
+                        workoutRepository.addExercise(exerciseDto)
+                            .flatMap { exerciseId ->
+                                val set = CurrentWorkoutDto.Set(
+                                    id = 0,
+                                    exerciseId = (exerciseId as DataState.Success).data,
+                                    setNumber = 1,
+                                    weight = params.weight,
+                                    reps = params.reps
+                                )
+                                workoutRepository.addSet(set)
+                            }.flatMap {
+                                workoutRepository.getExercisesWithSets()
+                                    .map { dataState -> dataState.reduce() }
+                            }.doAfterSuccess { state -> postEventState(state) }
+                            .subscribe()
+                    }
+                }
                 .subscribe()
             is Exercise.Delete -> exerciseHelper.deleteExercise(action.id)
                 .observeUi()
