@@ -11,8 +11,6 @@ object Deps {
         "com.jakewharton.timber:timber:${Versions.timber}"
     const val gson =
         "com.google.code.gson:gson:${Versions.gson}"
-    const val adapterDelegates =
-        "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:${Versions.adapterDelegates}"
 
     object Androidx {
         const val appcompat =
