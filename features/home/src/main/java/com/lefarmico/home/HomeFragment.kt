@@ -170,7 +170,8 @@ class HomeFragment :
     private fun switchEditState(isOn: Boolean) {
         if (!isOn) {
             noteAdapter.turnOffEditState()
-            binding.calendar.visibility = View.VISIBLE
+            binding.calendar.suppressLayout(false)
+            calendarAdapter.enableClicks()
             binding.nextMonthButton.isEnabled = true
             binding.prevMonthButton.isEnabled = true
             binding.newWorkoutButton.isEnabled = true
@@ -178,7 +179,8 @@ class HomeFragment :
             return
         }
         noteAdapter.turnOnEditState()
-        binding.calendar.visibility = View.GONE
+        binding.calendar.suppressLayout(true)
+        calendarAdapter.disableClicks()
         binding.nextMonthButton.isEnabled = false
         binding.prevMonthButton.isEnabled = false
         binding.newWorkoutButton.isEnabled = false

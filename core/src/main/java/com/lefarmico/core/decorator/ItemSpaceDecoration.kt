@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lefarmico.core.extensions.dp
 
 class ItemSpaceDecoration(
-    @SpaceDecorOrientation private val spacingDp: Int,
-    private val orientation: Int
+    private val spacingDp: Int,
+    @SpaceDecorOrientation private val orientation: Int
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
