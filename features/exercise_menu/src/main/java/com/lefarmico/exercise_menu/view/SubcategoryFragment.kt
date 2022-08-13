@@ -227,6 +227,11 @@ class SubcategoryFragment :
         dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
 
+    override fun onPause() {
+        super.onPause()
+        actionMode?.finish()
+    }
+
     companion object {
         private const val KEY_PARAMS = "subcategory_key"
 

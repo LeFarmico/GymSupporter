@@ -128,10 +128,17 @@ class CategoryViewModel @Inject constructor() : BaseViewModel<
     }
 
     private fun goToSubcategoryScreen(categoryId: Int, isFromWorkoutScreen: Boolean) {
-        router.navigate(
-            screen = Screen.SUBCATEGORY_LIST_SCREEN,
-            data = LibraryParams.SubcategoryList(categoryId, isFromWorkoutScreen)
-        )
+        if (isFromWorkoutScreen) {
+            router.navigate(
+                screen = Screen.SUBCATEGORY_LIST_SCREEN,
+                data = LibraryParams.SubcategoryList(categoryId, isFromWorkoutScreen)
+            )
+        } else {
+            router.navigate(
+                screen = Screen.LIBRARY_SUBCATEGORY_LIST_SCREEN,
+                data = LibraryParams.SubcategoryList(categoryId, isFromWorkoutScreen)
+            )
+        }
     }
 
     private fun showToast(text: String) {

@@ -45,14 +45,6 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                     navExtras
                 )
             }
-            Screen.SETTINGS_SCREEN -> {
-                navController?.navigate(
-                    R.id.action_navigation_home_to_settingsScreenFragment,
-                    null,
-                    null,
-                    navExtras
-                )
-            }
             Screen.CREATE_NEW_EXERCISE_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_createNewExerciseFragment,
@@ -101,8 +93,6 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                     navExtras
                 )
             }
-
-            Screen.SET_PARAMETERS_DIALOG -> {}
             Screen.ACTION_ADD_EXERCISE_TO_WORKOUT_SCREEN -> {
                 navController?.navigate(
                     R.id.action_exerciseListFragment_to_workoutScreenFragment,
@@ -123,6 +113,38 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
                 navController?.navigate(
                     R.id.action_editWorkoutRecordFragment_to_workoutScreenFragment,
                     WorkoutFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
+            Screen.LIBRARY_EXERCISES_LIST_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_library_subCategoty_to_library_exercises,
+                    SubcategoryFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
+            Screen.LIBRARY_SUBCATEGORY_LIST_SCREEN -> {
+                navController?.navigate(
+                    R.id.action_library_categories_to_library_subCategoty,
+                    SubcategoryFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
+            Screen.FROM_LIBRARY_TO_EXERCISE_DETAILS -> {
+                navController?.navigate(
+                    R.id.action_library_exercises_to_exerciseDetailsFragment,
+                    ExerciseDetailsFragment.createBundle(data),
+                    null,
+                    navExtras
+                )
+            }
+            Screen.FROM_LIBRARY_TO_CREATE_NEW_EXERCISE -> {
+                navController?.navigate(
+                    R.id.action_library_exercises_to_createNewExerciseFragment,
+                    CreateExerciseFragment.createBundle(data),
                     null,
                     navExtras
                 )

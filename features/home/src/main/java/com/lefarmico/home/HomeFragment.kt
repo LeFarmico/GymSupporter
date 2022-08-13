@@ -213,4 +213,9 @@ class HomeFragment :
         // TODO Log to crashlytics
         dispatchIntent(ShowToast(getString(R.string.state_error)))
     }
+
+    override fun onPause() {
+        super.onPause()
+        actionMode?.finish()
+    }
 }

@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_baseline_home_24"
     />
     <item
-        android:id="@+id/navigation_exercises"
+        android:id="@+id/library_categories"
         android:title="@string/exercises"
         app:showAsAction="withText"
         android:icon="@drawable/ic_baseline_book_24"
