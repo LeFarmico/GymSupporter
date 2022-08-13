@@ -34,10 +34,9 @@ class WorkoutFragment :
     private var selectHandler: SelectItemsHandler<ExerciseWithSets>? = null
     private var actionModeCallback: EditStateActionBarCallback? = null
 
-    private val params: WorkoutScreenParams by lazy {
-        arguments?.getParcelable<WorkoutScreenParams>(KEY_PARAMS)
-            ?: throw (IllegalArgumentException())
-    }
+    private val params: WorkoutScreenParams get() =
+        arguments?.getParcelable(KEY_PARAMS)
+            ?: WorkoutScreenParams.Empty
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,7 @@ class WorkoutFragment :
             is NewExercise -> {
                 val data = params as NewExercise
                 dispatchIntent(Exercise.Add(data.id))
+                arguments?.clear()
             }
             is UpdateWorkout -> {
                 val data = params as UpdateWorkout
