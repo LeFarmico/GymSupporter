@@ -67,17 +67,24 @@ class ExerciseListViewModel @Inject constructor(
                 data = WorkoutScreenParams.NewExercise(exerciseLibraryId)
             )
             false -> router.navigate(
-                screen = Screen.EXERCISE_DETAILS_SCREEN,
+                screen = Screen.FROM_LIBRARY_TO_EXERCISE_DETAILS,
                 data = LibraryParams.Exercise(exerciseLibraryId)
             )
         }
     }
 
     private fun createExercise(subcategoryId: Int, isFromWorkoutScreen: Boolean) {
-        router.navigate(
-            screen = Screen.CREATE_NEW_EXERCISE_SCREEN,
-            data = LibraryParams.NewExercise(subcategoryId, isFromWorkoutScreen)
-        )
+        if (isFromWorkoutScreen) {
+            router.navigate(
+                screen = Screen.CREATE_NEW_EXERCISE_SCREEN,
+                data = LibraryParams.NewExercise(subcategoryId, isFromWorkoutScreen)
+            )
+        } else {
+            router.navigate(
+                screen = Screen.FROM_LIBRARY_TO_CREATE_NEW_EXERCISE,
+                data = LibraryParams.NewExercise(subcategoryId, isFromWorkoutScreen)
+            )
+        }
     }
 
     private fun deleteExercise(exerciseId: Int, subcategoryId: Int) {

@@ -27,8 +27,7 @@ abstract class BaseFragment<I : BaseIntent, S : BaseState.State, E : BaseState.E
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)
-            .get(provideViewModel)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[provideViewModel]
     }
 
     override fun onCreateView(

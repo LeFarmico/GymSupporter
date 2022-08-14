@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DoneTime</string>
+    <string name="app_name">Gym Supporter</string>
 
     <!-- Fields -->
     <string name="repetitions_field">Reps. %1$d</string>
@@ -29,6 +29,7 @@
     <string name="dropdown_sets_list">Dropdown sets list</string>
     <string name="edit">Edit</string>
     <string name="finish">Finish</string>
+    <string name="save">Save</string>
     <string name="about">About</string>
     <string name="save_changes">Save changes</string>
     <string name="drag_and_drop">Drag and drop</string>
@@ -72,7 +73,8 @@
 
     <!-- Screen titles   -->
     <string name="home_screen">Home</string>
-    <string name="workout_screen">Workout</string>
+    <string name="workout_screen_new">New Workout</string>
+    <string name="workout_screen_edit">Edit Workout</string>
     <string name="category_screen">Category</string>
     <string name="create_new_exercise_screen">Create exercise</string>
     <string name="exercise_details_screen">Exercise</string>

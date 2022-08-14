@@ -3,6 +3,7 @@ package com.lefarmico.workout
 import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.mapper.toViewData
 import com.lefarmico.core.utils.Quad
+import com.lefarmico.core.utils.Quint
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.utils.DataState
@@ -72,8 +73,8 @@ fun DataState<WorkoutRecordsDto.WorkoutWithExercisesAndSets>.reduceWorkoutDto():
         is DataState.Success -> data.workout
     }
 }
-fun Quad<String, DataState<LocalDate>, DataState<LocalTime>, DataState<List<CurrentWorkoutDto.ExerciseWithSets>>
-    >.reduce(): Quad<LocalDate, LocalTime, String, List<CurrentWorkoutDto.ExerciseWithSets>> {
+fun Quint<String, DataState<LocalDate>, DataState<LocalTime>, DataState<List<CurrentWorkoutDto.ExerciseWithSets>>, Boolean
+    >.reduce(): Quint<LocalDate, LocalTime, String, List<CurrentWorkoutDto.ExerciseWithSets>, Boolean> {
     val title = first
     val date = (second as DataState.Success).data
     val time = (third as DataState.Success).data
@@ -81,5 +82,6 @@ fun Quad<String, DataState<LocalDate>, DataState<LocalTime>, DataState<List<Curr
         is DataState.Success -> (fourth as DataState.Success<List<CurrentWorkoutDto.ExerciseWithSets>>).data
         else -> listOf()
     }
-    return Quad(date, time, title, exercises)
+    val isUpdate = fives
+    return Quint(date, time, title, exercises, isUpdate)
 }
