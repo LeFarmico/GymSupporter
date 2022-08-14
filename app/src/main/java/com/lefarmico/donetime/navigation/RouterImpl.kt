@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lefarmico.donetime.R
 import com.lefarmico.navigation.Router
@@ -29,14 +30,16 @@ class RouterImpl @Inject constructor(
     private var fragmentManager: FragmentManager? = null
 
     override fun bind(activity: Activity) {
-        this.navController = activity.findNavController(R.id.fragment)
         this.activity = activity
         this.fragmentManager = (activity as FragmentActivity).supportFragmentManager
     }
 
+    override fun bindNavController(navController: NavController) {
+        this.navController = navController
+    }
+
     override fun bindNavigationUI(bottomNavigationView: BottomNavigationView) {
-        NavigationUI.setupWithNavController(
-            bottomNavigationView,
+        bottomNavigationView.setupWithNavController(
             navController
                 ?: throw NullPointerException("NavController is not implemented")
         )

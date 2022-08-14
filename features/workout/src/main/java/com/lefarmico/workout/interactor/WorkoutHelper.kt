@@ -2,6 +2,7 @@ package com.lefarmico.workout.interactor
 
 import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.utils.Quad
+import com.lefarmico.core.utils.Quint
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.entity.WorkoutRecordsDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
@@ -39,13 +40,14 @@ class WorkoutHelper(
             .map { dataState -> dataState.reduceWorkoutId() }
     }
 
-    fun finishWorkout(): Single<Quad<
-            LocalDate, LocalTime, String, List<CurrentWorkoutDto.ExerciseWithSets>>> {
+    fun finishWorkout(): Single<Quint<
+            LocalDate, LocalTime, String, List<CurrentWorkoutDto.ExerciseWithSets>, Boolean>> {
         return Single.zip(
             dateManager.getSelectedDate(),
             timeScheduleManager.getTime(),
             workoutTitleManager.getTitle(),
-            workoutRepository.getExercisesWithSets()
-        ) { date, time, title, exercises -> Quad(title, date, time, exercises).reduce() }
+            workoutRepository.getExercisesWithSets(),
+            workoutRepository.isUpdateMode()
+        ) { date, time, title, exercises, isUpdate -> Quint(title, date, time, exercises, isUpdate).reduce() }
     }
 }

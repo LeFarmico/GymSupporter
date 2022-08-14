@@ -19,6 +19,7 @@ class CalendarAdapter(
 ) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
     var clickListener: ((date: LocalDate) -> Unit) = {}
+    private var clickable = true
 
     private var selectedItemIndex = -1
     private var currentDateSelect = true
@@ -73,6 +74,14 @@ class CalendarAdapter(
         }
     }
 
+    fun disableClicks() {
+        clickable = false
+    }
+
+    fun enableClicks() {
+        clickable = true
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder =
         CalendarViewHolder(
             CalendarItemDeselectUncheckedBinding.inflate(
@@ -88,12 +97,15 @@ class CalendarAdapter(
             holder.bindDeselected()
         }
         holder.root.setOnClickListener {
-            holder.bindSelected()
-            notifyItemChanged(selectedItemIndex)
-            selectedItemIndex = holder.absoluteAdapterPosition
-            selectedDate = items[holder.absoluteAdapterPosition].date
-            notifyItemChanged(position)
-            clickListener(items[position].date)
+            if (clickable) {
+                holder.bindSelected()
+                notifyItemChanged(selectedItemIndex)
+                selectedItemIndex = holder.absoluteAdapterPosition
+                selectedDate = items[holder.absoluteAdapterPosition].date
+                notifyItemChanged(position)
+
+                clickListener(items[position].date)
+            }
         }
         if (currentDate == items[position].date && currentDateSelect) {
             holder.bindSelected()

@@ -2,6 +2,7 @@ package com.lefarmico.workout
 
 import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.extensions.observeIO
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toCurrent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
@@ -70,12 +71,32 @@ class WorkoutViewModel @Inject constructor(
             is Workout -> workoutAction(intent)
             is ShowToast -> toast(intent.text)
             is ExSet -> setAction(intent)
+            is UpdateModeIntent -> updateModeAction(intent)
         }
     }
 
+    private fun updateModeAction(action: UpdateModeIntent) {
+        when (action) {
+            UpdateModeIntent.Get -> {
+                workoutRepository.isUpdateMode()
+                    .observeUi()
+                    .doAfterSuccess { isUpdate ->
+                        postEventState(WorkoutState.UpdateMode(isUpdate))
+                    }
+                    .subscribe()
+            }
+            is UpdateModeIntent.Set -> {
+                workoutRepository.setUpdate(action.isUpdateMode)
+                    .observeUi()
+                    .doAfterSuccess { isUpdate -> postEventState(WorkoutState.UpdateMode(isUpdate)) }
+                    .subscribe()
+            }
+        }
+    }
     private fun workoutAction(action: Workout) {
         when (action) {
             Workout.New -> {
+                clearCache()
                 exerciseHelper.getAllExercises()
                     .observeUi()
                     .doOnSubscribe { postEventState(WorkoutState.Loading) }
@@ -88,6 +109,14 @@ class WorkoutViewModel @Inject constructor(
                 loadWorkoutRecord(action.workoutRecordId)
             }
             Workout.Finish -> finishWorkout()
+            Workout.GetCurrent -> {
+                exerciseHelper.getAllExercises()
+                    .observeUi()
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
+                    .subscribe()
+            }
         }
     }
 
@@ -117,17 +146,49 @@ class WorkoutViewModel @Inject constructor(
                 titleAction(Title.Set(workout.title))
 
                 workoutRepository.addExercises(exercises)
-            }.doAfterSuccess { workoutAction(Workout.New) }
+            }.doAfterSuccess {
+                exerciseHelper.getAllExercises()
+                    .observeUi()
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
+                    .subscribe()
+            }
             .subscribe()
     }
 
     private fun exerciseAction(action: Exercise) {
         when (action) {
-            is Exercise.Add -> exerciseHelper.addExercise(action.id) { event -> postEventState(event) }
+            is Exercise.Add -> libraryRepository.getExercise(action.id)
                 .observeUi()
                 .doOnSubscribe { postEventState(WorkoutState.Loading) }
                 .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
-                .doAfterSuccess { state -> postEventState(state) }
+                .doAfterSuccess { state ->
+                    state as DataState.Success
+                    val data = state.data
+                    navigateHelper.startSetParameterDialog(data.id) { params ->
+                        val exerciseDto = CurrentWorkoutDto.Exercise(
+                            id = 0,
+                            libraryId = action.id,
+                            title = data.title
+                        )
+                        workoutRepository.addExercise(exerciseDto)
+                            .flatMap { exerciseId ->
+                                val set = CurrentWorkoutDto.Set(
+                                    id = 0,
+                                    exerciseId = (exerciseId as DataState.Success).data,
+                                    setNumber = 1,
+                                    weight = params.weight,
+                                    reps = params.reps
+                                )
+                                workoutRepository.addSet(set)
+                            }.flatMap {
+                                workoutRepository.getExercisesWithSets()
+                                    .map { dataState -> dataState.reduce() }
+                            }.doAfterSuccess { state -> postEventState(state) }
+                            .subscribe()
+                    }
+                }
                 .subscribe()
             is Exercise.Delete -> exerciseHelper.deleteExercise(action.id)
                 .observeUi()
@@ -279,14 +340,24 @@ class WorkoutViewModel @Inject constructor(
             .observeUi()
             .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { quad ->
-                if (quad.fourth.isEmpty()) {
+                if (quad.fourth.isEmpty() && !quad.fives) {
                     clearCache()
                     navigateAction(Navigate.Home)
                     return@doAfterSuccess
+                } else if (quad.fourth.isEmpty() && quad.fives) {
+                    recordsRepository.deleteWorkoutWithExAndSets(workoutRecordId)
+                        .observeUi()
+                        .doAfterSuccess {
+                            clearCache()
+                            navigateAction(Navigate.Home)
+                        }
+                        .subscribe()
+                    return@doAfterSuccess
+                } else {
+                    val time = if (switchState) { quad.second } else { null }
+                    save(quad.third, quad.first, time, quad.fourth, workoutRecordId)
+                    workoutRecordId = 0
                 }
-                val time = if (switchState) { quad.second } else { null }
-                save(quad.third, quad.first, time, quad.fourth, workoutRecordId)
-                workoutRecordId = 0
             }.subscribe()
     }
 

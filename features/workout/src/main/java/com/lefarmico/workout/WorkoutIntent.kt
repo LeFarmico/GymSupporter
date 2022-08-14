@@ -64,6 +64,12 @@ sealed class WorkoutIntent : BaseIntent {
     sealed class Workout : WorkoutIntent() {
         object New : Workout()
         data class Load(val workoutRecordId: Int) : Workout()
+        object GetCurrent : Workout()
         object Finish : Workout()
+    }
+
+    sealed class UpdateModeIntent : WorkoutIntent() {
+        object Get : UpdateModeIntent()
+        data class Set(val isUpdateMode: Boolean) : UpdateModeIntent()
     }
 }
