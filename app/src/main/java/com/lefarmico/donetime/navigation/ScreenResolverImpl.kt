@@ -120,7 +120,7 @@ class ScreenResolverImpl @Inject constructor() : ScreenResolver {
             Screen.LIBRARY_EXERCISES_LIST_SCREEN -> {
                 navController?.navigate(
                     R.id.action_library_subCategoty_to_library_exercises,
-                    SubcategoryFragment.createBundle(data),
+                    ExerciseListFragment.createBundle(data),
                     null,
                     navExtras
                 )

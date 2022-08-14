@@ -150,10 +150,17 @@ class SubcategoryViewModel @Inject constructor(
     ) {
         val categoryId = subcategory.categoryId
         val subcategoryId = subcategory.id
-        router.navigate(
-            screen = Screen.EXERCISE_LIST_SCREEN,
-            data = LibraryParams.ExerciseList(categoryId, subcategoryId, isFromWorkoutScreen)
-        )
+        if (isFromWorkoutScreen) {
+            router.navigate(
+                screen = Screen.EXERCISE_LIST_SCREEN,
+                data = LibraryParams.ExerciseList(categoryId, subcategoryId, isFromWorkoutScreen)
+            )
+        } else {
+            router.navigate(
+                screen = Screen.LIBRARY_EXERCISES_LIST_SCREEN,
+                data = LibraryParams.ExerciseList(categoryId, subcategoryId, isFromWorkoutScreen)
+            )
+        }
     }
 
     private fun showToast(text: String) {
