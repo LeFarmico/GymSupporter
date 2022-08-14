@@ -70,12 +70,32 @@ class WorkoutViewModel @Inject constructor(
             is Workout -> workoutAction(intent)
             is ShowToast -> toast(intent.text)
             is ExSet -> setAction(intent)
+            is UpdateModeIntent -> updateModeAction(intent)
         }
     }
 
+    private fun updateModeAction(action: UpdateModeIntent) {
+        when (action) {
+            UpdateModeIntent.Get -> {
+                workoutRepository.isUpdateMode()
+                    .observeUi()
+                    .doAfterSuccess { isUpdate ->
+                        postEventState(WorkoutState.UpdateMode(isUpdate))
+                    }
+                    .subscribe()
+            }
+            is UpdateModeIntent.Set -> {
+                workoutRepository.setUpdate(action.isUpdateMode)
+                    .observeUi()
+                    .doAfterSuccess { isUpdate -> postEventState(WorkoutState.UpdateMode(isUpdate)) }
+                    .subscribe()
+            }
+        }
+    }
     private fun workoutAction(action: Workout) {
         when (action) {
             Workout.New -> {
+                clearCache()
                 exerciseHelper.getAllExercises()
                     .observeUi()
                     .doOnSubscribe { postEventState(WorkoutState.Loading) }
@@ -88,6 +108,14 @@ class WorkoutViewModel @Inject constructor(
                 loadWorkoutRecord(action.workoutRecordId)
             }
             Workout.Finish -> finishWorkout()
+            Workout.GetCurrent -> {
+                exerciseHelper.getAllExercises()
+                    .observeUi()
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
+                    .subscribe()
+            }
         }
     }
 
@@ -117,7 +145,14 @@ class WorkoutViewModel @Inject constructor(
                 titleAction(Title.Set(workout.title))
 
                 workoutRepository.addExercises(exercises)
-            }.doAfterSuccess { workoutAction(Workout.New) }
+            }.doAfterSuccess {
+                exerciseHelper.getAllExercises()
+                    .observeUi()
+                    .doOnSubscribe { postEventState(WorkoutState.Loading) }
+                    .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                    .doAfterSuccess { state -> postEventState(state) }
+                    .subscribe()
+            }
             .subscribe()
     }
 

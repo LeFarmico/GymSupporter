@@ -9,6 +9,7 @@ class CurrentWorkoutDataBase {
     private val lock = Any()
     private val exerciseWithSetsList = mutableListOf<CurrentWorkoutData.ExerciseWithSets>()
     private var exerciseId = 1
+    private var isUpdateMode: Boolean = false
 
     fun insertExercise(exerciseWithSets: CurrentWorkoutData.ExerciseWithSets): Single<Int> {
         return Single.create { emitter ->
@@ -100,6 +101,23 @@ class CurrentWorkoutDataBase {
         }
     }
 
+    fun setUpdate(isUpdate: Boolean): Single<Boolean> {
+        return Single.create { emitter ->
+            synchronized(lock) {
+                isUpdateMode = isUpdate
+                emitter.onSuccess(isUpdateMode)
+            }
+        }
+    }
+
+    fun isUpdate(): Single<Boolean> {
+        return Single.create { emitter ->
+            synchronized(lock) {
+                emitter.onSuccess(isUpdateMode)
+            }
+        }
+    }
+
     private fun validateExercise(
         id: Int,
         onExist: (CurrentWorkoutData.ExerciseWithSets) -> Unit,
@@ -113,4 +131,9 @@ class CurrentWorkoutDataBase {
             }
         }
     }
+}
+
+sealed interface Mode {
+    object New : Mode
+    object Update : Mode
 }

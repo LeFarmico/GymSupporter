@@ -34,9 +34,8 @@ class WorkoutFragment :
     private var selectHandler: SelectItemsHandler<ExerciseWithSets>? = null
     private var actionModeCallback: EditStateActionBarCallback? = null
 
-    private val params: WorkoutScreenParams get() =
+    private val params: WorkoutScreenParams? get() =
         arguments?.getParcelable(KEY_PARAMS)
-            ?: WorkoutScreenParams.Empty
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +49,13 @@ class WorkoutFragment :
             is UpdateWorkout -> {
                 val data = params as UpdateWorkout
                 dispatchIntent(Workout.Load(data.recordWorkoutId))
+                dispatchIntent(UpdateModeIntent.Set(true))
+                arguments?.clear()
+            }
+            WorkoutScreenParams.Empty -> {
+                dispatchIntent(Workout.New)
+                dispatchIntent(UpdateModeIntent.Set(false))
+                arguments?.clear()
             }
             else -> {}
         }
@@ -59,8 +65,9 @@ class WorkoutFragment :
         dispatchIntent(Title.Get)
         dispatchIntent(Date.Get)
         dispatchIntent(Time.Get)
-        dispatchIntent(Workout.New)
+        dispatchIntent(UpdateModeIntent.Get)
         dispatchIntent(SwitchState.Get)
+        dispatchIntent(Workout.GetCurrent)
         setUpToolbar()
 
         actionModeCallback = object : EditStateActionBarCallback() {
@@ -113,6 +120,7 @@ class WorkoutFragment :
             is WorkoutState.TitleResult -> workoutTitle(state.title)
             is WorkoutState.TimeResult -> workoutTime(state.time)
             is WorkoutState.SwitchState -> switchState(state.isOn)
+            is WorkoutState.UpdateMode -> setModeScreenParams(state.isUpdate)
         }
     }
 
@@ -129,8 +137,19 @@ class WorkoutFragment :
         }
     }
 
+    private fun setModeScreenParams(isUpdate: Boolean) {
+        when (isUpdate) {
+            false -> {
+                requireActivity().title = getString(R.string.workout_screen_new)
+                binding.finishButton.text = getText(R.string.finish)
+            }
+            true -> {
+                requireActivity().title = getString(R.string.workout_screen_edit)
+                binding.finishButton.text = getText(R.string.save)
+            }
+        }
+    }
     private fun setUpToolbar() {
-        requireActivity().title = getString(R.string.workout_screen)
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }

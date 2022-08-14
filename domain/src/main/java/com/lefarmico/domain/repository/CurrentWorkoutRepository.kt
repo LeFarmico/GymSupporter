@@ -1,5 +1,6 @@
 package com.lefarmico.domain.repository
 
+import android.view.Display
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.utils.DataState
 import io.reactivex.rxjava3.core.Single
@@ -23,6 +24,10 @@ interface CurrentWorkoutRepository : BaseRepository {
     fun deleteLastSet(exerciseId: Int): Single<DataState<Int>>
 
     fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>>
+
+    fun setUpdate(isUpdate: Boolean): Single<Boolean>
+
+    fun isUpdateMode(): Single<Boolean>
 
     fun clearCache()
 }

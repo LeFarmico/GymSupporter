@@ -12,5 +12,6 @@ sealed class WorkoutState : BaseState.State {
     data class TitleResult(val title: String) : WorkoutState()
     data class TimeResult(val time: String) : WorkoutState()
     data class SwitchState(val isOn: Boolean) : WorkoutState()
+    data class UpdateMode(val isUpdate: Boolean) : WorkoutState()
     object Loading : WorkoutState()
 }
