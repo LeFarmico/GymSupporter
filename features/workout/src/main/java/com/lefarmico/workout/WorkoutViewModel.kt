@@ -2,6 +2,7 @@ package com.lefarmico.workout
 
 import com.lefarmico.core.base.BaseState
 import com.lefarmico.core.base.BaseViewModel
+import com.lefarmico.core.extensions.observeIO
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.core.mapper.toCurrent
 import com.lefarmico.domain.entity.CurrentWorkoutDto
@@ -339,14 +340,24 @@ class WorkoutViewModel @Inject constructor(
             .observeUi()
             .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
             .doAfterSuccess { quad ->
-                if (quad.fourth.isEmpty()) {
+                if (quad.fourth.isEmpty() && !quad.fives) {
                     clearCache()
                     navigateAction(Navigate.Home)
                     return@doAfterSuccess
+                } else if (quad.fourth.isEmpty() && quad.fives) {
+                    recordsRepository.deleteWorkoutWithExAndSets(workoutRecordId)
+                        .observeUi()
+                        .doAfterSuccess {
+                            clearCache()
+                            navigateAction(Navigate.Home)
+                        }
+                        .subscribe()
+                    return@doAfterSuccess
+                } else {
+                    val time = if (switchState) { quad.second } else { null }
+                    save(quad.third, quad.first, time, quad.fourth, workoutRecordId)
+                    workoutRecordId = 0
                 }
-                val time = if (switchState) { quad.second } else { null }
-                save(quad.third, quad.first, time, quad.fourth, workoutRecordId)
-                workoutRecordId = 0
             }.subscribe()
     }
 
