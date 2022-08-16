@@ -51,6 +51,11 @@ class CurrentWorkoutRepositoryImpl @Inject constructor(
             .map { data -> dataStateResolver { data } }
     }
 
+    override fun updateSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>> {
+        return dataBase.updateSet(set.toData())
+            .map { data -> dataStateResolver { data } }
+    }
+
     override fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>> {
         return dataBase.getExercise(exerciseId)
             .map { data -> dataStateResolver { data.toDto() } }

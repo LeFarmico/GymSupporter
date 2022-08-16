@@ -1,6 +1,8 @@
 package com.lefarmico.workout.interactor
 
 import com.lefarmico.core.base.BaseState
+import com.lefarmico.core.entity.CurrentWorkoutViewData
+import com.lefarmico.core.mapper.toDto
 import com.lefarmico.domain.entity.CurrentWorkoutDto
 import com.lefarmico.domain.repository.CurrentWorkoutRepository
 import com.lefarmico.domain.repository.LibraryRepository
@@ -47,6 +49,11 @@ class ExerciseHelper(
 
     fun deleteLastSet(exerciseId: Int): Single<BaseState> {
         return workoutRepository.deleteLastSet(exerciseId)
+            .flatMap { getAllExercises() }
+    }
+
+    fun updateSet(set: CurrentWorkoutViewData.Set): Single<BaseState> {
+        return workoutRepository.updateSet(set.toDto())
             .flatMap { getAllExercises() }
     }
 

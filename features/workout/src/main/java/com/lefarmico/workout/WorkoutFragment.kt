@@ -25,9 +25,18 @@ class WorkoutFragment :
     ) {
 
     private val adapter = CurrentExerciseAdapter().apply {
-        plusButtonCallback = { dispatchIntent(Dialog.SetParamsDialog(it)) }
-        minusButtonCallback = { dispatchIntent(ExSet.DeleteLastExSet(it)) }
-        infoButtonCallback = { dispatchIntent(Navigate.ExerciseDetails(it)) }
+        plusButtonCallback = { exerciseId ->
+            dispatchIntent(Dialog.SetParamsDialog(exerciseId))
+        }
+        minusButtonCallback = { exerciseId ->
+            dispatchIntent(ExSet.DeleteLastExSet(exerciseId))
+        }
+        infoButtonCallback = { exerciseId ->
+            dispatchIntent(Navigate.ExerciseDetails(exerciseId))
+        }
+        onSetClick = {
+            dispatchIntent(Dialog.UpdateSetDialog(it))
+        }
     }
 
     private var actionMode: ActionMode? = null

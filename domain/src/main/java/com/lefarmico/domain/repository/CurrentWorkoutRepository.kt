@@ -23,6 +23,8 @@ interface CurrentWorkoutRepository : BaseRepository {
 
     fun deleteLastSet(exerciseId: Int): Single<DataState<Int>>
 
+    fun updateSet(set: CurrentWorkoutDto.Set): Single<DataState<Int>>
+
     fun getExerciseWithSets(exerciseId: Int): Single<DataState<CurrentWorkoutDto.ExerciseWithSets>>
 
     fun setUpdate(isUpdate: Boolean): Single<Boolean>
