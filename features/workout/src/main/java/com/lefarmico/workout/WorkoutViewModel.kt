@@ -263,6 +263,16 @@ class WorkoutViewModel @Inject constructor(
                         }
                     }.subscribe()
             }
+            is Dialog.UpdateSetDialog -> {
+                navigateHelper.startSetParameterDialog(action.set.exerciseId) { params ->
+                    val set = action.set.copy(exerciseId = params.exerciseId, weight = params.weight, reps = params.reps)
+                    exerciseHelper.updateSet(set)
+                        .observeUi()
+                        .doOnError { postEventState(WorkoutEvent.ExceptionResult(it as Exception)) }
+                        .doAfterSuccess { state -> postEventState(state) }
+                        .subscribe()
+                }
+            }
         }
     }
 

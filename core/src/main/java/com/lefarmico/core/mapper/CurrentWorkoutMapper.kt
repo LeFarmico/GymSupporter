@@ -30,6 +30,10 @@ fun List<CurrentWorkoutDto.ExerciseWithSets>.toRecordsDto() = this.map {
     )
 }
 
+fun CurrentWorkoutViewData.Set.toDto() = CurrentWorkoutDto.Set(
+    id, exerciseId, setNumber, weight, reps
+)
+
 /**
  *  Converts the [CurrentWorkoutDto.Exercise] to the [CurrentWorkoutViewData.Exercise]
  *   as a new instance.

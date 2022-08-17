@@ -11,7 +11,9 @@ import com.lefarmico.core.adapter.diffUtil.CurrentSetDiffCallback
 import com.lefarmico.core.databinding.ItemExerciseSetBinding
 import com.lefarmico.core.entity.CurrentWorkoutViewData
 
-class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
+class CurrentSetAdapter(
+    var onItemClick: (CurrentWorkoutViewData.Set) -> Unit = {}
+) : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>() {
 
     var items = listOf<CurrentWorkoutViewData.Set>()
         set(value) {
@@ -22,7 +24,7 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
             diffResult.dispatchUpdatesTo(this)
         }
 
-    class SetViewHolder(
+    inner class SetViewHolder(
         itemExerciseSetBinding: ItemExerciseSetBinding
     ) : RecyclerView.ViewHolder(itemExerciseSetBinding.root) {
 
@@ -38,7 +40,7 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
             weights.text = context.getString(R.string.weight_field, item.weight.toString())
             reps.text = context.getString(R.string.repetitions_field, item.reps)
             layout.setOnClickListener {
-                Toast.makeText(context, "Push", Toast.LENGTH_SHORT).show()
+                onItemClick(item)
             }
         }
     }
@@ -52,9 +54,8 @@ class CurrentSetAdapter : RecyclerView.Adapter<CurrentSetAdapter.SetViewHolder>(
     }
 
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
+        holder.itemView.setOnClickListener { onItemClick(items[position]) }
         holder.bind(items[position])
-        holder.itemView.isClickable = false
-        holder.itemView.isFocusable = false
     }
 
     override fun getItemCount(): Int {
