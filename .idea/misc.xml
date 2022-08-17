@@ -31,10 +31,11 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/layer_list_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/menu_selector.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/out_line_item_shape.xml" value="0.264" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_background_button.xml" value="0.2703125" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_background_button.xml" value="0.2" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_button_outline.xml" value="0.2703125" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_button_variant.xml" value="0.2703125" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_button_variant.xml" value="0.176" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/ripple_layout_variant.xml" value="0.172" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/selector_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/selector_edit_button.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/selector_input_text_layout.xml" value="0.2703125" />
@@ -43,6 +44,7 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_button_outline.xml" value="0.24722222222222223" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_button_variant.xml" value="0.39375" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_default_background.xml" value="0.2703125" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_layout_variant.xml" value="0.172" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_menu_item_bottom.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_menu_item_middle.xml" value="0.2703125" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/drawable/shape_menu_item_single.xml" value="0.2703125" />
@@ -69,7 +71,7 @@
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_edit_record.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_edit_record_exercise.xml" value="0.4" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_edit_record_set.xml" value="0.4" />
-        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise.xml" value="0.4" />
+        <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_set.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_set_edit.xml" value="0.264" />
         <entry key="..\:/Users/Flyin/AndroidStudioProjects/DoneTime/core/src/main/res/layout/item_exercise_title.xml" value="0.4" />

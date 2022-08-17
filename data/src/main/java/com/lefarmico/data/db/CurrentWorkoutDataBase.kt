@@ -2,7 +2,7 @@ package com.lefarmico.data.db
 
 import com.lefarmico.data.db.entity.CurrentWorkoutData
 import io.reactivex.rxjava3.core.Single
-import java.lang.NullPointerException
+import kotlin.NullPointerException
 
 class CurrentWorkoutDataBase {
 
@@ -95,9 +95,26 @@ class CurrentWorkoutDataBase {
         }
     }
 
+    fun updateSet(set: CurrentWorkoutData.Set): Single<Int> {
+        return Single.create { emitter ->
+            validateExercise(set.exerciseId) { exercise ->
+                val oldSet = exercise.setList.find { set.id == it.id }
+                val index = exercise.setList.indexOf(oldSet)
+                try {
+                    exercise.setList[index] = set
+                    emitter.onSuccess(index)
+                } catch (e: Exception) {
+                    emitter.onError(e)
+//                    emitter.onError(NullPointerException("Set with index: [$index] does no exist"))
+                }
+            }
+        }
+    }
+
     fun clearData() {
         synchronized(lock) {
             exerciseWithSetsList.clear()
+            exerciseId = 1
         }
     }
 
@@ -123,17 +140,12 @@ class CurrentWorkoutDataBase {
         onExist: (CurrentWorkoutData.ExerciseWithSets) -> Unit,
     ) {
         synchronized(lock) {
-            val exercise = exerciseWithSetsList.find { it.exercise.id == id }
-            if (exercise == null) {
-                throw (NullPointerException("Exercise with id = $id is not exist"))
-            } else {
-                onExist(exercise)
+            try {
+                val exercise = exerciseWithSetsList.find { it.exercise.id == id }
+                onExist(exercise!!)
+            } catch (e: Exception) {
+                throw (e)
             }
         }
     }
-}
-
-sealed interface Mode {
-    object New : Mode
-    object Update : Mode
 }

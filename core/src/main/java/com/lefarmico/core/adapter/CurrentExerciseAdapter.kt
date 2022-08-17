@@ -12,16 +12,16 @@ import com.lefarmico.core.databinding.ItemExerciseBinding
 import com.lefarmico.core.entity.CurrentWorkoutViewData
 import com.lefarmico.core.selector.SelectItemsHandler
 
-class CurrentExerciseAdapter :
+class CurrentExerciseAdapter(
+    var plusButtonCallback: (Int) -> Unit = {},
+    var minusButtonCallback: (Int) -> Unit = {},
+    var infoButtonCallback: (Int) -> Unit = {},
+    var onSetClick: (CurrentWorkoutViewData.Set) -> Unit = {}
+) :
     RecyclerView.Adapter<CurrentExerciseAdapter.ExerciseViewHolder>(),
     SelectItemsHandler.Callback<CurrentWorkoutViewData.ExerciseWithSets> {
 
     private var toggleButtonVisibility = View.GONE
-
-    lateinit var plusButtonCallback: (Int) -> Unit
-    lateinit var minusButtonCallback: (Int) -> Unit
-    lateinit var infoButtonCallback: (Int) -> Unit
-
     private val selectedItemsSet = mutableSetOf<CurrentWorkoutViewData.ExerciseWithSets>()
 
     var items = listOf<CurrentWorkoutViewData.ExerciseWithSets>()
@@ -33,7 +33,7 @@ class CurrentExerciseAdapter :
             diffResult.dispatchUpdatesTo(this)
         }
 
-    class ExerciseViewHolder(
+    inner class ExerciseViewHolder(
         itemExerciseBinding: ItemExerciseBinding
     ) : RecyclerView.ViewHolder(itemExerciseBinding.root) {
 
@@ -49,6 +49,9 @@ class CurrentExerciseAdapter :
 
         private val decorator = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
 
+        fun onSetClickCallback(set: (CurrentWorkoutViewData.Set) -> Unit) {
+            adapter.onItemClick = set
+        }
         fun bindAdapter() {
             recycler.adapter = adapter
             recycler.addItemDecoration(decorator, 0)
@@ -112,6 +115,9 @@ class CurrentExerciseAdapter :
             }
             infoButton.setOnClickListener {
                 infoButtonCallback(items[bindingAdapterPosition].exercise.libraryId)
+            }
+            onSetClickCallback {
+                onSetClick(it)
             }
             selectToggleButton.setOnCheckedChangeListener { _, isChecked ->
                 when (isChecked) {

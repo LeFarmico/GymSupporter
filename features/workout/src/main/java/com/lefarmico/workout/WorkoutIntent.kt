@@ -1,6 +1,7 @@
 package com.lefarmico.workout
 
 import com.lefarmico.core.base.BaseIntent
+import com.lefarmico.core.entity.CurrentWorkoutViewData
 import com.lefarmico.navigation.params.SetParameterParams
 import java.time.LocalDate
 import java.time.LocalTime
@@ -23,6 +24,7 @@ sealed class WorkoutIntent : BaseIntent {
     }
 
     sealed class Dialog : WorkoutIntent() {
+        data class UpdateSetDialog(val set: CurrentWorkoutViewData.Set) : Dialog()
         data class SetParamsDialog(val exerciseId: Int) : Dialog()
         object CalendarDialog : Dialog()
         object TitleDialog : Dialog()

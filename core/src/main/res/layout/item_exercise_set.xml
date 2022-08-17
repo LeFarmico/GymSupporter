@@ -4,7 +4,7 @@
     android:id="@+id/exercise"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:layout_marginHorizontal="16dp"
+    android:paddingHorizontal="16dp"
     android:orientation="horizontal"
     android:gravity="center_vertical">
 
