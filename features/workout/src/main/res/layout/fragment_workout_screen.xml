@@ -25,7 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextStyle.HeadlineBold"
-            android:layout_marginHorizontal="16dp"
+            android:background="?selectableItemBackground"
+            android:layout_marginHorizontal="24dp"
             android:layout_gravity="bottom"
             tools:text="Workout"
             />
@@ -38,6 +39,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
+            android:background="?selectableItemBackground"
             android:gravity="end"
             tools:text="01.01.2022"
             android:textStyle="bold"
@@ -51,6 +53,7 @@
             android:layout_marginTop="16dp"
             android:gravity="end"
             tools:text="18:40"
+            android:background="?selectableItemBackground"
             android:textStyle="bold"
             android:visibility="gone"
             />
