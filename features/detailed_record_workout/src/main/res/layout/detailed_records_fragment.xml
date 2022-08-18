@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             style="@style/ButtonStyle.Outline"
-            android:text="@string/cancel"
+            android:text="@string/close"
             android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="16dp"
             />

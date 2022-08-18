@@ -40,4 +40,8 @@ abstract class ManagerModule {
     @Binds
     @Singleton
     abstract fun provideRemindTimeManager(manager: RemindTimeManagerImpl): RemindTimeManager
+
+    @Binds
+    @Singleton
+    abstract fun provideRemindThemeManager(manager: ThemeManagerImpl): ThemeManager
 }

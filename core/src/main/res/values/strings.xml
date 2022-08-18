@@ -21,7 +21,7 @@
     <string name="add_new_category">New category</string>
     <string name="add_new_subcategory">New subcategory</string>
     <string name="add_new_exercise">New exercise</string>
-    <string name="start_new_workout">Schedule routine</string>
+    <string name="start_new_workout">New routine</string>
     <string name="add_exercise">Add exercise +</string>
     <string name="done">Done</string>
 
@@ -31,6 +31,7 @@
     <string name="finish">Finish</string>
     <string name="save">Save</string>
     <string name="about">About</string>
+    <string name="help">Help</string>
     <string name="save_changes">Save changes</string>
     <string name="drag_and_drop">Drag and drop</string>
     <string name="delete">Delete</string>
@@ -39,6 +40,9 @@
     <string name="add_set">Add set to workout</string>
     <string name="next_month_button">Next month</string>
     <string name="last_month_button">Last month</string>
+    <string name="apply">Apply</string>
+    <string name="close">Close</string>
+    <string name="change">Change</string>
 
     <!-- Text fields   -->
     <string name="new_category">New category</string>
@@ -52,12 +56,12 @@
     <string name="default_workout_title">Your workout</string>
 
     <!-- Input text fields -->
-    <string name="input_field_exist">That field already exist</string>
+    <string name="input_field_exist">That field already exists</string>
     <string name="input_field_empty">That field is empty</string>
     <string name="input_field_success"> </string>
 
     <!-- State -->
-    <string name="state_empty">Now that screen is empty, try to fill it up!</string>
+    <string name="state_empty">No records yet</string>
     <string name="state_error">Something went wrong. Try again.</string>
 
     <!-- Settings -->
@@ -65,6 +69,10 @@
     <string name="month_year_date_format">Month and Year format</string>
     <string name="remind_workout_before">Remind before %1$d hours</string>
     <string name="workout_remind">Workout reminder</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system_default">System Default</string>
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
 
     <!-- Notifications   -->
     <string name="next_workout_notification_title">Next workout soon!</string>
@@ -81,10 +89,10 @@
     <string name="settings_screen">Settings</string>
 
     <!-- Errors -->
-    <string name="smth_went_wrong">Something went wrong. Please try again.</string>
-    <string name="load_data_failure">Load data error.</string>
+    <string name="smth_went_wrong">Something went wrong. Please try again</string>
+    <string name="load_data_failure">Load data error</string>
 
     <!-- Validations -->
-    <string name="ex_exist">that exercise ia already exist.</string>
-    <string name="empty_field">that field is empty.</string>
+    <string name="ex_exist">that exercise already exists</string>
+    <string name="empty_field">that field is empty</string>
 </resources>

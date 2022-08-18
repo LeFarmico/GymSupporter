@@ -1,10 +1,12 @@
 package com.lefarmico.settings_screen
 
+import android.util.Log
 import com.lefarmico.core.base.BaseViewModel
 import com.lefarmico.core.extensions.observeUi
 import com.lefarmico.domain.repository.manager.FormatterManager
 import com.lefarmico.domain.repository.manager.FormatterMonthManager
 import com.lefarmico.domain.repository.manager.RemindTimeManager
+import com.lefarmico.domain.repository.manager.ThemeManager
 import com.lefarmico.navigation.Router
 import com.lefarmico.navigation.dialog.Dialog
 import com.lefarmico.settings_screen.SettingsScreenIntent.*
@@ -15,7 +17,8 @@ class SettingsScreenViewModel @Inject constructor(
     private val formatterManager: FormatterManager,
     private val formatterMonthManager: FormatterMonthManager,
     private val remindTimeManager: RemindTimeManager,
-    private val router: Router
+    private val router: Router,
+    private val themeManager: ThemeManager
 ) : BaseViewModel<
     SettingsScreenIntent, SettingsScreenState, SettingsScreenEvent
     >() {
@@ -82,6 +85,25 @@ class SettingsScreenViewModel @Inject constructor(
             }.subscribe()
     }
 
+    private fun getCurrentTheme() {
+        themeManager.getCurrentTheme()
+            .observeUi()
+            .doAfterSuccess { themeId ->
+                mEvent.setValue(SettingsScreenEvent.SetThemeMenuItem(themeId))
+            }.subscribe()
+    }
+
+    private fun setCurrentTheme(themeId: Int) {
+        themeManager.getCurrentTheme()
+            .observeUi()
+            .doAfterSuccess { oldThemeId ->
+                if (themeId != oldThemeId) {
+                    themeManager.setCurrentTheme(themeId)
+                    mEvent.setValue(SettingsScreenEvent.ChangeTheme(themeId))
+                }
+            }.subscribe()
+    }
+
     override fun triggerIntent(intent: SettingsScreenIntent) {
         return when (intent) {
             GetFullDateFormatter -> getCurrentFullDateFormat()
@@ -90,6 +112,8 @@ class SettingsScreenViewModel @Inject constructor(
             SetMonthDateFormatter -> setMonthYearFormatter()
             GetRemindTime -> getCurrentTimeRemind()
             SetRemindTime -> setRemindTime()
+            GetThemeSetting -> getCurrentTheme()
+            is SetTheme -> setCurrentTheme(intent.themeId)
         }
     }
 }
