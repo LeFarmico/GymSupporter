@@ -2,6 +2,9 @@ package com.lefarmico.donetime
 
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import com.lefarmico.core.extensions.observeUi
+import com.lefarmico.data.preference.ThemeSettingsPreferenceHelperImpl
+import com.lefarmico.data.repository.manager.ThemeManagerImpl
 import com.lefarmico.donetime.di.AppComponent
 import com.lefarmico.donetime.di.DaggerAppComponent
 import com.lefarmico.workout_notification.WorkoutReminderChannel

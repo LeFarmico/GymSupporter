@@ -37,6 +37,7 @@ class MainActivity : BaseActivity<
             setupBottomNavigationBar()
         }
         router.bind(this)
+        dispatchIntent(MainIntent.LoadThemeMode)
         dispatchIntent(MainIntent.LoadPreloadedData)
     }
 
@@ -58,12 +59,37 @@ class MainActivity : BaseActivity<
         router.bind(this)
     }
 
-    override fun receive(state: MainState) {}
+    override fun receive(state: MainState) {
+        when (state) {
+            is MainState.ThemeResult -> setThemeMode(state.themeId)
+        }
+    }
 
     override fun receive(event: MainEvent) {
         when (event) {
             MainEvent.LoadDataResult.Failure -> onFailureEvent()
             MainEvent.LoadDataResult.Success -> onLoadSuccess()
+        }
+    }
+
+    private fun setThemeMode(themeId: Int) {
+        val currentTheme = AppCompatDelegate.getDefaultNightMode()
+        when (themeId) {
+            R.id.system_default_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                }
+            }
+            R.id.night_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
+            R.id.light_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_NO) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
         }
     }
 

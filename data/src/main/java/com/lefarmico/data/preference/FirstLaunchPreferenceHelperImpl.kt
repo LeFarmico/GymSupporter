@@ -11,8 +11,10 @@ class FirstLaunchPreferenceHelperImpl @Inject constructor(
     private val preference = context.getSharedPreferences(FIRST_LAUNCH_PREFERENCE_FILE, Context.MODE_PRIVATE)
 
     override fun onOnFirstLaunchListener(action: () -> Unit): Boolean {
-        takeIf { preference.getBoolean(FIRST_LAUNCH_PREFERENCE_KEY, true) }
-            .run { action() }
+        if (preference.getBoolean(FIRST_LAUNCH_PREFERENCE_KEY, true)) {
+            action()
+            preference.edit().putBoolean(FIRST_LAUNCH_PREFERENCE_KEY, false).apply()
+        }
         return preference.getBoolean(FIRST_LAUNCH_PREFERENCE_KEY, true)
     }
 

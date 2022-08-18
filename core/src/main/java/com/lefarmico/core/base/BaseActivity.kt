@@ -1,6 +1,7 @@
 package com.lefarmico.core.base
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.lefarmico.core.di.ViewModelFactory
@@ -26,6 +27,13 @@ abstract class BaseActivity<I : BaseIntent, S : BaseState.State, E : BaseState.E
         binding = inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(provideViewModel)
+
+        viewModel.state.observe(this) { state ->
+            receive(state)
+        }
+        viewModel.event.observe(this) { event ->
+            receive(event)
+        }
     }
 
     fun dispatchIntent(intent: I) {
