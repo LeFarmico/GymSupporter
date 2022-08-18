@@ -51,7 +51,9 @@ class MainActivity : BaseActivity<
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        if (!currentNavController?.value?.navigateUp()!!) {
+            super.onBackPressed()
+        }
     }
 
     override fun onResume() {
