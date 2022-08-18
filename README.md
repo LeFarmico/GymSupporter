@@ -1,4 +1,11 @@
-# Gym Supportrer
+<h1 align="center">Gym Supportrer</h1>
+
+<p align="center">
+  <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
+  <a href="https://android-arsenal.com/api?level=21"><img alt="API" src="https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat"/></a>
+  <a href="https://github.com/LeFarmico"><img alt="Profile" src="https://img.shields.io/badge/github-LeFarmico-yellow"/></a>
+</p>
+  
 Android app for diary your workout routines. And planing future workouts.
 
 Last version: [Gym supporter](https://drive.google.com/file/d/1Cad4L5fsrcxBl0hJb58z2lBlTClnBI1o/view?usp=sharing)
