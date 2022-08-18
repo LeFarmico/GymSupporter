@@ -54,7 +54,7 @@ class NavigateHelper(
             .onErrorReturn { DataState.Error(it as Exception) }
             .doAfterSuccess {
                 if (it is DataState.Error) {
-                    showToast("Looks like this exercise is not exist")
+                    showToast("Looks like this exercise does not exist")
                 } else {
                     router.navigate(
                         screen = Screen.EXERCISE_DETAILS_SCREEN_FROM_WORKOUT,

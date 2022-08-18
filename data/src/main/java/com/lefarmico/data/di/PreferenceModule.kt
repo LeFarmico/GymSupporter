@@ -38,4 +38,10 @@ abstract class PreferenceModule {
     abstract fun provideFirstTimePreferenceHelper(
         helperImpl: FirstLaunchPreferenceHelperImpl
     ): FirstLaunchPreferenceHelper
+
+    @Binds
+    @Singleton
+    abstract fun provideThemePreferenceHelper(
+        helperImpl: ThemeSettingsPreferenceHelperImpl
+    ): ThemeSettingsPreferenceHelper
 }

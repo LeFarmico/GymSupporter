@@ -47,5 +47,17 @@
             android:background="?attr/colorOnBackground"
             android:alpha="0.1"
             />
+        <include layout="@layout/menu_item_swich"
+            android:id="@+id/dark_mode_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="@style/Divider"
+            android:background="?attr/colorOnBackground"
+            android:alpha="0.1"
+            />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

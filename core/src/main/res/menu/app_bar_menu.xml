@@ -10,14 +10,8 @@
         />
     <item
         android:id="@+id/about"
-        android:title="@string/about"
+        android:title="@string/help"
         app:showAsAction="withText"
         android:icon="@drawable/ic_outline_about_24"
-        />
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        app:showAsAction="withText"
-        android:icon="@drawable/ic_baseline_settings_24"
         />
 </menu>

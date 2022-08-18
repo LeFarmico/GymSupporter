@@ -1,5 +1,6 @@
 package com.lefarmico.donetime.view
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity<
             setupBottomNavigationBar()
         }
         router.bind(this)
+        dispatchIntent(MainIntent.LoadThemeMode)
         dispatchIntent(MainIntent.LoadPreloadedData)
     }
 
@@ -48,17 +50,48 @@ class MainActivity : BaseActivity<
         return currentNavController?.value?.navigateUp() ?: false
     }
 
+    override fun onBackPressed() {
+        if (!currentNavController?.value?.navigateUp()!!) {
+            super.onBackPressed()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         router.bind(this)
     }
 
-    override fun receive(state: MainState) {}
+    override fun receive(state: MainState) {
+        when (state) {
+            is MainState.ThemeResult -> setThemeMode(state.themeId)
+        }
+    }
 
     override fun receive(event: MainEvent) {
         when (event) {
             MainEvent.LoadDataResult.Failure -> onFailureEvent()
             MainEvent.LoadDataResult.Success -> onLoadSuccess()
+        }
+    }
+
+    private fun setThemeMode(themeId: Int) {
+        val currentTheme = AppCompatDelegate.getDefaultNightMode()
+        when (themeId) {
+            R.id.system_default_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                }
+            }
+            R.id.night_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
+            R.id.light_theme -> {
+                if (currentTheme != AppCompatDelegate.MODE_NIGHT_NO) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
         }
     }
 
@@ -81,7 +114,6 @@ class MainActivity : BaseActivity<
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this) { navController ->
             router.bindNavController(navController)
-//            setupActionBarWithNavController(navController)
         }
         currentNavController = controller
     }

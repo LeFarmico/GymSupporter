@@ -16,6 +16,7 @@
         style="@style/TextStyle.Body"
         tools:text="Menu item"
         android:gravity="center"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/summary"
