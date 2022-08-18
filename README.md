@@ -10,8 +10,8 @@
   
 Gym Supporter is a simple tracker of workout activities. You can schedule your routines and get notifications before it starts. Also, you can make your own exercises and simply add them to your routine.
 
-
-Last version: [Gym supporter](https://drive.google.com/file/d/1Cad4L5fsrcxBl0hJb58z2lBlTClnBI1o/view?usp=sharing)
+## Download
+Latest version: [Gym Supporter](https://github.com/LeFarmico/GymSupporter/releases)
 
 ## Tech stack
 - [Kotlin](https://kotlinlang.org/) main language.
