@@ -6,7 +6,7 @@
   <a href="https://github.com/LeFarmico"><img alt="Profile" src="https://img.shields.io/badge/github-LeFarmico-yellow"/></a>
 </p>
   
-Android app for diary your workout routines. And planing future workouts.
+This App is a simple tracker of workout activities. You can schedule your routines and get notifications before it starts. Also, you can make your own exercises and simply add them to your routine.
 
 Last version: [Gym supporter](https://drive.google.com/file/d/1Cad4L5fsrcxBl0hJb58z2lBlTClnBI1o/view?usp=sharing)
 
