@@ -15,4 +15,8 @@ sealed class SettingsScreenIntent : BaseIntent {
     object SetRemindTime : SettingsScreenIntent()
 
     object GetRemindTime : SettingsScreenIntent()
+
+    object GetThemeSetting : SettingsScreenIntent()
+
+    data class SetTheme(val themeId: Int) : SettingsScreenIntent()
 }

@@ -1,5 +1,6 @@
 package com.lefarmico.donetime.view
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -48,6 +49,10 @@ class MainActivity : BaseActivity<
         return currentNavController?.value?.navigateUp() ?: false
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
     override fun onResume() {
         super.onResume()
         router.bind(this)
@@ -81,7 +86,6 @@ class MainActivity : BaseActivity<
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this) { navController ->
             router.bindNavController(navController)
-//            setupActionBarWithNavController(navController)
         }
         currentNavController = controller
     }

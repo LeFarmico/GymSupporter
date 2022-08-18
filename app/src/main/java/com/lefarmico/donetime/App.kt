@@ -1,6 +1,7 @@
 package com.lefarmico.donetime
 
 import android.os.StrictMode
+import androidx.appcompat.app.AppCompatDelegate
 import com.lefarmico.donetime.di.AppComponent
 import com.lefarmico.donetime.di.DaggerAppComponent
 import com.lefarmico.workout_notification.WorkoutReminderChannel
@@ -16,7 +17,6 @@ class App : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-
         if (BuildConfig.DEBUG) {
             StrictMode.ThreadPolicy.Builder()
                 .detectAll()
