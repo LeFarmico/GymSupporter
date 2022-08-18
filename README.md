@@ -4,6 +4,8 @@
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
   <a href="https://android-arsenal.com/api?level=21"><img alt="API" src="https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat"/></a>
   <a href="https://github.com/LeFarmico"><img alt="Profile" src="https://img.shields.io/badge/github-LeFarmico-yellow"/></a>
+  <a href="https://www.linkedin.com/in/artsiom-zharnikovich-46726b1b5/"><img alt="Profile" src="https://img.shields.io/badge/linkedIn-Artsiom%20Zharnikovch-blue"/></a>
+ 
 </p>
   
 Gym Supporter is a simple tracker of workout activities. You can schedule your routines and get notifications before it starts. Also, you can make your own exercises and simply add them to your routine.
