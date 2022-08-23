@@ -10,6 +10,11 @@
   
 Gym Supporter is a simple tracker of workout activities. You can schedule your routines and get notifications before it starts. Also, you can make your own exercises and simply add them to your routine.
 
+<p align="center">
+<img src="resources/1.png" width=30% height=30%>
+<img src="resources/2.png" width=30% height=30%>
+</p>
+
 ## Download
 Latest version: [Gym Supporter](https://github.com/LeFarmico/GymSupporter/releases)
 
@@ -45,37 +50,16 @@ This App uses MVI (Model - View - Intent) Architecture pattern which helps to co
 </p>
 
 # Features
-## Schedule routines
-You can create your personal routine with your own exercises. Besides you can schedule the time to remind before the workout.
 
 <p align="center">
-<img src="resources/Screenshot_20220123_211639.png" width=30% height=30%>
-</p>
-
-## Workout remind
-You can create reminders of the next workout to get a notification before a few hours or a day (depends on settings).
-
-<p align="center">
-<img src="resources/Screenshot_20220123_211857.png" width=30% height=30%> <img src="resources/Screenshot_20220123_211903.png" width=30% height=30%> <img src="resources/Screenshot_20220123_211908.png" width=30% height=30%>
-</p>
-    
-## Workout calendar
-You can observe your next or last workouts with a calendar.
-
-<p align="center">
-<img src="resources/Screenshot_20220123_211915.png" width=30% height=30%>
-</p>
-
-## Create your own exercises
-You can create own Category -> Subcategory -> Exercise.
-
-<p align="center">
-<img src="resources/Screenshot_20220123_212137.png" width=30% height=30%> <img src="resources/Screenshot_20220123_212152.png" width=30% height=30%>
+<img src="resources/3.png" width=30% height=30%>
+<img src="resources/4.png" width=30% height=30%>
+<img src="resources/5.png" width=30% height=30%>
 </p>
 
 ## Dark Theme
 <p align="center">
-<img src="resources/light_theme.jpg" width=30% height=30%> <img src="resources/dark_theme.jpg" width=30% height=30%>
+<img src="resources/6.png" width=30% height=30%> <img src="resources/7.png" width=30% height=30%>
 </p>
 
 ## Do you like what i do? 🤟
