@@ -39,14 +39,14 @@ Latest version: [Gym Supporter](https://github.com/LeFarmico/GymSupporter/releas
 # Architecture
 ## MVI
 <p align="center">
-<img src="resources/80dfe2a7-28a1-4535-98b4-b90c38ba43ea.png" width=80% height=80%>
+<img src="resources/arch.png" width=80% height=80%>
 </p>
 
 This App uses MVI (Model - View - Intent) Architecture pattern which helps to control data flow and uses SST (Single Source of Truth). That helps to make clean testable code and use observer patterns to provide data to views. <br />
 
 ## Module dependencies
 <p align="center">
-<img src="resources/untitled1.png" width=80% height=80%>
+<img src="resources/module_deps.png" width=80% height=80%>
 </p>
 
 # Features
