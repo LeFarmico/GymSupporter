@@ -62,7 +62,7 @@ This App uses MVI (Model - View - Intent) Architecture pattern which helps to co
 <img src="resources/6.png" width=30% height=30%> <img src="resources/7.png" width=30% height=30%>
 </p>
 
-## Do you like what i do? 🤟
+## Do you like what I do? 🤟
 [Follow me](https://github.com/LeFarmico) on GitHub. 😻 <br />
 Also press ⭐ and add me on [Linkedin](https://www.linkedin.com/in/artsiom-zharnikovich-46726b1b5/).
 
